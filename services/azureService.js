@@ -23,7 +23,9 @@ class AzureOpenAIService {
         apiKey: config.azure.apiKey,
         endpoint: config.azure.endpoint,
         deploymentName: config.azure.deploymentName,
-        apiVersion: config.azure.apiVersion
+        apiVersion: config.azure.apiVersion,
+        timeout: 120000, // 2 minutes - fail fast instead of hanging for the SDK's ~10 min default
+        maxRetries: 2
       });
     }
   }

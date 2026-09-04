@@ -1117,9 +1117,13 @@ async searchForExistingDocumentType(documentType) {
   }
 }
 
-async getOrCreateDocumentType(name) {
+async getOrCreateDocumentType(name, options = {}) {
   this.initialize();
-  
+
+  const restrictToExistingDocumentTypes = options.restrictToExistingDocumentTypes === true ||
+                                         (options.restrictToExistingDocumentTypes === undefined &&
+                                          process.env.RESTRICT_TO_EXISTING_DOCUMENT_TYPES === 'yes');
+
   try {
       // Suche nach existierendem document_type
       const existingDocType = await this.searchForExistingDocumentType(name);
@@ -1128,6 +1132,11 @@ async getOrCreateDocumentType(name) {
       if (existingDocType) {
           console.log(`[DEBUG] Found existing document type "${name}" with ID ${existingDocType.id}`);
           return existingDocType;
+      }
+
+      if (restrictToExistingDocumentTypes) {
+          console.log(`[DEBUG] Skipping creation of document type "${name}" (restricted to existing)`);
+          return null;
       }
   
       // Erstelle neuen document_type
@@ -1279,8 +1288,8 @@ async getOrCreateDocumentType(name) {
         console.log(`[DEBUG] Combined tags:`, combinedTags);
       }
 
-      if (currentDoc.correspondent && updates.correspondent) {
-        console.log('[DEBUG] Document already has a correspondent, keeping existing one:', currentDoc.correspondent);
+      if (currentDoc.correspondent && updates.correspondent && currentDoc.correspondent === updates.correspondent) {
+        console.log('[DEBUG] New correspondent matches existing one, no change needed:', currentDoc.correspondent);
         delete updates.correspondent;
       }
 

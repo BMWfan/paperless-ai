@@ -24,7 +24,7 @@ class OllamaService {
         this.apiUrl = config.ollama.apiUrl;
         this.model = config.ollama.model;
         this.client = axios.create({
-            timeout: 1800000 // 30 minutes timeout
+            timeout: parseInt(process.env.OLLAMA_REQUEST_TIMEOUT_MS, 10) || 300000 // default 5 minutes, configurable via OLLAMA_REQUEST_TIMEOUT_MS
         });
 
         // JSON schema for document analysis output
