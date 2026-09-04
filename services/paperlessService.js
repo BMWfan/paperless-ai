@@ -18,6 +18,7 @@ class PaperlessService {
     if (!this.client && config.paperless.apiUrl && config.paperless.apiToken) {
       this.client = axios.create({
         baseURL: config.paperless.apiUrl,
+        timeout: parseInt(process.env.PAPERLESS_REQUEST_TIMEOUT_MS, 10) || 60000,
         headers: {
           'Authorization': `Token ${config.paperless.apiToken}`,
           'Content-Type': 'application/json'
@@ -115,6 +116,7 @@ class PaperlessService {
   async initializeWithCredentials(apiUrl, apiToken) {
     this.client = axios.create({
       baseURL: apiUrl,
+      timeout: parseInt(process.env.PAPERLESS_REQUEST_TIMEOUT_MS, 10) || 60000,
       headers: {
         'Authorization': `Token ${apiToken}`,
         'Content-Type': 'application/json'
