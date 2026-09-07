@@ -10,6 +10,37 @@ class RagService {
   }
 
   /**
+   * Find semantically similar previously classified documents
+   * for consistent tagging behavior.
+   *
+   * @param {string} query
+   * @param {number} limit
+   * @returns {Promise<Array>}
+   */
+  async findSimilarClassifications(query, limit = 5) {
+    try {
+      const response = await axios.post(`${this.baseUrl}/search`, {
+        query,
+        limit
+      });
+
+      if (!response.data || !Array.isArray(response.data.results)) {
+        return [];
+      }
+
+      return response.data.results.map(result => ({
+        title: result.title || 'Unknown',
+        tags: result.tags || [],
+        correspondent: result.correspondent || null,
+        score: result.score || 0
+      }));
+    } catch (error) {
+      console.warn('RAG similarity search unavailable:', error.message);
+      return [];
+    }
+  }
+
+  /**
    * Check if the RAG service is available and ready
    * @returns {Promise<{status: string, index_ready: boolean, data_loaded: boolean}>}
    */

@@ -290,7 +290,10 @@ class PaperlessService {
     
     try {
       // Versuche zuerst, den Tag zu erstellen
-      const response = await this.client.post('/tags/', { name: tagName });
+      // Auto matching (6) lets the trained classifier learn the tag from filed
+      // documents. The server default (any word) would match the tag name in any
+      // text, so a tag like "Auto" or "Rechnung" would land on nearly everything.
+      const response = await this.client.post('/tags/', { name: tagName, matching_algorithm: 6 });
       const newTag = response.data;
       console.log(`[DEBUG] Successfully created tag "${tagName}" with ID ${newTag.id}`);
       this.tagCache.set(normalizedName, newTag);

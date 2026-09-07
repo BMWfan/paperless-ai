@@ -3313,6 +3313,23 @@ router.post('/manual/updateDocument', express.json(), async (req, res) => {
     // Mark document as processed
     await documentModel.addProcessedDocument(documentId, updateData.title);
 
+    // A classification confirmed through the review UI is the gold standard for
+    // future suggestions, so it outranks the AI's own unreviewed output.
+    let contentPreview = null;
+    try {
+      const content = await paperlessService.getDocumentContent(documentId);
+      contentPreview = content ? content.substring(0, 2000) : null;
+    } catch (contentError) {
+      console.warn('[WARNING] Could not load content for learning feedback:', contentError.message);
+    }
+    await documentModel.markLearningFeedbackCorrected(
+      documentId,
+      title || null,
+      tags,
+      correspondent || null,
+      contentPreview
+    );
+
     res.json(updateDocument);
   } catch (error) {
     console.error('Update error:', error);

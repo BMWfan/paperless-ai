@@ -2,7 +2,9 @@ const {
   calculateTokens,
   calculateTotalPromptTokens,
   truncateToTokenLimit,
-  writePromptToFile
+  writePromptToFile,
+  buildLearningContext,
+  recordClassification
 } = require('./serviceUtils');
 const OpenAI = require('openai');
 const AzureOpenAI = require('openai').AzureOpenAI;
@@ -131,6 +133,9 @@ class AzureOpenAIService {
         systemPrompt += `\n\nAdditional context from external API:\n${validatedExternalApiData}`;
       }
 
+      // Add learning context from similar and user-confirmed classifications
+      systemPrompt += await buildLearningContext(content);
+
       if (process.env.USE_PROMPT_TAGS === 'yes') {
         promptTags = process.env.PROMPT_TAGS;
         systemPrompt = `
@@ -215,6 +220,9 @@ class AzureOpenAIService {
       if (!parsedResponse || !Array.isArray(parsedResponse.tags) || typeof parsedResponse.correspondent !== 'string') {
         throw new Error('Invalid response structure: missing tags array or correspondent string');
       }
+
+      // Persist successful classifications as future learning material
+      await recordClassification(id, parsedResponse, content);
 
       return {
         document: parsedResponse,

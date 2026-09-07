@@ -188,9 +188,111 @@ async function writePromptToFile(systemPrompt, truncatedContent, filePath = './l
     }
 }
 
+function parseTagList(raw) {
+    if (Array.isArray(raw)) return raw;
+
+    try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+/**
+ * Builds few-shot context from earlier classifications so comparable documents
+ * get comparable tags: semantically similar documents plus user-confirmed
+ * classifications, falling back to recent history while both are still empty.
+ *
+ * @param {string} content - Document content to find precedents for
+ * @returns {Promise<string>} Prompt section to append, empty when nothing is known yet
+ */
+async function buildLearningContext(content) {
+    // Required lazily: ragService pulls in the AI service factory, which requires
+    // the calling service back and would leave a partial export behind.
+    const ragService = require('./ragService');
+    const documentModel = require('../models/document');
+    const sections = [];
+
+    try {
+        const similar = await ragService.findSimilarClassifications(content.substring(0, 3000), 5);
+
+        if (Array.isArray(similar) && similar.length > 0) {
+            sections.push(`\n\nSemantically similar previously classified documents (use these patterns for consistent tagging):\n${JSON.stringify(similar, null, 2)}`);
+        }
+    } catch (error) {
+        console.warn('[WARNING] Semantic classification lookup failed:', error.message);
+    }
+
+    try {
+        const confirmed = (await documentModel.getLearningExamples(25))
+            .filter(entry => entry.corrected_by_user === 1 && entry.title)
+            .map(entry => ({
+                title: entry.title,
+                tags: parseTagList(entry.tags),
+                correspondent: entry.correspondent
+            }))
+            .filter(entry => entry.tags.length > 0);
+
+        if (confirmed.length > 0) {
+            sections.push(`\n\nClassifications confirmed by the user. Treat these as authoritative and reuse their tag combinations for comparable documents:\n${JSON.stringify(confirmed, null, 2)}`);
+        }
+    } catch (error) {
+        console.warn('[WARNING] Failed to load confirmed classifications:', error.message);
+    }
+
+    if (sections.length > 0) {
+        return sections.join('');
+    }
+
+    try {
+        const history = (await documentModel.getAllHistory())
+            .filter(entry => entry.title && entry.tags)
+            .slice(-25)
+            .map(entry => ({ title: entry.title, tags: parseTagList(entry.tags) }))
+            .filter(entry => entry.tags.length > 0);
+
+        if (history.length > 0) {
+            return `\n\nPreviously successful classifications (use them for consistency and learning patterns):\n${JSON.stringify(history, null, 2)}`;
+        }
+    } catch (error) {
+        console.warn('[WARNING] Failed to load classification history:', error.message);
+    }
+
+    return '';
+}
+
+/**
+ * Persists an AI classification as unconfirmed learning material. Confirmation
+ * happens later through the review UI, which outranks these rows.
+ *
+ * @param {number} documentId - Paperless document id
+ * @param {Object} parsedResponse - Parsed AI response
+ * @param {string} content - Document content the classification was based on
+ */
+async function recordClassification(documentId, parsedResponse, content) {
+    const documentModel = require('../models/document');
+
+    try {
+        await documentModel.saveLearningFeedback(
+            documentId,
+            parsedResponse.title || '',
+            content.substring(0, 2000),
+            parsedResponse.tags || [],
+            parsedResponse.correspondent || '',
+            parsedResponse.document_type || '',
+            false
+        );
+    } catch (error) {
+        console.warn('[WARNING] Failed to persist learning feedback:', error.message);
+    }
+}
+
 module.exports = {
     calculateTokens,
     calculateTotalPromptTokens,
     truncateToTokenLimit,
-    writePromptToFile
+    writePromptToFile,
+    buildLearningContext,
+    recordClassification
 };

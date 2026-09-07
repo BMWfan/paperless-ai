@@ -130,6 +130,35 @@ const createProcessingStatus = db.prepare(`
 `);
 createProcessingStatus.run();
 
+const createLearningFeedback = db.prepare(`
+  CREATE TABLE IF NOT EXISTS learning_feedback (
+    id INTEGER PRIMARY KEY,
+    document_id INTEGER,
+    title TEXT,
+    content_preview TEXT,
+    tags TEXT,
+    correspondent TEXT,
+    document_type TEXT,
+    corrected_by_user INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+`);
+createLearningFeedback.run();
+
+// One row per document: the unique index is what makes ON CONFLICT(document_id)
+// a valid upsert target, also for databases created before it existed.
+db.prepare(`
+  DELETE FROM learning_feedback
+  WHERE id NOT IN (
+    SELECT MAX(id) FROM learning_feedback GROUP BY document_id
+  )
+`).run();
+db.prepare(`
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_learning_feedback_document_id
+  ON learning_feedback(document_id)
+`).run();
+
 // Add with your other prepared statements
 const upsertProcessingStatus = db.prepare(`
   INSERT INTO processing_status (document_id, title, status)
@@ -480,6 +509,93 @@ module.exports = {
       console.error('[ERROR] getting document type stats:', error);
       return [];
     }
+},
+
+async saveLearningFeedback(documentId, title, contentPreview, tags, correspondent, documentType, correctedByUser = false) {
+  try {
+    const tagsString = JSON.stringify(tags || []);
+
+    const result = db.prepare(`
+      INSERT INTO learning_feedback (
+        document_id,
+        title,
+        content_preview,
+        tags,
+        correspondent,
+        document_type,
+        corrected_by_user,
+        updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+      ON CONFLICT(document_id) DO UPDATE SET
+        title = excluded.title,
+        content_preview = excluded.content_preview,
+        tags = excluded.tags,
+        correspondent = excluded.correspondent,
+        document_type = excluded.document_type,
+        corrected_by_user = excluded.corrected_by_user,
+        updated_at = CURRENT_TIMESTAMP
+    `).run(
+      documentId,
+      title,
+      contentPreview,
+      tagsString,
+      correspondent,
+      documentType,
+      correctedByUser ? 1 : 0
+    );
+
+    return result.changes > 0;
+  } catch (error) {
+    console.error('[ERROR] saving learning feedback:', error);
+    return false;
+  }
+},
+
+async markLearningFeedbackCorrected(documentId, title, tags, correspondent, contentPreview = null) {
+  try {
+    const result = db.prepare(`
+      INSERT INTO learning_feedback (
+        document_id,
+        title,
+        content_preview,
+        tags,
+        correspondent,
+        corrected_by_user,
+        updated_at
+      ) VALUES (?, ?, ?, ?, ?, 1, CURRENT_TIMESTAMP)
+      ON CONFLICT(document_id) DO UPDATE SET
+        title = excluded.title,
+        content_preview = COALESCE(excluded.content_preview, learning_feedback.content_preview),
+        tags = excluded.tags,
+        correspondent = excluded.correspondent,
+        corrected_by_user = 1,
+        updated_at = CURRENT_TIMESTAMP
+    `).run(
+      documentId,
+      title,
+      contentPreview,
+      JSON.stringify(tags || []),
+      correspondent
+    );
+
+    return result.changes > 0;
+  } catch (error) {
+    console.error('[ERROR] marking learning feedback as corrected:', error);
+    return false;
+  }
+},
+
+async getLearningExamples(limit = 50) {
+  try {
+    return db.prepare(`
+      SELECT * FROM learning_feedback
+      ORDER BY corrected_by_user DESC, updated_at DESC
+      LIMIT ?
+    `).all(limit);
+  } catch (error) {
+    console.error('[ERROR] getting learning examples:', error);
+    return [];
+  }
 },
 
 async setProcessingStatus(documentId, title, status) {
