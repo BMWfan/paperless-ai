@@ -2,7 +2,9 @@ const {
     calculateTokens,
     calculateTotalPromptTokens,
     truncateToTokenLimit,
-    writePromptToFile
+    writePromptToFile,
+    buildLearningContext,
+    recordClassification
 } = require('./serviceUtils');
 const axios = require('axios');
 const config = require('../config/config');
@@ -132,7 +134,7 @@ class OllamaService {
             const customFieldsStr = this._generateCustomFieldsTemplate();
 
             // Generate system prompt
-            const systemPrompt = this._generateSystemPrompt(customFieldsStr);
+            const systemPrompt = this._generateSystemPrompt(customFieldsStr) + await buildLearningContext(content);
 
             // Calculate context window size
             const promptTokenCount = this._calculatePromptTokenCount(prompt);
@@ -146,6 +148,7 @@ class OllamaService {
 
             // Process response
             const parsedResponse = this._processOllamaResponse(response);
+            await recordClassification(id, parsedResponse, content);
 
             // Check for missing data
             if (parsedResponse.tags.length === 0 && parsedResponse.correspondent === null) {
