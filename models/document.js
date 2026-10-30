@@ -534,6 +534,7 @@ async saveLearningFeedback(documentId, title, contentPreview, tags, corresponden
         document_type = excluded.document_type,
         corrected_by_user = excluded.corrected_by_user,
         updated_at = CURRENT_TIMESTAMP
+      WHERE learning_feedback.corrected_by_user = 0 OR excluded.corrected_by_user = 1
     `).run(
       documentId,
       title,
