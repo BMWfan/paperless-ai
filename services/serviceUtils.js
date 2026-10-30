@@ -213,6 +213,7 @@ async function buildLearningContext(content) {
     const ragService = require('./ragService');
     const documentModel = require('../models/document');
     const sections = [];
+    const maxContextChars = 6000;
 
     try {
         const similar = await ragService.findSimilarClassifications(content.substring(0, 3000), 5);
@@ -225,7 +226,7 @@ async function buildLearningContext(content) {
     }
 
     try {
-        const confirmed = (await documentModel.getLearningExamples(25))
+        const confirmed = (await documentModel.getLearningExamples(10))
             .filter(entry => entry.corrected_by_user === 1 && entry.title)
             .map(entry => ({
                 title: entry.title,
@@ -242,18 +243,18 @@ async function buildLearningContext(content) {
     }
 
     if (sections.length > 0) {
-        return sections.join('');
+        return sections.join('').slice(0, maxContextChars);
     }
 
     try {
         const history = (await documentModel.getAllHistory())
             .filter(entry => entry.title && entry.tags)
-            .slice(-25)
+            .slice(-10)
             .map(entry => ({ title: entry.title, tags: parseTagList(entry.tags) }))
             .filter(entry => entry.tags.length > 0);
 
         if (history.length > 0) {
-            return `\n\nPreviously successful classifications (use them for consistency and learning patterns):\n${JSON.stringify(history, null, 2)}`;
+            return `\n\nPrevious unconfirmed AI classifications (examples only; they may be incorrect):\n${JSON.stringify(history, null, 2)}`.slice(0, maxContextChars);
         }
     } catch (error) {
         console.warn('[WARNING] Failed to load classification history:', error.message);
