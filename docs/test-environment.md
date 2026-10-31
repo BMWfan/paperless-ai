@@ -54,3 +54,20 @@ runtime abort as a passing test. To run unit tests in the prepared image:
 ```sh
 docker compose -f docker-compose.test.yml run --rm --no-deps runner sh -c 'node --test tests/*.test.js'
 ```
+
+### Cloud disk capacity
+
+The Node test image uses Debian slim and removes npm's download cache after
+installation. On 2026-10-31 this image built successfully in a fresh Codex Cloud
+runtime and passed all 16 unit/SQLite/regression tests and the workflow's ESLint
+command directly in that runtime.
+
+This runtime has an approximately 8 GB root filesystem and Docker uses `vfs`.
+With this driver, image layers and container filesystems require full copies;
+the sizes reported by `docker image ls` understate actual disk use. Pulling the
+Paperless image failed with `no space left on device`. Building the slim Node
+image also exhausted disk while unused database images remained. Removing those
+unused test images and build cache freed enough space for the Node test suite.
+The full Paperless integration stack has not passed in this 8 GB runtime; it
+requires a runtime with more disk capacity. Do not change the managed storage
+driver or delete unrelated Docker images/volumes to work around this limit.
