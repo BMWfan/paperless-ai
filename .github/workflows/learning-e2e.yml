@@ -7,6 +7,10 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      # Compose mounts the CA as a BuildKit secret. Bake requires a separate
+      # filesystem entitlement for this system path on current hosted runners.
+      COMPOSE_BAKE: 'false'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

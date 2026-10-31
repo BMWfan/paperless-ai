@@ -24,6 +24,11 @@ if the platform needs a custom CA; it is mounted as a BuildKit secret only.
 No TLS verification is disabled. Runtime requests to test services use NO_PROXY;
 these hosts are confined to the internal test network.
 
+The GitHub workflow sets `COMPOSE_BAKE=false` to use Compose's regular BuildKit
+build. Current Bake versions otherwise reject the CA secret outside the checkout
+with an `fs.read` entitlement error. If this occurs locally, prefix the Compose
+commands with `COMPOSE_BAKE=false`; keep the CA mount and TLS verification enabled.
+
 `node --test tests/*.test.js` runs the existing unit/SQLite regression suite.
 `npm test` starts a development server and is not a test suite.
 The GitHub workflow `learning-e2e.yml` executes the same disposable stack.
