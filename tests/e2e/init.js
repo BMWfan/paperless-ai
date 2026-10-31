@@ -11,7 +11,7 @@ const fs = require('node:fs');
   fs.mkdirSync('data', { recursive: true });
   fs.writeFileSync('data/.env', [
     'PAPERLESS_API_URL=http://paperless:8000/api', `PAPERLESS_API_TOKEN=${token}`,
-    'PAPERLESS_USERNAME=test', 'AI_PROVIDER=ollama',
+    'PAPERLESS_USERNAME=test', 'API_KEY=isolated-test-api-key', 'AI_PROVIDER=ollama',
     'OLLAMA_API_URL=http://mock-ai:11434', 'OLLAMA_MODEL=deterministic-test',
     'RAG_SERVICE_ENABLED=false', 'DISABLE_AUTOMATIC_PROCESSING=yes',
     'SYSTEM_PROMPT=Classify the synthetic document.', 'TOKEN_LIMIT=8000',

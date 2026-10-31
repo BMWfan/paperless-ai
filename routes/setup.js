@@ -3308,7 +3308,7 @@ router.post('/manual/updateDocument', express.json(), async (req, res) => {
     if(updateData.tags === null && updateData.correspondent === null && updateData.title === null) {
       return res.status(400).json({ error: 'No changes provided' });
     }
-    const updateDocument = await paperlessService.updateDocument(documentId, updateData);
+    const updateDocument = await paperlessService.updateDocument(documentId, updateData, { confirmedUser: true });
     
     // Mark document as processed
     await documentModel.addProcessedDocument(documentId, updateData.title);

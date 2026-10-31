@@ -7,4 +7,4 @@
 - Start the stack with `docker compose -f docker-compose.test.yml up -d --build ai`; run `docker compose -f docker-compose.test.yml run --rm runner`.
 - Reset only this stack with `docker compose -f docker-compose.test.yml down -v --remove-orphans`.
 - Add meaningful automated coverage, run relevant tests before completion, investigate failures and explicitly report unrun tests and platform limitations.
-- `npm test` starts nodemon; use `node --test tests/*.test.js` for the existing unit suite.
+- `npm test` starts nodemon. Use Node 22 and `node --test tests/*.test.js`, preferably via `docker compose -f docker-compose.test.yml run --rm --no-deps runner sh -c 'node --test tests/*.test.js'`. Host Node 24 has shown a native SQLite addon cleanup abort.

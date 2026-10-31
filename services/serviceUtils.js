@@ -208,59 +208,22 @@ function parseTagList(raw) {
  * @returns {Promise<string>} Prompt section to append, empty when nothing is known yet
  */
 async function buildLearningContext(content) {
-    // Required lazily: ragService pulls in the AI service factory, which requires
-    // the calling service back and would leave a partial export behind.
-    const ragService = require('./ragService');
     const documentModel = require('../models/document');
-    const sections = [];
-    const maxContextChars = 6000;
-
-    try {
-        const similar = await ragService.findSimilarClassifications(content.substring(0, 3000), 5);
-
-        if (Array.isArray(similar) && similar.length > 0) {
-            sections.push(`\n\nSemantically similar previously classified documents (use these patterns for consistent tagging):\n${JSON.stringify(similar, null, 2)}`);
-        }
-    } catch (error) {
-        console.warn('[WARNING] Semantic classification lookup failed:', error.message);
+    const engine = require('./learningEngine');
+    if (engine.store.settings().mode === 'disabled') return '';
+    const { selectContext, rankExamples } = require('./learningContext');
+    let examples = rankExamples(content,engine.store.examples()).slice(0,8);
+    if (examples.length) {
+        const vocabulary = await require('./paperlessService').getLearningVocabulary();
+        examples = examples.map(row => ({ ...row, metadata: { ...row.metadata,
+            tags: row.metadata.tags.map(id => vocabulary.tags.get(id)).filter(Boolean),
+            correspondent: vocabulary.correspondents.get(row.metadata.correspondent) || null,
+            document_type: vocabulary.document_types.get(row.metadata.document_type) || null
+        } }));
     }
-
-    try {
-        const confirmed = (await documentModel.getLearningExamples(10))
-            .filter(entry => entry.corrected_by_user === 1 && entry.title)
-            .map(entry => ({
-                title: entry.title,
-                tags: parseTagList(entry.tags),
-                correspondent: entry.correspondent
-            }))
-            .filter(entry => entry.tags.length > 0);
-
-        if (confirmed.length > 0) {
-            sections.push(`\n\nClassifications confirmed by the user. Treat these as authoritative and reuse their tag combinations for comparable documents:\n${JSON.stringify(confirmed, null, 2)}`);
-        }
-    } catch (error) {
-        console.warn('[WARNING] Failed to load confirmed classifications:', error.message);
-    }
-
-    if (sections.length > 0) {
-        return sections.join('').slice(0, maxContextChars);
-    }
-
-    try {
-        const history = (await documentModel.getAllHistory())
-            .filter(entry => entry.title && entry.tags)
-            .slice(-10)
-            .map(entry => ({ title: entry.title, tags: parseTagList(entry.tags) }))
-            .filter(entry => entry.tags.length > 0);
-
-        if (history.length > 0) {
-            return `\n\nPrevious unconfirmed AI classifications (examples only; they may be incorrect):\n${JSON.stringify(history, null, 2)}`.slice(0, maxContextChars);
-        }
-    } catch (error) {
-        console.warn('[WARNING] Failed to load classification history:', error.message);
-    }
-
-    return '';
+    const legacy = (await documentModel.getLearningExamples(100)).filter(row => row.corrected_by_user === 1)
+        .map(row => ({ ...row, tags: parseTagList(row.tags) }));
+    return selectContext(content, [...examples, ...legacy]);
 }
 
 /**
@@ -275,6 +238,7 @@ async function recordClassification(documentId, parsedResponse, content) {
     const documentModel = require('../models/document');
 
     try {
+        require('./learningEngine').store.prediction(documentId, parsedResponse);
         await documentModel.saveLearningFeedback(
             documentId,
             parsedResponse.title || '',

@@ -24,16 +24,13 @@ class RagService {
         limit
       });
 
-      if (!response.data || !Array.isArray(response.data.results)) {
-        return [];
-      }
-
-      return response.data.results.map(result => ({
-        title: result.title || 'Unknown',
-        tags: result.tags || [],
-        correspondent: result.correspondent || null,
-        score: result.score || 0
-      }));
+      const results = Array.isArray(response.data) ? response.data : response.data?.results;
+      if (!Array.isArray(results)) return [];
+      // Python /search returns a list with doc_id, not classification metadata.
+      const documents = await Promise.all(results.slice(0,limit).filter(row => row.doc_id)
+        .map(row => paperlessService.getDocument(row.doc_id)));
+      return documents.map(doc => ({ title: doc.title, tags: doc.tags || [],
+        correspondent: doc.correspondent, document_type: doc.document_type }));
     } catch (error) {
       console.warn('RAG similarity search unavailable:', error.message);
       return [];

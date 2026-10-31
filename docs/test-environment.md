@@ -33,7 +33,19 @@ metadata. Evaluation fixtures are generated separately from learning examples.
 The protocol mock is deterministic and incurs no API costs. Passing mock tests
 cannot establish real model classification quality.
 
-The initial integration test covers actual ingestion, direct metadata correction,
-SQLite event creation across reopen, review and duplicate suppression. It does
-not yet establish the full learning-to-classification feedback loop, authenticated
-review dashboard or all three real providers; those remain implementation work.
+The integration test covers actual ingestion, deterministic classification, direct
+API correction, application monitor detection, authenticated review, confirmed
+example retrieval by all three provider protocols, overwrite protection,
+rejection/deletion and unauthenticated access denial. The unit suite additionally
+covers SQLite reopen/migration, stabilization and pagination beyond 100 documents.
+The synthetic corpus contains bilingual invoices, insurance documents, contracts,
+letters and payment confirmations. It is available for future real-model quality
+evaluation; only the deterministic integration scenario has been evaluated here.
+
+Use the pinned Node 22 image for tests. The host Node 24 runtime exhibited a native
+better-sqlite3 cleanup assertion in the expanded test suite; do not treat a host
+runtime abort as a passing test. To run unit tests in the prepared image:
+
+```sh
+docker compose -f docker-compose.test.yml run --rm --no-deps runner sh -c 'node --test tests/*.test.js'
+```

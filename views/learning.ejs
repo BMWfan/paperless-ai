@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paperless-AI Learning</title><link rel="stylesheet" href="/css/dashboard.css">
+<style>body{font:16px system-ui;margin:2rem;max-width:1100px}section,article{border:1px solid #aaa;border-radius:8px;padding:1rem;margin:1rem 0}button,input,select{padding:.5rem;margin:.3rem}pre{white-space:pre-wrap;overflow-wrap:anywhere}#message{color:#a33}</style></head>
+<body><a href="/dashboard">← Dashboard</a><h1>Learning</h1>
+<p>External changes have unknown provenance and require review. Confirm only corrections you trust.</p>
+<p id="message" role="status"></p>
+<section><h2>Configuration</h2><label><input type="checkbox" id="enabled">Enable detection</label>
+<label>Mode <select id="mode"><option>hybrid</option><option>manual</option><option>automatic</option><option>disabled</option></select></label>
+<label>Polling (seconds) <input id="interval" type="number" min="1"></label>
+<label>Stabilization (seconds) <input id="stabilization" type="number" min="0"></label>
+<button id="save">Save</button><button id="scan">Scan now</button></section>
+<section><h2>Corrections and review history</h2>
+<label>Status <select id="status"><option value="">All</option><option>pending</option><option>confirmed</option><option>rejected</option><option>deleted</option></select></label>
+<label>Search <input id="query" type="search"></label><button id="refresh">Refresh</button>
+<div id="events"></div></section>
+<script src="/js/learning.js"></script></body></html>

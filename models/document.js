@@ -586,6 +586,10 @@ async markLearningFeedbackCorrected(documentId, title, tags, correspondent, cont
   }
 },
 
+async getConfirmedLearningFeedback(documentId) {
+  return db.prepare('SELECT * FROM learning_feedback WHERE document_id=? AND corrected_by_user=1').get(documentId) || null;
+},
+
 async getLearningExamples(limit = 50) {
   try {
     return db.prepare(`
