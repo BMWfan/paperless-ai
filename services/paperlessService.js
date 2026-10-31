@@ -1310,6 +1310,7 @@ async getOrCreateDocumentType(name, options = {}) {
 
 
   async updateDocument(documentId, updates, options = {}) {
+    updates = { ...updates };
     this.initialize();
     if (!this.client) return;
     try {
@@ -1323,7 +1324,7 @@ async getOrCreateDocumentType(name, options = {}) {
       }
 
       
-      if (updates.tags) {
+      if (updates.tags && !options.confirmedUser) {
         console.log(`[DEBUG] Current tags for document ${documentId}:`, currentDoc.tags);
         console.log(`[DEBUG] Adding new tags:`, updates.tags);
         console.log(`[DEBUG] Current correspondent:`, currentDoc.correspondent);

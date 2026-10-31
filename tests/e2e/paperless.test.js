@@ -88,7 +88,14 @@ test('real Paperless ingestion, direct correction, persistent detection and revi
   assert.equal(protectedDoc.title,'Confirmed synthetic correction');
   await learning('/scan',{});
   assert.equal((await learning('/events?status=pending')).events.filter(row=>row.document_id===document.id).length,0,'self writes do not create corrections');
+  const editInput = {tags:[]};
+  const userEdited = await paperless.updateDocument(document.id,editInput,{confirmedUser:true});
+  assert.deepEqual(userEdited.tags,[],'explicit user edits can remove tags');
+  assert.deepEqual(editInput,{tags:[]},'write protection never mutates caller input');
   await learning(`/events/${event.id}/review`,{decision:'deleted'});
+  const currentExample = (await learning('/examples')).examples.find(row=>row.document_id===document.id);
+  assert.ok(currentExample,'deleting an older event must preserve a newer confirmed correction');
+  await learning(`/events/${currentExample.event_id}/review`,{decision:'deleted'});
   assert.equal((await learning('/examples')).examples.filter(row=>row.document_id===document.id).length,0);
   await api(`/documents/${second.id}/`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'Rejected correction'})});
   await learning('/scan',{});

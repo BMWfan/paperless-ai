@@ -3296,9 +3296,9 @@ router.post('/manual/updateDocument', express.json(), async (req, res) => {
     const correspondentData = correspondent ? await paperlessService.getOrCreateCorrespondent(correspondent) : null;
 
 
-    await paperlessService.removeUnusedTagsFromDocument(documentId, tagIds);
+    // The authenticated update replaces tags atomically with the other metadata.
     
-    // Then update with new tags (this will only add new ones since we already removed unused ones)
+    // Explicit user edits replace tags; automated classifications keep the existing merge behavior.
     const updateData = {
       tags: tagIds,
       correspondent: correspondentData ? correspondentData.id : null,
