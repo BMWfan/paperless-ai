@@ -1,5 +1,36 @@
 # Validation on 2026-10-31
 
+## Follow-up: direct 8 GB Codex Cloud validation, 2026-11-01
+
+The compact setup in `docker-compose.test-cloud.yml` passed directly in the
+managed 8 GB runtime using Docker's existing `vfs` driver:
+
+- All 16 Node 22 unit/SQLite/regression tests and the workflow's ESLint command passed.
+- Real Paperless integration passed before and after deleting this stack's test
+  containers and data volumes, rebuilding its data from scratch and waiting for
+  all services to become healthy.
+- With PostgreSQL, Redis, Paperless and the app running, disk use was approximately
+  4.9 GB, leaving 2.7 GB available.
+
+The Cloud override uses single-layer local images, stores the complete Paperless
+`/usr` tree once in a dedicated program volume, and runs initialization, app,
+protocol mock and test processes in one app container. All Paperless files and
+OCR languages remain present. PostgreSQL and Redis use pinned Alpine variants.
+No managed storage driver, network policy or production service was changed.
+
+Earlier failed operations left unreferenced vfs directories behind. Their exact
+paths were checked against current Docker image/container layer references before
+targeted cleanup. A broad Docker prune was rejected and was not performed. Do not
+automate raw Docker storage cleanup or prune unrelated workloads.
+
+The optional program volume survives ordinary test-data resets and must stay
+paired with its compact image. See `docs/test-environment.md` for preparation,
+start, execution and reset commands. These are development images, not release
+artifacts. Deterministic provider fixtures still do not measure real model quality;
+the optional Python RAG/model service remains untested.
+
+## Original validation record
+
 Executed in the managed cloud Docker environment on `feature/learning-engine-v2`:
 
 - Node 22 unit, SQLite migration and regression suite: **16 passed, 0 failed**.

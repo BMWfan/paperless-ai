@@ -1,7 +1,7 @@
 name: paperless-ai-e2e
 services:
   db:
-    image: postgres:16.6-bookworm
+    image: postgres:16.6-alpine
     environment:
       POSTGRES_DB: paperless_test
       POSTGRES_USER: test
@@ -12,7 +12,7 @@ services:
       interval: 5s
       retries: 30
   redis:
-    image: redis:7.4.2-bookworm
+    image: redis:7.4.2-alpine
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s

@@ -1,0 +1,33 @@
+# Use after preparing the compact images documented in docs/test-environment.md.
+# Runtime services, volumes, authentication and internal networking are inherited.
+services:
+  db:
+    image: paperless-ai-e2e-cloud-db:local
+  redis:
+    image: paperless-ai-e2e-cloud-redis:local
+  paperless:
+    image: paperless-ai-e2e-cloud-paperless:local
+    volumes:
+      - paperless-runtime:/usr
+  ai:
+    image: paperless-ai-e2e-cloud-app:local
+    # One filesystem copy for app, initializer, mock and test execution.
+    depends_on: !override
+      paperless: {condition: service_healthy}
+    command: ["sh", "-c", "node tests/e2e/mock-ai.js & node tests/e2e/init.js && exec node server.js"]
+    networks:
+      default:
+        aliases: [mock-ai]
+  mock-ai:
+    image: paperless-ai-e2e-cloud-app:local
+    profiles: [separate-services]
+  init:
+    image: paperless-ai-e2e-cloud-app:local
+    profiles: [separate-services]
+  runner:
+    image: paperless-ai-e2e-cloud-app:local
+    profiles: [separate-services]
+volumes:
+  paperless-runtime:
+    name: paperless-ai-e2e_paperless-runtime
+    external: true

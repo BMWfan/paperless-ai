@@ -6,5 +6,6 @@
 - Integration tests must use `docker-compose.test.yml`, never a production Paperless instance or real documents/credentials.
 - Start the stack with `docker compose -f docker-compose.test.yml up -d --build ai`; run `docker compose -f docker-compose.test.yml run --rm runner`.
 - Reset only this stack with `docker compose -f docker-compose.test.yml down -v --remove-orphans`.
+- On small cloud runtimes using Docker's `vfs` driver, follow the compact-image procedure in `docs/test-environment.md` and add `-f docker-compose.test-cloud.yml` to test commands. Start with `up --no-build --pull never`; use `run --pull never` with the prepared local images. Never change the managed storage driver or prune unrelated workloads.
 - Add meaningful automated coverage, run relevant tests before completion, investigate failures and explicitly report unrun tests and platform limitations.
 - `npm test` starts nodemon. Use Node 22 and `node --test tests/*.test.js`, preferably via `docker compose -f docker-compose.test.yml run --rm --no-deps runner sh -c 'node --test tests/*.test.js'`. Host Node 24 has shown a native SQLite addon cleanup abort.

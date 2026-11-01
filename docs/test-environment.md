@@ -68,6 +68,56 @@ the sizes reported by `docker image ls` understate actual disk use. Pulling the
 Paperless image failed with `no space left on device`. Building the slim Node
 image also exhausted disk while unused database images remained. Removing those
 unused test images and build cache freed enough space for the Node test suite.
-The full Paperless integration stack has not passed in this 8 GB runtime; it
-requires a runtime with more disk capacity. Do not change the managed storage
-driver or delete unrelated Docker images/volumes to work around this limit.
+For the vfs driver, use the compact-image procedure below before concluding that
+more disk capacity is needed. Do not change the managed storage driver or delete
+unrelated Docker images/volumes to work around this limit.
+
+### Compact images for small Codex Cloud runtimes
+
+`docker-compose.test-cloud.yml` retains the same real Paperless service, synthetic
+documents, isolated network, healthchecks, and persistent test volumes. It runs
+the initializer and protocol mock alongside the app in one container. Tests run
+as a separate process with `compose exec`, avoiding extra vfs container copies.
+PostgreSQL and Redis use pinned Alpine variants.
+The optional `tests/e2e/compact-image.py` imports each filesystem as a single layer
+so vfs does not store a full copy for every original image layer. It preserves
+entrypoint, command, environment, working directory, user, exposed ports, volumes,
+and stop signal. All Paperless files, including OCR languages, are retained. Its
+`/usr` tree is stored once in the dedicated `paperless-ai-e2e_paperless-runtime`
+volume, avoiding a second full copy when the container is created. Compose
+supplies the healthchecks. Images are local and disposable;
+no registry pushes or Docker daemon changes occur.
+
+Install the official `crane` CLI (tested with go-containerregistry v0.22.1) from
+https://github.com/google/go-containerregistry/releases. Keep inherited proxy and
+CA settings. The commands below assume an amd64 runtime, Compose 2.24.4+
+(`!override` support), and `crane` on PATH:
+
+```sh
+# Build the current application, then compact it before importing the large services.
+COMPOSE_BAKE=false docker compose -f docker-compose.test.yml build ai
+python3 tests/e2e/compact-image.py paperless-ai-e2e-ai paperless-ai-e2e-cloud-app:local
+# Remove only the now-redundant test image/cache created by this build when needed.
+# Do not prune unrelated workloads on a shared Docker daemon.
+python3 tests/e2e/compact-image.py --remote --usr-volume paperless-ai-e2e_paperless-runtime ghcr.io/paperless-ngx/paperless-ngx:3.4.1 paperless-ai-e2e-cloud-paperless:local
+python3 tests/e2e/compact-image.py --remote registry-1.docker.io/library/postgres:16.6-alpine paperless-ai-e2e-cloud-db:local
+python3 tests/e2e/compact-image.py --remote registry-1.docker.io/library/redis:7.4.2-alpine paperless-ai-e2e-cloud-redis:local
+
+docker compose -f docker-compose.test.yml -f docker-compose.test-cloud.yml up -d --no-build --pull never ai
+docker compose -f docker-compose.test.yml -f docker-compose.test-cloud.yml exec -T ai node --test tests/e2e/paperless.test.js
+# Run unit tests in the same compact image:
+docker compose -f docker-compose.test.yml -f docker-compose.test-cloud.yml exec -T ai sh -c 'node --test tests/*.test.js'
+# Reset only this disposable stack:
+docker compose -f docker-compose.test.yml -f docker-compose.test-cloud.yml down -v --remove-orphans
+```
+
+Remote tags are resolved to a digest before reading configuration and filesystem.
+No intermediate root filesystem tarball is stored: crane streams directly into
+Docker import and, for Paperless, into its program volume. The helper refuses
+to overwrite an existing program volume. This external volume survives a test
+data reset; keep it paired with its compact image. To recreate both, first stop
+the stack, then explicitly remove `paperless-ai-e2e_paperless-runtime` and
+`paperless-ai-e2e-cloud-paperless:local` before preparing them again. Rebuild and compact the application after source
+changes; do not reuse a stale compact image. Importing changes the local image digest and removes
+its original build history, so use these images only for disposable development
+tests, not release publication.
