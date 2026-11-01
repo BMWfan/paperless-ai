@@ -3268,74 +3268,8 @@ router.post('/manual/playground', express.json(), async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/manual/updateDocument', express.json(), async (req, res) => {
-  try {
-    var { documentId, tags, correspondent, title } = req.body;
-    console.log("TITLE: ", title);
-    // Convert all tags to names if they are IDs
-    tags = await Promise.all(tags.map(async tag => {
-      console.log('Processing tag:', tag);
-      if (!isNaN(tag)) {
-        const tagName = await paperlessService.getTagTextFromId(Number(tag));
-        console.log('Converted tag ID:', tag, 'to name:', tagName);
-        return tagName;
-      }
-      return tag;
-    }));
-
-    // Filter out any null or undefined tags
-    tags = tags.filter(tag => tag != null);
-
-    // Process new tags to get their IDs
-    const { tagIds, errors } = await paperlessService.processTags(tags);
-    if (errors.length > 0) {
-      return res.status(400).json({ errors });
-    }
-
-    // Process correspondent if provided
-    const correspondentData = correspondent ? await paperlessService.getOrCreateCorrespondent(correspondent) : null;
-
-
-    // The authenticated update replaces tags atomically with the other metadata.
-    
-    // Explicit user edits replace tags; automated classifications keep the existing merge behavior.
-    const updateData = {
-      tags: tagIds,
-      correspondent: correspondentData ? correspondentData.id : null,
-      title: title ? title : null
-    };
-
-    if(updateData.tags === null && updateData.correspondent === null && updateData.title === null) {
-      return res.status(400).json({ error: 'No changes provided' });
-    }
-    const updateDocument = await paperlessService.updateDocument(documentId, updateData, { confirmedUser: true });
-    
-    // Mark document as processed
-    await documentModel.addProcessedDocument(documentId, updateData.title);
-
-    // A classification confirmed through the review UI is the gold standard for
-    // future suggestions, so it outranks the AI's own unreviewed output.
-    let contentPreview = null;
-    try {
-      const content = await paperlessService.getDocumentContent(documentId);
-      contentPreview = content ? content.substring(0, 2000) : null;
-    } catch (contentError) {
-      console.warn('[WARNING] Could not load content for learning feedback:', contentError.message);
-    }
-    await documentModel.markLearningFeedbackCorrected(
-      documentId,
-      title || null,
-      tags,
-      correspondent || null,
-      contentPreview
-    );
-
-    res.json(updateDocument);
-  } catch (error) {
-    console.error('Update error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
+router.post('/manual/updateDocument', express.json(), require('./learning').sameOriginJSON,
+  require('./manualLearning').createManualUpdateHandler(paperlessService, documentModel));
 
 /**
  * @swagger

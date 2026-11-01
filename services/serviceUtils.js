@@ -188,41 +188,39 @@ async function writePromptToFile(systemPrompt, truncatedContent, filePath = './l
     }
 }
 
-function parseTagList(raw) {
-    if (Array.isArray(raw)) return raw;
-
-    try {
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed : [];
-    } catch (error) {
-        return [];
-    }
-}
-
 /**
- * Builds few-shot context from earlier classifications so comparable documents
- * get comparable tags: semantically similar documents plus user-confirmed
- * classifications, falling back to recent history while both are still empty.
+ * Builds bounded reference context from current confirmed v2 examples and
+ * non-revoked legacy corrections. Unconfirmed predictions never train retrieval.
  *
  * @param {string} content - Document content to find precedents for
  * @returns {Promise<string>} Prompt section to append, empty when nothing is known yet
  */
 async function buildLearningContext(content) {
-    const documentModel = require('../models/document');
     const engine = require('./learningEngine');
     if (engine.store.settings().mode === 'disabled') return '';
     const { selectContext, rankExamples } = require('./learningContext');
-    let examples = rankExamples(content,engine.store.examples()).slice(0,8);
+    let examples = engine.store.examples();
     if (examples.length) {
-        const vocabulary = await require('./paperlessService').getLearningVocabulary();
-        examples = examples.map(row => ({ ...row, metadata: { ...row.metadata,
-            tags: row.metadata.tags.map(id => vocabulary.tags.get(id)).filter(Boolean),
-            correspondent: vocabulary.correspondents.get(row.metadata.correspondent) || null,
-            document_type: vocabulary.document_types.get(row.metadata.document_type) || null
-        } }));
+        try {
+            const paperless = require('./paperlessService');
+            let vocabulary = await paperless.getLearningVocabulary();
+            const missingName = examples.some(row => row.metadata.tags.some(id => !vocabulary.tags.has(id)) ||
+                (row.metadata.correspondent && !vocabulary.correspondents.has(row.metadata.correspondent)) ||
+                (row.metadata.document_type && !vocabulary.document_types.has(row.metadata.document_type)));
+            if (missingName) vocabulary = await paperless.getLearningVocabulary(true);
+            examples = examples.map(row => ({ ...row, metadata: { ...row.metadata,
+                tags: row.metadata.tags.map(id => vocabulary.tags.get(id)).filter(Boolean),
+                correspondent: vocabulary.correspondents.get(row.metadata.correspondent) || null,
+                document_type: vocabulary.document_types.get(row.metadata.document_type) || null
+            } }));
+        } catch {
+            // Classification can still use titles/content during a vocabulary outage.
+            examples = examples.map(row => ({ ...row, metadata: { title: row.metadata.title,
+                tags: [], correspondent: null, document_type: null } }));
+        }
     }
-    const legacy = (await documentModel.getLearningExamples(100)).filter(row => row.corrected_by_user === 1)
-        .map(row => ({ ...row, tags: parseTagList(row.tags) }));
+    examples = rankExamples(content, examples).slice(0,8);
+    const legacy = engine.store.legacyExamples();
     return selectContext(content, [...examples, ...legacy]);
 }
 

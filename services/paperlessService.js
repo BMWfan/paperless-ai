@@ -936,10 +936,10 @@ class PaperlessService {
 
 
   // Aktualisierte getDocuments Methode
-  async getLearningVocabulary() {
+  async getLearningVocabulary(force = false) {
     this.initialize();
     if (!this.client) throw new Error('Paperless is not configured');
-    if (this.learningVocabulary && Date.now() - this.learningVocabularyAt < 60000) return this.learningVocabulary;
+    if (!force && this.learningVocabulary && Date.now() - this.learningVocabularyAt < 60000) return this.learningVocabulary;
     const entries = await Promise.all(['tags','correspondents','document_types'].map(async resource => {
       const names = new Map();
       let page = 1;
@@ -962,7 +962,7 @@ class PaperlessService {
     let page = 1;
     while (true) {
       const { data } = await this.client.get('/documents/', { params: { page, page_size: 100,
-        fields: 'id,title,tags,correspondent,document_type,custom_fields,content,modified' } });
+        fields: 'id,title,tags,correspondent,document_type,custom_fields,modified' } });
       if (!Array.isArray(data.results)) throw new Error('Invalid Paperless learning response');
       documents.push(...data.results);
       if (!data.next) return documents;
@@ -1396,7 +1396,7 @@ async getOrCreateDocumentType(name, options = {}) {
         console.warn(`[WARN] Title truncated to 128 characters for document ${documentId}`);
       }
       
-      console.log('[DEBUG] Final update data:', updateData);
+      console.log('[DEBUG] Final update fields:', Object.keys(updateData));
       const engineWrite = require('./learningEngine');
       const { compareDocumentMetadata } = require('./documentSnapshotService');
       if (engineWrite.inFlight.has(Number(documentId))) throw new Error('Concurrent document write');
@@ -1406,12 +1406,11 @@ async getOrCreateDocumentType(name, options = {}) {
         if (Object.keys(compareDocumentMetadata(currentDoc, latest)).length) throw new Error('Document changed during classification; retry required');
         engineWrite.store.observe(latest, 'unknown');
         const response = await this.client.patch(`/documents/${documentId}/`, updateData);
-        engineWrite.store.observe(response.data, options.confirmedUser ? 'confirmed_ui' : 'self_write');
+        engineWrite.store.observe(response.data, options.confirmedUser ? 'confirmed_ui' : 'self_write', { actor: options.actor });
       } finally { engineWrite.inFlight.delete(Number(documentId)); }
-      console.log(`[SUCCESS] Updated document ${documentId} with:`, updateData);
+      console.log(`[SUCCESS] Updated metadata for document ${documentId}`);
       return await this.getDocument(documentId);
     } catch (error) {
-      console.log(error);
       console.error(`[ERROR] updating document ${documentId}:`, error.message);
       throw error;
     }

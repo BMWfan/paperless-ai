@@ -70,9 +70,9 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
-const { authenticateJWT } = require('./routes/auth');
+const { authenticateJWT, isAuthenticated } = require('./routes/auth');
 app.use('/api/learning', authenticateJWT, require('./routes/learning').createLearningRouter({ monitor: learningMonitor }));
-app.get('/learning', authenticateJWT, (req, res) => res.render('learning'));
+app.get('/learning', isAuthenticated, (req, res) => res.render('learning'));
 
 
 // Swagger documentation route

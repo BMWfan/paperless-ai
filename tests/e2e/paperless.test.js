@@ -106,3 +106,71 @@ test('real Paperless ingestion, direct correction, persistent detection and revi
   const health = await fetch('http://ai:3000/health');
   assert.equal(health.status, 200);
 });
+
+test('real manual API honors modes, multi-field protection and legacy revocation', {timeout:180000}, async () => {
+  const fixture=generate(Date.now()+99,'de');
+  const form=new FormData();form.set('document',new Blob([fixture.content],{type:'text/plain'}),fixture.name);
+  await api('/documents/post_document/',{method:'POST',body:form});
+  let document;
+  for(let attempt=0;attempt<90;attempt++) {
+    document=(await api('/documents/?ordering=-id')).results.find(row=>row.original_file_name===fixture.name);
+    if(document) break;
+    await new Promise(resolve=>setTimeout(resolve,1000));
+  }
+  assert.ok(document);
+  const create=(resource,name,extra={})=>api(`/${resource}/`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,...extra})});
+  const tag=await create('tags',`typed-tag-${document.id}`);
+  const correspondent=await create('correspondents',`Synthetic insurer ${document.id}`);
+  const type=await create('document_types',`Synthetic insurance ${document.id}`);
+  const custom=await create('custom_fields',`Synthetic field ${document.id}`,{data_type:'string'});
+  await learning('/settings',{mode:'manual',enabled:false,stabilizationMs:0});await learning('/scan',{});
+  const correction={title:'Synthetic insurance correction',tags:[tag.id],correspondent:correspondent.id,document_type:type.id,custom_fields:[{field:custom.id,value:'synthetic-value'}]};
+  await api(`/documents/${document.id}/`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(correction)});
+  await learning('/scan',{});
+  const eventsFor=async()=> (await learning('/events?limit=200')).events.filter(row=>row.document_id===document.id);
+  let event=(await eventsFor()).find(row=>row.status==='pending');assert.ok(event);
+  for(const field of Object.keys(correction)) assert.ok(event.changes[field],`direct API detects ${field}`);
+  const staleId=event.id;
+  correction.title='Synthetic insurance corrected again';
+  await api(`/documents/${document.id}/`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:correction.title})});
+  const stale=await fetch(`http://ai:3000/api/learning/events/${staleId}/review`,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'isolated-test-api-key'},body:JSON.stringify({decision:'confirmed'})});
+  assert.equal(stale.status,409,'approval checks live Paperless metadata even before the next scheduled scan');
+  await learning(`/events/${staleId}/review`,{decision:'rejected'});
+  event=(await eventsFor()).find(row=>row.status==='pending');assert.ok(event);
+  await learning(`/events/${event.id}/review`,{decision:'confirmed'});
+  const count=(await eventsFor()).length;await learning('/scan',{});assert.equal((await eventsFor()).length,count);
+  const paperless=require('../../services/paperlessService');
+  const protectedDoc=await paperless.updateDocument(document.id,{title:'Untrusted overwrite',tags:[],correspondent:null,document_type:null,custom_fields:[]});
+  for(const field of Object.keys(correction)) assert.deepEqual(protectedDoc[field],correction[field],`confirmed ${field} is protected`);
+  const model=require('../../models/document');
+  await model.saveLearningFeedback(document.id,'Legacy resurrection trap','synthetic insurance',['legacy'],'Synthetic','Insurance',true);
+  await learning(`/events/${event.id}/review`,{decision:'deleted'});
+  assert.equal(await model.getConfirmedLearningFeedback(document.id),null,'legacy duplicate cannot keep write protection after revocation');
+  assert.ok((await model.getLearningExamples(100,true)).some(row=>row.document_id===document.id),'legacy data remains stored');
+  const afterRevocation=await paperless.updateDocument(document.id,{title:'Allowed after revocation'});
+  assert.equal(afterRevocation.title,'Allowed after revocation');
+  assert.doesNotMatch(await require('../../services/serviceUtils').buildLearningContext('synthetic insurance'),/Legacy resurrection trap/);
+  const manual=async body=>{
+    const response=await fetch('http://ai:3000/manual/updateDocument',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'isolated-test-api-key'},body:JSON.stringify(body),redirect:'manual'});
+    assert.equal(response.status,200,'existing manual route returns a successful update');return response.json();
+  };
+  for(const mode of ['automatic','hybrid','manual','disabled']) {
+    await learning('/settings',{mode});const before=(await eventsFor()).length;
+    const updated=await manual({documentId:document.id,title:`Explicit synthetic ${mode}`});
+    assert.equal(updated.title,`Explicit synthetic ${mode}`);assert.deepEqual(updated.tags,[tag.id],'partial manual edit preserves tags');
+    const events=await eventsFor();
+    if(mode==='disabled') assert.equal(events.length,before);
+    else {
+      const latest=events[0];assert.equal(latest.source,'confirmed_ui');
+      assert.equal(latest.status,mode==='manual'?'pending':'confirmed');
+      if(mode==='manual') await learning(`/events/${latest.id}/review`,{decision:'rejected'});
+    }
+  }
+  await learning('/settings',{mode:'hybrid'});
+  const history=(await learning(`/history?documentId=${document.id}`)).history;
+  assert.ok(history.some(row=>row.actor==='api-key' && row.decision==='confirmed'));
+  const page=await fetch('http://ai:3000/learning',{headers:{'x-api-key':'isolated-test-api-key'}});
+  assert.equal(page.status,200);const html=await page.text();
+  assert.match(html,/Confirmed learning examples/);assert.match(html,/Review history/);assert.match(html,/learning.css/);
+  assert.equal((await fetch('http://ai:3000/learning',{redirect:'manual'})).status,302,'the dashboard uses the existing login flow');
+});

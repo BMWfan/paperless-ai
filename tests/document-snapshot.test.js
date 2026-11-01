@@ -26,4 +26,12 @@ test('custom fields are compared independent of array order', () => {
 
 test('rejects invalid document input', () => {
   assert.throws(() => normalizeDocumentMetadata(null), TypeError);
+  assert.throws(() => normalizeDocumentMetadata([]), TypeError);
+});
+
+test('normalizes empty IDs, invalid tag IDs and typed custom-field key order', () => {
+  assert.deepEqual(compareDocumentMetadata(
+    {correspondent:'',document_type:null,tags:[null,0,2,'2'],custom_fields:[{field:'3',value:{b:2,a:1}}]},
+    {correspondent:null,document_type:'',tags:[2],custom_fields:[{field:3,value:{a:1,b:2}}]}
+  ),{});
 });

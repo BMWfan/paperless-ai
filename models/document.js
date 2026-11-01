@@ -146,18 +146,24 @@ const createLearningFeedback = db.prepare(`
 `);
 createLearningFeedback.run();
 
-// One row per document: the unique index is what makes ON CONFLICT(document_id)
-// a valid upsert target, also for databases created before it existed.
-db.prepare(`
-  DELETE FROM learning_feedback
-  WHERE id NOT IN (
-    SELECT MAX(id) FROM learning_feedback GROUP BY document_id
-  )
-`).run();
-db.prepare(`
-  CREATE UNIQUE INDEX IF NOT EXISTS idx_learning_feedback_document_id
-  ON learning_feedback(document_id)
-`).run();
+// Upgrade pre-upsert databases without losing duplicate historical rows. A
+// confirmed correction outranks a newer unconfirmed prediction for the same doc.
+db.transaction(() => {
+  db.exec(`CREATE TABLE IF NOT EXISTS learning_feedback_archive (
+    id INTEGER PRIMARY KEY, original_id INTEGER NOT NULL, document_id INTEGER NOT NULL,
+    payload_json TEXT NOT NULL, archived_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)`);
+  const duplicates = db.prepare(`SELECT * FROM learning_feedback WHERE document_id IN (
+    SELECT document_id FROM learning_feedback WHERE document_id IS NOT NULL GROUP BY document_id HAVING COUNT(*)>1
+  ) ORDER BY document_id,corrected_by_user DESC,id DESC`).all();
+  const retained = new Set();
+  for (const row of duplicates) {
+    if (!retained.has(row.document_id)) { retained.add(row.document_id); continue; }
+    db.prepare('INSERT INTO learning_feedback_archive(original_id,document_id,payload_json) VALUES(?,?,?)')
+      .run(row.id,row.document_id,JSON.stringify(row));
+    db.prepare('DELETE FROM learning_feedback WHERE id=?').run(row.id);
+  }
+  db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_learning_feedback_document_id ON learning_feedback(document_id)');
+})();
 
 // Add with your other prepared statements
 const upsertProcessingStatus = db.prepare(`
@@ -587,13 +593,16 @@ async markLearningFeedbackCorrected(documentId, title, tags, correspondent, cont
 },
 
 async getConfirmedLearningFeedback(documentId) {
+  if (require('../services/learningEngine').store.isLegacySuppressed(documentId)) return null;
   return db.prepare('SELECT * FROM learning_feedback WHERE document_id=? AND corrected_by_user=1').get(documentId) || null;
 },
 
-async getLearningExamples(limit = 50) {
+async getLearningExamples(limit = 50, includeRevoked = false) {
   try {
+    if (!includeRevoked) require('../services/learningEngine').store;
     return db.prepare(`
-      SELECT * FROM learning_feedback
+      SELECT f.* FROM learning_feedback f
+      ${includeRevoked ? '' : 'WHERE NOT EXISTS (SELECT 1 FROM learning_legacy_overrides o WHERE o.document_id=f.document_id)'}
       ORDER BY corrected_by_user DESC, updated_at DESC
       LIMIT ?
     `).all(limit);

@@ -92,7 +92,7 @@ test('additive migration preserves legacy feedback and existing v1 snapshots on 
   const check = new Database(file);
   try {
     assert.equal(check.prepare('SELECT title FROM learning_feedback WHERE document_id=7').get().title,'Legacy correction');
-    assert.equal(check.prepare('SELECT COUNT(*) AS n FROM learning_migrations').get().n,1);
+    assert.deepEqual(check.prepare('SELECT version FROM learning_migrations ORDER BY version').all().map(row=>row.version),[2,3]);
     assert.equal(check.prepare('SELECT COUNT(*) AS n FROM learning_document_snapshots').get().n,1);
   } finally { check.close(); }
 });
@@ -102,6 +102,6 @@ test('synthetic evaluation corpus is bilingual and separate from learning fixtur
   const corpus = generate.corpus();
   assert.equal(corpus.length,10);
   assert.equal(new Set(corpus.map(row=>row.name)).size,10);
-  assert.ok(corpus.every(row=>row.content.includes('SYNTHETIC DATA ONLY') && row.expected.document_type));
+  assert.ok(corpus.every(row=>row.content.includes('SYNTHETIC DATA ONLY') && row.expected.title && row.expected.document_type));
   assert.ok(corpus.every(row=>row.content !== generate(1).content));
 });

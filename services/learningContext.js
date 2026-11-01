@@ -4,7 +4,8 @@ function rankExamples(content, examples) {
   const words = text => new Set(String(text || '').toLowerCase().match(/[\p{L}\p{N}]{3,}/gu) || []);
   const query = words(content);
   const ranked = examples.map(example => {
-    const tokens = words(`${example.content_preview || ''} ${example.metadata?.title || example.title || ''}`);
+    const metadata = example.metadata || example;
+    const tokens = words(`${example.content_preview || ''} ${metadata.title || ''} ${metadata.document_type || ''} ${metadata.correspondent || ''} ${(metadata.tags || []).join(' ')}`);
     let score = 0;
     for (const token of query) if (tokens.has(token)) score++;
     return { example, score: score / Math.max(1, Math.sqrt(tokens.size * query.size)) };
