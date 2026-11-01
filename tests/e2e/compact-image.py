@@ -18,6 +18,8 @@ def main():
     parser.add_argument('--remote', action='store_true')
     parser.add_argument('--crane', default='crane')
     parser.add_argument('--usr-volume', help='store /usr once in a new disposable test volume')
+    parser.add_argument('--extractor-image', default='paperless-ai-e2e-cloud-redis:local',
+                        help='small prepared test image providing tar (used only for /usr extraction)')
     args = parser.parse_args()
     if not args.target.startswith('paperless-ai-e2e-cloud-'):
         parser.error('target must be a disposable paperless-ai-e2e-cloud-* image')
@@ -41,6 +43,9 @@ def main():
             docker + ['create', '--network', 'none', source], text=True).strip()
         export = docker + ['export', container]
     changes = []
+    changes += ['--change', 'LABEL org.paperless-ai.e2e.source=' + json.dumps(source)]
+    if args.usr_volume:
+        changes += ['--change', 'LABEL org.paperless-ai.e2e.program-volume=' + json.dumps(args.usr_volume)]
     for field, instruction in [('Entrypoint', 'ENTRYPOINT'), ('Cmd', 'CMD'),
                                ('WorkingDir', 'WORKDIR'), ('User', 'USER'),
                                ('StopSignal', 'STOPSIGNAL')]:
@@ -69,7 +74,7 @@ def main():
             extraction = subprocess.Popen(docker + [
                 'run', '--rm', '-i', '--network', 'none',
                 '--mount', 'type=volume,src=' + args.usr_volume + ',dst=/runtime',
-                'paperless-ai-e2e-cloud-app:local', 'tar', '-xpf', '-', '-C', '/runtime'],
+                args.extractor_image, 'tar', '-xpf', '-', '-C', '/runtime'],
                 stdin=subprocess.PIPE)
             importing = subprocess.Popen(docker + ['import'] + changes + ['-', args.target],
                                          stdin=subprocess.PIPE)

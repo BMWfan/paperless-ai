@@ -1,5 +1,52 @@
 # Isolated development environment
 
+## Codex Cloud quick start
+
+From the existing `feature/learning-engine-v2` checkout:
+
+```sh
+python3 tests/e2e/cloud-test.py test
+```
+
+This command prepares the current source, downloads and verifies pinned crane
+when needed, installs Node dependencies in the test image, prepares all real
+services, waits for health, then runs unit/API/migration tests, ESLint, Python setup
+safety tests, both real integration scenarios and offline-edit restart detection.
+It checks a source fingerprint and rebuilds changed app sources automatically.
+Its `.e2e-cache` tooling/manifest directory is excluded from Git and Docker builds.
+
+Other actions are `prepare`, `start`, `status`, `stop`, and `reset`. Reset removes
+only this fixed project's containers and synthetic data volumes; the external
+Paperless program volume and prepared images remain reusable. Docker's local
+socket and project name `paperless-ai-e2e` are explicit, so inherited Docker
+contexts/project names cannot redirect a reset to another installation. Existing
+registry credentials, proxies and CA trust are preserved. Build-cache cleanup is
+restricted to the exact cache IDs created by this preparation, not all unused data.
+
+For a full rebuild, run `reset`, remove only the four
+`paperless-ai-e2e-cloud-{app,paperless,db,redis}:local` images and the
+`paperless-ai-e2e_paperless-runtime` program volume, then run `test` again. Never
+force removal of images still referenced by other containers.
+
+### Saved Codex environment settings
+
+Until this development PR is merged, select repository `BMWfan/paperless-ai` with
+ref `feature/learning-engine-v2` in the saved environment. Use this install command:
+
+```sh
+cd /workspace/paperless-ai
+python3 tests/e2e/cloud-test.py prepare
+```
+
+Startup/development instructions should run `python3 tests/e2e/cloud-test.py test`
+from that same directory and preserve existing allowed domains, proxies and
+credentials. Review and republish the saved environment through its settings.
+The saved environment list still reported ref `main` on 2026-11-01. This coding
+task has read-only environment inspection and cannot edit/publish that template;
+the commands above are the concrete setup to apply in the environment editor.
+
+## Standard local/CI stack
+
 Use only branch `feature/learning-engine-v2`. Docker Engine with Compose v2 is
 required. No production configuration, files or environment values are imported.
 The test stack publishes no ports and its network is internal. Password literals
@@ -72,7 +119,7 @@ For the vfs driver, use the compact-image procedure below before concluding that
 more disk capacity is needed. Do not change the managed storage driver or delete
 unrelated Docker images/volumes to work around this limit.
 
-### Compact images for small Codex Cloud runtimes
+### Compact images for small Codex Cloud runtimes (advanced manual steps)
 
 `docker-compose.test-cloud.yml` retains the same real Paperless service, synthetic
 documents, isolated network, healthchecks, and persistent test volumes. It runs
@@ -99,9 +146,9 @@ COMPOSE_BAKE=false docker compose -f docker-compose.test.yml build ai
 python3 tests/e2e/compact-image.py paperless-ai-e2e-ai paperless-ai-e2e-cloud-app:local
 # Remove only the now-redundant test image/cache created by this build when needed.
 # Do not prune unrelated workloads on a shared Docker daemon.
-python3 tests/e2e/compact-image.py --remote --usr-volume paperless-ai-e2e_paperless-runtime ghcr.io/paperless-ngx/paperless-ngx:3.4.1 paperless-ai-e2e-cloud-paperless:local
-python3 tests/e2e/compact-image.py --remote registry-1.docker.io/library/postgres:16.6-alpine paperless-ai-e2e-cloud-db:local
 python3 tests/e2e/compact-image.py --remote registry-1.docker.io/library/redis:7.4.2-alpine paperless-ai-e2e-cloud-redis:local
+python3 tests/e2e/compact-image.py --remote registry-1.docker.io/library/postgres:16.6-alpine paperless-ai-e2e-cloud-db:local
+python3 tests/e2e/compact-image.py --remote --usr-volume paperless-ai-e2e_paperless-runtime ghcr.io/paperless-ngx/paperless-ngx:3.4.1 paperless-ai-e2e-cloud-paperless:local
 
 docker compose -f docker-compose.test.yml -f docker-compose.test-cloud.yml up -d --no-build --pull never ai
 docker compose -f docker-compose.test.yml -f docker-compose.test-cloud.yml exec -T ai node --test tests/e2e/paperless.test.js

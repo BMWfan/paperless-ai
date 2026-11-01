@@ -1,4 +1,48 @@
-# Validation on 2026-10-31
+# Learning Engine v2 validation
+
+
+## Full requirement acceptance, 2026-11-01
+
+The complete request was audited against the actual source, not inferred from the
+original 16 green tests. Findings and completion evidence are mapped in
+[learning-v2-acceptance.md](learning-v2-acceptance.md).
+
+Executed directly in the managed 8 GB Codex Cloud runtime:
+
+- **28 Node tests passed**, including actual legacy-model migration/upsert and
+  revocation, old-schema reopen, all learning modes, JWT/API-key authentication,
+  stale live approval, paginated events/history, monitor concurrency/revisions,
+  provider context/name resolution, outage fallback and Python RAG contract.
+- **3 Python setup safety tests passed**: verified helper checksum, refusal to
+  overwrite an unpaired program volume and cleanup restricted to newly created
+  cache IDs. ESLint for learning modules, routes, dashboard and tests passed.
+- **2 real Paperless scenarios passed**: upload/consumption and held-out provider
+  context; direct multi-field correction, protection, live stale-review rejection,
+  legacy revocation and actual Manual-route behavior in all four modes.
+- **Offline-edit restart check passed**: stop only the app, mutate a synthetic
+  document through the real Paperless API, restart with existing SQLite data and
+  verify the change is pending with unknown provenance. No automatic trust.
+- Full setup was rebuilt after removing all four compact test images, all synthetic
+  data volumes and the external program volume. The default `cloud-test.py test`
+  command downloaded and checksum-verified crane, installed dependencies and
+  prepared the complete stack. A changed-source run also rebuilt the app through
+  the fingerprint mechanism.
+- The running stack used approximately 4.9 GiB, with **2.55–2.57 GiB free**. No managed
+  storage-driver/network-policy changes or broad Docker cleanup were needed in
+  this fresh runtime. Reset/stop/prepare/test commands are documented.
+
+Paperless 3.4.1 was rechecked through its GitHub latest-release API on 2026-11-01
+and remained the latest stable release (published 2026-10-31). CI runs the same
+unit, setup-safety, lint, real integration and restart checks. Current results
+are available on the existing PR #1.
+
+Limits are explicit: provider fixtures do not establish real model quality; the
+full optional Python RAG/model runtime was not launched; no browser screenshot
+validation is claimed; a remote writer can still race the final PATCH because
+this integration has no server-side compare-and-set. The saved Cloud template
+still reports `main` and must be reviewed/republished in its editor using the
+concrete settings in `test-environment.md`; this task has no configuration-write
+or publish tool. No merge or production deployment was performed.
 
 ## Follow-up: direct 8 GB Codex Cloud validation, 2026-11-01
 

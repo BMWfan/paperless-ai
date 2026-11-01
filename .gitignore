@@ -41,3 +41,5 @@ rag.ejs.old
 surya_env/
 ocr_server.py
 surya_models.py
+# Disposable test tooling and source-fingerprint manifest.
+.e2e-cache/

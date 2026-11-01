@@ -66,6 +66,36 @@ Powered by **Retrieval-Augmented Generation (RAG)**, you can now search semantic
 
 ## 🚀 Installation
 
+### Learning Engine v2 (development branch)
+
+On `feature/learning-engine-v2`, open **Learning** from the dashboard to enable
+scheduled correction detection and choose manual, automatic, hybrid or disabled
+mode. Changes made directly in Paperless-ngx always require review because the
+API does not establish that a human made them. Confirmed examples provide shared
+reference context to OpenAI, Azure OpenAI and Ollama.
+
+Existing app data is upgraded additively on startup. Legacy confirmed feedback is
+preserved, visible and revocable. No model weights are trained. See the
+[architecture and configuration](docs/learning-engine-v2.md),
+[requirement acceptance checklist](docs/learning-v2-acceptance.md), and
+[validation evidence](docs/learning-v2-validation.md).
+
+Run the complete isolated development stack in Codex Cloud:
+
+```sh
+python3 tests/e2e/cloud-test.py test
+# Delete only this stack's synthetic test data; keep reusable program images:
+python3 tests/e2e/cloud-test.py reset
+```
+
+Requires Docker with Compose 2.24.4+ and Python 3.9+ on an amd64 Linux host. The
+script downloads a pinned, checksum-verified helper automatically, builds the
+current checkout, and keeps test data on an internal Docker network with no
+published ports. It runs unit tests, real Paperless integration and offline-edit
+restart detection. Full local/CI and Cloud instructions are in
+[test-environment.md](docs/test-environment.md). The standard `npm test` command
+continues to launch the existing development server.
+
 > ⚠️ **First-time install:** Restart the container **after completing setup** (API keys, preferences) to build RAG index.  
 > 🔁 Not required for updates.
 
