@@ -80,6 +80,68 @@ commands with `COMPOSE_BAKE=false`; keep the CA mount and TLS verification enabl
 `npm test` starts a development server and is not a test suite.
 The GitHub workflow `learning-e2e.yml` executes the same disposable stack.
 
+### Docker Desktop on Windows with WSL 2
+
+Start Docker Desktop with Linux containers and enable integration for the WSL
+distribution used for development. Run the commands below in that distribution,
+from this checkout. Verify that `docker --host unix:///var/run/docker.sock version`
+reports a Linux server and that `docker compose version` succeeds.
+
+Compose 5.6.1 uses Bake even with `COMPOSE_BAKE=false`. It can reject the default
+CA secret outside the checkout with an `fs.read` entitlement error. Keep a copy of
+the distribution's trusted public CA bundle in the ignored test cache instead:
+
+```sh
+mkdir -p .e2e-cache
+cp /etc/ssl/certs/ca-certificates.crt .e2e-cache/ca-certificates.crt
+export TEST_CA_BUNDLE=.e2e-cache/ca-certificates.crt
+docker --host unix:///var/run/docker.sock compose --project-name paperless-ai-e2e -f docker-compose.test.yml up -d --build ai
+docker --host unix:///var/run/docker.sock compose --project-name paperless-ai-e2e -f docker-compose.test.yml run --rm runner
+python3 -B tests/e2e/restart-check.py
+```
+
+Use the approved combined CA bundle if your network requires additional trust.
+The cache is excluded from Git and the image build context; the bundle is mounted
+only as a build secret. No filesystem entitlement or TLS bypass is needed. The
+restart helper uses the local WSL Docker socket and only this test project.
+
+### Optional browser and real-model validation
+
+The `extended` profile adds test-only Chromium and Ollama services to this same
+Compose file. They publish no ports and use the same internal network. They are
+not part of the compact 8 GB Cloud quick start; allow additional disk space for
+the browser and model images. Public software and model weights are fetched at
+build time. No hosted-model credentials, account login or API charges are needed.
+
+```sh
+# Keep TEST_CA_BUNDLE set as above when Bake requires an in-checkout CA path.
+docker compose -f docker-compose.test.yml --profile extended run --build --name paperless-ai-e2e-browser browser
+docker cp paperless-ai-e2e-browser:/artifacts ../browser-artifacts
+# Remove only this completed one-off container before reusing the same name:
+docker rm paperless-ai-e2e-browser
+
+docker compose -f docker-compose.test.yml --profile extended run --rm --build model-check
+docker compose -f docker-compose.test.yml cp ai:/app/data/real-model-evaluation.json ../real-model-evaluation.json
+docker compose -f docker-compose.test.yml --profile extended stop
+```
+
+Keep exported reports outside the checkout or in an ignored scratch directory.
+The browser test exercises authenticated API-key access, anonymous login/setup
+redirection, actual review/revoke/reject actions, settings, saved themes and mobile
+layout. Screenshots are generated in the dedicated `browser-artifacts` volume.
+CI runs this check and uploads its screenshots.
+
+The CPU model test uses pinned Ollama 0.12.6 and `qwen2.5:0.5b`; the evaluation
+report records the downloaded model digest. Ten separately ingested English/German
+documents are classified before and after five independent training documents
+receive explicit review. Confirmed test references are revoked afterward and the
+previous learning settings restored. The report contains actual predictions,
+completeness, type/language counts and timing. Empty fields and inaccurate labels
+are recorded as quality failures rather than hidden by an aggregate pass result.
+The integration assertions cover schema-constrained JSON, actual inference tokens
+and reference context sent to the model. This small evaluation is not a general
+model-quality guarantee or an actual hosted OpenAI/Azure model evaluation.
+
 `tests/e2e/generate.js` generates English/German synthetic invoices and expected
 metadata. Evaluation fixtures are generated separately from learning examples.
 The protocol mock is deterministic and incurs no API costs. Passing mock tests

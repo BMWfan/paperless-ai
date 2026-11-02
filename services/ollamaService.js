@@ -137,7 +137,8 @@ class OllamaService {
             const systemPrompt = this._generateSystemPrompt(customFieldsStr) + await buildLearningContext(content);
 
             // Calculate context window size
-            const promptTokenCount = this._calculatePromptTokenCount(prompt);
+            // System instructions and reviewed examples share the same context window.
+            const promptTokenCount = this._calculatePromptTokenCount(systemPrompt + '\n' + prompt);
             const numCtx = this._calculateNumCtx(promptTokenCount, 1024);
 
             console.log(`[DEBUG] Use existing data: ${config.useExistingData}, Restrictions applied based on useExistingData setting`);
@@ -186,12 +187,10 @@ class OllamaService {
      */
     async analyzePlayground(content, prompt) {
         try {
-            // Calculate context window size
-            const promptTokenCount = await calculateTokens(prompt);
-            const numCtx = this._calculateNumCtx(promptTokenCount, 1024);
-
-            // Generate playground system prompt (simpler than full analysis)
+            // Count the full playground request, including system instructions and content.
             const systemPrompt = this._generatePlaygroundSystemPrompt();
+            const promptTokenCount = await calculateTokens(systemPrompt + '\n' + prompt + '\n\n' + JSON.stringify(content));
+            const numCtx = this._calculateNumCtx(promptTokenCount, 1024);
 
             // Call Ollama API
             const response = await this._callOllamaAPI(

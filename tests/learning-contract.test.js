@@ -113,6 +113,35 @@ test('type-only confirmed metadata is relevant and quoted within the token budge
   assert.equal(selectContext('insurance',[{metadata:{document_type:'Insurance'}}],1),'');
 });
 
+test('Ollama reserves context for system instructions and reviewed examples, including custom prompts', async t => {
+  const engine=require('../services/learningEngine'),model=require('../models/document'),config=require('../config/config');
+  const descriptor=Object.getOwnPropertyDescriptor(engine,'store'),originalSave=model.saveLearningFeedback,originalLimit=config.tokenLimit;
+  t.after(()=>{Object.defineProperty(engine,'store',descriptor);model.saveLearningFeedback=originalSave;config.tokenLimit=originalLimit;});
+  Object.defineProperty(engine,'store',{configurable:true,value:{settings:()=>({mode:'hybrid'}),examples:()=>[],legacyExamples:()=>[],prediction:()=>{}}});
+  model.saveLearningFeedback=async()=>{};config.tokenLimit=8000;
+  const service=Object.create(require('../services/ollamaService'));
+  service._handleThumbnailCaching=async()=>{};service._logPromptAndResponse=async()=>{};
+  service._generateSystemPrompt=()=> 'Reviewed reference instructions. '.repeat(160);
+  service._generateCustomFieldsTemplate=()=>'';
+  const windows=[];
+  service._callOllamaAPI=async(prompt,system,numCtx)=>{
+    windows.push(numCtx);
+    const required=Math.ceil((system+'\n'+prompt).length/4)+1024;
+    assert.equal(numCtx,Math.min(required,Number(config.tokenLimit)));
+    assert.ok(numCtx>Math.ceil(prompt.length/4)+1024,'system context is included');
+    return {response:{title:'Synthetic',tags:['synthetic'],correspondent:'Fictional',document_type:'Invoice',language:'en'}};
+  };
+  const result=await service.analyzeDocument('Synthetic invoice',[],[],[],1,'Classify the document.');
+  assert.equal(result.error,undefined);assert.equal(windows.length,1);
+  const {calculateTokens}=require('../services/serviceUtils');
+  service._generatePlaygroundSystemPrompt=service._generateSystemPrompt;
+  service._callOllamaAPI=async(prompt,system,numCtx)=>{
+    assert.equal(numCtx,Math.min(await calculateTokens(system+'\n'+prompt)+1024,Number(config.tokenLimit)));
+    return {response:{title:'Synthetic',tags:['synthetic'],document_type:'Invoice'}};
+  };
+  assert.equal((await service.analyzePlayground('Synthetic invoice','Classify.')).error,undefined);
+});
+
 test('shared context resolves names before ranking and falls back during vocabulary outages', async t => {
   const engine=require('../services/learningEngine'),paperless=require('../services/paperlessService');
   const descriptor=Object.getOwnPropertyDescriptor(engine,'store'),original=paperless.getLearningVocabulary;

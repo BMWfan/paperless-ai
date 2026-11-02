@@ -1,5 +1,73 @@
 # Learning Engine v2 validation
 
+## Browser and real-model follow-up, 2026-11-02
+
+The remaining local validations use only `docker-compose.test.yml`, including
+the optional `extended` profile. Runtime services remain on the internal network,
+with no published ports, production credentials or real documents.
+
+- 29 Node tests pass, including a new regression proving Ollama counts system
+  instructions, reviewed references and playground document content when reserving
+  its context window. The previous calculation omitted these parts.
+- Both real Paperless integration scenarios, all 3 Python setup safety contracts,
+  ESLint and offline-edit restart detection pass.
+- Chromium exercises anonymous redirection, authenticated review, rejection,
+  revocation, history, settings and theme persistence. Light/dark desktop/mobile
+  screenshots were visually inspected. Mobile navigation now spans the viewport;
+  metadata comparisons use readable before/after pairs on narrow screens.
+- CI now runs Node, Python, lint and browser checks inside the Compose services.
+  It uploads browser screenshots. Real inference remains an optional local check.
+
+Ollama 0.12.6 ran `qwen2.5:0.5b` on CPU. Its model digest was
+`a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67`.
+Ten separately ingested English/German evaluation documents were each classified
+with learning disabled, then with five independently ingested and explicitly
+reviewed references. Actual inference token counts, schema-constrained JSON and
+reference context sent in requests were verified for all 20 calls. Training
+references were revoked and previous settings restored after the run.
+
+| Measurement | Disabled baseline | With reviewed references |
+| --- | --- | --- |
+| Nonempty title and document type | 9/10 | 10/10 |
+| Exact document-type match | 4/10 | 5/10 |
+| Exact language match | 3/10 | 1/10 |
+
+The integration completed, but this tiny model produced incorrect metadata and
+copied placeholder values. The sample does **not** demonstrate a dependable
+quality improvement. Completeness is a separate measurement from correctness;
+all predictions and timings are exported in `real-model-evaluation.json`.
+The first exploratory runs stopped on empty-title quality failures; the final
+evaluation reports quality separately from transport/schema assertions rather
+than treating a successful response as accurate classification.
+
+Actual hosted OpenAI/Azure model quality and the optional full Python RAG runtime
+remain outside this local evaluation. Their existing protocol/contract checks
+remain in place. No merge or production deployment is performed.
+
+## Local Docker Desktop validation, 2026-11-01
+
+Validated source commit `11ac874` on `feature/learning-engine-v2` using Docker
+Desktop 4.97.0, Engine 29.9.2 and Compose 5.6.1 through Ubuntu WSL 2. Only
+`docker-compose.test.yml` and its local `paperless-ai-e2e` project were used;
+no production configuration, credentials or documents were imported.
+
+- 28 Node unit/API/SQLite regression tests passed in the Node 22 runner image.
+- Both real Paperless integration scenarios passed (2 passed, 0 failed).
+- All 3 Python setup safety tests passed in the isolated Paperless container;
+  the test helpers were copied to its temporary directory for this check.
+- ESLint passed inside the app container.
+- The restart helper stopped the app, edited a synthetic document and confirmed
+  pending/unknown detection after restart. The helper ran in WSL and used only
+  the local Docker socket to orchestrate the test containers.
+
+The initial build hit Bake's external CA-file entitlement check despite
+`COMPOSE_BAKE=false`. Copying the trusted CA bundle to the ignored `.e2e-cache`
+directory and setting `TEST_CA_BUNDLE` resolved it without a new filesystem grant
+or disabling certificate verification. See `test-environment.md` for the commands.
+The stack was stopped after validation, preserving its synthetic data volumes.
+Existing limitations concerning real model quality, optional Python RAG execution,
+browser screenshot validation and the final external-write race still apply.
+
 
 ## Full requirement acceptance, 2026-11-01
 
