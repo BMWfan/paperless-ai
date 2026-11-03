@@ -140,9 +140,6 @@ class OpenAIService {
         systemPrompt += `\n\nAdditional context from external API:\n${validatedExternalApiData}`;
       }
 
-      // Add learning context from similar and user-confirmed classifications
-      systemPrompt += await buildLearningContext(content);
-
       if (process.env.USE_PROMPT_TAGS === 'yes') {
         promptTags = process.env.PROMPT_TAGS;
         systemPrompt = `
@@ -154,6 +151,9 @@ class OpenAIService {
         console.log('[DEBUG] Replace system prompt with custom prompt via WebHook');
         systemPrompt = customPrompt + '\n\n' + config.mustHavePrompt;
       }
+
+      // Append learning context only after all prompt overrides are finalized.
+      systemPrompt += await buildLearningContext(content);
 
       // Calculate tokens AFTER all prompt modifications are complete
       const totalPromptTokens = await calculateTotalPromptTokens(

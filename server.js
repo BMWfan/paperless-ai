@@ -9,6 +9,10 @@ const documentModel = require('./models/document');
 const setupService = require('./services/setupService');
 const setupRoutes = require('./routes/setup');
 
+const { createLearningMonitor } = require('./services/learningMonitor');
+const learningMonitor = createLearningMonitor(paperlessService);
+learningMonitor.start();
+
 // Add environment variables for RAG service if not already set
 process.env.RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || 'http://localhost:8000';
 process.env.RAG_SERVICE_ENABLED = process.env.RAG_SERVICE_ENABLED || 'true';
@@ -66,6 +70,10 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
+const { authenticateJWT, isAuthenticated } = require('./routes/auth');
+app.use('/api/learning', authenticateJWT, require('./routes/learning').createLearningRouter({ monitor: learningMonitor }));
+app.get('/learning', isAuthenticated, (req, res) => res.render('learning'));
+
 
 // Swagger documentation route
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {

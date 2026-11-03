@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Learning · Paperless-AI</title><link rel="stylesheet" href="/css/dashboard.css"><link rel="stylesheet" href="/css/learning.css"></head>
+<body class="learning-page"><div class="learning-shell">
+<aside class="sidebar"><div class="sidebar-header"><a class="brand-title" href="/dashboard">Paperless-AI</a></div>
+<nav class="sidebar-nav" aria-label="Main navigation"><ul>
+<li><a class="sidebar-link" href="/dashboard">Dashboard</a></li><li><a class="sidebar-link" href="/manual">Manual</a></li>
+<li><a class="sidebar-link active" aria-current="page" href="/learning">Learning</a></li><li><a class="sidebar-link" href="/history">History</a></li>
+<li><a class="sidebar-link" href="/settings">Settings</a></li><li><a class="sidebar-link" href="/logout">Logout</a></li>
+</ul></nav><button id="theme" type="button">Switch theme</button></aside>
+<main class="main-content"><h1>Learning</h1>
+<p>Review corrections, manage trusted examples and control how Paperless-AI learns. External changes have unknown provenance and always require review.</p>
+<p id="message" role="status" aria-live="polite"></p><p id="monitor-status"></p>
+<div id="summary" class="learning-summary" aria-label="Learning overview"></div>
+<section><h2>Detection and learning mode</h2><form id="settings-form">
+<label><input type="checkbox" id="enabled">Enable scheduled detection</label>
+<label>Learning mode <select id="mode"><option value="hybrid">Hybrid</option><option value="manual">Manual</option><option value="automatic">Automatic</option><option value="disabled">Disabled</option></select></label>
+<label>Polling interval (seconds) <input id="interval" type="number" min="1" max="86400" required></label>
+<label>Stabilization (seconds) <input id="stabilization" type="number" min="0" max="3600" required></label>
+<button type="submit">Save settings</button><button id="scan" type="button">Scan now</button></form>
+<p>Manual mode queues every correction. Automatic and hybrid modes accept explicit authenticated edits in the Manual screen; changes made by other clients still require review. Disabled mode stops detection and learning-context retrieval.</p></section>
+<section><h2>Corrections</h2><form id="filter-form">
+<label>Status <select id="status"><option value="">All</option><option>pending</option><option>confirmed</option><option>rejected</option><option>deleted</option></select></label>
+<label>Search title or document ID <input id="query" type="search" maxlength="100"></label><button type="submit">Search</button>
+</form><div id="events"></div><div class="learning-pagination"><button id="previous" type="button">Previous</button><span id="page-info"></span><button id="next" type="button">Next</button></div></section>
+<section><h2>Confirmed learning examples</h2><p>Only current confirmed examples influence classification. Outdated examples retain metadata protection until revoked. Revoking an example keeps its audit history.</p><div id="examples"></div></section>
+<section><h2>Review history</h2><form id="history-form"><label>Document ID (optional) <input id="history-document" type="number" min="1"></label><button type="submit">Show history</button></form>
+<div id="history"></div><div class="learning-pagination"><button id="history-previous" type="button">Previous</button><span id="history-page"></span><button id="history-next" type="button">Next</button></div></section>
+</main></div><script src="/js/learning.js"></script></body></html>

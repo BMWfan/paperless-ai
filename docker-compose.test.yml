@@ -1,0 +1,138 @@
+name: paperless-ai-e2e
+services:
+  db:
+    image: postgres:16.6-alpine
+    environment:
+      POSTGRES_DB: paperless_test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: isolated-test-only
+    volumes: ["database:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d paperless_test"]
+      interval: 5s
+      retries: 30
+  redis:
+    image: redis:7.4.2-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 30
+  paperless:
+    image: ghcr.io/paperless-ngx/paperless-ngx:3.4.1
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    environment:
+      PAPERLESS_REDIS: redis://redis:6379
+      PAPERLESS_DBHOST: db
+      PAPERLESS_DBNAME: paperless_test
+      PAPERLESS_DBUSER: test
+      PAPERLESS_DBPASS: isolated-test-only
+      PAPERLESS_ADMIN_USER: test
+      PAPERLESS_ADMIN_PASSWORD: isolated-test-only
+      PAPERLESS_SECRET_KEY: isolated-disposable-test-environment-only
+      PAPERLESS_OCR_LANGUAGE: eng
+      PAPERLESS_TASK_WORKERS: 1
+      PAPERLESS_THREADS_PER_WORKER: 1
+      PAPERLESS_CONSUMER_POLLING: 1
+      PAPERLESS_URL: http://paperless:8000
+    volumes:
+      - documents:/usr/src/paperless/media
+      - paperless-data:/usr/src/paperless/data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/accounts/login/"]
+      interval: 5s
+      start_period: 60s
+      retries: 60
+  mock-ai:
+    build: &app-build
+      context: .
+      dockerfile: tests/e2e/Dockerfile
+      secrets: [proxy_ca]
+    command: ["node", "tests/e2e/mock-ai.js"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:11434/health').then(r=>{if(!r.ok)process.exit(1)})"]
+      interval: 5s
+      retries: 30
+  init:
+    build: *app-build
+    command: ["node", "tests/e2e/init.js"]
+    environment:
+      NO_PROXY: paperless,ai,mock-ai,localhost,127.0.0.1
+      no_proxy: paperless,ai,mock-ai,localhost,127.0.0.1
+    depends_on:
+      paperless: {condition: service_healthy}
+    volumes: ["ai-data:/app/data"]
+  ai:
+    build: *app-build
+    depends_on:
+      init: {condition: service_completed_successfully}
+      mock-ai: {condition: service_healthy}
+    environment:
+      NO_PROXY: paperless,ai,mock-ai,localhost,127.0.0.1
+      no_proxy: paperless,ai,mock-ai,localhost,127.0.0.1
+      RAG_SERVICE_ENABLED: 'false'
+      DISABLE_AUTOMATIC_PROCESSING: 'yes'
+    volumes: ["ai-data:/app/data"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health').then(r=>{if(!r.ok)process.exit(1)})"]
+      interval: 5s
+      start_period: 15s
+      retries: 60
+  runner:
+    build: *app-build
+    command: ["node", "--test", "tests/e2e/paperless.test.js"]
+    environment:
+      NO_PROXY: paperless,ai,mock-ai,localhost,127.0.0.1
+      no_proxy: paperless,ai,mock-ai,localhost,127.0.0.1
+    depends_on:
+      ai: {condition: service_healthy}
+    volumes: ["ai-data:/app/data"]
+  browser:
+    profiles: [extended]
+    build:
+      context: .
+      dockerfile: tests/e2e/Dockerfile.browser
+    depends_on:
+      ai: {condition: service_healthy}
+    volumes:
+      - ai-data:/fixture-data:ro
+      - browser-artifacts:/artifacts
+    shm_size: 256mb
+  real-model:
+    profiles: [extended]
+    build:
+      context: .
+      dockerfile: tests/e2e/Dockerfile.model
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_NO_CLOUD: '1'
+      OLLAMA_NUM_PARALLEL: '1'
+    mem_limit: 3g
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      retries: 30
+  model-check:
+    profiles: [extended]
+    build: *app-build
+    command: ["node", "--test", "tests/e2e/real-model.test.js"]
+    environment:
+      NO_PROXY: paperless,ai,real-model,localhost,127.0.0.1
+      no_proxy: paperless,ai,real-model,localhost,127.0.0.1
+    depends_on:
+      ai: {condition: service_healthy}
+      real-model: {condition: service_healthy}
+    volumes: ["ai-data:/app/data"]
+networks:
+  default:
+    internal: true
+volumes:
+  database:
+  documents:
+  paperless-data:
+  ai-data:
+  browser-artifacts:
+secrets:
+  proxy_ca:
+    file: ${TEST_CA_BUNDLE:-/etc/ssl/certs/ca-certificates.crt}

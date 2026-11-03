@@ -37,3 +37,5 @@ indexed.conf
 main.py.bak
 __pycache__/
 
+# Host-only disposable test tooling; never include build cache or manifests.
+.e2e-cache
