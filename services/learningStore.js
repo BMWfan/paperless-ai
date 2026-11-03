@@ -124,6 +124,7 @@ function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'docu
   const offsetValue = offset => Math.max(0,Math.min(10000000,Math.floor(Number(offset)||0)));
   return {
     observe, review, settings,
+    snapshotRevision(id) { return db.prepare('SELECT revision FROM learning_document_snapshots WHERE document_id=?').get(id)?.revision || 0; },
     snapshotRevisions() { return new Map(db.prepare('SELECT document_id,revision FROM learning_document_snapshots').all().map(row => [row.document_id,row.revision])); },
     needsContent(document) {
       const prior = db.prepare('SELECT metadata_json FROM learning_document_snapshots WHERE document_id=?').get(Number(document.id));

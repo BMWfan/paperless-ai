@@ -50,9 +50,14 @@ function createLearningRouter(options = {}) {
       const event = store.event(Number(req.params.id));
       if (!event) return res.status(404).json({ error: 'Event not found' });
       if (event.status !== 'pending') return res.status(404).json({ error: 'Event is no longer pending' });
+      const { inFlight } = require('../services/learningEngine');
+      if (inFlight.has(event.document_id)) return res.status(409).json({ error: 'Document update in progress; retry review' });
+      const expectedRevision = store.snapshotRevision(event.document_id);
       try {
         const document = await (options.paperless || require('../services/paperlessService')).getDocument(event.document_id);
-        store.observe(document,'unknown');
+        if (inFlight.has(event.document_id) || store.observe(document,'unknown',{ expectedRevision }).skipped) {
+          return res.status(409).json({ error: 'Document changed during review; refresh and retry' });
+        }
       } catch { return res.status(503).json({ error: 'Cannot verify current Paperless metadata; retry when connected' }); }
     }
     try {

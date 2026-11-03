@@ -16,11 +16,12 @@ test('authenticated learning routes validate origins, expose history and obey ma
   const store=openLearningStore(path.join(directory,'test.db'));
   const previous=process.env.API_KEY;process.env.API_KEY='isolated-contract-api-key';
   let current={id:1,title:'Before',tags:[7],document_type:3,correspondent:4};
+  let duringRead;
   store.observe(current);store.configure({mode:'manual'});let reschedules=0;
   const paperless={async updateDocument(id,updates,options){
     assert.equal(id,1);assert.equal(options.confirmedUser,true);assert.equal(options.actor,'api-key');
     current={...current,...updates};store.observe(current,'confirmed_ui',{actor:options.actor});return current;
-  },async getDocument(){return current;},async getLearningVocabulary(){return {tags:new Map([[7,'Invoice']])};}};
+  },async getDocument(){const snapshot=current;await duringRead?.();return snapshot;},async getLearningVocabulary(){return {tags:new Map([[7,'Invoice']])};}};
   const app=express();app.use(express.json(),cookieParser(),authenticateJWT);
   app.use('/api/learning',createLearningRouter({store,paperless,monitor:{reschedule(){reschedules++;},async scan(){return {scanned:1};}}}));
   app.post('/manual/updateDocument',sameOriginJSON,createManualUpdateHandler(paperless,{async addProcessedDocument(){}}));
@@ -61,4 +62,13 @@ test('authenticated learning routes validate origins, expose history and obey ma
   const approved=await fetch(base+`/api/learning/events/${candidate.id}/review`,{method:'POST',headers:{Cookie:`jwt=${token}`,Origin:base,'Content-Type':'application/json'},body:JSON.stringify({decision:'confirmed'})});
   assert.equal(approved.status,200);
   assert.equal(store.history(1)[0].actor,'user:17');
+  current={...current,title:'Pending before concurrent write'};
+  const {eventId}=store.observe(current,'unknown');
+  duringRead=async()=>{
+    current={...current,title:'Newer completed write'};
+    store.observe(current,'self_write');
+  };
+  assert.equal((await request(`/api/learning/events/${eventId}/review`,{decision:'confirmed'})).status,409);
+  assert.equal(store.event(eventId).status,'pending');
+  assert.equal(store.needsContent(current),false,'older read did not replace newer snapshot');
 });
