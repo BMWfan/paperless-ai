@@ -18,7 +18,7 @@ services:
       interval: 5s
       retries: 30
   paperless:
-    image: ghcr.io/paperless-ngx/paperless-ngx:3.4.1
+    image: ghcr.io/paperless-ngx/paperless-ngx:${TEST_PAPERLESS_VERSION:-3.4.2}
     depends_on:
       db: {condition: service_healthy}
       redis: {condition: service_healthy}
@@ -36,6 +36,7 @@ services:
       PAPERLESS_THREADS_PER_WORKER: 1
       PAPERLESS_CONSUMER_POLLING: 1
       PAPERLESS_URL: http://paperless:8000
+      PAPERLESS_AI_ENABLED: 'false'
     volumes:
       - documents:/usr/src/paperless/media
       - paperless-data:/usr/src/paperless/data

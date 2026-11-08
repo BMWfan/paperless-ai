@@ -18,6 +18,8 @@ ROOT = Path(__file__).resolve().parents[2]
 PROJECT = 'paperless-ai-e2e'
 APP = PROJECT + '-cloud-app:local'
 RUNTIME = PROJECT + '_paperless-runtime'
+PAPERLESS_VERSION = '3.4.2'
+PAPERLESS_IMAGE = PROJECT + '-cloud-paperless:' + PAPERLESS_VERSION
 CRANE_VERSION = 'v0.22.1'
 DOCKER = ['docker', '--host=unix:///var/run/docker.sock']
 COMPOSE = DOCKER + ['compose', '--project-name', PROJECT, '-f', 'docker-compose.test.yml', '-f', 'docker-compose.test-cloud.yml']
@@ -76,8 +78,15 @@ def crane_path(args):
 
 
 def prepare(args):
-    if run(['git', 'branch', '--show-current'], capture=True).stdout.strip() != 'feature/learning-engine-v2':
-        raise SystemExit('Use the existing feature/learning-engine-v2 development branch.')
+    branch = run(['git', 'branch', '--show-current'], capture=True).stdout.strip()
+    if not branch or branch == 'main':
+        raise SystemExit('Use the approved development branch.')
+    volume_exists = run(DOCKER + ['volume', 'inspect', RUNTIME], capture=True, check=False).returncode == 0
+    paperless_exists = bool(image_id(PAPERLESS_IMAGE))
+    if volume_exists and not paperless_exists:
+        raise SystemExit(f'Paperless program volume exists without {PAPERLESS_IMAGE}. Stop the stack and explicitly remove only the test program volume before preparing again.')
+    if paperless_exists and not volume_exists:
+        raise SystemExit(f'Paperless program volume is missing. Stop the stack and remove only {PAPERLESS_IMAGE} before preparing again.')
     manifest_file = CACHE / 'prepared.json'
     manifest = json.loads(manifest_file.read_text()) if manifest_file.exists() else {}
     current = fingerprint()
@@ -103,18 +112,13 @@ def prepare(args):
     remote = [
         ('registry-1.docker.io/library/redis:7.4.2-alpine', PROJECT + '-cloud-redis:local'),
         ('registry-1.docker.io/library/postgres:16.6-alpine', PROJECT + '-cloud-db:local'),
-        ('ghcr.io/paperless-ngx/paperless-ngx:3.4.1', PROJECT + '-cloud-paperless:local')
+        ('ghcr.io/paperless-ngx/paperless-ngx:' + PAPERLESS_VERSION, PAPERLESS_IMAGE)
     ]
     crane = None
     for source, target in remote:
-        is_paperless = target.endswith('-paperless:local')
-        volume_exists = run(DOCKER + ['volume','inspect',RUNTIME], capture=True, check=False).returncode == 0
+        is_paperless = target == PAPERLESS_IMAGE
         if image_id(target):
-            if is_paperless and not volume_exists:
-                raise SystemExit('Paperless program volume is missing. Stop the stack and remove only its compact Paperless image before preparing again.')
             continue
-        if is_paperless and volume_exists:
-            raise SystemExit('Paperless image is missing but its program volume exists. Stop the stack and explicitly remove that test program volume before preparing again.')
         crane = crane or crane_path(args)
         command = [sys.executable, 'tests/e2e/compact-image.py', '--remote', '--crane', crane]
         if is_paperless:

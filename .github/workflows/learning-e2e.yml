@@ -41,6 +41,20 @@ jobs:
           name: learning-browser-screenshots
           path: browser-artifacts/*.png
           if-no-files-found: ignore
+      - name: Verify isolated upgrade from Paperless-ngx 3.4.1
+        run: |
+          docker compose -f docker-compose.test.yml --profile extended down -v --remove-orphans
+          export TEST_PAPERLESS_VERSION=3.4.1
+          docker compose -f docker-compose.test.yml up -d --wait ai
+          docker compose -f docker-compose.test.yml exec -T ai node tests/e2e/upgrade-probe.js seed
+          docker compose -f docker-compose.test.yml down --remove-orphans
+          unset TEST_PAPERLESS_VERSION
+          docker compose -f docker-compose.test.yml up -d --wait ai
+          container=$(docker compose -f docker-compose.test.yml ps -q paperless)
+          image=$(docker inspect --format '{{.Config.Image}}' "$container")
+          test "$image" = ghcr.io/paperless-ngx/paperless-ngx:3.4.2
+          echo "Running upgraded fixture on $image"
+          docker compose -f docker-compose.test.yml exec -T ai node tests/e2e/upgrade-probe.js verify
       - name: Logs on failure
         if: failure()
         run: docker compose -f docker-compose.test.yml logs --no-color --tail=100

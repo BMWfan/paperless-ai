@@ -2,7 +2,7 @@
 
 ## Codex Cloud quick start
 
-From the existing `feature/learning-engine-v2` checkout:
+From the isolated checkout on the approved development branch:
 
 ```sh
 python3 tests/e2e/cloud-test.py test
@@ -47,7 +47,7 @@ the commands above are the concrete setup to apply in the environment editor.
 
 ## Standard local/CI stack
 
-Use only branch `feature/learning-engine-v2`. Docker Engine with Compose v2 is
+Use the approved development branch. Docker Engine with Compose v2 is
 required. No production configuration, files or environment values are imported.
 The test stack publishes no ports and its network is internal. Password literals
 in Compose are public disposable fixture values, not production secrets.
@@ -59,8 +59,8 @@ docker compose -f docker-compose.test.yml run --rm runner
 docker compose -f docker-compose.test.yml down -v --remove-orphans
 ```
 
-Paperless-ngx 3.4.1 was the newest stable GitHub release when checked on
-2026-10-31. PostgreSQL, Redis and Node versions are pinned. The initializer obtains
+The stack defaults to Paperless-ngx 3.4.2. PostgreSQL, Redis and Node versions
+are pinned. The initializer obtains
 a test API token inside the isolated network and writes the app configuration to
 a dedicated volume. Health checks gate initialization, app startup and tests.
 The test-specific Node image excludes optional Python RAG/model downloads.
@@ -71,14 +71,24 @@ if the platform needs a custom CA; it is mounted as a BuildKit secret only.
 No TLS verification is disabled. Runtime requests to test services use NO_PROXY;
 these hosts are confined to the internal test network.
 
-The GitHub workflow sets `COMPOSE_BAKE=false` to use Compose's regular BuildKit
-build. Current Bake versions otherwise reject the CA secret outside the checkout
-with an `fs.read` entitlement error. If this occurs locally, prefix the Compose
-commands with `COMPOSE_BAKE=false`; keep the CA mount and TLS verification enabled.
+The GitHub workflow sets `TEST_CA_BUNDLE` to a copy of the runner's trusted CA
+bundle within the ignored `.e2e-cache` directory. This keeps the path within
+Bake's read boundary while retaining TLS verification.
 
 `node --test tests/*.test.js` runs the existing unit/SQLite regression suite.
 `npm test` starts a development server and is not a test suite.
 The GitHub workflow `learning-e2e.yml` executes the same disposable stack.
+
+### Paperless-ngx upgrade check
+
+After validating a fresh 3.4.2 stack, CI resets its disposable project and starts
+3.4.1 using `TEST_PAPERLESS_VERSION=3.4.1`. It runs
+`docker compose -f docker-compose.test.yml exec -T ai node tests/e2e/upgrade-probe.js seed`
+to ingest a synthetic document and confirm a correction. CI stops the stack
+with `down --remove-orphans`, keeping the volumes, unsets the version override,
+and starts 3.4.2. The `verify` action checks the same document ID, title and
+confirmed learning example. To return to 3.4.1, use fresh disposable volumes or
+restore a synthetic backup taken before the upgrade.
 
 ### Docker Desktop on Windows with WSL 2
 
@@ -210,7 +220,7 @@ python3 tests/e2e/compact-image.py paperless-ai-e2e-ai paperless-ai-e2e-cloud-ap
 # Do not prune unrelated workloads on a shared Docker daemon.
 python3 tests/e2e/compact-image.py --remote registry-1.docker.io/library/redis:7.4.2-alpine paperless-ai-e2e-cloud-redis:local
 python3 tests/e2e/compact-image.py --remote registry-1.docker.io/library/postgres:16.6-alpine paperless-ai-e2e-cloud-db:local
-python3 tests/e2e/compact-image.py --remote --usr-volume paperless-ai-e2e_paperless-runtime ghcr.io/paperless-ngx/paperless-ngx:3.4.1 paperless-ai-e2e-cloud-paperless:local
+python3 tests/e2e/compact-image.py --remote --usr-volume paperless-ai-e2e_paperless-runtime ghcr.io/paperless-ngx/paperless-ngx:3.4.2 paperless-ai-e2e-cloud-paperless:3.4.2
 
 docker compose -f docker-compose.test.yml -f docker-compose.test-cloud.yml up -d --no-build --pull never ai
 docker compose -f docker-compose.test.yml -f docker-compose.test-cloud.yml exec -T ai node --test tests/e2e/paperless.test.js
@@ -225,8 +235,11 @@ No intermediate root filesystem tarball is stored: crane streams directly into
 Docker import and, for Paperless, into its program volume. The helper refuses
 to overwrite an existing program volume. This external volume survives a test
 data reset; keep it paired with its compact image. To recreate both, first stop
-the stack, then explicitly remove `paperless-ai-e2e_paperless-runtime` and
-`paperless-ai-e2e-cloud-paperless:local` before preparing them again. Rebuild and compact the application after source
+the stack, then explicitly remove `paperless-ai-e2e_paperless-runtime` and its
+paired compact Paperless image before preparing them again. The old 3.4.1
+compact image uses the `:local` tag. The new image uses `:3.4.2`. When migrating,
+remove only that old program volume and image, keeping the synthetic database,
+document and app volumes for the upgrade. Rebuild and compact the application after source
 changes; do not reuse a stale compact image. Importing changes the local image digest and removes
 its original build history, so use these images only for disposable development
 tests, not release publication.

@@ -6,7 +6,7 @@ services:
   redis:
     image: paperless-ai-e2e-cloud-redis:local
   paperless:
-    image: paperless-ai-e2e-cloud-paperless:local
+    image: paperless-ai-e2e-cloud-paperless:3.4.2
     volumes:
       - paperless-runtime:/usr
   ai:
