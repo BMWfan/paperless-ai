@@ -20,7 +20,8 @@ module.exports.corpus = function corpus() {
   return types.flatMap(([kind,en,de,english,german],index) => ['en','de'].map(language => ({
     name: `evaluation-${kind}-${language}.txt`,
     content: `Fictional Example ${index+1}\n${language==='de'?de:en}\nSYNTHETIC DATA ONLY\n${language==='de'?german:english}`,
-    expected: { title: `${language==='de'?de:en} ${index+1}`, document_type: en, correspondent: `Fictional Example ${index+1}`,
-      language, tags: ['synthetic',kind] }
+    expected: { title: `${language==='de'?de:en} ${index+1}`, document_type: en,
+      correspondent: `${language==='de'?'Fiktives Beispiel':'Fictional Example'} ${index+1}`,
+      language, tags: [kind] }
   })));
 };

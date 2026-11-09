@@ -1,0 +1,38 @@
+name: Synthetic classification evaluation
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/classification-evaluation.yml'
+      - 'tests/e2e/real-model.test.js'
+      - 'tests/e2e/Dockerfile.model'
+      - 'tests/e2e/generate.js'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evaluation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare trusted CA bundle
+        run: |
+          mkdir -p .e2e-cache
+          cp /etc/ssl/certs/ca-certificates.crt "$TEST_CA_BUNDLE"
+      - name: Start isolated Paperless-ngx and local Ollama
+        run: docker compose -f docker-compose.test.yml --profile extended up -d --build --wait ai real-model
+      - name: Compare baseline with confirmed examples
+        run: |
+          docker compose -f docker-compose.test.yml --profile extended run --no-deps --build \
+            --name paperless-ai-evaluation -e "GITHUB_SHA=$(git rev-parse HEAD)" model-check
+          docker cp paperless-ai-evaluation:/app/data/real-model-evaluation.json ./real-model-evaluation.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-classification-evaluation
+          path: real-model-evaluation.json
+          if-no-files-found: error
+      - name: Remove disposable stack
+        if: always()
+        run: docker compose -f docker-compose.test.yml --profile extended down -v --remove-orphans
