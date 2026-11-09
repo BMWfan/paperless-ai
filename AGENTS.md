@@ -3,6 +3,8 @@
 - Inspect architecture and existing implementation before changing code.
 - Follow the [SDD-Light workflow](.github/SDD-LIGHT.md). Work only on the feature branch approved for the task. Never work on or push to `main`.
 - Link the approved specification and verification evidence in a draft PR. Merge, release and deployment each require explicit owner approval.
+- Check existing issues and PRs before coding; reuse approved work instead of creating duplicates. Follow Specify → Clarify → Plan → Tasks → Analyze → Implement → Verify → AI Review → owner-approved Merge. Plan approval and green CI never authorize a merge, publication or deployment.
+- Keep CI/release workflow and repository-setting changes outside a task unless its specification explicitly includes them. Codex and Copilot follow the same process.
 - Use the existing isolated checkout. Do not create worktrees unless explicitly requested.
 - Integration tests must use `docker-compose.test.yml`, never a production Paperless instance or real documents/credentials.
 - Start the stack with `docker compose -f docker-compose.test.yml up -d --build ai`; run `docker compose -f docker-compose.test.yml run --rm runner`.

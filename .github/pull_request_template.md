@@ -3,6 +3,8 @@
 Closes #
 Size (S, M or L):
 Specification or decision links:
+Owner agreement on the plan:
+Dependencies / target base:
 
 ## Change summary
 
@@ -15,7 +17,9 @@ Specification or decision links:
 
 ## Review and owner decision
 
+- AI review findings, resolutions and remaining risks:
 - [ ] Acceptance criteria and review findings addressed or documented.
 - [ ] Ready for the owner's review.
 
-Merge, release and deployment each require explicit owner approval.
+Plan approval and green CI do not authorize a merge. Merge, release/prerelease,
+image publication and deployment each require explicit owner approval.
