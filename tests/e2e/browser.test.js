@@ -57,8 +57,9 @@ test('learning dashboard supports real review actions, themes and mobile layout'
     await page.getByRole('button',{name:'Confirm correction',exact:true}).click();
     await page.waitForFunction(()=>!document.querySelector('#events').textContent.includes(' · pending'));
     assert.ok((await page.locator('#examples').textContent()).includes(`Document ${document.id}`));
-    await page.getByRole('button',{name:'Show review history',exact:true}).click();
-    await page.waitForFunction(()=>document.querySelector('#history').textContent.includes('confirmed'));
+    const event = page.locator('#events article').filter({hasText:`Document ${document.id} · confirmed`});
+    await event.getByRole('button',{name:'Show review history',exact:true}).click();
+    await page.locator('#history').filter({hasText:`Document ${document.id} · confirmed`}).waitFor();
     await page.locator('#theme').click();
     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
     await page.screenshot({path:'/artifacts/learning-desktop-dark.png',fullPage:true,animations:'disabled'});
@@ -83,7 +84,6 @@ test('learning dashboard supports real review actions, themes and mobile layout'
     assert.equal((await (await learning.get(origin+'/api/learning/settings')).json()).mode,'hybrid');
     await page.locator('#query').fill(String(document.id));
     await page.locator('#filter-form button').click();
-    const event = page.locator('#events article').filter({hasText:`Document ${document.id} · confirmed`});
     await event.getByRole('button',{name:'Revoke example',exact:true}).click();
     await page.waitForFunction(id=>!document.querySelector('#examples').textContent.includes(`Document ${id} ·`),document.id);
     assert.ok((await paperless.patch(`http://paperless:8000/api/documents/${document.id}/`,{data:{title:'Rejected browser correction'}})).ok());
