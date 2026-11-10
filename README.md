@@ -66,9 +66,9 @@ Powered by **Retrieval-Augmented Generation (RAG)**, you can now search semantic
 
 ## 🚀 Installation
 
-### Learning Engine v2 (development branch)
+### Learning Engine v2
 
-On `feature/learning-engine-v2`, open **Learning** from the dashboard to enable
+In this fork, open **Learning** from the dashboard to enable
 scheduled correction detection and choose manual, automatic, hybrid or disabled
 mode. Changes made directly in Paperless-ngx always require review because the
 API does not establish that a human made them. Confirmed examples provide shared
@@ -80,7 +80,7 @@ preserved, visible and revocable. No model weights are trained. See the
 [requirement acceptance checklist](docs/learning-v2-acceptance.md), and
 [validation evidence](docs/learning-v2-validation.md).
 
-Run the complete isolated development stack in Codex Cloud:
+From the approved development branch, run the isolated development stack in Codex Cloud:
 
 ```sh
 python3 tests/e2e/cloud-test.py test
