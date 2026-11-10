@@ -46,11 +46,15 @@ class CloudSetupTests(unittest.TestCase):
             cache = Path(directory)
             (cache / 'prepared.json').write_text(json.dumps({'fingerprint':'same', 'image':'app-id'}))
             def image(image):
-                return None if image.endswith('-paperless:local') else 'app-id'
+                return None if image == SETUP.PAPERLESS_IMAGE else 'app-id'
             with patch.object(SETUP, 'CACHE', cache, create=True), patch.object(SETUP, 'run', side_effect=run), patch.object(SETUP, 'image_id', side_effect=image), patch.object(SETUP, 'fingerprint', return_value='same'):
                 with self.assertRaisesRegex(SystemExit, 'program volume exists'):
                     SETUP.prepare(SimpleNamespace(crane=None))
         self.assertTrue(all('rm' not in command and 'prune' not in command for command in commands))
+        self.assertEqual(commands, [
+            ['git', 'branch', '--show-current'],
+            SETUP.DOCKER + ['volume', 'inspect', SETUP.RUNTIME],
+        ])
 
     def test_build_cache_cleanup_selects_only_ids_created_by_this_preparation(self):
         commands, state = [], {'compacted':False}
