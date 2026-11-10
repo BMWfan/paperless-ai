@@ -1,5 +1,52 @@
 # Learning Engine v2 validation
 
+## Compact Paperless-ngx 3.4.2 qualification
+
+Tested source: `7f9db35ac98ded5e18dc79626f21b7067b54afb9`, on the existing
+`test/paperless-ngx-3.4.2` branch and Draft PR #11. No runtime code was changed
+for this follow-up. Commands used the existing compact helper and only the
+`paperless-ai-e2e` project:
+
+```sh
+python3 tests/e2e/cloud-test.py prepare
+# Expected abort with the old 3.4.1 program volume and no versioned 3.4.2 image.
+python3 tests/e2e/cloud-test.py stop
+docker --host=unix:///var/run/docker.sock volume rm paperless-ai-e2e_paperless-runtime
+docker --host=unix:///var/run/docker.sock image rm paperless-ai-e2e-cloud-paperless:local
+TEST_CA_BUNDLE=.e2e-cache/ca-certificates.crt python3 tests/e2e/cloud-test.py test
+```
+
+Before replacing the program volume, its only referencing container was verified
+to belong to this test project. Database, document and app volumes were retained;
+no global prune or storage-driver change occurred. Remote source was resolved to
+`ghcr.io/paperless-ngx/paperless-ngx:3.4.2@sha256:1856adaeccf1a3bfc58722767321888ee6ecbeeb7807ae5b0836d0f0a4ce3f25`.
+The running Python package reported version `3.4.2`.
+
+The complete helper run passed, and passed again after the Cloud runtime was
+restored and the test services restarted:
+
+- 30 Node unit/API/SQLite regressions; 0 failed.
+- 3 Python setup-safety tests; ESLint passed.
+- 2 real Paperless integration scenarios; 0 failed.
+- Offline-edit restart detection passed.
+- Approximately 2.48 GiB free on the 7.9 GiB filesystem with the `vfs` driver.
+
+A witness recorded before the 3.4.1 program volume was replaced remained
+unchanged after the upgrade and runtime restoration: synthetic document ID 10,
+title `Synthetic cloud upgrade witness 1794257708845`, confirmed event ID 30,
+active example. These are synthetic fixture values, not production data. The
+pre-upgrade temporary log was not retained by the runtime restoration; the
+earlier execution record and the fresh post-upgrade API check are separate
+evidence. Ignored local logs are under `.e2e-cache/review-2026-11-10/`; they are
+not committed or advertised as GitHub CI artifacts.
+
+The existing [standard CI at this source](https://github.com/BMWfan/paperless-ai/actions/runs/42479811963)
+already covers Chromium, a fresh 3.4.2 stack and the standard 3.4.1 → 3.4.2
+upgrade. Those checks were not rerun locally as part of this compact follow-up.
+Real models, native-AI coexistence and production compatibility are separate
+claims; native AI stayed disabled in this baseline. No merge, publication,
+deployment or reusable environment-template change was performed.
+
 ## Browser and real-model follow-up, 2026-11-02
 
 The remaining local validations use only `docker-compose.test.yml`, including
