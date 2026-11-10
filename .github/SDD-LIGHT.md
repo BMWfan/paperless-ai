@@ -24,11 +24,16 @@ issue and PR are sufficient; do not create empty specification files.
    production isolation and test gaps. Resolve blocking uncertainty before coding.
 6. **Implement:** use the existing branch and draft PR when available, otherwise
    the branch approved for this task. Preserve confirmed learning, unknown-source
-   review, existing configuration and migration compatibility.
+   review, existing configuration and migration compatibility. Update affected
+   documentation in the same PR; do not leave setup, configuration, API,
+   architecture, migration or rollback instructions describing obsolete behavior.
 7. **Verify:** record the tested commit SHA, commands, actual results, CI links
    and coverage gaps. Distinguish deterministic provider fixtures, real
    Paperless-ngx integration and measured model quality. Recheck changed heads
    and target bases; a passing run for an older commit is not current evidence.
+   Check documented commands, links, examples and branch/version references.
+   Preserve historical records as dated evidence, clearly separated from current
+   results. Document why a change has no documentation impact when applicable.
 8. **AI Review:** perform a separate review pass against the specification,
    diff, compatibility and evidence. Record findings and their resolution in the
    PR. State the scope of the review; do not claim independent review unless it
