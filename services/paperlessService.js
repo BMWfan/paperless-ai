@@ -1315,14 +1315,6 @@ async getOrCreateDocumentType(name, options = {}) {
     if (!this.client) return;
     try {
       const currentDoc = await this.getDocument(documentId);
-      const engine = require('./learningEngine');
-      const legacyConfirmed = await require('../models/document').getConfirmedLearningFeedback(Number(documentId));
-      const protectedValues = engine.store.protectedMetadata(Number(documentId)) || (legacyConfirmed ? require('./documentSnapshotService').normalizeDocumentMetadata(currentDoc) : null);
-      if (protectedValues && !options.confirmedUser) {
-        // Keep current metadata when confirmed corrections exist; the operator can explicitly revise it.
-        for (const field of Object.keys(protectedValues)) delete updates[field];
-      }
-
       
       if (updates.tags && !options.confirmedUser) {
         console.log(`[DEBUG] Current tags for document ${documentId}:`, currentDoc.tags);
@@ -1402,9 +1394,16 @@ async getOrCreateDocumentType(name, options = {}) {
       if (engineWrite.inFlight.has(Number(documentId))) throw new Error('Concurrent document write');
       engineWrite.inFlight.add(Number(documentId));
       try {
+        const legacyConfirmed = !options.confirmedUser && await require('../models/document').getConfirmedLearningFeedback(Number(documentId));
         const latest = await this.getDocument(documentId);
         if (Object.keys(compareDocumentMetadata(currentDoc, latest)).length) throw new Error('Document changed during classification; retry required');
         engineWrite.store.observe(latest, 'unknown');
+        if (!options.confirmedUser) {
+          const protectedValues = engineWrite.store.protectedMetadata(Number(documentId)) ||
+            (legacyConfirmed ? require('./documentSnapshotService').normalizeDocumentMetadata(latest) : null);
+          for (const field of Object.keys(protectedValues || {})) delete updateData[field];
+        }
+        if (!Object.keys(updateData).length) return latest;
         const response = await this.client.patch(`/documents/${documentId}/`, updateData);
         engineWrite.store.observe(response.data, options.confirmedUser ? 'confirmed_ui' : 'self_write', { actor: options.actor });
       } finally { engineWrite.inFlight.delete(Number(documentId)); }

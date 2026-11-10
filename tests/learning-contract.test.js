@@ -113,6 +113,31 @@ test('type-only confirmed metadata is relevant and quoted within the token budge
   assert.equal(selectContext('insurance',[{metadata:{document_type:'Insurance'}}],1),'');
 });
 
+test('automatic PATCH excludes fields confirmed while its final metadata read is pending', async t => {
+  const {store}=setup(t);
+  const engine=require('../services/learningEngine'), model=require('../models/document');
+  const descriptor=Object.getOwnPropertyDescriptor(engine,'store'), original=model.getConfirmedLearningFeedback;
+  t.after(()=>{Object.defineProperty(engine,'store',descriptor);model.getConfirmedLearningFeedback=original;});
+  Object.defineProperty(engine,'store',{configurable:true,value:store});
+  model.getConfirmedLearningFeedback=async()=>null;
+  const current={id:1,title:'Reviewed title',tags:[]};
+  store.observe({...current,title:'Before'});
+  const {eventId}=store.observe(current,'unknown');
+  const service=Object.create(require('../services/paperlessService'));
+  service.initialize=()=>{};
+  let reads=0,patches=0;
+  service.getDocument=async()=>{
+    if(++reads===2) {
+      await Promise.resolve();
+      assert.equal(store.review(eventId,'confirmed'),true);
+    }
+    return current;
+  };
+  service.client={async patch(){patches++;throw new Error('Unexpected PATCH');}};
+  assert.deepEqual(await service.updateDocument(1,{title:'Automatic overwrite'}),current);
+  assert.equal(patches,0);
+});
+
 test('Ollama reserves context for system instructions and reviewed examples, including custom prompts', async t => {
   const engine=require('../services/learningEngine'),model=require('../models/document'),config=require('../config/config');
   const descriptor=Object.getOwnPropertyDescriptor(engine,'store'),originalSave=model.saveLearningFeedback,originalLimit=config.tokenLimit;
