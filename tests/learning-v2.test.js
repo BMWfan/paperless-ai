@@ -104,4 +104,6 @@ test('synthetic evaluation corpus is bilingual and separate from learning fixtur
   assert.equal(new Set(corpus.map(row=>row.name)).size,10);
   assert.ok(corpus.every(row=>row.content.includes('SYNTHETIC DATA ONLY') && row.expected.title && row.expected.document_type));
   assert.ok(corpus.every(row=>row.content !== generate(1).content));
+  assert.ok(corpus.every(row=>row.content.startsWith(row.expected.correspondent+'\n')),
+    'ground truth must preserve the sender written in each English/German fixture');
 });
