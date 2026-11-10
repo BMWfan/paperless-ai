@@ -8,11 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      # Compose mounts the CA as a BuildKit secret. Bake requires a separate
-      # filesystem entitlement for this system path on current hosted runners.
-      COMPOSE_BAKE: 'false'
+      TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
       - uses: actions/checkout@v4
+      - name: Prepare trusted CA bundle for Compose
+        run: |
+          mkdir -p .e2e-cache
+          cp /etc/ssl/certs/ca-certificates.crt "$TEST_CA_BUNDLE"
       - name: Start isolated integration stack
         run: docker compose -f docker-compose.test.yml up -d --build --wait ai
       - name: Unit and SQLite regression tests
