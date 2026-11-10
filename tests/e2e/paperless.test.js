@@ -41,10 +41,17 @@ test('real scan applies typed custom fields without losing unrelated metadata', 
     count: 'integer', price: 'monetary', ratio: 'float', flag: 'boolean', category: 'select',
     note: 'longtext', invalid: 'monetary', untouched: 'string'
   })) {
-    fields[key] = await api('/custom_fields/', {
+    const fieldName = `Contract ${key}`;
+    const existing = (await api(`/custom_fields/?name__iexact=${encodeURIComponent(fieldName)}`)).results
+      .find(field=>field.name===fieldName);
+    if (existing) {
+      assert.equal(existing.data_type,type,'existing synthetic field fixture keeps its type');
+      if (type === 'select') assert.equal(existing.extra_data.select_options.filter(option=>option.label==='Fixture').length,1);
+    }
+    fields[key] = existing || await api('/custom_fields/', {
       method: 'POST', headers: json,
       body: JSON.stringify({
-        name: `Contract ${key}`, data_type: type,
+        name: fieldName, data_type: type,
         ...(type === 'select' ? { extra_data: { select_options: [{ label: 'Fixture' }] } } : {})
       })
     });
@@ -65,7 +72,7 @@ test('real scan applies typed custom fields without losing unrelated metadata', 
   assert.equal(values.get(fields.price.id), 'EUR42.50');
   assert.equal(values.get(fields.ratio.id), 1.25);
   assert.equal(values.get(fields.flag.id), false);
-  assert.equal(values.get(fields.category.id), fields.category.extra_data.select_options[0].id);
+  assert.equal(values.get(fields.category.id), fields.category.extra_data.select_options.find(option=>option.label==='Fixture').id);
   assert.equal(values.get(fields.note.id), 'Synthetic long text '.repeat(8).trim());
   assert.equal(values.get(fields.untouched.id), 'keep me');
   assert.equal(values.has(fields.invalid.id), false);

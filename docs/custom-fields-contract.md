@@ -20,3 +20,14 @@ round-trips, explicit clearing and preservation of unrelated fields. It does
 not measure provider accuracy. The implementation needs no data or configuration
 migration. Reverting the change restores the previous suggestion parser and
 does not roll back metadata already stored in Paperless-ngx.
+
+The integration fixture reuses its named synthetic field definitions after
+checking their types, so the scan scenario can run again without deleting test
+data. A changed fixture type or ambiguous select label fails explicitly; tests
+do not rewrite field definitions to make them pass.
+
+For the compact Cloud path, the helper releases only cache records created by
+its own build before exporting the final image. This frees intermediate compiler
+stages before `vfs` copies the export container. Pre-existing cache, tagged final
+image layers, database/document volumes and the managed storage driver remain
+untouched. The setup safety test checks both the selected cache IDs and ordering.

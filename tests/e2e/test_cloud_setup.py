@@ -72,6 +72,9 @@ class CloudSetupTests(unittest.TestCase):
         self.assertEqual(len(prunes),1)
         self.assertIn('id=^(owned\\-new)$',prunes[0])
         self.assertNotIn('unrelated-cache',' '.join(prunes[0]))
+        compact_index = next(index for index,command in enumerate(commands) if 'tests/e2e/compact-image.py' in command)
+        self.assertLess(commands.index(prunes[0]),compact_index,
+                        'release only this build cache before vfs copies the export container')
 
 
 if __name__ == '__main__':

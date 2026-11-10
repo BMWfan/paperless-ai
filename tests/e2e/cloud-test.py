@@ -98,16 +98,18 @@ def prepare(args):
         before = cache_ids()
         run(DOCKER + ['compose', '--project-name', PROJECT, '-f', 'docker-compose.test.yml', 'build', 'ai'])
         created = cache_ids() - before
+        if created:
+            # vfs copies whole parent filesystems. Drop this build's intermediate
+            # compiler stages before compact-image creates its export container.
+            # The tagged final image keeps its own required layers alive.
+            expression = '^(' + '|'.join(re.escape(value) for value in sorted(created)) + ')$'
+            run(DOCKER + ['buildx', 'prune', '--all', '--force', '--filter', 'id=' + expression])
         old_image = image_id(APP)
         run([sys.executable, 'tests/e2e/compact-image.py', PROJECT + '-ai', APP])
         run(DOCKER + ['image', 'rm', PROJECT + '-ai'])
         if old_image and old_image != image_id(APP):
             # Never force removal of an image still referenced by another container.
             run(DOCKER + ['image', 'rm', old_image], check=False)
-        if created:
-            # Only cache entries created by this build; pre-existing cache is untouched.
-            expression = '^(' + '|'.join(re.escape(value) for value in sorted(created)) + ')$'
-            run(DOCKER + ['buildx', 'prune', '--all', '--force', '--filter', 'id=' + expression])
         manifest_file.write_text(json.dumps({'fingerprint': current, 'image': image_id(APP)}))
     remote = [
         ('registry-1.docker.io/library/redis:7.4.2-alpine', PROJECT + '-cloud-redis:local'),
