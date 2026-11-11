@@ -72,8 +72,8 @@ workflow scheduler in the fork. The native AI action (type 8) can select title,
 tags, correspondent, document type, storage path and created date, with missing
 object/overwrite options. It executes asynchronously. #19 exercises real native
 API workflows and the manual-PATCH provenance boundary; its evidence must be read per tested commit. The ancestor case reproduced false
-confirmation and has a conservative response-provenance guard pending final
-qualification; the asynchronous manual/workflow case passed without such a defect.
+confirmation and has a conservative response-provenance guard subject to the native
+qualification tracked in #19; the asynchronous manual/workflow case passed without such a defect.
 
 ## OCR templates
 

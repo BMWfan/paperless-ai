@@ -49,7 +49,8 @@ network. The model manifests observed in the first successful real run 431105337
 locked in tests/e2e/native-models.sha256. The image build verifies these checksums
 after downloading, and the runtime test verifies API digests again. A changed
 versioned tag therefore fails rather than silently using different weights.
-The expanded ancestor test and final locked-model run still require qualification.
+Final locked-model/ancestor qualification is tracked per tested revision in
+[PR #19](https://github.com/BMWfan/paperless-ai/pull/19).
 
 The managed 8-GB vfs runtime retains the compact baseline stack and synthetic
 volumes. This additional Ollama image/build is deliberately run on its isolated
@@ -80,8 +81,8 @@ provenance storage or migrate existing examples.
 Initial discovery run 43110533740 at c73e045 passed the disabled, read-only,
 disjoint, overlapping-write and manual/workflow cases. The suspected manual
 response defect did not reproduce in that run, so no production writer was
-changed. This is historical evidence: the expanded ancestor test and locked-model
-head still require their own successful runtime run. Reports record real API metadata/events and model digests. A failed
+changed. This is historical evidence; consult PR #19 for the expanded ancestor and
+locked-model runtime results at the exact tested revision. Reports record real API metadata/events and model digests. A failed
 provenance assertion is a reproduced defect to investigate, not a green result
 or permission to weaken the assertion. No production fix is claimed yet.
 
@@ -118,6 +119,6 @@ Only fields tracked by documentSnapshotService participate (title, tags,
 correspondent, document type and custom fields). This does not add monitoring for
 storage path, created date, content, or an external atomic PATCH contract.
 Unit cases cover matching manual/automatic writes, workflow-like divergence,
-implicit ancestors and equivalent tag order. Runtime requalification of the fix
-is pending at this commit. Rollback should disable automatic learning or use an
+implicit ancestors and equivalent tag order. Runtime requalification of the fix is recorded at the exact tested revision
+in PR #19; unit counts alone do not establish native compatibility. Rollback should disable automatic learning or use an
 explicitly reviewed corrective PR rather than silently restoring false provenance.
