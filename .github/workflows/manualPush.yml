@@ -1,67 +1,91 @@
-name: Manual Docker Build and Push
-
+name: Owner-approved GHCR publication
 on:
-  workflow_dispatch:  # Ermöglicht manuelle Auslösung über GitHub UI
+  workflow_dispatch:
     inputs:
       tag:
-        description: 'Custom tag (optional, defaults to latest)'
-        required: false
-        default: 'latest'
+        description: Existing version tag (never created or moved)
+        required: true
         type: string
-
+      sha:
+        description: Full tested commit SHA on main
+        required: true
+        type: string
+      latest:
+        description: Also update the mutable latest image tag
+        required: true
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: ghcr-publication
+  cancel-in-progress: false
 jobs:
-  docker:
-    runs-on: ubuntu-latest
+  preflight:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      sha: ${{ steps.policy.outputs.sha }}
+      tag: ${{ steps.policy.outputs.tag }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-        
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+          persist-credentials: false
+      - id: policy
+        uses: actions/github-script@v7
+        env:
+          PUBLISH_ENABLED: ${{ vars.GHCR_PUBLISH_ENABLED }}
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+          script: |
+            await require('./.github/scripts/release-policy').preflight({github, context, core});
+  publish:
+    needs: preflight
+    environment: ghcr-release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: read
+      packages: write
+    steps:
+      # Recheck after approval: inputs, tag, CI and protection may have changed while waiting.
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/github-script@v7
+        env:
+          PUBLISH_ENABLED: ${{ vars.GHCR_PUBLISH_ENABLED }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            await require('./.github/scripts/release-policy').preflight({github, context, core});
+            const image = `${context.repo.owner}/${context.repo.repo}`.toLowerCase();
+            await require('./.github/scripts/registry-tags').requireAbsent(image,
+              [context.payload.inputs.tag, `sha-${context.payload.inputs.sha}`],
+              `${context.actor}:${process.env.GITHUB_TOKEN}`);
+            core.exportVariable('RELEASE_IMAGE', `ghcr.io/${image}`);
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.preflight.outputs.sha }}
+          persist-credentials: false
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GHCR_PAT }}
-          
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: |
-            ${{ secrets.DOCKER_USERNAME }}/paperless-ai
-            ghcr.io/${{ github.repository_owner }}/paperless-ai
-          tags: |
-            type=raw,value=${{ inputs.tag }}
-            type=sha,prefix={{branch}}-
-            
-      - name: Build and push
-        uses: docker/build-push-action@v4
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          
-      - name: Summary
-        run: |
-          echo "## 🚀 Docker Build Complete" >> $GITHUB_STEP_SUMMARY
-          echo "Successfully built and pushed Docker images with tag: **${{ inputs.tag }}**" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Images pushed to:" >> $GITHUB_STEP_SUMMARY
-          echo "- Docker Hub: \`${{ secrets.DOCKER_USERNAME }}/paperless-ai:${{ inputs.tag }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- GitHub Container Registry: \`ghcr.io/${{ github.repository_owner }}/paperless-ai:${{ inputs.tag }}\`" >> $GITHUB_STEP_SUMMARY
+          tags: |
+            ${{ env.RELEASE_IMAGE }}:${{ needs.preflight.outputs.tag }}
+            ${{ env.RELEASE_IMAGE }}:sha-${{ needs.preflight.outputs.sha }}
+            ${{ inputs.latest && format('{0}:latest', env.RELEASE_IMAGE) || '' }}
