@@ -1,0 +1,33 @@
+# Opt-in only, separate synthetic project per model/seed.
+services:
+  quality-model:
+    build:
+      context: .
+      dockerfile: tests/e2e/Dockerfile.quality-model
+      args:
+        QUALITY_MODEL: ${QUALITY_MODEL:-qwen2.5:0.5b}
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_NO_CLOUD: '1'
+      OLLAMA_NUM_PARALLEL: '1'
+    mem_limit: 3g
+    healthcheck:
+      test: [CMD, ollama, list]
+      interval: 5s
+      retries: 30
+  quality-check:
+    build:
+      context: .
+      dockerfile: tests/e2e/Dockerfile
+      secrets: [proxy_ca]
+    command: [node, tests/quality/run.js]
+    environment:
+      QUALITY_MODEL: ${QUALITY_MODEL:-qwen2.5:0.5b}
+      QUALITY_SEED: ${QUALITY_SEED:-42}
+      QUALITY_SPLITS: ${QUALITY_SPLITS:-evaluation,confirmation}
+      NO_PROXY: paperless,ai,quality-model,localhost,127.0.0.1
+      no_proxy: paperless,ai,quality-model,localhost,127.0.0.1
+    volumes: ['ai-data:/app/data']
+    depends_on:
+      ai: {condition: service_healthy}
+      quality-model: {condition: service_healthy}

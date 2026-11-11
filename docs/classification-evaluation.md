@@ -21,3 +21,12 @@ correspondent and language are scored as correct, wrong or missing. Tag
 comparison uses an exact case-insensitive set. A successful run verifies the
 measurement and context delivery. The scores describe this small local model
 and corpus and do not set a pass threshold for classification accuracy.
+
+## Follow-up quality protocol
+
+[The document-bound quality experiment](learning-quality.md) separately measures
+reference relevance and structured extraction with a frozen larger corpus. Its
+consistent-taxonomy protocol is distinct from this historical benchmark. Raw
+errors and source-supported outputs remain separate; rejected values are not
+scored as correctly extracted values. Production defaults remain unchanged in
+the initial experiment.
