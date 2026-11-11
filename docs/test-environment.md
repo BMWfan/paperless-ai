@@ -287,3 +287,10 @@ document and app volumes for the upgrade. Rebuild and compact the application af
 changes; do not reuse a stale compact image. Importing changes the local image digest and removes
 its original build history, so use these images only for disposable development
 tests, not release publication.
+
+## Optional native AI coexistence experiment
+
+See [the isolated opt-in native profile](native-ai-coexistence.md) and the
+[source-based synergy assessment](paperless-ngx-synergies.md). The standard stack
+keeps native AI disabled. The initial experiment requires separate runtime
+qualification and model digest pinning; it does not imply production activation.
