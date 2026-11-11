@@ -188,6 +188,14 @@ The integration assertions cover schema-constrained JSON, actual inference token
 and reference context sent to the model. This small evaluation is not a general
 model-quality guarantee or an actual hosted OpenAI/Azure model evaluation.
 
+Expected correspondent names must match the sender written in the fixture, even
+when its body is German. Proper names are not translated for scoring. A corpus
+regression checks that each expected sender occurs as the first line. Earlier
+reports expecting `Fiktives Beispiel` in documents headed `Fictional Example`
+have invalid correspondent scores for those German cases; use a new report and
+corpus digest after this correction. Other field scores remain descriptive,
+not evidence of a reliable learning improvement.
+
 `tests/e2e/generate.js` generates English/German synthetic invoices and expected
 metadata. Evaluation fixtures are generated separately from learning examples.
 The protocol mock is deterministic and incurs no API costs. Passing mock tests
