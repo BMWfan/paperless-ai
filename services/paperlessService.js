@@ -1405,7 +1405,12 @@ async getOrCreateDocumentType(name, options = {}) {
         }
         if (!Object.keys(updateData).length) return latest;
         const response = await this.client.patch(`/documents/${documentId}/`, updateData);
-        engineWrite.store.observe(response.data, options.confirmedUser ? 'confirmed_ui' : 'self_write', { actor: options.actor });
+        // A native workflow or tag hierarchy can add metadata to the PATCH response.
+        // The payload proves intent only for the expected state, not those extra writes.
+        const expected = { ...latest, ...updateData };
+        const unexpected = Object.keys(compareDocumentMetadata(expected, response.data)).length > 0;
+        const source = unexpected ? 'unknown' : (options.confirmedUser ? 'confirmed_ui' : 'self_write');
+        engineWrite.store.observe(response.data, source, { actor: options.actor });
       } finally { engineWrite.inFlight.delete(Number(documentId)); }
       console.log(`[SUCCESS] Updated metadata for document ${documentId}`);
       return await this.getDocument(documentId);

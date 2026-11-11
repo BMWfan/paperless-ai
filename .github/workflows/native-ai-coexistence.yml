@@ -1,0 +1,46 @@
+name: Native AI coexistence experiment
+on:
+  pull_request:
+    paths: ['docker-compose.native-ai.yml', 'tests/e2e/native-ai.test.js', 'tests/e2e/Dockerfile.native-model', 'tests/e2e/native-models.sha256', '.github/workflows/native-ai-coexistence.yml', 'services/paperlessService.js']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: native-ai-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      COMPOSE_PROJECT_NAME: paperless-ai-native-e2e
+      TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare isolated trust bundle
+        run: |
+          mkdir -p .e2e-cache
+          cp /etc/ssl/certs/ca-certificates.crt "$TEST_CA_BUNDLE"
+      - name: Baseline with native AI disabled
+        run: |
+          docker compose -f docker-compose.test.yml up -d --build --wait ai
+          docker compose -f docker-compose.test.yml run --rm -e NATIVE_PROFILE=disabled runner node --test tests/e2e/native-ai.test.js
+      - name: Start opt-in local native AI profile
+        run: docker compose -f docker-compose.test.yml -f docker-compose.native-ai.yml up -d --build --wait ai native-model
+      - name: Read-only suggestions and workflow provenance
+        run: docker compose -f docker-compose.test.yml -f docker-compose.native-ai.yml run --no-deps --build --name paperless-native-check -e "GITHUB_SHA=$(git rev-parse HEAD)" native-check
+      - name: Collect report
+        if: always()
+        run: docker cp paperless-native-check:/app/data/native-ai-report.json ./native-ai-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-ai-coexistence
+          path: native-ai-report.json
+          if-no-files-found: warn
+      - name: Logs on failure
+        if: failure()
+        run: docker compose -f docker-compose.test.yml -f docker-compose.native-ai.yml logs --no-color --tail=100
+      - name: Remove only the disposable experiment stack
+        if: always()
+        run: docker compose -f docker-compose.test.yml -f docker-compose.native-ai.yml down -v --remove-orphans

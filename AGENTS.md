@@ -1,6 +1,7 @@
 # Development rules
 
 - Inspect architecture and existing implementation before changing code.
+- Develop Paperless-AI in this fork. Use unmodified official Paperless-ngx images as integration-test counterparts; do not patch ngx source here. Distinguish expected native behavior from fork defects. For a reproducible upstream defect, check for existing reports and file a focused upstream issue with synthetic reproduction, versions and evidence; do not expose secrets or production data.
 - Follow the [SDD-Light workflow](.github/SDD-LIGHT.md). Work only on the feature branch approved for the task. Never work on or push to `main`.
 - Link the approved specification and verification evidence in a draft PR. Merge, release and deployment each require explicit owner approval.
 - Check existing issues and PRs before coding; reuse approved work instead of creating duplicates. Follow Specify → Clarify → Plan → Tasks → Analyze → Implement → Verify → AI Review → owner-approved Merge. Plan approval and green CI never authorize a merge, publication or deployment.

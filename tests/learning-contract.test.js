@@ -204,3 +204,32 @@ test('RAG adapter resolves Python list/doc_id results and tolerates unavailable 
   axios.post=async()=>{throw new Error('isolated simulated outage');};
   assert.deepEqual(await rag.findSimilarClassifications('synthetic'),[]);
 });
+
+test('PATCH provenance trusts only the requested normalized result', async t => {
+  const {store}=setup(t);
+  const engine=require('../services/learningEngine'),model=require('../models/document');
+  const descriptor=Object.getOwnPropertyDescriptor(engine,'store'),original=model.getConfirmedLearningFeedback;
+  t.after(()=>{Object.defineProperty(engine,'store',descriptor);model.getConfirmedLearningFeedback=original;});
+  Object.defineProperty(engine,'store',{configurable:true,value:store});
+  model.getConfirmedLearningFeedback=async()=>null;
+  const service=Object.create(require('../services/paperlessService'));service.initialize=()=>{};
+  for(const [index,scenario] of [
+    {name:'matching manual title',confirmedUser:true,updates:{title:'Explicit'},returned:{title:'Explicit'},source:'confirmed_ui',status:'confirmed'},
+    {name:'matching automatic title',updates:{title:'Automatic'},returned:{title:'Automatic'},source:'self_write'},
+    {name:'unrequested native title after manual type',confirmedUser:true,updates:{document_type:7},returned:{document_type:7,title:'Workflow title'},source:'unknown',status:'pending'},
+    {name:'native response after automatic type',updates:{document_type:7},returned:{document_type:7,title:'Workflow title'},source:'unknown',status:'pending'},
+    {name:'implicit parent after manual child',confirmedUser:true,updates:{tags:[5]},returned:{tags:[4,5]},source:'unknown',status:'pending'},
+    {name:'same normalized tag set',confirmedUser:true,updates:{tags:[5,4]},returned:{tags:[4,5]},source:'confirmed_ui',status:'confirmed'}
+  ].entries()) {
+    const id=100+index,current={id,title:'Before',tags:[],document_type:null};
+    const returned={...current,...scenario.returned};let reads=0;
+    service.getDocument=async()=>++reads<=2?current:returned;
+    service.client={patch:async(_path,payload)=>{assert.deepEqual(payload,scenario.updates,scenario.name);return {data:returned};}};
+    store.observe(current);
+    assert.deepEqual(await service.updateDocument(id,scenario.updates,{confirmedUser:!!scenario.confirmedUser,actor:'test-user'}),returned);
+    const event=store.list().find(e=>e.document_id===id);
+    if(scenario.source==='self_write') {assert.equal(event,undefined);continue;}
+    assert.equal(event.source,scenario.source,scenario.name);assert.equal(event.status,scenario.status,scenario.name);
+    assert.equal(store.examples().some(e=>e.document_id===id),scenario.status==='confirmed',scenario.name);
+  }
+});
