@@ -117,6 +117,8 @@ test('native read, disjoint writes, overlapping writes and manual provenance',{s
       report.profiles.push({profile:'implicit-tag-ancestor',requested:{tags:[child.id]},patchResponse:metadata(returned),after:metadata(after),events});
       assert.ok(!events.some(e=>e.status==='confirmed'&&e.metadata.tags.includes(parent.id)),
         'implicit parent tag must not be recorded as explicitly confirmed by the user');
+      assert.ok(events.some(e=>e.source==='unknown'&&e.status==='pending'&&e.metadata.tags.includes(parent.id)));
+      assert.ok(!(await learning('/examples')).examples.some(e=>e.document_id===tagDoc.id&&e.active));
     });
   }finally{
     await learning('/settings',original);console.log('NATIVE_PROFILE_RESULTS',JSON.stringify(report.profiles));fs.writeFileSync('/app/data/native-ai-report.json',JSON.stringify(report,null,2)+'\n');

@@ -118,3 +118,15 @@ outage classification can still use confirmed title/content patterns. The shared
 builder never falls back to unconfirmed predictions. The optional Python RAG
 runtime and real-model quality still require separate evaluation; deterministic
 provider fixtures establish integration correctness only.
+
+## PATCH response provenance
+
+A manual request proves intent for its expected normalized metadata state.
+Paperless-ngx can add ancestor tags or apply workflow changes. The writer compares
+the PATCH response with its final pre-write document plus actual payload. When
+monitored metadata differs unexpectedly, it records unknown provenance and leaves
+the change pending review instead of auto-confirming it or hiding it as a
+self-write. Exact matching writes keep existing learning-mode behavior. API writes
+still succeed; no migration is required. Normalization/implicit changes can cause
+additional document-level review. See [the native experiment](native-ai-coexistence.md)
+for evidence, monitored fields, asynchronous behavior and remaining race limits.

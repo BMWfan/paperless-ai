@@ -3,8 +3,8 @@
 SPEC [#17](https://github.com/BMWfan/paperless-ai/issues/17), EPIC #12.
 Baseline is Paperless-ngx 3.4.2, not an unmerged upstream branch.
 Native AI remains disabled in `docker-compose.test.yml` and all existing user
-configuration. This change adds opt-in test infrastructure, not a production
-suggestion adapter or an assertion of better classification.
+configuration. This change adds opt-in test infrastructure and a conservative PATCH-provenance
+guard, not a production native-suggestion adapter or a quality promise.
 
 ## Contract and ordered tasks
 
@@ -87,11 +87,37 @@ or permission to weaken the assertion. No production fix is claimed yet.
 
 Disable/delete experiment workflows, stop this project and remove only its
 synthetic volumes, then use the base Compose file alone with fresh volumes.
-No production data/config migration. Existing Learning Engine settings, review
-flow and compatibility remain unchanged in the initial test-only diff.
+No production data/config migration. Existing Learning Engine settings and review API remain compatible; no database
+migration or modification of existing examples is required.
 
 Upstream source references (v3.4.2):
 [configuration](https://github.com/paperless-ngx/paperless-ngx/blob/v3.4.2/docs/configuration.md#ai),
 [views](https://github.com/paperless-ngx/paperless-ngx/blob/v3.4.2/src/documents/views.py),
 [workflow API tests](https://github.com/paperless-ngx/paperless-ngx/blob/v3.4.2/src/documents/tests/test_api_workflows.py),
 [AI workflow executor](https://github.com/paperless-ngx/paperless-ngx/blob/v3.4.2/src/documents/workflows/ai.py).
+
+## Reproduced ancestor defect and compatibility decision
+
+Run 43111608775 at b39c9d5 reproduced the negative ancestor case: the request
+contained child tag 5, ngx returned tags 5 and parent 4, and the fork recorded an
+active confirmed_ui reference for both. Other native scenarios passed, including
+the asynchronous manual/workflow case; its workflow title correctly became a
+separate unknown/pending event. Do not report that case as a reproduced failure.
+
+The bounded fix compares the normalized PATCH response with the expected state
+(final pre-write document plus actual payload). Exact matching responses retain
+confirmed_ui/self_write behavior. Any unexpected change in the monitored learning
+fields is conservatively observed as unknown, requiring review. This applies to
+manual and automatic writes: an automatic write must not hide an external change
+as self_write. Tags are compared as sets, so order alone does not add review.
+
+The metadata write still succeeds. Server coercion or automatic ancestor tags can
+now require extra review for the whole document; this deliberately avoids adding
+a per-field provenance database or trusting a partially inferred human intent.
+Only fields tracked by documentSnapshotService participate (title, tags,
+correspondent, document type and custom fields). This does not add monitoring for
+storage path, created date, content, or an external atomic PATCH contract.
+Unit cases cover matching manual/automatic writes, workflow-like divergence,
+implicit ancestors and equivalent tag order. Runtime requalification of the fix
+is pending at this commit. Rollback should disable automatic learning or use an
+explicitly reviewed corrective PR rather than silently restoring false provenance.
