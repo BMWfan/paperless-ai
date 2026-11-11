@@ -41,7 +41,7 @@ test('native disabled baseline rejects AI without changing metadata',{skip:proce
   assert.equal(response.status,400);assert.deepEqual(metadata(await api(`/documents/${doc.id}/`)),before);
 });
 
-test('native read, disjoint writes, overlapping writes and manual provenance',{skip:process.env.NATIVE_PROFILE==='disabled',timeout:1200000},async()=>{
+test('native read, disjoint writes, overlapping writes and manual provenance',{skip:process.env.NATIVE_PROFILE==='disabled',timeout:1200000},async t=>{
   const original=await learning('/settings');
   await learning('/settings',{enabled:false,mode:'hybrid',stabilizationMs:0});
   try {
@@ -88,6 +88,7 @@ test('native read, disjoint writes, overlapping writes and manual provenance',{s
     assert.ok((await learning('/examples')).examples.some(e=>e.document_id===overlapDoc.id&&e.active));
     report.profiles.push({profile:'overlap',document:overlapDoc.id,after:metadata(current),events});
 
+    await t.test('manual PATCH plus workflow preserves provenance',async()=>{
     // Deterministic workflow exercises the same native update pipeline without model timing ambiguity.
     const manualTag=await api('/tags/',{name:`Native manual ${Date.now()}`,matching_algorithm:0});
     const manualDoc=await upload('manual',[manualTag.id]);await learning('/scan',{});
@@ -102,6 +103,19 @@ test('native read, disjoint writes, overlapping writes and manual provenance',{s
       assert.ok(!manualEvents.some(e=>e.status==='confirmed'&&JSON.parse(e.metadata_json).title==='Workflow-owned title'),
         'workflow-owned title must not become a human-confirmed learning example');
     }finally{await disable(manualWorkflow.id);}
+    });
+    await t.test('implicit ancestor tags are not explicit human feedback',async()=>{
+      const parent=await api('/tags/',{name:`Native parent ${Date.now()}`,matching_algorithm:0});
+      const child=await api('/tags/',{name:`Native child ${Date.now()}`,matching_algorithm:0,parent:parent.id});
+      const tagDoc=await upload('ancestors');await learning('/scan',{});
+      const response=await fetch('http://ai:3000/manual/updateDocument',{method:'POST',headers:{...json,'x-api-key':'isolated-test-api-key'},body:JSON.stringify({documentId:tagDoc.id,tags:[child.id]})});
+      assert.equal(response.status,200);const returned=await response.json();
+      const after=await api(`/documents/${tagDoc.id}/`);assert.ok(after.tags.includes(parent.id)&&after.tags.includes(child.id));
+      await learning('/scan',{});const events=await eventsFor(tagDoc.id);
+      report.profiles.push({profile:'implicit-tag-ancestor',requested:{tags:[child.id]},patchResponse:metadata(returned),after:metadata(after),events});
+      assert.ok(!events.some(e=>e.status==='confirmed'&&e.metadata.tags.includes(parent.id)),
+        'implicit parent tag must not be recorded as explicitly confirmed by the user');
+    });
   }finally{
     await learning('/settings',original);fs.writeFileSync('/app/data/native-ai-report.json',JSON.stringify(report,null,2)+'\n');
   }

@@ -19,9 +19,11 @@ suggestion adapter or an assertion of better classification.
    workflow assigning a different title. Capture requested fields, returned
    document, freshly fetched document and learning events. A workflow-owned title
    must not silently become a confirmed human reference.
-6. Reproduce any failure before proposing a production writer change; document
+6. Test implicit ancestor tags added by ngx after an explicit child-tag update;
+   an automatic parent must not count as explicitly confirmed feedback.
+7. Reproduce any failure before proposing a production writer change; document
    the compatibility decision and add meaningful regression coverage first.
-7. Review evidence/limits, pin discovered model manifests, then request owner
+8. Review evidence/limits, pin discovered model manifests, then request owner
    merge approval. No production deployment or default activation.
 
 ## Reusable isolated profile
