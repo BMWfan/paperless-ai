@@ -113,6 +113,8 @@ continues to launch the existing development server.
 
 ## 🔧 Local Development
 
+See the [isolated test guide](docs/test-environment.md), [SDD-Light process](.github/SDD-LIGHT.md) and [build/publication policy](docs/release-policy.md). Image publication and merges require separate owner approval.
+
 ```bash
 # Install dependencies
 npm install

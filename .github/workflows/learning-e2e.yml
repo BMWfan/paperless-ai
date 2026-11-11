@@ -2,7 +2,7 @@ name: Learning engine validation
 on:
   pull_request:
   push:
-    branches: [feature/learning-engine-v2]
+    branches: [main, feature/learning-engine-v2]
 jobs:
   integration:
     runs-on: ubuntu-latest
