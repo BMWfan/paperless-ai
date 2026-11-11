@@ -11,6 +11,19 @@ http.createServer(async (req, res) => {
   const context = body.system || (body.messages || []).filter(row => row.role === 'system').map(row => row.content).join('\n');
   requests.push({ path: req.url, context });
   const result = { ...classification, title: context.includes('Confirmed synthetic correction') ? 'Confirmed synthetic correction' : classification.title };
+  if (body.prompt?.includes('SYNTHETIC CUSTOM FIELD CONTRACT')) {
+    result.title = 'Typed synthetic invoice';
+    result.custom_fields = {
+      count: { field_name: 'Contract count', value: 0 },
+      price: { field_name: 'Contract price', value: 'EUR42,50' },
+      ratio: { field_name: 'Contract ratio', value: 1.25 },
+      flag: { field_name: 'Contract flag', value: false },
+      category: { field_name: 'Contract category', value: 'Fixture' },
+      note: { field_name: 'Contract note', value: 'Synthetic long text '.repeat(8) },
+      invalid: { field_name: 'Contract invalid', value: '1,234' },
+      omitted: { field_name: 'Contract untouched', value: null }
+    };
+  }
   res.setHeader('Content-Type', 'application/json');
   if (req.url === '/health') return res.end('{"ok":true}');
   res.end(JSON.stringify({ response: JSON.stringify(result), done: true,

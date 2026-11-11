@@ -22,6 +22,71 @@ async function api(path, options = {}) {
   assert.ok(response.ok, `${path}: HTTP ${response.status}`);
   return response.json();
 }
+
+test('real scan applies typed custom fields without losing unrelated metadata', { timeout: 180000 }, async () => {
+  const name = `synthetic-field-contract-${Date.now()}.txt`;
+  const form = new FormData();
+  form.set('document', new Blob(['SYNTHETIC CUSTOM FIELD CONTRACT'], { type: 'text/plain' }), name);
+  await api('/documents/post_document/', { method: 'POST', body: form });
+  let document;
+  for (let attempt = 0; attempt < 90; attempt++) {
+    document = (await api('/documents/?ordering=-id')).results.find(row => row.original_file_name === name);
+    if (document) break;
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+  assert.ok(document, 'synthetic contract document ingested');
+  const json = { 'Content-Type': 'application/json' };
+  const fields = {};
+  for (const [key, type] of Object.entries({
+    count: 'integer', price: 'monetary', ratio: 'float', flag: 'boolean', category: 'select',
+    note: 'longtext', invalid: 'monetary', untouched: 'string'
+  })) {
+    const fieldName = `Contract ${key}`;
+    const existing = (await api(`/custom_fields/?name__iexact=${encodeURIComponent(fieldName)}`)).results
+      .find(field=>field.name===fieldName);
+    if (existing) {
+      assert.equal(existing.data_type,type,'existing synthetic field fixture keeps its type');
+      if (type === 'select') assert.equal(existing.extra_data.select_options.filter(option=>option.label==='Fixture').length,1);
+    }
+    fields[key] = existing || await api('/custom_fields/', {
+      method: 'POST', headers: json,
+      body: JSON.stringify({
+        name: fieldName, data_type: type,
+        ...(type === 'select' ? { extra_data: { select_options: [{ label: 'Fixture' }] } } : {})
+      })
+    });
+  }
+  await api(`/documents/${document.id}/`, {
+    method: 'PATCH', headers: json,
+    body: JSON.stringify({ custom_fields: [{ field: fields.untouched.id, value: 'keep me' }] })
+  });
+  const response = await fetch('http://ai:3000/api/scan/now', {
+    method: 'POST', headers: { 'x-api-key': 'isolated-test-api-key' }, redirect: 'manual',
+    signal: AbortSignal.timeout(45000)
+  });
+  assert.equal(response.status, 200, 'the automatic scan entry point completes');
+  const updated = await api(`/documents/${document.id}/`);
+  const values = new Map(updated.custom_fields.map(row => [row.field, row.value]));
+  assert.equal(updated.title, 'Typed synthetic invoice', 'invalid field must not block other metadata');
+  assert.equal(values.get(fields.count.id), 0);
+  assert.equal(values.get(fields.price.id), 'EUR42.50');
+  assert.equal(values.get(fields.ratio.id), 1.25);
+  assert.equal(values.get(fields.flag.id), false);
+  assert.equal(values.get(fields.category.id), fields.category.extra_data.select_options.find(option=>option.label==='Fixture').id);
+  assert.equal(values.get(fields.note.id), 'Synthetic long text '.repeat(8).trim());
+  assert.equal(values.get(fields.untouched.id), 'keep me');
+  assert.equal(values.has(fields.invalid.id), false);
+  const manual = await fetch('http://ai:3000/manual/updateDocument', {
+    method: 'POST', headers: { ...json, 'x-api-key': 'isolated-test-api-key' },
+    body: JSON.stringify({ documentId: document.id, custom_fields: updated.custom_fields.map(row =>
+      row.field === fields.count.id ? { ...row, value: null } : row) })
+  });
+  assert.equal(manual.status, 200);
+  const cleared = await api(`/documents/${document.id}/`);
+  assert.equal(cleared.custom_fields.find(row => row.field === fields.count.id)?.value, null);
+  assert.equal(cleared.custom_fields.find(row => row.field === fields.untouched.id)?.value, 'keep me');
+});
+
 test('real Paperless ingestion, direct correction, persistent detection and review', { timeout: 180000 }, async () => {
   const fixture = generate(Date.now());
   const form = new FormData();
