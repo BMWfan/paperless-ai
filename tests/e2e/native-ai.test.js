@@ -22,7 +22,7 @@ async function waitFor(fn,message,attempts=180) {
 }
 async function upload(label,tags=[]) {
   const name=`native-${label}-${Date.now()}.txt`;const form=new FormData();
-  form.set('document',new Blob([`SYNTHETIC DATA ONLY\nExample Energy Ltd\nElectricity invoice INV-42\nAmount EUR 42.50. Due 2030-05-01.`],{type:'text/plain'}),name);
+  form.set('document',new Blob([`SYNTHETIC DATA ONLY ${name}\nExample Energy Ltd\nElectricity invoice INV-42\nAmount EUR 42.50. Due 2030-05-01.`],{type:'text/plain'}),name);
   form.set('title',`Unclassified ${label}`);for(const tag of tags)form.append('tags',String(tag));
   await api('/documents/post_document/',form);
   return waitFor(async()=>{const rows=(await api('/documents/?ordering=-id')).results;return rows.find(d=>d.original_file_name===name);},'document ingested');
