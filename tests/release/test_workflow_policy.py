@@ -42,6 +42,7 @@ class WorkflowPolicy(unittest.TestCase):
     def test_discord_removed_and_main_is_actually_tested(self):
         self.assertFalse((ROOT / '.github/workflows/release-to-discord.yml').exists())
         self.assertIn('main', workflow('learning-e2e.yml')['on']['push']['branches'])
+        self.assertEqual(workflow('learning-e2e.yml')['permissions'], {'contents': 'read'})
         for path in (ROOT / '.github/workflows').glob('*.yml'):
             text = path.read_text()
             self.assertNotIn('DISCORD_WEBHOOK', text)
