@@ -47,8 +47,10 @@ test('native read, disjoint writes, overlapping writes and manual provenance',{s
   try {
     const models=await (await fetch('http://native-model:11434/api/tags')).json();
     report.models=models.models.map(({name,digest})=>({name,digest}));console.log('NATIVE_MODEL_DIGESTS',JSON.stringify(report.models));
-    assert.ok(report.models.some(m=>m.name==='qwen2.5:0.5b'&&m.digest));
-    assert.ok(report.models.some(m=>m.name==='all-minilm:22m'&&m.digest));
+    for(const line of fs.readFileSync('tests/e2e/native-models.sha256','utf8').trim().split('\n')) {
+      const [digest,manifest]=line.split(/\s+/);const name=manifest.split('/library/')[1].replace('/',':');
+      assert.equal(report.models.find(m=>m.name===name)?.digest,digest,'loaded model must match the qualified manifest');
+    }
     // Exercise actual local embeddings, not just the configured backend name.
     const embedding=await fetch('http://native-model:11434/api/embed',{method:'POST',headers:json,body:JSON.stringify({model:'all-minilm:22m',input:'Synthetic invoice'})});
     assert.ok(embedding.ok);assert.ok((await embedding.json()).embeddings[0].length>0);
@@ -117,6 +119,6 @@ test('native read, disjoint writes, overlapping writes and manual provenance',{s
         'implicit parent tag must not be recorded as explicitly confirmed by the user');
     });
   }finally{
-    await learning('/settings',original);fs.writeFileSync('/app/data/native-ai-report.json',JSON.stringify(report,null,2)+'\n');
+    await learning('/settings',original);console.log('NATIVE_PROFILE_RESULTS',JSON.stringify(report.profiles));fs.writeFileSync('/app/data/native-ai-report.json',JSON.stringify(report,null,2)+'\n');
   }
 });

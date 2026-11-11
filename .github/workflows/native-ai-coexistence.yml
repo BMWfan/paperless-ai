@@ -1,7 +1,7 @@
 name: Native AI coexistence experiment
 on:
   pull_request:
-    paths: ['docker-compose.native-ai.yml', 'tests/e2e/native-ai.test.js', 'tests/e2e/Dockerfile.native-model', '.github/workflows/native-ai-coexistence.yml', 'services/paperlessService.js']
+    paths: ['docker-compose.native-ai.yml', 'tests/e2e/native-ai.test.js', 'tests/e2e/Dockerfile.native-model', 'tests/e2e/native-models.sha256', '.github/workflows/native-ai-coexistence.yml', 'services/paperlessService.js']
   workflow_dispatch:
 permissions:
   contents: read

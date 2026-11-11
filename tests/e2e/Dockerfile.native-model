@@ -1,6 +1,8 @@
 FROM ollama/ollama:0.12.6
+COPY tests/e2e/native-models.sha256 /tmp/native-models.sha256
 # Public models downloaded only at build time; runtime network is internal.
 RUN ollama serve >/tmp/ollama-build.log 2>&1 & server=$!; \
     trap 'kill "$server"' EXIT; \
     for attempt in $(seq 1 60); do ollama list >/dev/null 2>&1 && break; sleep 1; done; \
-    ollama pull qwen2.5:0.5b && ollama pull all-minilm:22m
+    ollama pull qwen2.5:0.5b && ollama pull all-minilm:22m && \
+    sha256sum -c /tmp/native-models.sha256

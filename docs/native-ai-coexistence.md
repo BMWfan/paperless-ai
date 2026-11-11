@@ -45,10 +45,11 @@ docker compose -f docker-compose.test.yml -f docker-compose.native-ai.yml down -
 
 The overlay uses Ollama 0.12.6, qwen2.5:0.5b generation and all-minilm:22m
 embeddings. Downloads happen during image build; inference has no external
-network. The initial experiment records manifest digests; a passing qualification
-requires verifying/pinning those observed digests in the fixture. Versioned model
-tags alone are not immutable. The first CI run is a discovery/compatibility run,
-not a completed qualification.
+network. The model manifests observed in the first successful real run 43110533740 are
+locked in tests/e2e/native-models.sha256. The image build verifies these checksums
+after downloading, and the runtime test verifies API digests again. A changed
+versioned tag therefore fails rather than silently using different weights.
+The expanded ancestor test and final locked-model run still require qualification.
 
 The managed 8-GB vfs runtime retains the compact baseline stack and synthetic
 volumes. This additional Ollama image/build is deliberately run on its isolated
@@ -76,8 +77,11 @@ provenance storage or migrate existing examples.
 
 ## Evidence and rollback
 
-At initial draft, syntax/config checks only; runtime CI and digest pinning are
-pending. Reports record real API metadata/events and model digests. A failed
+Initial discovery run 43110533740 at c73e045 passed the disabled, read-only,
+disjoint, overlapping-write and manual/workflow cases. The suspected manual
+response defect did not reproduce in that run, so no production writer was
+changed. This is historical evidence: the expanded ancestor test and locked-model
+head still require their own successful runtime run. Reports record real API metadata/events and model digests. A failed
 provenance assertion is a reproduced defect to investigate, not a green result
 or permission to weaken the assertion. No production fix is claimed yet.
 
