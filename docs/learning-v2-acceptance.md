@@ -1,5 +1,15 @@
 # Learning Engine v2 acceptance
 
+## Historical baseline acceptance
+
+The table below is preserved as the original `d924021` acceptance audit and its
+subsequent first delivery. Its versions, branch/PR and environment observations
+are historical, not current operating instructions. See the dated
+[current project status](project-status.md) for integrated and pending work.
+The current test pin is3.4.2, and development follows approved feature branches
+under AGENTS/SDD-Light; the original PR #1-only boundary is superseded by those
+later owner-approved work packages. Model quality remains explicitly unqualified.
+
 This checklist compares the complete original project request with the delivered
 implementation. Provider fixtures establish integration, not real model accuracy.
 The final clean-build validation is recorded in `learning-v2-validation.md`.

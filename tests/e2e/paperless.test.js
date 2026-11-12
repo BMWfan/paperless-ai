@@ -98,6 +98,23 @@ test('real scan applies typed custom fields without losing unrelated metadata', 
   assert.equal(cleared.custom_fields.find(row => row.field === fields.date.id)?.value, null, 'manual date clearing remains allowed');
   assert.equal(cleared.custom_fields.find(row => row.field === fields.invalidDate.id)?.value, '2030-01-01');
   assert.equal(cleared.custom_fields.find(row => row.field === fields.untouched.id)?.value, 'keep me');
+  const previewResponse = await fetch('http://ai:3000/manual/custom-field-preview', {
+    method: 'POST', headers: { ...json, 'x-api-key': 'isolated-test-api-key' },
+    body: JSON.stringify({ documentId: document.id, content: cleared.content.slice(0,50000), suggestions: [
+      {field_name:'Contract invalidDate',value:'2031-02-30'},
+      {field_name:'Contract date',value:'2032-2-29'},
+      {field_name:'Contract untouched',value:'<img src=x onerror=alert(1)>'}
+    ] })
+  });
+  assert.equal(previewResponse.status,200);
+  const preview = await previewResponse.json();
+  assert.equal(preview.readOnly,true);assert.equal(preview.rows[0].fieldId,fields.invalidDate.id);
+  assert.ok(preview.rows[0].flags.includes('invalid_value'));
+  assert.equal(preview.rows[1].normalizedValue,'2032-02-29');
+  assert.ok(preview.rows.every(row=>row.semanticStatus==='unverified'));
+  const afterPreview = await api(`/documents/${document.id}/`);
+  assert.deepEqual(afterPreview.custom_fields,cleared.custom_fields);
+  assert.equal(afterPreview.title,cleared.title);assert.equal(afterPreview.modified,cleared.modified,'preview performs no native write');
 });
 
 test('real Paperless ingestion, direct correction, persistent detection and review', { timeout: 180000 }, async () => {
