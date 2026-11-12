@@ -53,6 +53,12 @@ the document but still be the wrong current value: presence alone is not semanti
 evidence. This diagnostic is not a production extraction policy and does not
 promise complete hallucination prevention.
 
+A separate [field-evidence experiment](field-evidence.md) tests explicit EN/DE
+label/value pairs against the unchanged archived answers and28 newly frozen
+challenge cases. It reports wrong-value rejection and lost correct proposals
+separately. Its measured coverage losses and attachment false acceptances block
+production promotion; the original source-support scoring stays unchanged.
+
 Training documents are ingested into the isolated official ngx instance, edited,
 and explicitly reviewed through the fork's actual learning API. Only those active
 references enter the comparison. Evaluation predictions never become learning

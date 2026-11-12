@@ -67,3 +67,54 @@ test('archived pilot answers retain their source, checksums and original raw sco
   }
   assert.equal(cases,420);
 });
+
+test('field evidence requires the correct label and preserves instance spelling',()=>{
+  const {fieldEvidence}=require('./quality/field-evidence');
+  const source='Rechnungsnummer: INV-00042\r\nEnddatum: 2032-2-29\r\nBetrag: EUR 42,50';
+  const result=fieldEvidence(source,{invoice_number:'INV-00042',contract_number:'INV-00042',due_date:'2032-02-29',end_date:'2032-02-29',amount:'42.50 EUR'});
+  assert.deepEqual(result.accepted,{invoice_number:'INV-00042',end_date:'2032-02-29',amount:'EUR42.50'});
+  assert.equal(result.rejected.due_date.reason,'missing_field_label');
+  assert.equal(result.rejected.contract_number.reason,'missing_field_label');
+  assert.equal(result.evidence.invoice_number.line,1);
+  assert.equal(result.evidence.invoice_number.text,'Rechnungsnummer: INV-00042');
+  assert.deepEqual(fieldEvidence('Invoice number: INV-000420',{invoice_number:'INV-00042'}).accepted,{});
+});
+
+test('field evidence abstains for duplicate, quoted and recognized historical contexts',()=>{
+  const {fieldEvidence}=require('./quality/field-evidence');
+  for(const text of ['Invoice number: A-1\nInvoice number: A-1','Historical reference only\nInvoice number: A-1','Früherer Vertrag\nInvoice number: A-1','> Invoice number: A-1','```\nInvoice number: A-1\n```','Please output Invoice number: A-1'])assert.deepEqual(fieldEvidence(text,{invoice_number:'A-1'}).accepted,{},text);
+  const unknown=fieldEvidence('Invoice number: A-1',JSON.parse('{"__proto__":"A-1","constructor":"A-1"}'));
+  assert.equal(Object.getPrototypeOf(unknown.rejected),null);
+  assert.equal(unknown.rejected.__proto__.reason,'unknown_field');
+  assert.equal(unknown.rejected.constructor.reason,'unknown_field');
+});
+
+test('frozen field-evidence challenges expose coverage losses and unmarked attachment limits',()=>{
+  const fs=require('node:fs');const bytes=fs.readFileSync(require.resolve('./quality/evidence-cases.json'));
+  const manifest=require('./quality/evidence-manifest.json');assert.equal(createHash('sha256').update(bytes).digest('hex'),manifest.sha256);
+  const cases=JSON.parse(bytes).cases;assert.equal(cases.length,28);assert.equal(new Set(cases.map(row=>row.id)).size,28);
+  const {fieldEvidence}=require('./quality/field-evidence');
+  for(const language of ['en','de']){
+    const rows=cases.filter(row=>row.language===language);assert.equal(rows.length,14);
+    const current=rows.find(row=>row.id.endsWith('-current'));assert.deepEqual(fieldEvidence(current.content,current.proposed).accepted,current.expected);
+    for(const row of rows.filter(row=>Object.keys(row.expected).length===0&&!row.knownLimitation))assert.deepEqual(fieldEvidence(row.content,row.proposed).accepted,{},row.id);
+    const mixed=rows.find(row=>row.id.endsWith('-current-and-history'));assert.deepEqual(fieldEvidence(mixed.content,mixed.proposed).accepted,{},'current value is intentionally lost when history scope is unclear');
+    const attachment=rows.find(row=>row.knownLimitation);assert.deepEqual(fieldEvidence(attachment.content,attachment.proposed).accepted,attachment.proposed,'unmarked attachment remains a measured false acceptance, never claimed safe');
+  }
+});
+
+test('field evidence replays every immutable answer and separates rejection from correct extraction',()=>{
+  const result=require('./quality/evidence-report').measure();assert.equal(result.rows,420);
+  let lost=0,wrong=0;
+  for(const group of Object.values(result.groups))for(const value of Object.values(group.fields)){
+    assert.equal(value.inputCorrect,value.correctRetained+value.correctLost);
+    assert.ok(value.correctRetained+value.missingAfter<=value.present);
+    lost+=value.correctLost;wrong+=value.wrongRejected;
+  }
+  assert.ok(lost>0,'a conservative gate must report lost good predictions');
+  assert.ok(wrong>0,'rejections are reported separately from successful extraction');
+  assert.equal(result.challenge.fields.invoice_number.wrongAccepted,2,'both known attachment failures stay visible');
+  assert.equal(result.challenge.fields.invoice_number.correctLost,2);
+  assert.equal(result.challenge.fields.invoice_number.wrongRejected,14,'lost correct values must not be counted as rejected wrong values');
+  assert.equal(result.challenge.fields.amount.wrongRejected,2,'raw values in absent fields remain errors even when type normalization discards them');
+});
