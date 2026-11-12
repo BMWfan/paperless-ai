@@ -80,6 +80,8 @@ preserved, visible and revocable. No model weights are trained. See the
 [architecture and configuration](docs/learning-engine-v2.md),
 [requirement acceptance checklist](docs/learning-v2-acceptance.md), and
 [validation evidence](docs/learning-v2-validation.md).
+The dated [project status and remaining requirements](docs/project-status.md)
+separate integrated features from open PRs and historical test results.
 
 From the approved development branch, run the isolated development stack in Codex Cloud:
 

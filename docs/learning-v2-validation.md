@@ -1,5 +1,14 @@
 # Learning Engine v2 validation
 
+## Reading these historical records
+
+The entries below preserve the tested sources, commands and limitations from
+their original validations. They do not certify later heads. The dated
+[project status](project-status.md) separates the integrated main baseline,
+currently reviewed PRs and remaining requirements; each current PR records its
+own exact-head CI and review. In particular, the3.4.1 baseline, PR #1 and saved
+Cloud-template observations in older entries are historical.
+
 ## Compact Paperless-ngx 3.4.2 qualification
 
 Tested source: `7f9db35ac98ded5e18dc79626f21b7067b54afb9`, on the existing
