@@ -76,3 +76,13 @@ The archived-answer replay and exact final verification are tracked in PR #21.
 No tested model/context arm qualifies for unsupervised structured extraction
 under this pilot's critical-error gate. In particular, increased acceptance of
 a monetary format is not a guarantee against a plausible but wrong number.
+
+## Follow-up: field-specific evidence
+
+The separate [field-evidence diagnosis](field-evidence.md) reuses all420 immutable
+answers without inference or score changes. A fixed label/value gate rejects542
+incorrect proposals in this replay but also loses239 of375 correct typed
+proposals. Two newly frozen unmarked-attachment cases still accept wrong IDs.
+It remains outside production: label adjacency and whole-document historical
+abstention do not establish reliable semantic extraction. See the linked
+contract for per-field reports, negative cases and reproducible commands.
