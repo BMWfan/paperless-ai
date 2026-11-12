@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="/css/custom-field-preview.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body class="h-full">
     <button id="themeToggle" class="theme-toggle">
@@ -686,6 +685,15 @@ return object;
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Manual has no dashboard charts or modal data; initialize its theme locally.
+            const themeToggle = document.getElementById('themeToggle');
+            function setTheme(theme) {
+                document.documentElement.dataset.theme = theme;
+                localStorage.setItem('theme', theme);
+                themeToggle.querySelector('i').className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+            setTheme(localStorage.getItem('theme') === 'dark' ? 'dark' : 'light');
+            themeToggle.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
             const mobileMenuButton = document.getElementById('mobileMenuButton');
             const sidebar = document.querySelector('.sidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -749,6 +757,5 @@ return object;
             getStarsCount();
         });
     </script>
-    <script src="js/dashboard.js"></script>
 </body>
 </html>

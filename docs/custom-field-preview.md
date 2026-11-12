@@ -50,6 +50,9 @@ text nodes. Excerpts are at most300 characters, at most five per suggestion.
 Changing the selected document clears suggestions immediately. Selection and
 analysis responses carry a local generation check so late results cannot populate
 another document. Analyze/save controls stay disabled while selection loads.
+The Manual page initializes its own theme and navigation without loading the
+dashboard chart/modal initializer, whose required dashboard data is absent here.
+Theme selection remains persistent; this also removes an existing startup error.
 
 ## Validation and compatibility
 

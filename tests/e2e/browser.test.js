@@ -143,6 +143,8 @@ test('manual field preview shows native values safely and discards responses aft
     assert.match(await page.locator('#customFieldPreview').textContent(),/Text near line/);
     fs.mkdirSync('/artifacts',{recursive:true});
     await page.screenshot({path:'/artifacts/manual-custom-fields-desktop.png',fullPage:true,animations:'disabled'});
+    await page.locator('#themeToggle').click();
+    assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
     await page.setViewportSize({width:390,height:844});
     assert.ok(await page.locator('#customFieldPreview').evaluate(element=>element.scrollWidth<=element.clientWidth),'proposal text wraps on mobile');
     await page.screenshot({path:'/artifacts/manual-custom-fields-mobile.png',fullPage:true,animations:'disabled'});
@@ -155,6 +157,8 @@ test('manual field preview shows native values safely and discards responses aft
     assert.match(await page.locator('#customFieldPreview').textContent(),/Analyze this document/);
     assert.ok(!(await page.locator('#customFieldPreview').textContent()).includes(value),'late response cannot populate another selection');
     assert.equal(await page.locator('#analyzeBtn').isDisabled(),true);
+    await page.reload();
+    assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','manual theme persists without dashboard initialization');
     assert.deepEqual(errors,[]);
     const after=await(await native.get(`http://paperless:8000/api/documents/${document.id}/`)).json();
     assert.deepEqual(after.custom_fields,before.custom_fields);assert.equal(after.modified,before.modified,'preview does not write metadata');
