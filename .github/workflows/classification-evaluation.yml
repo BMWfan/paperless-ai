@@ -6,6 +6,14 @@ on:
       - 'tests/e2e/real-model.test.js'
       - 'tests/e2e/Dockerfile.model'
       - 'tests/e2e/generate.js'
+      - 'tests/quality/**'
+      - 'services/customFieldUpdates.js'
+      - 'tests/quality.test.js'
+      - 'tests/e2e/Dockerfile.quality-model'
+      - 'docker-compose.quality.yml'
+      - 'services/learningRelevance.js'
+      - 'services/learningContext.js'
+      - 'services/serviceUtils.js'
   workflow_dispatch:
 permissions:
   contents: read
@@ -36,3 +44,96 @@ jobs:
       - name: Remove disposable stack
         if: always()
         run: docker compose -f docker-compose.test.yml --profile extended down -v --remove-orphans
+
+  quality:
+    if: github.event_name == 'workflow_dispatch'
+    name: Quality ${{ matrix.label }} seed ${{ matrix.seed }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - {model: 'qwen2.5:0.5b', label: qwen05b, seed: 42, splits: 'evaluation,confirmation'}
+          - {model: 'qwen2.5:1.5b', label: qwen15b, seed: 42, splits: 'evaluation,confirmation'}
+          - {model: 'qwen2.5:0.5b', label: qwen05b, seed: 43, splits: confirmation}
+          - {model: 'qwen2.5:1.5b', label: qwen15b, seed: 43, splits: confirmation}
+    env:
+      COMPOSE_PROJECT_NAME: quality-${{ matrix.label }}-${{ matrix.seed }}
+      TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
+      QUALITY_MODEL: ${{ matrix.model }}
+      QUALITY_SEED: ${{ matrix.seed }}
+      QUALITY_SPLITS: ${{ matrix.splits }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare isolated trust bundle
+        run: |
+          mkdir -p .e2e-cache
+          cp /etc/ssl/certs/ca-certificates.crt "$TEST_CA_BUNDLE"
+      - name: Start isolated API and local model
+        run: docker compose -f docker-compose.test.yml -f docker-compose.quality.yml up -d --build --wait ai quality-model
+      - name: Measure classification, extraction and typed roundtrips
+        run: docker compose -f docker-compose.test.yml -f docker-compose.quality.yml run --no-deps --build --name quality-evaluation -e "GITHUB_SHA=$(git rev-parse HEAD)" quality-check
+      - name: Collect complete or partial report
+        if: always()
+        run: docker cp quality-evaluation:/app/data/learning-quality.json ./learning-quality.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: learning-quality-${{ matrix.label }}-${{ matrix.seed }}
+          path: learning-quality.json
+          if-no-files-found: warn
+      - name: Synthetic logs on failure
+        if: failure()
+        run: docker compose -f docker-compose.test.yml -f docker-compose.quality.yml logs --no-color --tail=80
+      - name: Remove only this disposable project
+        if: always()
+        run: docker compose -f docker-compose.test.yml -f docker-compose.quality.yml down -v --remove-orphans
+
+  replay:
+    if: github.event_name == 'pull_request'
+    name: Replay immutable model answers at typed API boundary
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      COMPOSE_PROJECT_NAME: paperless-quality-replay
+      TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare isolated trust bundle
+        run: |
+          mkdir -p .e2e-cache
+          cp /etc/ssl/certs/ca-certificates.crt "$TEST_CA_BUNDLE"
+      - name: Start unchanged isolated ngx and current fork
+        run: docker compose -f docker-compose.test.yml up -d --build --wait ai
+      - name: Replay raw values without inference or rescoring
+        run: |
+          docker compose -f docker-compose.test.yml exec -T -e "GITHUB_SHA=$(git rev-parse HEAD)" ai node tests/quality/replay.js tests/quality/baseline
+          docker compose -f docker-compose.test.yml cp ai:/app/data/quality-replay.json ./quality-replay.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quality-typed-replay
+          path: quality-replay.json
+          if-no-files-found: error
+      - name: Remove only disposable replay stack
+        if: always()
+        run: docker compose -f docker-compose.test.yml down -v --remove-orphans
+
+  model-integrity:
+    if: github.event_name == 'pull_request'
+    name: Verify pinned model ${{ matrix.model }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        model: ['qwen2.5:0.5b', 'qwen2.5:1.5b']
+    env:
+      QUALITY_MODEL: ${{ matrix.model }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify downloaded manifest without inference or publication
+        run: docker build --build-arg "QUALITY_MODEL=$QUALITY_MODEL" -f tests/e2e/Dockerfile.quality-model .

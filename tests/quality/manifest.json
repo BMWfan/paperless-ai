@@ -1,0 +1,17 @@
+{
+  "revision": "quality-v1",
+  "splits": {
+    "training": {
+      "count": 10,
+      "sha256": "986a7d0b58e241cbb3a6b93ccfab1681542b4fd6709622a83c15215ab90e96fb"
+    },
+    "evaluation": {
+      "count": 30,
+      "sha256": "fc7bc4bdcf4baa029a1b5dca5665aa9ecc26a48642dc8a7cc7fbe610e97ca2ed"
+    },
+    "confirmation": {
+      "count": 20,
+      "sha256": "14dd42784e211597cfba9c2db9dbc50e851718c9a1aeb03da08a7f6fe6eb9eee"
+    }
+  }
+}

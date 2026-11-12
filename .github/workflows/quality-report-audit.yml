@@ -1,0 +1,24 @@
+name: Audit existing synthetic quality report
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Existing quality workflow run to inspect (read-only)
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ inputs.run_id }}
+          pattern: learning-quality-qwen15b-42
+          path: prior-quality
+      - run: node tests/quality/audit-report.js prior-quality

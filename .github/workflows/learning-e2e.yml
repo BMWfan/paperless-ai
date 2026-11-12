@@ -27,7 +27,7 @@ jobs:
           docker compose -f docker-compose.test.yml cp tests/e2e paperless:/tmp/learning-validation/tests/
           docker compose -f docker-compose.test.yml exec -T paperless python3 -B -m unittest discover -s /tmp/learning-validation/tests/e2e -p 'test_*.py'
       - name: Lint new test infrastructure
-        run: docker compose -f docker-compose.test.yml exec -T ai sh -c 'npx --no-install eslint tests/e2e/*.js tests/learning*.test.js services/learning*.js routes/learning.js routes/manualLearning.js public/js/learning.js'
+        run: docker compose -f docker-compose.test.yml exec -T ai sh -c 'npx --no-install eslint tests/e2e/*.js tests/quality/*.js tests/quality.test.js tests/learning*.test.js services/learning*.js routes/learning.js routes/manualLearning.js public/js/learning.js'
       - name: Real Paperless integration tests
         run: docker compose -f docker-compose.test.yml run --rm runner
       - name: Detect edits made while the app was stopped
