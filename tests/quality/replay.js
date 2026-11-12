@@ -6,7 +6,7 @@ require('dotenv').config({path:'data/.env'});
 const {corpus,fieldTypes}=require('./corpus');const {evaluate,score,supportedFields}=require('./scoring');
 const {normalizeValue,buildCustomFieldUpdates}=require('../../services/customFieldUpdates');
 const root=process.argv[2];if(!root)throw new Error('Provide immutable report directory');
-const normalizeBefore=require('./before-writer').beforeWriter(root);
+const normalizeBefore=require('./before-writer').beforeWriter();
 assert.equal(process.env.PAPERLESS_API_URL,'http://paperless:8000/api');
 const json={'Content-Type':'application/json'};const docs=new Map();
 const snapshotManifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));

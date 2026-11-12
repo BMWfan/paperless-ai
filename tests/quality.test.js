@@ -52,7 +52,7 @@ test('pattern context removes training-instance values and stays within actual t
 test('archived pilot answers retain their source, checksums and original raw scores',()=>{
   const fs=require('node:fs'),path=require('node:path');
   const directory=path.join(__dirname,'quality','baseline');const manifest=require('./quality/baseline/manifest.json');
-  const before=require('./quality/before-writer').beforeWriter(directory);
+  const before=require('./quality/before-writer').beforeWriter();
   assert.equal(before('EUR 42.50',{data_type:'monetary'}),undefined);
   assert.equal(before('EUR42.50',{data_type:'monetary'}),'EUR42.50');
   let cases=0;
