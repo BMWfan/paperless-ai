@@ -104,3 +104,59 @@ test('learning dashboard supports real review actions, themes and mobile layout'
     await learning.dispose();
   }
 });
+
+test('manual field preview shows native values safely and discards responses after document changes', {timeout:180000}, async()=>{
+  const token=fs.readFileSync('/fixture-data/.env','utf8').match(/^PAPERLESS_API_TOKEN=(.+)$/m)[1];
+  const native=await request.newContext({extraHTTPHeaders:{Authorization:`Token ${token}`}});
+  const fieldName=`Browser preview ${Date.now()}`;
+  const fieldResponse=await native.post('http://paperless:8000/api/custom_fields/',{data:{name:fieldName,data_type:'string'}});
+  assert.ok(fieldResponse.ok());const field=await fieldResponse.json();
+  const value='<img src=x onerror="window.previewExecuted=true">';
+  const content=`Synthetic preview ${fieldName}\nReference value: ${value}\nHistorical reference: OLD-007`;
+  const name=`browser-field-preview-${Date.now()}.txt`;
+  assert.ok((await native.post('http://paperless:8000/api/documents/post_document/',{multipart:{document:{name,mimeType:'text/plain',buffer:Buffer.from(content)}}})).ok());
+  let document;
+  for(let attempt=0;attempt<90;attempt++){
+    const page=await(await native.get('http://paperless:8000/api/documents/?ordering=-id')).json();
+    document=page.results.find(row=>row.original_file_name===name);if(document)break;
+    await new Promise(resolve=>setTimeout(resolve,1000));
+  }
+  assert.ok(document);
+  assert.ok((await native.patch(`http://paperless:8000/api/documents/${document.id}/`,{data:{custom_fields:[{field:field.id,value:'Existing value'}]}})).ok());
+  const before=await(await native.get(`http://paperless:8000/api/documents/${document.id}/`)).json();
+  const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
+  try{
+    const context=await browser.newContext({extraHTTPHeaders:key,viewport:{width:1280,height:900}});
+    await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
+    await context.route('**/manual/analyze',route=>route.fulfill({json:{document:{title:'Synthetic preview',tags:[],custom_fields:[{field_name:fieldName,value}]}}}));
+    const page=await context.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));
+    await page.goto(origin+'/manual');
+    await page.locator(`#documentSelect option[value="${document.id}"]`).waitFor({state:'attached'});
+    await page.locator('#documentSelect').selectOption(String(document.id));
+    await page.waitForFunction(()=>!document.getElementById('analyzeBtn').disabled);
+    await page.locator('#analyzeBtn').click();
+    await page.locator('#customFieldPreview').filter({hasText:'Existing value'}).waitFor();
+    assert.ok((await page.locator('#customFieldPreview').textContent()).includes(value));
+    assert.equal(await page.locator('#customFieldPreview img').count(),0,'source/suggestion text cannot create HTML');
+    assert.equal(await page.evaluate(()=>window.previewExecuted),undefined);
+    assert.match(await page.locator('#customFieldPreview').textContent(),/Field meaning is unverified/);
+    assert.match(await page.locator('#customFieldPreview').textContent(),/Text near line/);
+    fs.mkdirSync('/artifacts',{recursive:true});
+    await page.screenshot({path:'/artifacts/manual-custom-fields-desktop.png',fullPage:true,animations:'disabled'});
+    await page.setViewportSize({width:390,height:844});
+    assert.ok(await page.locator('#customFieldPreview').evaluate(element=>element.scrollWidth<=element.clientWidth),'proposal text wraps on mobile');
+    await page.screenshot({path:'/artifacts/manual-custom-fields-mobile.png',fullPage:true,animations:'disabled'});
+    let release,started;
+    const held=new Promise(resolve=>{release=resolve;});const reached=new Promise(resolve=>{started=resolve;});
+    await page.route('**/manual/custom-field-preview',async route=>{const response=await route.fetch();started();await held;await route.fulfill({response});});
+    const pending=page.evaluate(()=>window.handleAnalysis());
+    await reached;
+    await page.locator('#documentSelect').selectOption('');release();await pending;
+    assert.match(await page.locator('#customFieldPreview').textContent(),/Analyze this document/);
+    assert.ok(!(await page.locator('#customFieldPreview').textContent()).includes(value),'late response cannot populate another selection');
+    assert.equal(await page.locator('#analyzeBtn').isDisabled(),true);
+    assert.deepEqual(errors,[]);
+    const after=await(await native.get(`http://paperless:8000/api/documents/${document.id}/`)).json();
+    assert.deepEqual(after.custom_fields,before.custom_fields);assert.equal(after.modified,before.modified,'preview does not write metadata');
+  }finally{await browser.close();await native.dispose();}
+});

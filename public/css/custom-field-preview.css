@@ -1,0 +1,7 @@
+.custom-field-proposal{margin:1rem 0;padding:1rem;border:1px solid var(--border-color,#777);border-radius:.5rem;min-width:0;overflow-wrap:anywhere}
+.custom-field-proposal h3{font-weight:600}
+.custom-field-proposal dl{margin:.75rem 0}
+.custom-field-proposal dt{font-weight:600;margin-top:.5rem}
+.custom-field-proposal dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.custom-field-proposal blockquote{margin:.75rem 0;padding:.5rem;border-left:3px solid var(--border-color,#777)}
+.custom-field-proposal pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;max-width:100%}
