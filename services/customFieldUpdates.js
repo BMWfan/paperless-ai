@@ -29,9 +29,12 @@ function normalizeValue(value, field) {
     }
     case 'monetary': {
       const amount = typeof value === 'number' && Number.isFinite(value) ? String(value) : text;
-      const match = /^(?<currency>[A-Z]{3})?(?<whole>-?\d{1,10})(?:[.,](?<fraction>\d{1,2}))?$/.exec(amount);
+      const match = /^(?:(?<leading>[A-Z]{3})\s*)?(?<whole>-?\d{1,10})(?:[.,](?<fraction>\d{1,2}))?(?:\s*(?<trailing>[A-Z]{3}))?$/.exec(amount);
       if (!match) return undefined;
-      const { currency, whole, fraction } = match.groups;
+      const { leading, trailing, whole, fraction } = match.groups;
+      // Two codes or ambiguous separators must never be guessed away.
+      if (leading && trailing) return undefined;
+      const currency = leading || trailing;
       if (!currency && whole.startsWith('-')) return undefined;
       return `${currency || ''}${whole}.${(fraction || '').padEnd(2, '0')}`;
     }

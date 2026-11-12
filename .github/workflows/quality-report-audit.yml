@@ -1,8 +1,5 @@
 name: Audit existing synthetic quality report
 on:
-  push:
-    branches: [feat/learning-quality]
-    paths: ['tests/quality/audit-report.js', '.github/workflows/quality-report-audit.yml']
   workflow_dispatch:
     inputs:
       run_id:
@@ -21,7 +18,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ inputs.run_id || '43118154733' }}
+          run-id: ${{ inputs.run_id }}
           pattern: learning-quality-qwen15b-42
           path: prior-quality
       - run: node tests/quality/audit-report.js prior-quality

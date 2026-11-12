@@ -31,3 +31,12 @@ test('automatic custom-field updates preserve existing fields and ignore ambiguo
     { field_name: 'text', value: 'x'.repeat(129) }
   ]), []);
 });
+
+test('explicit monetary currency formats normalize without guessing symbols or separators',()=>{
+  const {normalizeValue}=require('../services/customFieldUpdates');const field={data_type:'monetary'};
+  for(const value of ['EUR 42.5','42.50 EUR','42,5EUR',' EUR42.50 '])assert.equal(normalizeValue(value,field),'EUR42.50');
+  assert.equal(normalizeValue('-42,5 EUR',field),'EUR-42.50');
+  for(const value of ['$42.50','USD42 EUR','EUR42EUR','EUR1,234.56','1.234,56 EUR','EUR42.999'])assert.equal(normalizeValue(value,field),undefined);
+  assert.equal(normalizeValue('42.5',field),'42.50','legacy currency-free values remain currency-free');
+  assert.equal(normalizeValue('-42.5',field),undefined,'legacy ambiguous negative values remain rejected');
+});

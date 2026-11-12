@@ -45,6 +45,7 @@ jobs:
         run: docker compose -f docker-compose.test.yml --profile extended down -v --remove-orphans
 
   quality:
+    if: github.event_name == 'workflow_dispatch'
     name: Quality ${{ matrix.label }} seed ${{ matrix.seed }}
     runs-on: ubuntu-24.04
     timeout-minutes: 45
@@ -88,3 +89,42 @@ jobs:
       - name: Remove only this disposable project
         if: always()
         run: docker compose -f docker-compose.test.yml -f docker-compose.quality.yml down -v --remove-orphans
+
+  replay:
+    if: github.event_name == 'pull_request'
+    name: Replay immutable model answers at typed API boundary
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    env:
+      COMPOSE_PROJECT_NAME: paperless-quality-replay
+      TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: '43118154733'
+          pattern: learning-quality-*
+          path: .e2e-cache/prior-quality
+      - name: Prepare isolated trust bundle
+        run: |
+          mkdir -p .e2e-cache
+          cp /etc/ssl/certs/ca-certificates.crt "$TEST_CA_BUNDLE"
+      - name: Start unchanged isolated ngx and current fork
+        run: docker compose -f docker-compose.test.yml up -d --build --wait ai
+      - name: Replay raw values without inference or rescoring
+        run: |
+          docker compose -f docker-compose.test.yml cp .e2e-cache/prior-quality ai:/tmp/prior-quality
+          docker compose -f docker-compose.test.yml exec -T -e "GITHUB_SHA=$(git rev-parse HEAD)" ai node tests/quality/replay.js /tmp/prior-quality
+          docker compose -f docker-compose.test.yml cp ai:/app/data/quality-replay.json ./quality-replay.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quality-typed-replay
+          path: quality-replay.json
+          if-no-files-found: error
+      - name: Remove only disposable replay stack
+        if: always()
+        run: docker compose -f docker-compose.test.yml down -v --remove-orphans
