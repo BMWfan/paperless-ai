@@ -26,7 +26,7 @@ async function api(path, options = {}) {
 test('real scan applies typed custom fields without losing unrelated metadata', { timeout: 180000 }, async () => {
   const name = `synthetic-field-contract-${Date.now()}.txt`;
   const form = new FormData();
-  form.set('document', new Blob(['SYNTHETIC CUSTOM FIELD CONTRACT'], { type: 'text/plain' }), name);
+  form.set('document', new Blob([`SYNTHETIC CUSTOM FIELD CONTRACT ${name}`], { type: 'text/plain' }), name);
   await api('/documents/post_document/', { method: 'POST', body: form });
   let document;
   for (let attempt = 0; attempt < 90; attempt++) {
@@ -39,7 +39,8 @@ test('real scan applies typed custom fields without losing unrelated metadata', 
   const fields = {};
   for (const [key, type] of Object.entries({
     count: 'integer', price: 'monetary', ratio: 'float', flag: 'boolean', category: 'select',
-    note: 'longtext', invalid: 'monetary', untouched: 'string'
+    note: 'longtext', invalid: 'monetary', untouched: 'string',
+    date: 'date', invalidDate: 'date', impossibleDate: 'date'
   })) {
     const fieldName = `Contract ${key}`;
     const existing = (await api(`/custom_fields/?name__iexact=${encodeURIComponent(fieldName)}`)).results
@@ -58,8 +59,15 @@ test('real scan applies typed custom fields without losing unrelated metadata', 
   }
   await api(`/documents/${document.id}/`, {
     method: 'PATCH', headers: json,
-    body: JSON.stringify({ custom_fields: [{ field: fields.untouched.id, value: 'keep me' }] })
+    body: JSON.stringify({ custom_fields: [{ field: fields.untouched.id, value: 'keep me' },
+      { field: fields.invalidDate.id, value: '2030-01-01' }] })
   });
+  const rejected = await fetch(`${base}/documents/${document.id}/`, {
+    method: 'PATCH', headers: { ...headers, ...json },
+    body: JSON.stringify({ title: 'Must not apply', custom_fields: [{ field: fields.invalidDate.id, value: 'null' }] })
+  });
+  assert.equal(rejected.status, 400, 'native API correctly rejects the invalid date');
+  assert.notEqual((await api(`/documents/${document.id}/`)).title, 'Must not apply');
   const response = await fetch('http://ai:3000/api/scan/now', {
     method: 'POST', headers: { 'x-api-key': 'isolated-test-api-key' }, redirect: 'manual',
     signal: AbortSignal.timeout(45000)
@@ -76,14 +84,19 @@ test('real scan applies typed custom fields without losing unrelated metadata', 
   assert.equal(values.get(fields.note.id), 'Synthetic long text '.repeat(8).trim());
   assert.equal(values.get(fields.untouched.id), 'keep me');
   assert.equal(values.has(fields.invalid.id), false);
+  assert.equal(values.get(fields.date.id), '2032-02-29');
+  assert.equal(values.get(fields.invalidDate.id), '2030-01-01', 'invalid automatic date does not clear prior value');
+  assert.equal(values.has(fields.impossibleDate.id), false);
   const manual = await fetch('http://ai:3000/manual/updateDocument', {
     method: 'POST', headers: { ...json, 'x-api-key': 'isolated-test-api-key' },
     body: JSON.stringify({ documentId: document.id, custom_fields: updated.custom_fields.map(row =>
-      row.field === fields.count.id ? { ...row, value: null } : row) })
+      row.field === fields.count.id || row.field === fields.date.id ? { ...row, value: null } : row) })
   });
   assert.equal(manual.status, 200);
   const cleared = await api(`/documents/${document.id}/`);
   assert.equal(cleared.custom_fields.find(row => row.field === fields.count.id)?.value, null);
+  assert.equal(cleared.custom_fields.find(row => row.field === fields.date.id)?.value, null, 'manual date clearing remains allowed');
+  assert.equal(cleared.custom_fields.find(row => row.field === fields.invalidDate.id)?.value, '2030-01-01');
   assert.equal(cleared.custom_fields.find(row => row.field === fields.untouched.id)?.value, 'keep me');
 });
 

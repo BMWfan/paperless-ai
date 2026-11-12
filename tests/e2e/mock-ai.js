@@ -21,6 +21,9 @@ http.createServer(async (req, res) => {
       category: { field_name: 'Contract category', value: 'Fixture' },
       note: { field_name: 'Contract note', value: 'Synthetic long text '.repeat(8) },
       invalid: { field_name: 'Contract invalid', value: '1,234' },
+      date: { field_name: 'Contract date', value: '2032-2-29' },
+      invalidDate: { field_name: 'Contract invalidDate', value: 'null' },
+      impossibleDate: { field_name: 'Contract impossibleDate', value: '2031-02-30' },
       omitted: { field_name: 'Contract untouched', value: null }
     };
   }
