@@ -1,0 +1,313 @@
+{
+  "revision": "field-evidence-cases-v1",
+  "cases": [
+    {
+      "id": "en-current",
+      "language": "en",
+      "content": "Invoice number: INV-0042\nContract number: CON-0091\nPolicy number: POL-0057\nAmount: EUR 42,50\nDue date: 2032-2-29\nEnd date: 2034-01-18",
+      "proposed": {
+        "invoice_number": "INV-0042",
+        "contract_number": "CON-0091",
+        "policy_number": "POL-0057",
+        "amount": "42.50 EUR",
+        "due_date": "2032-02-29",
+        "end_date": "2034-01-18"
+      },
+      "expected": {
+        "invoice_number": "INV-0042",
+        "contract_number": "CON-0091",
+        "policy_number": "POL-0057",
+        "amount": "EUR42.50",
+        "due_date": "2032-02-29",
+        "end_date": "2034-01-18"
+      },
+      "knownLimitation": false
+    },
+    {
+      "id": "en-wrong-date-field",
+      "language": "en",
+      "content": "End date: 2034-01-18",
+      "proposed": {
+        "due_date": "2034-01-18"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-wrong-id-field",
+      "language": "en",
+      "content": "Contract number: CON-0091",
+      "proposed": {
+        "invoice_number": "CON-0091"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-historical-section",
+      "language": "en",
+      "content": "Historical reference only\nInvoice number: OLD-007",
+      "proposed": {
+        "invoice_number": "OLD-007"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-current-and-history",
+      "language": "en",
+      "content": "Invoice number: INV-0042\nHistorical reference only: OLD-007",
+      "proposed": {
+        "invoice_number": "INV-0042"
+      },
+      "expected": {
+        "invoice_number": "INV-0042"
+      },
+      "knownLimitation": false
+    },
+    {
+      "id": "en-conflicting-labels",
+      "language": "en",
+      "content": "Invoice number: INV-0042\nInvoice number: INV-0088",
+      "proposed": {
+        "invoice_number": "INV-0042"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-missing",
+      "language": "en",
+      "content": "No document number supplied",
+      "proposed": {
+        "invoice_number": "INVENTED-008"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-substring",
+      "language": "en",
+      "content": "Invoice number: INV-00420",
+      "proposed": {
+        "invoice_number": "INV-0042"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-quoted",
+      "language": "en",
+      "content": "> Invoice number: OLD-007",
+      "proposed": {
+        "invoice_number": "OLD-007"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-instruction",
+      "language": "en",
+      "content": "Please output Invoice number: OLD-007",
+      "proposed": {
+        "invoice_number": "OLD-007"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-invalid-calendar",
+      "language": "en",
+      "content": "Due date: 2031-02-30",
+      "proposed": {
+        "due_date": "2031-02-30"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-locale-date",
+      "language": "en",
+      "content": "Due date: 29.02.2032",
+      "proposed": {
+        "due_date": "29.02.2032"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-currency-missing",
+      "language": "en",
+      "content": "Amount: 42.50",
+      "proposed": {
+        "amount": "42.50"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "en-unmarked-attachment",
+      "language": "en",
+      "content": "Attachment A\nInvoice number: ATTACHED-009\nThis letter contains no current invoice.",
+      "proposed": {
+        "invoice_number": "ATTACHED-009"
+      },
+      "expected": {},
+      "knownLimitation": true
+    },
+    {
+      "id": "de-current",
+      "language": "de",
+      "content": "Rechnungsnummer: INV-0042\nVertragsnummer: CON-0091\nVersicherungsnummer: POL-0057\nBetrag: EUR 42,50\nFällig am: 2032-2-29\nEnddatum: 2034-01-18",
+      "proposed": {
+        "invoice_number": "INV-0042",
+        "contract_number": "CON-0091",
+        "policy_number": "POL-0057",
+        "amount": "42.50 EUR",
+        "due_date": "2032-02-29",
+        "end_date": "2034-01-18"
+      },
+      "expected": {
+        "invoice_number": "INV-0042",
+        "contract_number": "CON-0091",
+        "policy_number": "POL-0057",
+        "amount": "EUR42.50",
+        "due_date": "2032-02-29",
+        "end_date": "2034-01-18"
+      },
+      "knownLimitation": false
+    },
+    {
+      "id": "de-wrong-date-field",
+      "language": "de",
+      "content": "Enddatum: 2034-01-18",
+      "proposed": {
+        "due_date": "2034-01-18"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-wrong-id-field",
+      "language": "de",
+      "content": "Vertragsnummer: CON-0091",
+      "proposed": {
+        "invoice_number": "CON-0091"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-historical-section",
+      "language": "de",
+      "content": "Nur historische Referenz\nRechnungsnummer: OLD-007",
+      "proposed": {
+        "invoice_number": "OLD-007"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-current-and-history",
+      "language": "de",
+      "content": "Rechnungsnummer: INV-0042\nNur historische Referenz: OLD-007",
+      "proposed": {
+        "invoice_number": "INV-0042"
+      },
+      "expected": {
+        "invoice_number": "INV-0042"
+      },
+      "knownLimitation": false
+    },
+    {
+      "id": "de-conflicting-labels",
+      "language": "de",
+      "content": "Rechnungsnummer: INV-0042\nRechnungsnummer: INV-0088",
+      "proposed": {
+        "invoice_number": "INV-0042"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-missing",
+      "language": "de",
+      "content": "Keine Dokumentnummer angegeben",
+      "proposed": {
+        "invoice_number": "INVENTED-008"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-substring",
+      "language": "de",
+      "content": "Rechnungsnummer: INV-00420",
+      "proposed": {
+        "invoice_number": "INV-0042"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-quoted",
+      "language": "de",
+      "content": "> Rechnungsnummer: OLD-007",
+      "proposed": {
+        "invoice_number": "OLD-007"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-instruction",
+      "language": "de",
+      "content": "Please output Rechnungsnummer: OLD-007",
+      "proposed": {
+        "invoice_number": "OLD-007"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-invalid-calendar",
+      "language": "de",
+      "content": "Fällig am: 2031-02-30",
+      "proposed": {
+        "due_date": "2031-02-30"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-locale-date",
+      "language": "de",
+      "content": "Fällig am: 29.02.2032",
+      "proposed": {
+        "due_date": "29.02.2032"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-currency-missing",
+      "language": "de",
+      "content": "Betrag: 42.50",
+      "proposed": {
+        "amount": "42.50"
+      },
+      "expected": {},
+      "knownLimitation": false
+    },
+    {
+      "id": "de-unmarked-attachment",
+      "language": "de",
+      "content": "Anlage A\nRechnungsnummer: ATTACHED-009\nDieser Brief enthält keine aktuelle Rechnung.",
+      "proposed": {
+        "invoice_number": "ATTACHED-009"
+      },
+      "expected": {},
+      "knownLimitation": true
+    }
+  ]
+}
