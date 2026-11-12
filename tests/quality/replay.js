@@ -6,8 +6,11 @@ require('dotenv').config({path:'data/.env'});
 const {corpus,fieldTypes}=require('./corpus');const {evaluate,score,supportedFields}=require('./scoring');
 const {normalizeValue,buildCustomFieldUpdates}=require('../../services/customFieldUpdates');
 const root=process.argv[2];if(!root)throw new Error('Provide immutable report directory');
+const normalizeBefore=require('./before-writer').beforeWriter(root);
 assert.equal(process.env.PAPERLESS_API_URL,'http://paperless:8000/api');
 const json={'Content-Type':'application/json'};const docs=new Map();
+const snapshotManifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));
+assert.equal(snapshotManifest.sourceRun,43118154733);
 const expectedDigest=createHash('sha256').update(JSON.stringify(['training','evaluation','confirmation'].map(corpus))).digest('hex');
 const fixtures=new Map(['evaluation','confirmation'].flatMap(corpus).map(row=>[row.id,row]));
 const replay={commit:process.env.GITHUB_SHA||null,sourceRun:43118154733,corpusDigest:expectedDigest,reports:[],typedWrites:0,unrelatedPreserved:0};
@@ -28,20 +31,20 @@ async function document(fixture,unrelated){
 (async()=>{
   const defs={};for(const [name,data_type]of Object.entries({...fieldTypes,replay_unrelated:'string'}))defs[name]=await api('/custom_fields/',{name,data_type});
   for(const file of files(root).filter(f=>f.endsWith('.json'))){
-    const original=JSON.parse(fs.readFileSync(file,'utf8'));if(!original.rows)continue;
+    const bytes=fs.readFileSync(file);const original=JSON.parse(bytes);if(!original.rows)continue;
+    const checksum=snapshotManifest.files[path.basename(file)]?.sha256;assert.ok(checksum,'unknown snapshot');
+    assert.equal(createHash('sha256').update(bytes).digest('hex'),checksum,'immutable raw-answer checksum');
     assert.equal(original.complete,true);assert.equal(original.corpusDigest,expectedDigest,'do not replay against changed ground truth');
-    console.log('QUALITY_ARCHIVE_HEADER',JSON.stringify({model:original.model,seed:original.seed,modelDigest:original.modelDigest,commit:original.commit,complete:original.complete,corpusDigest:original.corpusDigest,protocolRevision:original.protocolRevision,system:original.system,schema:original.schema,generationOptions:original.generationOptions,environment:original.environment}));
     const result={model:original.model,modelDigest:original.modelDigest,seed:original.seed,sourceCommit:original.commit,groups:{},cases:[]};
     for(const row of original.rows){
-      console.log('QUALITY_ARCHIVE_ROW',JSON.stringify({model:original.model,seed:original.seed,row:{id:row.id,split:row.split,arm:row.arm,actual:row.actual,scores:{fields:row.scores.fields,errors:row.scores.errors},durationMs:row.durationMs,selected:row.selected,contextTokens:row.contextTokens,promptTokens:row.promptTokens,generatedTokens:row.generatedTokens}}));
       const fixture=fixtures.get(row.id);assert.ok(fixture);if(row.expected)assert.deepEqual(row.expected,fixture.expected);
       // A scoring bug/change cannot silently rewrite the original raw evaluation.
       assert.deepEqual(evaluate(row.actual,fixture,corpus('training')).fields,row.scores.fields);
       const values=Object.fromEntries(Object.entries(fieldTypes).map(([name,data_type])=>[name,normalizeValue(row.actual.custom_fields?.[name],{data_type})]));
       const supported=supportedFields(fixture.content,values).supported;
       const groupKey=`${row.split}/${row.arm}`;
-      const group=result.groups[groupKey]||(result.groups[groupKey]={documents:0,amount:{present:0,rawCorrect:0,normalizedCorrect:0,supportedCorrect:0,rejected:0},rawCriticalIdentifierErrors:0});group.documents++;
-      if(fixture.expected.custom_fields.amount!==null){group.amount.present++;if(row.scores.fields.amount==='correct')group.amount.rawCorrect++;if(score(values.amount,fixture.expected.custom_fields.amount)==='correct')group.amount.normalizedCorrect++;if(score(supported.amount,fixture.expected.custom_fields.amount)==='correct')group.amount.supportedCorrect++;}
+      const group=result.groups[groupKey]||(result.groups[groupKey]={documents:0,amount:{present:0,rawCorrect:0,beforeCorrect:0,normalizedCorrect:0,supportedCorrect:0,rejected:0},rawCriticalIdentifierErrors:0});group.documents++;
+      if(fixture.expected.custom_fields.amount!==null){group.amount.present++;if(row.scores.fields.amount==='correct')group.amount.rawCorrect++;if(score(normalizeBefore(row.actual.custom_fields?.amount,{data_type:'monetary'}),fixture.expected.custom_fields.amount)==='correct')group.amount.beforeCorrect++;if(score(values.amount,fixture.expected.custom_fields.amount)==='correct')group.amount.normalizedCorrect++;if(score(supported.amount,fixture.expected.custom_fields.amount)==='correct')group.amount.supportedCorrect++;}
       if(row.actual.custom_fields?.amount!=null&&supported.amount===undefined)group.amount.rejected++;
       for(const name of ['invoice_number','contract_number','policy_number'])if(['training_value_copy','historical_value_copy','invented_absent_value'].includes(row.scores.errors[name]))group.rawCriticalIdentifierErrors++;
       const doc=await document(fixture,defs.replay_unrelated);

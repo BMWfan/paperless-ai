@@ -8,8 +8,11 @@ update. Existing provider response shapes and app configuration remain valid.
   suggestions remain text, with the Paperless string length limit applied.
 - Select suggestions may use an option ID or an unambiguous exact label.
 - Monetary suggestions accept plain nonnegative decimals or an explicit
-  three-letter currency code. A single decimal point or comma with at most two
-  fractional digits is accepted. Grouped or ambiguous amounts are ignored.
+  three-letter currency code before or after the amount, with optional whitespace
+  (`EUR 42.5` and `42,50 EUR` become `EUR42.50`). A single decimal point or comma
+  with at most two fractional digits is accepted. Grouped/ambiguous separators,
+  currency symbols and two currency codes are ignored. Currency-free legacy values
+  remain currency-free; no currency is guessed from a symbol or added implicitly.
 - Missing, null and invalid automatic suggestions leave existing values
   unchanged. Explicit clearing stays in the authenticated manual update path.
   Confirmed corrections remain protected by the existing learning engine.
@@ -31,3 +34,12 @@ its own build before exporting the final image. This frees intermediate compiler
 stages before `vfs` copies the export container. Pre-existing cache, tagged final
 image layers, database/document volumes and the managed storage driver remain
 untouched. The setup safety test checks both the selected cache IDs and ordering.
+
+The format extension was derived from actual synthetic model answers in SPEC #20.
+The [quality protocol](learning-quality.md) keeps raw strict-format errors separate
+from native typed normalization. Accepting a format does not prove the amount is
+correct for the current document or prevent copied values by itself.
+
+This is format validation, not a source-currency check: `USD42.50` is a valid
+format even if the document says EUR. Semantic correctness still requires
+provider evidence/review; the format parser does not establish it.

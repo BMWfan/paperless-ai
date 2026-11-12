@@ -2,8 +2,9 @@
 
 SPEC [#20](https://github.com/BMWfan/paperless-ai/issues/20), EPIC #12.
 The owner approved the model/relevance/extraction plan. This first implementation
-adds measurement and an experimental selector; it does not enable that selector,
-change user model settings, or modify Paperless-ngx.
+adds measurement, an experimental selector and a bounded typed-currency format
+fix derived from real answers. It does not enable the selector, change user model
+settings, or modify Paperless-ngx. See [the measured results](quality-results.md).
 
 ## Frozen protocol
 
@@ -74,10 +75,13 @@ docker cp quality-evaluation:/app/data/learning-quality.json ./learning-quality.
 docker compose -f docker-compose.test.yml -f docker-compose.quality.yml down -v --remove-orphans
 ```
 
-The existing classification-evaluation workflow retains the historical job and
-adds qwen2.5:0.5b / qwen2.5:1.5b on seed 42 (evaluation + confirmation), plus seed43
-on the frozen confirmation split for both models. Models download only during
-build, with Ollama 0.12.6; inference uses the inherited internal network. Reports
+The existing classification-evaluation workflow retains the historical job. Its
+manually dispatched quality matrix runs qwen2.5:0.5b / qwen2.5:1.5b on seed 42
+(evaluation + confirmation), plus seed 43 on confirmation for both models. The
+initial actual matrix ran in workflow 43118154733 before this dispatch-only split.
+Models download only during build, with Ollama 0.12.6; their observed manifests
+are now locked under tests/quality/model-locks and checked at build. Inference
+uses the inherited internal network. Reports
 record actual model/corpus digests, seed, generation parameters, selected
 references, token use, latency, raw outputs and per-case errors. Each matrix job
 has its own disposable project. Additional model images run on isolated CI
@@ -89,8 +93,17 @@ Unit checks use Node22:
 node --test tests/quality.test.js
 ```
 
-At initial draft these unit checks and lint passed; actual model outcomes must be
-read per commit in the linked SPEC/PR. A successful workflow means the measurement
+The pilot completed 420 actual classifications; model answers are archived under
+tests/quality/baseline with source run, checkout SHA, artifact IDs/digests and
+checksums. Original raw scores are regression-checked, not rewritten. The previous typed
+writer is also archived with its original commit/checksum so replay compares
+actual before/after normalization rather than treating every raw-format error
+as a new parser improvement. Only trusted checksum-verified repository source
+is executed for that comparison; model text is never evaluated as code. The archive
+is independent of expiring GitHub artifact retention. Current PR CI replays those
+answers through the current typed writer and real isolated API without rerunning
+models or claiming new inference. The replay verifies corpus and answer hashes.
+Actual outcomes and tested revisions are linked in the SPEC/PR and results page. A successful workflow means the measurement
 and protocol ran, not that a model is accurate or a selector improved quality.
 
 ## Decision and rollback
@@ -102,6 +115,30 @@ transport test. Foreign/invented identifiers block promotion of an automatic
 extraction candidate in these scenarios. If no reliable gain is measured, keep
 production behavior and document the rejected hypothesis.
 
-This initial experiment changes no database schema, confirmed-example policy,
-user configuration or default model. Rollback removes the optional overlay/job
-and experimental selector; existing classification and learning continue.
+No database schema, confirmed-example policy, user configuration or default model
+changes. The shared currency parser additionally accepts explicit prefix/suffix
+codes with whitespace and keeps old currency-free behavior. Reverting that small
+parser change restores old acceptance rules but does not undo existing metadata.
+The optional overlay/job and unused experimental selector can be removed without
+changing existing classification/learning configuration. No unqualified selector
+or source-presence policy is promoted.
+
+## Replay and raw audit
+
+On a sufficiently sized Docker runner, use a fresh base test project and run:
+
+```sh
+export COMPOSE_PROJECT_NAME=paperless-quality-replay
+export TEST_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+docker compose -f docker-compose.test.yml up -d --build --wait ai
+docker compose -f docker-compose.test.yml exec -T ai node tests/quality/replay.js tests/quality/baseline
+docker compose -f docker-compose.test.yml cp ai:/app/data/quality-replay.json ./quality-replay.json
+docker compose -f docker-compose.test.yml down -v --remove-orphans
+```
+
+The managed 8-GB/vfs environment uses the compact helper described in the test
+guide instead of a full multi-stage rebuild; the automatic replay runs in CI.
+No model image is needed for replay. For a local read-only raw-value audit use
+`node tests/quality/audit-report.js tests/quality/baseline`; it edits no scores.
+The separately manually dispatched audit workflow can inspect retained original
+GitHub artifacts, but ordinary CI does not depend on their continued availability.

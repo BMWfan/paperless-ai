@@ -48,3 +48,22 @@ test('pattern context removes training-instance values and stays within actual t
   assert.equal(relevantContext(row.content,refs,1).context,'');
   assert.ok(!JSON.stringify(patternRecord(refs[0])).includes('987.65'));
 });
+
+test('archived pilot answers retain their source, checksums and original raw scores',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const directory=path.join(__dirname,'quality','baseline');const manifest=require('./quality/baseline/manifest.json');
+  const before=require('./quality/before-writer').beforeWriter(directory);
+  assert.equal(before('EUR 42.50',{data_type:'monetary'}),undefined);
+  assert.equal(before('EUR42.50',{data_type:'monetary'}),'EUR42.50');
+  let cases=0;
+  const fixtures=new Map(['evaluation','confirmation'].flatMap(corpus).map(row=>[row.id,row]));
+  for(const [name,entry]of Object.entries(manifest.files)){
+    const bytes=fs.readFileSync(path.join(directory,name));assert.equal(createHash('sha256').update(bytes).digest('hex'),entry.sha256);
+    const report=JSON.parse(bytes);assert.equal(report.sourceRun,43118154733);assert.equal(report.complete,true);assert.equal(report.rows.length,entry.rows);
+    assert.ok(report.sourceArtifact.id);assert.match(report.sourceArtifact.zipDigest,/^sha256:[a-f0-9]{64}$/);
+    assert.equal(new Set(report.rows.map(row=>`${row.arm}/${row.id}`)).size,report.rows.length);
+    for(const row of report.rows){const result=evaluate(row.actual,fixtures.get(row.id),corpus('training'));assert.deepEqual(result.fields,row.scores.fields);assert.deepEqual(result.errors,row.scores.errors);}
+    cases+=report.rows.length;
+  }
+  assert.equal(cases,420);
+});

@@ -7,6 +7,7 @@ on:
       - 'tests/e2e/Dockerfile.model'
       - 'tests/e2e/generate.js'
       - 'tests/quality/**'
+      - 'services/customFieldUpdates.js'
       - 'tests/quality.test.js'
       - 'tests/e2e/Dockerfile.quality-model'
       - 'docker-compose.quality.yml'
@@ -97,18 +98,11 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: read
-      actions: read
     env:
       COMPOSE_PROJECT_NAME: paperless-quality-replay
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: '43118154733'
-          pattern: learning-quality-*
-          path: .e2e-cache/prior-quality
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -117,8 +111,7 @@ jobs:
         run: docker compose -f docker-compose.test.yml up -d --build --wait ai
       - name: Replay raw values without inference or rescoring
         run: |
-          docker compose -f docker-compose.test.yml cp .e2e-cache/prior-quality ai:/tmp/prior-quality
-          docker compose -f docker-compose.test.yml exec -T -e "GITHUB_SHA=$(git rev-parse HEAD)" ai node tests/quality/replay.js /tmp/prior-quality
+          docker compose -f docker-compose.test.yml exec -T -e "GITHUB_SHA=$(git rev-parse HEAD)" ai node tests/quality/replay.js tests/quality/baseline
           docker compose -f docker-compose.test.yml cp ai:/app/data/quality-replay.json ./quality-replay.json
       - uses: actions/upload-artifact@v4
         with:
@@ -128,3 +121,19 @@ jobs:
       - name: Remove only disposable replay stack
         if: always()
         run: docker compose -f docker-compose.test.yml down -v --remove-orphans
+
+  model-integrity:
+    if: github.event_name == 'pull_request'
+    name: Verify pinned model ${{ matrix.model }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        model: ['qwen2.5:0.5b', 'qwen2.5:1.5b']
+    env:
+      QUALITY_MODEL: ${{ matrix.model }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify downloaded manifest without inference or publication
+        run: docker build --build-arg "QUALITY_MODEL=$QUALITY_MODEL" -f tests/e2e/Dockerfile.quality-model .

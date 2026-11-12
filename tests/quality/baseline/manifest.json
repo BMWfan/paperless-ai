@@ -1,0 +1,26 @@
+{
+  "sourceRun": 43118154733,
+  "files": {
+    "qwen05b-42.json": {
+      "sha256": "e722af22646c14d0da082546782092716515bbd91739702bcb4fc5e7d27faf0e",
+      "rows": 150
+    },
+    "qwen05b-43.json": {
+      "sha256": "ab6885c478b4a36c0b6a733c4035cf502c859f14fc45b5595b6666f762b1c452",
+      "rows": 60
+    },
+    "qwen15b-42.json": {
+      "sha256": "d2775983be0999783c0b221fb740fb07024c3b9bda4b467c654f620e1ea12c67",
+      "rows": 150
+    },
+    "qwen15b-43.json": {
+      "sha256": "dfa0a02990491b10a5b493bee0781bc81b19d2c7f9f2e1189136dd8ad75ab64f",
+      "rows": 60
+    }
+  },
+  "writerBefore": {
+    "file": "writer-before.js",
+    "sourceCommit": "ebc39c531751b0cc5886bf77a6b056d7673e4194",
+    "sha256": "fd7bb5f2ab20db5b4438bd8160bf4ef9d2b56993d12d7b7a4e8e72ad49aa8da5"
+  }
+}
