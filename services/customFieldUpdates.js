@@ -63,4 +63,4 @@ async function buildCustomFieldUpdates(paperless, documentId, suggestions) {
   return [...updates.values(), ...existing.filter(row => !updates.has(row.field))];
 }
 
-module.exports = { buildCustomFieldUpdates };
+module.exports = { buildCustomFieldUpdates, normalizeValue };
