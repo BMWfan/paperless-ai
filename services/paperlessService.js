@@ -171,6 +171,13 @@ class PaperlessService {
     }
   }
   
+  // Fresh read for review previews; do not trust cached field types or create fields.
+  async getCustomFieldDefinitionMatches(fieldName) {
+    this.initialize();
+    const response = await this.client.get('/custom_fields/', { params: { name__iexact: fieldName } });
+    return response.data;
+  }
+
   async findExistingCustomField(fieldName) {
     const normalizedName = fieldName.toLowerCase();
     

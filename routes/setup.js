@@ -3234,6 +3234,10 @@ router.post('/manual/playground', express.json(), async (req, res) => {
 router.post('/manual/updateDocument', express.json(), require('./learning').sameOriginJSON,
   require('./manualLearning').createManualUpdateHandler(paperlessService, documentModel));
 
+router.post('/manual/custom-field-preview', authenticateJWT, express.json(), require('./learning').sameOriginJSON,
+  require('./customFieldPreview').createCustomFieldPreviewHandler(paperlessService));
+
+
 /**
  * @swagger
  * /health:

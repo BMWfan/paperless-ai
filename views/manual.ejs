@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
     <link rel="stylesheet" href="css/dashboard.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="stylesheet" href="/css/custom-field-preview.css">
 </head>
 <body class="h-full">
     <button id="themeToggle" class="theme-toggle">
@@ -160,6 +160,12 @@
                             </div>
                         </div>
         
+                        <section class="material-card mb-6" aria-labelledby="customFieldHeading">
+                            <h2 id="customFieldHeading" class="card-title">Custom field suggestions</h2>
+                            <p>Preview only. Custom field values are not saved by Save Tags.</p>
+                            <div id="customFieldPreview" aria-live="polite"><p>Analyze a document to see its suggested values and text excerpts.</p></div>
+                        </section>
+
                         <!-- Tags Card -->
                         <div class="material-card">
                             <h2 class="card-title">Tags</h2>
@@ -201,12 +207,14 @@
             </div>
         </main>
     </div>
+    <script src="/js/custom-field-preview.js"></script>
     <script>
 // Global Variables
 let availableTags = [];
 let currentDocument = null;
 let currentCorrespondent = null;
 let isUpdating = false;
+let manualSelectionVersion = 0;
 
 // Show message (error or success)
 function showMessage(message, type = 'error') {
@@ -391,6 +399,13 @@ function updateHiddenTagsInput() {
 
 // Document Handling Functions
 async function handleDocumentSelection(documentId) {
+    const selectionVersion = ++manualSelectionVersion;
+    document.getElementById('saveTagsBtn').disabled = true;
+    currentDocument = documentId || null;
+    document.getElementById('analyzeBtn').disabled = true;
+    document.getElementById('chatBtn').disabled = true;
+    document.getElementById('aiStatus').classList.add('hidden');
+    window.CustomFieldPreview.message(document.getElementById('customFieldPreview'), 'Analyze this document to see suggested values.');
     if (!documentId) {
         document.getElementById('analyzeBtn').disabled = true;
         document.getElementById('chatBtn').disabled = true;
@@ -402,13 +417,13 @@ async function handleDocumentSelection(documentId) {
     }
 
     currentDocument = documentId;
-    document.getElementById('analyzeBtn').disabled = false;
-    document.getElementById('chatBtn').disabled = false;
+
     
     try {
         const response = await fetch(`/manual/preview/${documentId}`);
         if (!response.ok) throw new Error('Failed to fetch document content');
         const data = await response.json();
+        if (selectionVersion !== manualSelectionVersion) return;
         
         if (!data.content) {
             throw new Error('Document content is missing');
@@ -433,7 +448,11 @@ async function handleDocumentSelection(documentId) {
 
         updateCorrespondentDisplay(data.correspondent);
         updateTitleDisplay(data.title);
+        document.getElementById('analyzeBtn').disabled = false;
+        document.getElementById('chatBtn').disabled = false;
+        document.getElementById('saveTagsBtn').disabled = false;
     } catch (error) {
+        if (selectionVersion !== manualSelectionVersion) return;
         showMessage('Error loading document content: ' + error.message);
     }
 }
@@ -441,6 +460,11 @@ async function handleDocumentSelection(documentId) {
 // Analysis Functions
 async function handleAnalysis() {
     if (!currentDocument) return;
+    const selectionVersion = manualSelectionVersion;
+    const analyzedDocument = currentDocument;
+    const preview = document.getElementById('customFieldPreview');
+    document.getElementById('analyzeBtn').disabled = true;
+    window.CustomFieldPreview.message(preview, 'Analyzing field suggestions…');
 
     const aiStatus = document.getElementById('aiStatus');
     aiStatus.classList.remove('hidden');
@@ -482,6 +506,7 @@ async function handleAnalysis() {
         }
 
         const result = await response.json();
+        if (selectionVersion !== manualSelectionVersion || analyzedDocument !== currentDocument) return;
 
         let suggestedTags = [];
         if (result.document && result.document.tags) {
@@ -497,12 +522,31 @@ async function handleAnalysis() {
             updateCorrespondentDisplay(result.document.correspondent);
             updateTitleDisplay(result.document.title);
         }
+        try {
+            const fieldResponse = await fetch('/manual/custom-field-preview', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ documentId: analyzedDocument, content,
+                    suggestions: result.document?.custom_fields || {} })
+            });
+            const fields = await fieldResponse.json();
+            if (selectionVersion !== manualSelectionVersion || analyzedDocument !== currentDocument) return;
+            if (!fieldResponse.ok) throw new Error(fields.error || 'Custom field preview is unavailable');
+            window.CustomFieldPreview.render(preview, fields);
+        } catch (error) {
+            if (selectionVersion !== manualSelectionVersion) return;
+            window.CustomFieldPreview.message(preview, error.message);
+        }
         showMessage('Analysis completed successfully', 'success');
     } catch (error) {
+        if (selectionVersion !== manualSelectionVersion) return;
+        window.CustomFieldPreview.message(preview, 'Analysis failed. No field preview is available.');
         showMessage('Error during analysis: ' + error.message);
         console.error('Analysis error:', error);
     } finally {
-        aiStatus.classList.add('hidden');
+        if (selectionVersion === manualSelectionVersion) {
+            aiStatus.classList.add('hidden');
+            document.getElementById('analyzeBtn').disabled = false;
+        }
     }
 }
 
@@ -641,6 +685,15 @@ return object;
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Manual has no dashboard charts or modal data; initialize its theme locally.
+            const themeToggle = document.getElementById('themeToggle');
+            function setTheme(theme) {
+                document.documentElement.dataset.theme = theme;
+                localStorage.setItem('theme', theme);
+                themeToggle.querySelector('i').className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+            setTheme(localStorage.getItem('theme') === 'dark' ? 'dark' : 'light');
+            themeToggle.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
             const mobileMenuButton = document.getElementById('mobileMenuButton');
             const sidebar = document.querySelector('.sidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -704,6 +757,5 @@ return object;
             getStarsCount();
         });
     </script>
-    <script src="js/dashboard.js"></script>
 </body>
 </html>
