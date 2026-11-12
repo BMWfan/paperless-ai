@@ -27,6 +27,14 @@ function normalizeValue(value, field) {
       const matches = options.filter(option => option?.label === text);
       return matches.length === 1 ? matches[0].id : undefined;
     }
+    case 'date': {
+      // Calendar-only ISO dates. Never guess a locale or strip a time zone.
+      const match = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(text);
+      if (!match || match[1] === '0000') return undefined;
+      const canonical = `${match[1]}-${match[2].padStart(2, '0')}-${match[3].padStart(2, '0')}`;
+      const parsed = new Date(`${canonical}T00:00:00.000Z`);
+      return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === canonical ? canonical : undefined;
+    }
     case 'monetary': {
       const amount = typeof value === 'number' && Number.isFinite(value) ? String(value) : text;
       const match = /^(?:(?<leading>[A-Z]{3})\s*)?(?<whole>-?\d{1,10})(?:[.,](?<fraction>\d{1,2}))?(?:\s*(?<trailing>[A-Z]{3}))?$/.exec(amount);

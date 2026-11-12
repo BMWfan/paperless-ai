@@ -7,6 +7,12 @@ update. Existing provider response shapes and app configuration remain valid.
 - Integer, float and boolean values retain their types. String and long-text
   suggestions remain text, with the Paperless string length limit applied.
 - Select suggestions may use an option ID or an unambiguous exact label.
+- Date suggestions must be real calendar dates in year-first ISO form. Values
+  such as `2032-2-29` are canonically padded to `2032-02-29`; impossible days,
+  literal `"null"`, year zero, locale-specific dates and timestamps are ignored.
+  This prevents a bad field from blocking other valid metadata in the native
+  API. Invalid/missing automatic dates retain prior values; explicit manual
+  date clearing remains allowed. No locale or timezone is guessed.
 - Monetary suggestions accept plain nonnegative decimals or an explicit
   three-letter currency code before or after the amount, with optional whitespace
   (`EUR 42.5` and `42,50 EUR` become `EUR42.50`). A single decimal point or comma
@@ -43,3 +49,12 @@ correct for the current document or prevent copied values by itself.
 This is format validation, not a source-currency check: `USD42.50` is a valid
 format even if the document says EUR. Semantic correctness still requires
 provider evidence/review; the format parser does not establish it.
+
+The date guard follows the reproduced SPEC #20 case: the fork passed literal
+`"null"` to a native date field, and ngx correctly rejected the whole PATCH with
+HTTP400, including an otherwise valid title update. The fix is in Paperless-AI,
+not Paperless-ngx. The scan regression checks a valid leap day, invalid null text,
+an impossible date, preserved prior data and successful manual date clearing.
+Formal date validity does not prove that a date belongs to the right semantic
+field. This change needs no migration; reverting it restores the earlier risk
+of whole-update rejection, without undoing already stored metadata.
