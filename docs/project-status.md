@@ -1,4 +1,4 @@
-# Project status — 2026-11-12
+# Project status — baseline after PR25
 
 This is a dated source/acceptance audit, not a release announcement. GitHub issues,
 PRs and their exact checked commits remain the source of truth. Historical
@@ -6,7 +6,9 @@ validation records are not evidence for later heads.
 
 ## Integrated in main at this audit
 
-Baseline: `185607ac1f4cf64bdaa96c07a646175cad9eb02a` (merged PR23 after PR24).
+Baseline: `9f561e84385fb0fd77572602b29a31c507fb5e3f` (owner-approved PR25).
+Its direct main-push [Learning run43378895338](https://github.com/BMWfan/paperless-ai/actions/runs/43378895338)
+passed. The earlier main audit below remains dated evidence for185607a.
 
 | Requirement | Delivered state | Evidence / limit |
 | --- | --- | --- |
@@ -18,7 +20,7 @@ Baseline: `185607ac1f4cf64bdaa96c07a646175cad9eb02a` (merged PR23 after PR24).
 | Measured model/relevance quality | Disjoint data, archived answers, reproducible scoring/replay and rejected field-evidence hypothesis | Merged PR21/23; [protocol](learning-quality.md), [results](quality-results.md), [evidence limits](field-evidence.md). No arm qualifies for unattended extraction |
 | Agent/release rules | SDD-Light, approved feature branches, tests/review and explicit merge approvals | [AGENTS](../AGENTS.md), [SDD-Light](../.github/SDD-LIGHT.md); publication separately gated |
 
-Additional post-merge validation ran directly on this main SHA:
+Earlier post-merge validation ran directly on185607a:
 [Learning43294521484](https://github.com/BMWfan/paperless-ai/actions/runs/43294521484).
 Its logs confirm49 root regressions,3 Python contracts,3 real API cases,2 browser
 cases, restart and3.4.1→3.4.2 upgrade, with no skipped/failed test cases. Browser
@@ -36,24 +38,28 @@ all newer Custom-Field modules (these are explicitly linted locally); image
 version tags and apt installs do not make every build byte-identical. The test
 pin is3.4.2, not an assertion of the globally latest upstream release.
 
-## Approved work in development, not merged at this audit
+## Integrated confirmed saving and current diagnostic work
 
-`feat/confirmed-custom-fields`, SPEC #20 M-plan: explicitly select and save valid
-fields, compare fresh document/definition snapshots inside the existing writer,
-preserve unselected values and current learning/provenance rules, handle stale
-or uncertain outcomes without automatic retries. [The contract](custom-field-preview.md)
-describes this feature branch; use its PR for the exact tested head and results.
-Plan approval permits implementation, not merge or deployment. No new database,
-provider, workflow engine or production automatic extraction policy is included.
+PR25 integrated explicit selected-field saving, fresh document/definition guards,
+existing learning modes, unselected-value preservation and conservative uncertain
+outcomes. [Contract](custom-field-preview.md). Head28080f4 had59 root/3 Python/
+4 real API/3 browser cases, restart, upgrade and native-coexistence verification.
+Owner-approved merge9f561e8 has the same tree. No migration or model change.
+
+The approved `feat/section-evidence-diagnostic` M-plan remains diagnostic only.
+[Results and frozen contract](section-evidence.md):10/10 positive confirmation
+proposals retained but two wrong unmarked-attachment IDs accepted; old unheaded
+data loses all coverage. The candidate is not qualified and is not activated.
+Use its PR for exact current-head verification/review; merge still needs separate
+owner approval. No new inference, production writer or CI workflow change.
 
 ## Remaining requirements
 
 - SPEC #20 and EPIC #12 remain open: semantic/document-section ownership is not
   established by a literal or label match. Old references, invented absent IDs
   and dates assigned to the wrong field remain real model errors.
-- Controlled field saving needs completed current-head verification, separate
-  review and owner-approved merge. Existing learning-event review remains
-  distinct from approval of a not-yet-applied proposal.
+- Controlled field saving is integrated through PR25. Existing learning-event
+  review remains distinct from approval of a not-yet-applied proposal.
 - ngx provides no compare-and-set PATCH. Preflight checks/local exclusion do not
   guarantee atomicity against external writers, including changes after the final
   read. No absolute loss-prevention guarantee is claimed.
