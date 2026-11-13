@@ -1,4 +1,4 @@
-# Project status — baseline after PR25
+# Project status — baseline after PR26
 
 This is a dated source/acceptance audit, not a release announcement. GitHub issues,
 PRs and their exact checked commits remain the source of truth. Historical
@@ -6,8 +6,9 @@ validation records are not evidence for later heads.
 
 ## Integrated in main at this audit
 
-Baseline: `9f561e84385fb0fd77572602b29a31c507fb5e3f` (owner-approved PR25).
-Its direct main-push [Learning run43378895338](https://github.com/BMWfan/paperless-ai/actions/runs/43378895338)
+Baseline: `96fac1157eed5fe3bcb5b562af78b24b8b875fe0` (owner-approved PR26).
+PR25 integrated confirmed saving; PR26 preserves the failed section diagnostic.
+PR25's direct main-push [Learning run43378895338](https://github.com/BMWfan/paperless-ai/actions/runs/43378895338)
 passed. The earlier main audit below remains dated evidence for185607a.
 
 | Requirement | Delivered state | Evidence / limit |
@@ -50,8 +51,12 @@ The approved `feat/section-evidence-diagnostic` M-plan remains diagnostic only.
 [Results and frozen contract](section-evidence.md):10/10 positive confirmation
 proposals retained but two wrong unmarked-attachment IDs accepted; old unheaded
 data loses all coverage. The candidate is not qualified and is not activated.
-Use its PR for exact current-head verification/review; merge still needs separate
-owner approval. No new inference, production writer or CI workflow change.
+Use its PR for exact current-head verification/review; PR26 was separately owner-approved and integrated. No production activation.
+The approved [model qualification](extraction-model-qualification.md) now adds
+a separate opt-in inference/replay profile on feat/extraction-model-qualification;
+its270 real answers are now archived. B/C fail confirmation (wrong ID
+acceptances remain and positive coverage declines); no production promotion.
+Exact current native replay/CI evidence and tested heads remain in its PR. Merge and activation remain separate approvals.
 
 ## Remaining requirements
 

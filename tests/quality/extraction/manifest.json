@@ -1,0 +1,16 @@
+{
+  "revision": "extraction-freeze-v1.2",
+  "splits": {
+    "training": 10,
+    "development": 30,
+    "confirmation": 30
+  },
+  "files": {
+    "cases.json": "d39943d7d1b6166b1a87d9d63ee063d18da665b15568eba6b8ebec3ca9c8ca68",
+    "protocol.json": "5bf81918b7952379fd9afb11c316054aac410276d1d4ab7770695bec7960060b",
+    "CONTRACT.md": "c102c07f9d287b992bf6d44f551747ba26131494a2555f11426b58060e97d186",
+    "model-locks.json": "80e4db9939b06b412c6987bf713cea64a23073badc7b6a9003bfe34bdee155c0",
+    "qwen15b.json": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+    "qwen3b.json": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b"
+  }
+}

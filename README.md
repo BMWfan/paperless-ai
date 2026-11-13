@@ -118,7 +118,8 @@ continues to launch the existing development server.
 
 See the [learning/extraction quality protocol](docs/learning-quality.md) and
 [measured outcomes](docs/quality-results.md) and the unqualified
-[section-evidence diagnostic](docs/section-evidence.md); a passing test is not a general
+[section-evidence diagnostic](docs/section-evidence.md). The opt-in
+[extraction model qualification](docs/extraction-model-qualification.md) remains experimental; a passing test is not a general
 classification-accuracy guarantee.
 
 See the [isolated test guide](docs/test-environment.md), [SDD-Light process](.github/SDD-LIGHT.md) and [build/publication policy](docs/release-policy.md). Image publication and merges require separate owner approval.
