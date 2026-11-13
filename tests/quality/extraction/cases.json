@@ -1,0 +1,2115 @@
+{
+  "revision": "extraction-corpus-v1",
+  "cases": [
+    {
+      "id": "training-invoice-en-0",
+      "split": "training",
+      "family": "training-invoice-en",
+      "kind": "invoice",
+      "language": "en",
+      "content": "Birkenstrom Ltd\nInvoice for supplied services. Please pay by the stated deadline.\nInvoice number — LEARN-EN-101-0047\nTotal amount: EUR 64.80\nPayment due: 2036-05-17",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Birkenstrom Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "LEARN-EN-101-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": "2036-05-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "training-contract-en-0",
+      "split": "training",
+      "family": "training-contract-en",
+      "kind": "contract",
+      "language": "en",
+      "content": "Talblick Mobil Ltd\nAgreement for ongoing services.\nContract number — LEARN-EN-201-0047\nContract amount: EUR 64.80\nAgreement ends: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Talblick Mobil Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "LEARN-EN-201-0047",
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "training-insurance-en-0",
+      "split": "training",
+      "family": "training-insurance-en",
+      "kind": "insurance",
+      "language": "en",
+      "content": "Feldwiese Schutz Ltd\nInsurance coverage for the agreed period.\nPolicy number — LEARN-EN-301-0047\nAnnual premium: EUR 64.80\nAgreement ends: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Feldwiese Schutz Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "LEARN-EN-301-0047",
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "training-letter-en-0",
+      "split": "training",
+      "family": "training-letter-en",
+      "kind": "letter",
+      "language": "en",
+      "content": "Hainpost Ltd\nNotice about our opening hours, no charges requested.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Hainpost Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "training-payment-en-0",
+      "split": "training",
+      "family": "training-payment-en",
+      "kind": "payment",
+      "language": "en",
+      "content": "Uferkasse Ltd\nWe confirm receipt of payment; no new payment is requested.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Uferkasse Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "training-invoice-de-0",
+      "split": "training",
+      "family": "training-invoice-de",
+      "kind": "invoice",
+      "language": "de",
+      "content": "Birkenstrom GmbH\nAbrechnung der gelieferten Leistung. Bitte fristgerecht überweisen.\nRechnungsnummer — LEARN-DE-101-0047\nGesamtbetrag: EUR 64.80\nZahlbar bis: 2036-05-17",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Birkenstrom GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "LEARN-DE-101-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": "2036-05-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "training-contract-de-0",
+      "split": "training",
+      "family": "training-contract-de",
+      "kind": "contract",
+      "language": "de",
+      "content": "Talblick Mobil GmbH\nVereinbarung über die laufende Dienstleistung.\nVertragsnummer — LEARN-DE-201-0047\nVertragsbetrag: EUR 64.80\nLaufzeitende: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Talblick Mobil GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "LEARN-DE-201-0047",
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "training-insurance-de-0",
+      "split": "training",
+      "family": "training-insurance-de",
+      "kind": "insurance",
+      "language": "de",
+      "content": "Feldwiese Schutz GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nVersicherungsnummer — LEARN-DE-301-0047\nJährlicher Beitrag: EUR 64.80\nLaufzeitende: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Feldwiese Schutz GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "LEARN-DE-301-0047",
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "training-letter-de-0",
+      "split": "training",
+      "family": "training-letter-de",
+      "kind": "letter",
+      "language": "de",
+      "content": "Hainpost GmbH\nMitteilung zu unseren Öffnungszeiten, keine Abrechnung.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Hainpost GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "training-payment-de-0",
+      "split": "training",
+      "family": "training-payment-de",
+      "kind": "payment",
+      "language": "de",
+      "content": "Uferkasse GmbH\nWir bestätigen den Eingang der Zahlung, keine neue Forderung.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Uferkasse GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-invoice-en-0",
+      "split": "development",
+      "family": "development-invoice-en",
+      "kind": "invoice",
+      "language": "en",
+      "content": "Wiesenlicht Energie Ltd\nInvoice for supplied services. Please pay by the stated deadline.\nInvoice number: STUDY-EN-101-0047\nTotal amount: EUR 64.80\nPayment due: 2036-05-17",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Wiesenlicht Energie Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "STUDY-EN-101-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": "2036-05-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-invoice-en-1",
+      "split": "development",
+      "family": "development-invoice-en",
+      "kind": "invoice",
+      "language": "en",
+      "content": "Wiesenlicht Energie Ltd\nInvoice for supplied services. Please pay by the stated deadline.\nInvoice number: STUDY-EN-102-0047\nReference to an earlier transaction:\nInvoice number: OLD-STUDY-EN-102-0081\nTotal amount: EUR 64.80\nPayment due: 2036-05-17",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Wiesenlicht Energie Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "STUDY-EN-102-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": "2036-05-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-102-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-invoice-en-2",
+      "split": "development",
+      "family": "development-invoice-en",
+      "kind": "invoice",
+      "language": "en",
+      "content": "Wiesenlicht Energie Ltd\nInvoice for supplied services. Please pay by the stated deadline.\nThe current identifier is not provided.\n\f\nInvoice number: OLD-STUDY-EN-103-0081\nAmount and due date are not provided.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Wiesenlicht Energie Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-103-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-contract-en-0",
+      "split": "development",
+      "family": "development-contract-en",
+      "kind": "contract",
+      "language": "en",
+      "content": "Nordbogen Funk Ltd\nAgreement for ongoing services.\nContract number: STUDY-EN-201-0047\nContract amount: EUR 64.80\nAgreement ends: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Nordbogen Funk Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "STUDY-EN-201-0047",
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-contract-en-1",
+      "split": "development",
+      "family": "development-contract-en",
+      "kind": "contract",
+      "language": "en",
+      "content": "Nordbogen Funk Ltd\nAgreement for ongoing services.\nContract number: STUDY-EN-202-0047\nReference to an earlier transaction:\nContract number: OLD-STUDY-EN-202-0081\nContract amount: EUR 64.80\nAgreement ends: 2038-11-30\nEarlier invoice was due: 2031-01-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Nordbogen Funk Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "STUDY-EN-202-0047",
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-202-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-contract-en-2",
+      "split": "development",
+      "family": "development-contract-en",
+      "kind": "contract",
+      "language": "en",
+      "content": "Nordbogen Funk Ltd\nAgreement for ongoing services.\nThe current identifier is not provided.\n\f\nContract number: OLD-STUDY-EN-203-0081\nContract amount: EUR 64.80\nAgreement ends: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Nordbogen Funk Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-203-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-insurance-en-0",
+      "split": "development",
+      "family": "development-insurance-en",
+      "kind": "insurance",
+      "language": "en",
+      "content": "Kiesel Hausrat Ltd\nInsurance coverage for the agreed period.\nPolicy number: STUDY-EN-301-0047\nAnnual premium: EUR 64.80\nAgreement ends: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Kiesel Hausrat Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "STUDY-EN-301-0047",
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-insurance-en-1",
+      "split": "development",
+      "family": "development-insurance-en",
+      "kind": "insurance",
+      "language": "en",
+      "content": "Kiesel Hausrat Ltd\nInsurance coverage for the agreed period.\nPolicy number: STUDY-EN-302-0047\nReference to an earlier transaction:\nPolicy number: OLD-STUDY-EN-302-0081\nAnnual premium: EUR 64.80\nAgreement ends: 2038-11-30\nEarlier invoice was due: 2031-01-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Kiesel Hausrat Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "STUDY-EN-302-0047",
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-302-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-insurance-en-2",
+      "split": "development",
+      "family": "development-insurance-en",
+      "kind": "insurance",
+      "language": "en",
+      "content": "Kiesel Hausrat Ltd\nInsurance coverage for the agreed period.\nThe current identifier is not provided.\n\f\nPolicy number: OLD-STUDY-EN-303-0081\nAnnual premium: EUR 64.80\nAgreement ends: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Kiesel Hausrat Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-303-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-letter-en-0",
+      "split": "development",
+      "family": "development-letter-en",
+      "kind": "letter",
+      "language": "en",
+      "content": "Gartenweg Service Ltd\nNotice about our opening hours, no charges requested.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Gartenweg Service Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-letter-en-1",
+      "split": "development",
+      "family": "development-letter-en",
+      "kind": "letter",
+      "language": "en",
+      "content": "Gartenweg Service Ltd\nNotice about our opening hours, no charges requested.\nAn old receipt is attached for information:\nInvoice number: OLD-STUDY-EN-402-0081\nAmount: EUR 777.77",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Gartenweg Service Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-402-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-letter-en-2",
+      "split": "development",
+      "family": "development-letter-en",
+      "kind": "letter",
+      "language": "en",
+      "content": "Gartenweg Service Ltd\nNotice about our opening hours, no charges requested.\n\f\nInvoice number: OLD-STUDY-EN-403-0081",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Gartenweg Service Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-403-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-payment-en-0",
+      "split": "development",
+      "family": "development-payment-en",
+      "kind": "payment",
+      "language": "en",
+      "content": "Buchenbank Ltd\nWe confirm receipt of payment; no new payment is requested.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Buchenbank Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-payment-en-1",
+      "split": "development",
+      "family": "development-payment-en",
+      "kind": "payment",
+      "language": "en",
+      "content": "Buchenbank Ltd\nWe confirm receipt of payment; no new payment is requested.\nAn old receipt is attached for information:\nInvoice number: OLD-STUDY-EN-502-0081\nAmount: EUR 777.77",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Buchenbank Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-502-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-payment-en-2",
+      "split": "development",
+      "family": "development-payment-en",
+      "kind": "payment",
+      "language": "en",
+      "content": "Buchenbank Ltd\nWe confirm receipt of payment; no new payment is requested.\n\f\nInvoice number: OLD-STUDY-EN-503-0081",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Buchenbank Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-EN-503-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-invoice-de-0",
+      "split": "development",
+      "family": "development-invoice-de",
+      "kind": "invoice",
+      "language": "de",
+      "content": "Wiesenlicht Energie GmbH\nAbrechnung der gelieferten Leistung. Bitte fristgerecht überweisen.\nRechnungsnummer: STUDY-DE-101-0047\nGesamtbetrag: EUR 64.80\nZahlbar bis: 2036-05-17",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Wiesenlicht Energie GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "STUDY-DE-101-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": "2036-05-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-invoice-de-1",
+      "split": "development",
+      "family": "development-invoice-de",
+      "kind": "invoice",
+      "language": "de",
+      "content": "Wiesenlicht Energie GmbH\nAbrechnung der gelieferten Leistung. Bitte fristgerecht überweisen.\nRechnungsnummer: STUDY-DE-102-0047\nVerweis auf früheren Vorgang:\nRechnungsnummer: OLD-STUDY-DE-102-0081\nGesamtbetrag: EUR 64.80\nZahlbar bis: 2036-05-17",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Wiesenlicht Energie GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "STUDY-DE-102-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": "2036-05-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-102-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-invoice-de-2",
+      "split": "development",
+      "family": "development-invoice-de",
+      "kind": "invoice",
+      "language": "de",
+      "content": "Wiesenlicht Energie GmbH\nAbrechnung der gelieferten Leistung. Bitte fristgerecht überweisen.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nRechnungsnummer: OLD-STUDY-DE-103-0081\nBetrag und Fälligkeit nicht angegeben.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Wiesenlicht Energie GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-103-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-contract-de-0",
+      "split": "development",
+      "family": "development-contract-de",
+      "kind": "contract",
+      "language": "de",
+      "content": "Nordbogen Funk GmbH\nVereinbarung über die laufende Dienstleistung.\nVertragsnummer: STUDY-DE-201-0047\nVertragsbetrag: EUR 64.80\nLaufzeitende: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Nordbogen Funk GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "STUDY-DE-201-0047",
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-contract-de-1",
+      "split": "development",
+      "family": "development-contract-de",
+      "kind": "contract",
+      "language": "de",
+      "content": "Nordbogen Funk GmbH\nVereinbarung über die laufende Dienstleistung.\nVertragsnummer: STUDY-DE-202-0047\nVerweis auf früheren Vorgang:\nVertragsnummer: OLD-STUDY-DE-202-0081\nVertragsbetrag: EUR 64.80\nLaufzeitende: 2038-11-30\nFrühere Rechnung, damals fällig: 2031-01-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Nordbogen Funk GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "STUDY-DE-202-0047",
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-202-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-contract-de-2",
+      "split": "development",
+      "family": "development-contract-de",
+      "kind": "contract",
+      "language": "de",
+      "content": "Nordbogen Funk GmbH\nVereinbarung über die laufende Dienstleistung.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nVertragsnummer: OLD-STUDY-DE-203-0081\nVertragsbetrag: EUR 64.80\nLaufzeitende: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Nordbogen Funk GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-203-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-insurance-de-0",
+      "split": "development",
+      "family": "development-insurance-de",
+      "kind": "insurance",
+      "language": "de",
+      "content": "Kiesel Hausrat GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nVersicherungsnummer: STUDY-DE-301-0047\nJährlicher Beitrag: EUR 64.80\nLaufzeitende: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Kiesel Hausrat GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "STUDY-DE-301-0047",
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-insurance-de-1",
+      "split": "development",
+      "family": "development-insurance-de",
+      "kind": "insurance",
+      "language": "de",
+      "content": "Kiesel Hausrat GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nVersicherungsnummer: STUDY-DE-302-0047\nVerweis auf früheren Vorgang:\nVersicherungsnummer: OLD-STUDY-DE-302-0081\nJährlicher Beitrag: EUR 64.80\nLaufzeitende: 2038-11-30\nFrühere Rechnung, damals fällig: 2031-01-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Kiesel Hausrat GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "STUDY-DE-302-0047",
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-302-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-insurance-de-2",
+      "split": "development",
+      "family": "development-insurance-de",
+      "kind": "insurance",
+      "language": "de",
+      "content": "Kiesel Hausrat GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nVersicherungsnummer: OLD-STUDY-DE-303-0081\nJährlicher Beitrag: EUR 64.80\nLaufzeitende: 2038-11-30",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Kiesel Hausrat GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR64.80",
+          "due_date": null,
+          "end_date": "2038-11-30"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-303-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-letter-de-0",
+      "split": "development",
+      "family": "development-letter-de",
+      "kind": "letter",
+      "language": "de",
+      "content": "Gartenweg Service GmbH\nMitteilung zu unseren Öffnungszeiten, keine Abrechnung.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Gartenweg Service GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-letter-de-1",
+      "split": "development",
+      "family": "development-letter-de",
+      "kind": "letter",
+      "language": "de",
+      "content": "Gartenweg Service GmbH\nMitteilung zu unseren Öffnungszeiten, keine Abrechnung.\nAls Anlage ein alter Beleg zur Information:\nRechnungsnummer: OLD-STUDY-DE-402-0081\nAmount: EUR 777.77",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Gartenweg Service GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-402-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-letter-de-2",
+      "split": "development",
+      "family": "development-letter-de",
+      "kind": "letter",
+      "language": "de",
+      "content": "Gartenweg Service GmbH\nMitteilung zu unseren Öffnungszeiten, keine Abrechnung.\n\f\nRechnungsnummer: OLD-STUDY-DE-403-0081",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Gartenweg Service GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-403-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-payment-de-0",
+      "split": "development",
+      "family": "development-payment-de",
+      "kind": "payment",
+      "language": "de",
+      "content": "Buchenbank GmbH\nWir bestätigen den Eingang der Zahlung, keine neue Forderung.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Buchenbank GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-payment-de-1",
+      "split": "development",
+      "family": "development-payment-de",
+      "kind": "payment",
+      "language": "de",
+      "content": "Buchenbank GmbH\nWir bestätigen den Eingang der Zahlung, keine neue Forderung.\nAls Anlage ein alter Beleg zur Information:\nRechnungsnummer: OLD-STUDY-DE-502-0081\nAmount: EUR 777.77",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Buchenbank GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-502-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "development-payment-de-2",
+      "split": "development",
+      "family": "development-payment-de",
+      "kind": "payment",
+      "language": "de",
+      "content": "Buchenbank GmbH\nWir bestätigen den Eingang der Zahlung, keine neue Forderung.\n\f\nRechnungsnummer: OLD-STUDY-DE-503-0081",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Buchenbank GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-STUDY-DE-503-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-invoice-en-0",
+      "split": "confirmation",
+      "family": "confirmation-invoice-en",
+      "kind": "invoice",
+      "language": "en",
+      "content": "Silberweg Transport Ltd\nInvoice for supplied services. Please pay by the stated deadline.\nRecord details\nInvoice number   HOLD-EN-101-0047\nTotal amount: EUR 91.35\nPayment due: 2037-09-23",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Silberweg Transport Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "HOLD-EN-101-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": "2037-09-23",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-invoice-en-1",
+      "split": "confirmation",
+      "family": "confirmation-invoice-en",
+      "kind": "invoice",
+      "language": "en",
+      "content": "Silberweg Transport Ltd\nInvoice for supplied services. Please pay by the stated deadline.\nRecord details\nInvoice number   HOLD-EN-102-0047\nReference to an earlier transaction:\nInvoice number: OLD-HOLD-EN-102-0081\nTotal amount: EUR 91.35\nPayment due: 2037-09-23",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Silberweg Transport Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "HOLD-EN-102-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": "2037-09-23",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-102-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-invoice-en-2",
+      "split": "confirmation",
+      "family": "confirmation-invoice-en",
+      "kind": "invoice",
+      "language": "en",
+      "content": "Silberweg Transport Ltd\nInvoice for supplied services. Please pay by the stated deadline.\nThe current identifier is not provided.\n\f\nInvoice number: OLD-HOLD-EN-103-0081\nAmount and due date are not provided.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Silberweg Transport Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-103-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-contract-en-0",
+      "split": "confirmation",
+      "family": "confirmation-contract-en",
+      "kind": "contract",
+      "language": "en",
+      "content": "Eichenfeld Leasing Ltd\nAgreement for ongoing services.\nRecord details\nContract number   HOLD-EN-201-0047\nContract amount: EUR 91.35\nAgreement ends: 2039-02-28",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Eichenfeld Leasing Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "HOLD-EN-201-0047",
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-contract-en-1",
+      "split": "confirmation",
+      "family": "confirmation-contract-en",
+      "kind": "contract",
+      "language": "en",
+      "content": "Eichenfeld Leasing Ltd\nAgreement for ongoing services.\nRecord details\nContract number   HOLD-EN-202-0047\nReference to an earlier transaction:\nContract number: OLD-HOLD-EN-202-0081\nContract amount: EUR 91.35\nAgreement ends: 2039-02-28\nEarlier invoice was due: 2031-01-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Eichenfeld Leasing Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "HOLD-EN-202-0047",
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-202-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-contract-en-2",
+      "split": "confirmation",
+      "family": "confirmation-contract-en",
+      "kind": "contract",
+      "language": "en",
+      "content": "Eichenfeld Leasing Ltd\nAgreement for ongoing services.\nThe current identifier is not provided.\n\f\nContract number: OLD-HOLD-EN-203-0081\nContract amount: EUR 91.35\nAgreement ends: 2039-02-28",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Eichenfeld Leasing Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-203-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-insurance-en-0",
+      "split": "confirmation",
+      "family": "confirmation-insurance-en",
+      "kind": "insurance",
+      "language": "en",
+      "content": "Morgenrot Reise Ltd\nInsurance coverage for the agreed period.\nRecord details\nPolicy number   HOLD-EN-301-0047\nAnnual premium: EUR 91.35\nAgreement ends: 2039-02-28",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Morgenrot Reise Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "HOLD-EN-301-0047",
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-insurance-en-1",
+      "split": "confirmation",
+      "family": "confirmation-insurance-en",
+      "kind": "insurance",
+      "language": "en",
+      "content": "Morgenrot Reise Ltd\nInsurance coverage for the agreed period.\nRecord details\nPolicy number   HOLD-EN-302-0047\nReference to an earlier transaction:\nPolicy number: OLD-HOLD-EN-302-0081\nAnnual premium: EUR 91.35\nAgreement ends: 2039-02-28\nEarlier invoice was due: 2031-01-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Morgenrot Reise Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "HOLD-EN-302-0047",
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-302-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-insurance-en-2",
+      "split": "confirmation",
+      "family": "confirmation-insurance-en",
+      "kind": "insurance",
+      "language": "en",
+      "content": "Morgenrot Reise Ltd\nInsurance coverage for the agreed period.\nThe current identifier is not provided.\n\f\nPolicy number: OLD-HOLD-EN-303-0081\nAnnual premium: EUR 91.35\nAgreement ends: 2039-02-28",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Morgenrot Reise Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-303-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-letter-en-0",
+      "split": "confirmation",
+      "family": "confirmation-letter-en",
+      "kind": "letter",
+      "language": "en",
+      "content": "Bergpfad Auskunft Ltd\nNotice about our opening hours, no charges requested.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Bergpfad Auskunft Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-letter-en-1",
+      "split": "confirmation",
+      "family": "confirmation-letter-en",
+      "kind": "letter",
+      "language": "en",
+      "content": "Bergpfad Auskunft Ltd\nNotice about our opening hours, no charges requested.\nAn old receipt is attached for information:\nInvoice number: OLD-HOLD-EN-402-0081\nAmount: EUR 777.77",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Bergpfad Auskunft Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-402-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-letter-en-2",
+      "split": "confirmation",
+      "family": "confirmation-letter-en",
+      "kind": "letter",
+      "language": "en",
+      "content": "Bergpfad Auskunft Ltd\nNotice about our opening hours, no charges requested.\n\f\nInvoice number: OLD-HOLD-EN-403-0081",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Bergpfad Auskunft Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-403-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-payment-en-0",
+      "split": "confirmation",
+      "family": "confirmation-payment-en",
+      "kind": "payment",
+      "language": "en",
+      "content": "Seeblick Zahlung Ltd\nWe confirm receipt of payment; no new payment is requested.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Seeblick Zahlung Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-payment-en-1",
+      "split": "confirmation",
+      "family": "confirmation-payment-en",
+      "kind": "payment",
+      "language": "en",
+      "content": "Seeblick Zahlung Ltd\nWe confirm receipt of payment; no new payment is requested.\nAn old receipt is attached for information:\nInvoice number: OLD-HOLD-EN-502-0081\nAmount: EUR 777.77",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Seeblick Zahlung Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-502-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-payment-en-2",
+      "split": "confirmation",
+      "family": "confirmation-payment-en",
+      "kind": "payment",
+      "language": "en",
+      "content": "Seeblick Zahlung Ltd\nWe confirm receipt of payment; no new payment is requested.\n\f\nInvoice number: OLD-HOLD-EN-503-0081",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Seeblick Zahlung Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-EN-503-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-invoice-de-0",
+      "split": "confirmation",
+      "family": "confirmation-invoice-de",
+      "kind": "invoice",
+      "language": "de",
+      "content": "Silberweg Transport GmbH\nAbrechnung der gelieferten Leistung. Bitte fristgerecht überweisen.\nBelegangaben\nRechnungsnummer   HOLD-DE-101-0047\nGesamtbetrag: EUR 91.35\nZahlbar bis: 2037-09-23",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Silberweg Transport GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "HOLD-DE-101-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": "2037-09-23",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-invoice-de-1",
+      "split": "confirmation",
+      "family": "confirmation-invoice-de",
+      "kind": "invoice",
+      "language": "de",
+      "content": "Silberweg Transport GmbH\nAbrechnung der gelieferten Leistung. Bitte fristgerecht überweisen.\nBelegangaben\nRechnungsnummer   HOLD-DE-102-0047\nVerweis auf früheren Vorgang:\nRechnungsnummer: OLD-HOLD-DE-102-0081\nGesamtbetrag: EUR 91.35\nZahlbar bis: 2037-09-23",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Silberweg Transport GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "HOLD-DE-102-0047",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": "2037-09-23",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-102-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-invoice-de-2",
+      "split": "confirmation",
+      "family": "confirmation-invoice-de",
+      "kind": "invoice",
+      "language": "de",
+      "content": "Silberweg Transport GmbH\nAbrechnung der gelieferten Leistung. Bitte fristgerecht überweisen.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nRechnungsnummer: OLD-HOLD-DE-103-0081\nBetrag und Fälligkeit nicht angegeben.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Silberweg Transport GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-103-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-contract-de-0",
+      "split": "confirmation",
+      "family": "confirmation-contract-de",
+      "kind": "contract",
+      "language": "de",
+      "content": "Eichenfeld Leasing GmbH\nVereinbarung über die laufende Dienstleistung.\nBelegangaben\nVertragsnummer   HOLD-DE-201-0047\nVertragsbetrag: EUR 91.35\nLaufzeitende: 2039-02-28",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Eichenfeld Leasing GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "HOLD-DE-201-0047",
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-contract-de-1",
+      "split": "confirmation",
+      "family": "confirmation-contract-de",
+      "kind": "contract",
+      "language": "de",
+      "content": "Eichenfeld Leasing GmbH\nVereinbarung über die laufende Dienstleistung.\nBelegangaben\nVertragsnummer   HOLD-DE-202-0047\nVerweis auf früheren Vorgang:\nVertragsnummer: OLD-HOLD-DE-202-0081\nVertragsbetrag: EUR 91.35\nLaufzeitende: 2039-02-28\nFrühere Rechnung, damals fällig: 2031-01-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Eichenfeld Leasing GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "HOLD-DE-202-0047",
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-202-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-contract-de-2",
+      "split": "confirmation",
+      "family": "confirmation-contract-de",
+      "kind": "contract",
+      "language": "de",
+      "content": "Eichenfeld Leasing GmbH\nVereinbarung über die laufende Dienstleistung.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nVertragsnummer: OLD-HOLD-DE-203-0081\nVertragsbetrag: EUR 91.35\nLaufzeitende: 2039-02-28",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Eichenfeld Leasing GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-203-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "contract_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-insurance-de-0",
+      "split": "confirmation",
+      "family": "confirmation-insurance-de",
+      "kind": "insurance",
+      "language": "de",
+      "content": "Morgenrot Reise GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nBelegangaben\nVersicherungsnummer   HOLD-DE-301-0047\nJährlicher Beitrag: EUR 91.35\nLaufzeitende: 2039-02-28",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Morgenrot Reise GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "HOLD-DE-301-0047",
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-insurance-de-1",
+      "split": "confirmation",
+      "family": "confirmation-insurance-de",
+      "kind": "insurance",
+      "language": "de",
+      "content": "Morgenrot Reise GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nBelegangaben\nVersicherungsnummer   HOLD-DE-302-0047\nVerweis auf früheren Vorgang:\nVersicherungsnummer: OLD-HOLD-DE-302-0081\nJährlicher Beitrag: EUR 91.35\nLaufzeitende: 2039-02-28\nFrühere Rechnung, damals fällig: 2031-01-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Morgenrot Reise GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "HOLD-DE-302-0047",
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-302-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-insurance-de-2",
+      "split": "confirmation",
+      "family": "confirmation-insurance-de",
+      "kind": "insurance",
+      "language": "de",
+      "content": "Morgenrot Reise GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nVersicherungsnummer: OLD-HOLD-DE-303-0081\nJährlicher Beitrag: EUR 91.35\nLaufzeitende: 2039-02-28",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Morgenrot Reise GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR91.35",
+          "due_date": null,
+          "end_date": "2039-02-28"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-303-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "policy_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-letter-de-0",
+      "split": "confirmation",
+      "family": "confirmation-letter-de",
+      "kind": "letter",
+      "language": "de",
+      "content": "Bergpfad Auskunft GmbH\nMitteilung zu unseren Öffnungszeiten, keine Abrechnung.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Bergpfad Auskunft GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-letter-de-1",
+      "split": "confirmation",
+      "family": "confirmation-letter-de",
+      "kind": "letter",
+      "language": "de",
+      "content": "Bergpfad Auskunft GmbH\nMitteilung zu unseren Öffnungszeiten, keine Abrechnung.\nAls Anlage ein alter Beleg zur Information:\nRechnungsnummer: OLD-HOLD-DE-402-0081\nAmount: EUR 777.77",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Bergpfad Auskunft GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-402-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-letter-de-2",
+      "split": "confirmation",
+      "family": "confirmation-letter-de",
+      "kind": "letter",
+      "language": "de",
+      "content": "Bergpfad Auskunft GmbH\nMitteilung zu unseren Öffnungszeiten, keine Abrechnung.\n\f\nRechnungsnummer: OLD-HOLD-DE-403-0081",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Bergpfad Auskunft GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-403-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-payment-de-0",
+      "split": "confirmation",
+      "family": "confirmation-payment-de",
+      "kind": "payment",
+      "language": "de",
+      "content": "Seeblick Zahlung GmbH\nWir bestätigen den Eingang der Zahlung, keine neue Forderung.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Seeblick Zahlung GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-payment-de-1",
+      "split": "confirmation",
+      "family": "confirmation-payment-de",
+      "kind": "payment",
+      "language": "de",
+      "content": "Seeblick Zahlung GmbH\nWir bestätigen den Eingang der Zahlung, keine neue Forderung.\nAls Anlage ein alter Beleg zur Information:\nRechnungsnummer: OLD-HOLD-DE-502-0081\nAmount: EUR 777.77",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Seeblick Zahlung GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-502-0081"
+      ],
+      "abstentionCase": false,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    },
+    {
+      "id": "confirmation-payment-de-2",
+      "split": "confirmation",
+      "family": "confirmation-payment-de",
+      "kind": "payment",
+      "language": "de",
+      "content": "Seeblick Zahlung GmbH\nWir bestätigen den Eingang der Zahlung, keine neue Forderung.\n\f\nRechnungsnummer: OLD-HOLD-DE-503-0081",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Seeblick Zahlung GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "OLD-HOLD-DE-503-0081"
+      ],
+      "abstentionCase": true,
+      "targetIdentifier": "invoice_number",
+      "annotation": "Synthetic curated ground truth; bundle fragments do not establish a current ID. Not supplied to the model."
+    }
+  ]
+}

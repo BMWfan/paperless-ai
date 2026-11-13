@@ -1,0 +1,12 @@
+{
+  "revision": "extraction-freeze-v1",
+  "splits": {
+    "training": 10,
+    "development": 30,
+    "confirmation": 30
+  },
+  "files": {
+    "cases.json": "6adebdf23c2800df2da055f4ad2d0f0df110d2bf7446faf7c6935a323b86383a",
+    "protocol.json": "5bf81918b7952379fd9afb11c316054aac410276d1d4ab7770695bec7960060b"
+  }
+}
