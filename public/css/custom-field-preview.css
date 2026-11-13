@@ -8,3 +8,6 @@
 .custom-field-controls{margin:1rem 0;overflow-wrap:anywhere}
 .custom-field-controls button{padding:.5rem 1rem;border:1px solid var(--border-color,#777);border-radius:.4rem;cursor:pointer}
 .custom-field-controls button:disabled{opacity:.5;cursor:not-allowed}
+.custom-field-controls button{margin:.25rem .5rem .25rem 0}
+.custom-field-editor{display:block;box-sizing:border-box;width:100%;max-width:100%;padding:.5rem;margin:.5rem 0;color:inherit;background:var(--bg-primary,transparent);border:1px solid var(--border-color,#777);border-radius:.3rem}
+.custom-field-editor:disabled{opacity:.5}

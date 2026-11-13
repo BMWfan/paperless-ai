@@ -192,7 +192,7 @@ test('manual reviewed saves require selection, reject stale snapshots and never 
   try{
     const context=await browser.newContext({extraHTTPHeaders:key,viewport:{width:1280,height:900}});
     await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
-    let proposed='NEW-42';
+    let proposed='OLD-007';
     await context.route('**/manual/analyze',route=>route.fulfill({json:{document:{title:'Synthetic review',tags:[],custom_fields:[
       {field_name:fieldName,value:proposed},{field_name:invalidName,value:'2031-02-30'}]}}}));
     const page=await context.newPage(),errors=[];let saves=0;
@@ -205,14 +205,29 @@ test('manual reviewed saves require selection, reject stale snapshots and never 
     const analyze=async()=>{await page.locator('#analyzeBtn').click();await page.getByRole('checkbox',{name:`Select ${fieldName}`,exact:true}).waitFor();};
     const select=()=>page.getByRole('checkbox',{name:`Select ${fieldName}`,exact:true});
     const save=()=>page.getByRole('button',{name:'Save selected custom fields',exact:true});
+    const edit=()=>page.getByRole('textbox',{name:`Edit ${fieldName}`,exact:true});
+    const editDate=()=>page.getByRole('textbox',{name:`Edit ${invalidName}`,exact:true});
+    const check=()=>page.getByRole('button',{name:'Check edited values',exact:true});
     await analyze();assert.equal(await save().isDisabled(),true);assert.equal(await select().isChecked(),false);
     assert.equal(await page.getByRole('checkbox',{name:`Select ${invalidName}`,exact:true}).isDisabled(),true);
-    assert.equal(saves,0);await select().check();await save().dblclick();
+    const beforeEdit=await(await native.get(`http://paperless:8000/api/documents/${document.id}/`)).json();
+    await select().check();await edit().fill('NEW-42');
+    assert.equal(await select().isChecked(),false);assert.equal(await select().isDisabled(),true);assert.equal(await save().isDisabled(),true);
+    await check().click();await page.locator('#customFieldPreview [role="status"]').filter({hasText:'Edited values checked'}).waitFor();
+    assert.equal(await select().isChecked(),false);assert.equal(await select().isDisabled(),false);
+    assert.equal(await page.getByRole('checkbox',{name:`Select ${invalidName}`,exact:true}).isDisabled(),true,'invalid correction cannot be selected');
+    await editDate().fill('2032-02-29');await check().click();
+    await page.locator('#customFieldPreview [role="status"]').filter({hasText:'Edited values checked'}).waitFor();
+    const numberRow=page.locator('#customFieldPreview article').filter({has:page.getByRole('heading',{name:fieldName,exact:true})});
+    assert.match(await numberRow.textContent(),/AI suggestionOLD-007/,'original AI proposal stays visible after repeated checks');
+    const afterCheck=await(await native.get(`http://paperless:8000/api/documents/${document.id}/`)).json();
+    assert.equal(afterCheck.modified,beforeEdit.modified);assert.deepEqual(afterCheck.custom_fields,beforeEdit.custom_fields);assert.equal(saves,0);
+    await select().check();await page.getByRole('checkbox',{name:`Select ${invalidName}`,exact:true}).check();await save().dblclick();
     await page.locator('#customFieldPreview [role="status"]').filter({hasText:'Save completed'}).waitFor();
     assert.equal(saves,1,'double click does not issue a second save');assert.equal(await select().isChecked(),false);assert.equal(await save().isDisabled(),true);
     let current=await(await native.get(`http://paperless:8000/api/documents/${document.id}/`)).json();
     assert.equal(current.custom_fields.find(row=>row.field===field.id).value,'NEW-42');assert.equal(current.custom_fields.find(row=>row.field===kept.id).value,'Keep native metadata');
-    assert.ok(!current.custom_fields.some(row=>row.field===invalid.id));
+    assert.equal(current.custom_fields.find(row=>row.field===invalid.id).value,'2032-02-29');
     const events=(await(await app.get(origin+`/api/learning/events?q=${document.id}&limit=200`)).json()).events.filter(row=>row.document_id===document.id);
     assert.ok(events.some(row=>row.source==='confirmed_ui'&&row.status==='pending'),'manual mode still requires learning review');
     fs.mkdirSync('/artifacts',{recursive:true});await page.screenshot({path:'/artifacts/manual-reviewed-fields-desktop.png',fullPage:true,animations:'disabled'});
@@ -233,9 +248,19 @@ test('manual reviewed saves require selection, reject stale snapshots and never 
     proposed='NEW-LAST';await analyze();await select().check();
     let release,reached;const hold=new Promise(resolve=>{release=resolve;});const started=new Promise(resolve=>{reached=resolve;});
     await page.route('**/manual/custom-field-apply',async route=>{const response=await route.fetch();reached();await hold;await route.fulfill({response});});
-    await save().click();await started;await page.locator('#documentSelect').selectOption('');release();
+    await save().click();await started;assert.equal(await edit().isDisabled(),true);assert.equal(await check().isDisabled(),true);
+    await page.locator('#documentSelect').selectOption('');release();
     await page.waitForLoadState('networkidle');
     assert.match(await page.locator('#customFieldPreview').textContent(),/Analyze this document/);assert.equal(saves,4);
+    await page.unroute('**/manual/custom-field-apply');
+    await page.locator('#documentSelect').selectOption(String(document.id));
+    await page.waitForFunction(()=>!document.getElementById('analyzeBtn').disabled);await analyze();
+    await edit().fill('DO-NOT-SAVE');
+    let releaseCheck,reachedCheck;const holdCheck=new Promise(resolve=>{releaseCheck=resolve;});const checking=new Promise(resolve=>{reachedCheck=resolve;});
+    await page.route('**/manual/custom-field-preview',async route=>{const response=await route.fetch();reachedCheck();await holdCheck;await route.fulfill({response});});
+    await check().click();await checking;assert.equal(await edit().isDisabled(),true);
+    await page.locator('#documentSelect').selectOption('');releaseCheck();await page.waitForLoadState('networkidle');
+    assert.match(await page.locator('#customFieldPreview').textContent(),/Analyze this document/);assert.equal(saves,4,'late correction check never writes or populates another document');
     assert.deepEqual(errors,[]);
   }finally{
     await browser.close();await app.post(origin+'/api/learning/settings',{data:previous});await app.dispose();await native.dispose();
