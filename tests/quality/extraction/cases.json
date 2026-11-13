@@ -1,5 +1,5 @@
 {
-  "revision": "extraction-corpus-v1",
+  "revision": "extraction-corpus-v1.1",
   "cases": [
     {
       "id": "training-invoice-en-0",
@@ -448,7 +448,7 @@
       "family": "development-contract-en",
       "kind": "contract",
       "language": "en",
-      "content": "Nordbogen Funk Ltd\nAgreement for ongoing services.\nThe current identifier is not provided.\n\f\nContract number: OLD-STUDY-EN-203-0081\nContract amount: EUR 64.80\nAgreement ends: 2038-11-30",
+      "content": "Nordbogen Funk Ltd\nAgreement for ongoing services.\nThe current identifier is not provided.\nContract amount: EUR 64.80\nAgreement ends: 2038-11-30\n\f\nContract number: OLD-STUDY-EN-203-0081",
       "expected": {
         "title": "Synthetic",
         "document_type": "Contract",
@@ -539,7 +539,7 @@
       "family": "development-insurance-en",
       "kind": "insurance",
       "language": "en",
-      "content": "Kiesel Hausrat Ltd\nInsurance coverage for the agreed period.\nThe current identifier is not provided.\n\f\nPolicy number: OLD-STUDY-EN-303-0081\nAnnual premium: EUR 64.80\nAgreement ends: 2038-11-30",
+      "content": "Kiesel Hausrat Ltd\nInsurance coverage for the agreed period.\nThe current identifier is not provided.\nAnnual premium: EUR 64.80\nAgreement ends: 2038-11-30\n\f\nPolicy number: OLD-STUDY-EN-303-0081",
       "expected": {
         "title": "Synthetic",
         "document_type": "Insurance policy",
@@ -903,7 +903,7 @@
       "family": "development-contract-de",
       "kind": "contract",
       "language": "de",
-      "content": "Nordbogen Funk GmbH\nVereinbarung über die laufende Dienstleistung.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nVertragsnummer: OLD-STUDY-DE-203-0081\nVertragsbetrag: EUR 64.80\nLaufzeitende: 2038-11-30",
+      "content": "Nordbogen Funk GmbH\nVereinbarung über die laufende Dienstleistung.\nZur Zuordnung fehlt die aktuelle Kennung.\nVertragsbetrag: EUR 64.80\nLaufzeitende: 2038-11-30\n\f\nVertragsnummer: OLD-STUDY-DE-203-0081",
       "expected": {
         "title": "Synthetic",
         "document_type": "Contract",
@@ -994,7 +994,7 @@
       "family": "development-insurance-de",
       "kind": "insurance",
       "language": "de",
-      "content": "Kiesel Hausrat GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nVersicherungsnummer: OLD-STUDY-DE-303-0081\nJährlicher Beitrag: EUR 64.80\nLaufzeitende: 2038-11-30",
+      "content": "Kiesel Hausrat GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nZur Zuordnung fehlt die aktuelle Kennung.\nJährlicher Beitrag: EUR 64.80\nLaufzeitende: 2038-11-30\n\f\nVersicherungsnummer: OLD-STUDY-DE-303-0081",
       "expected": {
         "title": "Synthetic",
         "document_type": "Insurance policy",
@@ -1358,7 +1358,7 @@
       "family": "confirmation-contract-en",
       "kind": "contract",
       "language": "en",
-      "content": "Eichenfeld Leasing Ltd\nAgreement for ongoing services.\nThe current identifier is not provided.\n\f\nContract number: OLD-HOLD-EN-203-0081\nContract amount: EUR 91.35\nAgreement ends: 2039-02-28",
+      "content": "Eichenfeld Leasing Ltd\nAgreement for ongoing services.\nThe current identifier is not provided.\nContract amount: EUR 91.35\nAgreement ends: 2039-02-28\n\f\nContract number: OLD-HOLD-EN-203-0081",
       "expected": {
         "title": "Synthetic",
         "document_type": "Contract",
@@ -1449,7 +1449,7 @@
       "family": "confirmation-insurance-en",
       "kind": "insurance",
       "language": "en",
-      "content": "Morgenrot Reise Ltd\nInsurance coverage for the agreed period.\nThe current identifier is not provided.\n\f\nPolicy number: OLD-HOLD-EN-303-0081\nAnnual premium: EUR 91.35\nAgreement ends: 2039-02-28",
+      "content": "Morgenrot Reise Ltd\nInsurance coverage for the agreed period.\nThe current identifier is not provided.\nAnnual premium: EUR 91.35\nAgreement ends: 2039-02-28\n\f\nPolicy number: OLD-HOLD-EN-303-0081",
       "expected": {
         "title": "Synthetic",
         "document_type": "Insurance policy",
@@ -1813,7 +1813,7 @@
       "family": "confirmation-contract-de",
       "kind": "contract",
       "language": "de",
-      "content": "Eichenfeld Leasing GmbH\nVereinbarung über die laufende Dienstleistung.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nVertragsnummer: OLD-HOLD-DE-203-0081\nVertragsbetrag: EUR 91.35\nLaufzeitende: 2039-02-28",
+      "content": "Eichenfeld Leasing GmbH\nVereinbarung über die laufende Dienstleistung.\nZur Zuordnung fehlt die aktuelle Kennung.\nVertragsbetrag: EUR 91.35\nLaufzeitende: 2039-02-28\n\f\nVertragsnummer: OLD-HOLD-DE-203-0081",
       "expected": {
         "title": "Synthetic",
         "document_type": "Contract",
@@ -1904,7 +1904,7 @@
       "family": "confirmation-insurance-de",
       "kind": "insurance",
       "language": "de",
-      "content": "Morgenrot Reise GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nZur Zuordnung fehlt die aktuelle Kennung.\n\f\nVersicherungsnummer: OLD-HOLD-DE-303-0081\nJährlicher Beitrag: EUR 91.35\nLaufzeitende: 2039-02-28",
+      "content": "Morgenrot Reise GmbH\nVersicherungsschutz für den vereinbarten Zeitraum.\nZur Zuordnung fehlt die aktuelle Kennung.\nJährlicher Beitrag: EUR 91.35\nLaufzeitende: 2039-02-28\n\f\nVersicherungsnummer: OLD-HOLD-DE-303-0081",
       "expected": {
         "title": "Synthetic",
         "document_type": "Insurance policy",
