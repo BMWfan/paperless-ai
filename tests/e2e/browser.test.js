@@ -213,6 +213,7 @@ test('manual reviewed saves require selection, reject stale snapshots and never 
     const beforeEdit=await(await native.get(`http://paperless:8000/api/documents/${document.id}/`)).json();
     await select().check();await edit().fill('NEW-42');
     assert.equal(await select().isChecked(),false);assert.equal(await select().isDisabled(),true);assert.equal(await save().isDisabled(),true);
+    await editDate().fill('not-a-date');
     await check().click();await page.locator('#customFieldPreview [role="status"]').filter({hasText:'Edited values checked'}).waitFor();
     assert.equal(await select().isChecked(),false);assert.equal(await select().isDisabled(),false);
     assert.equal(await page.getByRole('checkbox',{name:`Select ${invalidName}`,exact:true}).isDisabled(),true,'invalid correction cannot be selected');
@@ -261,6 +262,12 @@ test('manual reviewed saves require selection, reject stale snapshots and never 
     await check().click();await checking;assert.equal(await edit().isDisabled(),true);
     await page.locator('#documentSelect').selectOption('');releaseCheck();await page.waitForLoadState('networkidle');
     assert.match(await page.locator('#customFieldPreview').textContent(),/Analyze this document/);assert.equal(saves,4,'late correction check never writes or populates another document');
+    await page.unroute('**/manual/custom-field-preview');
+    await page.locator('#documentSelect').selectOption(String(document.id));
+    await page.waitForFunction(()=>!document.getElementById('analyzeBtn').disabled);await analyze();await edit().fill('DO-NOT-SAVE');
+    await page.route('**/manual/custom-field-preview',route=>route.fulfill({status:502,json:{error:'Synthetic preview unavailable'}}));
+    await check().click();await page.getByText('Synthetic preview unavailable',{exact:true}).waitFor();
+    assert.equal(await page.locator('#customFieldPreview input').count(),0);assert.equal(saves,4,'failed read-only check cannot send a save');
     assert.deepEqual(errors,[]);
   }finally{
     await browser.close();await app.post(origin+'/api/learning/settings',{data:previous});await app.dispose();await native.dispose();

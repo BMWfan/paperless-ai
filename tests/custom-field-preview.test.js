@@ -44,7 +44,7 @@ test('preview reports ambiguous fields, invalid values, duplicate proposals and 
 
 test('edited preview reuses native typing and evidence without writing or promoting semantic meaning',async()=>{
   const types=['string','longtext','integer','float','boolean','select','date','monetary','documentlink'];
-  const values=['INV-007','Current document',0,0,false,'Approved','2032-2-29','42.50 EUR','7'];
+  const values=['INV-007','Current document','0','0','false','Approved','2032-2-29','42.50 EUR','7'];
   const content='Current document INV-007 2032-02-29 EUR 42.50 false 0';
   const document={content,custom_fields:[],modified:'2030-01-01'};
   const paperless={async getDocument(){return structuredClone(document);},async getCustomFieldDefinitionMatches(name){
