@@ -42,7 +42,7 @@
         label.append(checkbox,document.createTextNode(' Select this value after checking its meaning.'));article.append(label);
       }
       const values=node('dl');
-      for(const [label,value]of [['Current value',row.currentValue],['AI suggestion',originals[index]],['Reviewed proposal',row.proposedValue],['Typed value',row.normalizedValue]])values.append(node('dt',label),node('dd',display(value)));
+      for(const [label,value]of [['Current value',row.currentValue],['AI suggestion',originals[index]],['Draft proposal',row.proposedValue],['Typed value',row.normalizedValue]])values.append(node('dt',label),node('dd',display(value)));
       article.append(values,node('p','Field meaning is unverified. A text occurrence is not proof of the correct field.'));
       if(selectable&&row.canEdit){
         const label=node('label'),editor=node(row.type==='longtext'?'textarea':'input');
