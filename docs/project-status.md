@@ -54,8 +54,9 @@ data loses all coverage. The candidate is not qualified and is not activated.
 Use its PR for exact current-head verification/review; PR26 was separately owner-approved and integrated. No production activation.
 The approved [model qualification](extraction-model-qualification.md) now adds
 a separate opt-in inference/replay profile on feat/extraction-model-qualification;
-its fixed results and exact tested head remain in its PR. No new quality result
-is claimed before measurement. Merge and activation remain separate approvals.
+its270 real answers are now archived. B/C fail confirmation (wrong ID
+acceptances remain and positive coverage declines); no production promotion.
+Exact current native replay/CI evidence and tested heads remain in its PR. Merge and activation remain separate approvals.
 
 ## Remaining requirements
 

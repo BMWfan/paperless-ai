@@ -95,3 +95,14 @@ correct proposals versus4/10 with the old label gate, but both accept two wrong
 unmarked-attachment IDs. It fails the frozen zero-false-acceptance criterion.
 On unheaded old data it abstains completely, losing all375 correct archived
 proposals. No new model inference or production improvement is claimed.
+
+## Follow-up: real1.5B/3B and evidence-contract measurement
+
+The [new qualification](extraction-model-qualification.md) ran270 real responses
+on separately frozen data at source f33937c/run43463132516. Both new candidates
+fail: confirmation B retains8/10 current IDs with5 wrong accepted assignments;
+C retains4/10 then3/10 with3 then2 wrong assignments. A retains10/10 but has9
+false assignments per seed. C's quote checking also loses correct values and
+positive amount coverage. Raw records and reproducible counters remain archived;
+no model/prompt/default is promoted. These new-data results do not overwrite or
+rescore the earlier pilot's distinct corpus/contract.

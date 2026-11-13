@@ -2,7 +2,9 @@
 
 SPEC #20 approved M-plan; branch `feat/extraction-model-qualification` after PR26.
 This is an isolated experiment, not a new provider/default or production guard.
-No model-quality outcome is claimed until the fixed run and replay are complete.
+The fixed270-answer run is complete; both candidates fail qualification. No
+production/default is changed. Native API replay is separate integration evidence;
+its exact tested head/run/results are recorded in PR #27.
 
 ## Inputs fixed before inference
 
@@ -92,7 +94,8 @@ Archive original bytes/manifests with source run/commit. Reproduction means
 re-scoring those saved answers; a fresh model generation is a new measured run,
 not the original evidence. The dispatch-only `replay` stage uses archived outputs
 with the official ngx3.4.2 synthetic stack, never a production endpoint. It checks
-all accepted typed values/unrelated-field preservation and that predictions
+all350 accepted typed field assignments across270 snapshots, unrelated-field
+preservation and that predictions
 never become active learning examples. That checks integration, not correctness.
 
 ## Fixed decision and rollback
@@ -109,3 +112,93 @@ native definitions/compatibility and owner approval. No automatic promotion;
 #20/#12 remain open until their actual requirements are met. Removing experimental
 files/opt-in stages/docs rolls back without changing stored metadata/learning or
 user model settings. Merge, release/publication and deployment remain separate.
+
+## Actual outcome — original run43463132516
+
+[Measurement](https://github.com/BMWfan/paperless-ai/actions/runs/43463132516),
+actual source head `f33937c884964bf611d8c1da761384ffd9606d2f`. All nine batches
+completed,270 unique scheduled responses, no request/JSON/schema failures. Every
+original ZIP was downloaded and independently hash-verified. Original report
+bytes (including token-context arrays) are losslessly gzip-preserved under
+[archive](../tests/quality/extraction/archive/manifest.json); both compressed-file and decoded-original hashes are checked. Generated-file
+attributes collapse review payloads; decoding reproduces the exact source bytes. Artifact
+IDs/ZIP hashes are in [provenance](../tests/quality/extraction/artifact-sources.json).
+The executable [result](../tests/quality/extraction/results.json) verifies all
+inputs, model locks, contexts, parsed raw answers and scores. Postprocessing adds
+sorted directory iteration and typed-input retention diagnostics only; no
+predictions, validation rules, prompts or thresholds were changed after inference.
+
+Each30-document test split contains10 present target IDs,10 missing applicable
+IDs and10 non-ID documents. There are90 possible invoice/contract/policy slots;
+wrong acceptances are field assignments, not distinct documents. All270 rows
+repeat60 distinct test documents across arms/seeds, not270 independent documents.
+
+| Split | Arm/seed | Correct typed ID input | Correct IDs retained /10 | Correct input IDs lost | Wrong IDs accepted | Of these in absent fields |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Development | A/42 | 8 | 8 | 0 | 9 | 9 |
+| Development | B/42 | 9 | 9 | 0 | 7 | 6 |
+| Development | C/42 | 7 | 3 | 4 | 0 | 0 |
+| Confirmation | A/42 | 10 | 10 | 0 | 9 | 9 |
+| Confirmation | A/43 | 10 | 10 | 0 | 9 | 9 |
+| Confirmation | B/42 | 8 | 8 | 0 | 5 | 4 |
+| Confirmation | B/43 | 8 | 8 | 0 | 5 | 4 |
+| Confirmation | C/42 | 8 | 4 | 4 | 3 | 2 |
+| Confirmation | C/43 | 9 | 3 | 6 | 2 | 1 |
+
+B lowers false assignments versus A but loses two correct present IDs. It fails
+zero-wrong acceptance and no-regression. C's four/six lost correct typed inputs
+are rejected for evidence-value/range mismatch, not missing model values. C also
+retains semantic wrong-field/absent-ID errors despite literal evidence. It fails
+zero-wrong acceptance,80% positive coverage and no-regression. Development C's
+zero wrong assignments does not survive confirmation; do not select that split
+as the result or relax validation after seeing losses. A itself is unsafe in
+this test despite10/10 present-ID recall because it populates absent fields.
+
+Other validated fields on confirmation (each seed separately):
+
+| Arm/seed | Amount correct /18; wrong accepted | Due date correct /6; wrong accepted | End date correct /12; wrong accepted |
+| --- | --- | --- | --- |
+| A/42 and43 | 18;2 | 6;2 | 12;0 |
+| B/42 and43 | 16;2 | 6;0 | 12;0 |
+| C/42 and43 | 0;0 | 0;1 | 2;0 |
+
+C's lack of accepted wrong amounts accompanies complete loss of positive amount
+coverage; this is not accurate extraction. Per-field raw/validated scores,
+correct typed inputs/loss reasons, missing-target/inapplicable counts, language
+breakdowns and errors remain in the full result. No raw score is retroactively
+replaced with a normalized success. Sender/type/language results use the frozen
+existing metadata comparator, not strict new verbatim scoring.
+
+On confirmation, A classifies type/tags30/30, sender/language27/30 in each seed.
+B has type/tags/sender29/30 and language30/30. C has type/tags29/30 then30/30,
+sender30/30 and language29/30 in both seeds. These mixed tradeoffs do not justify
+a global model switch. Requested seeds42/43 at temperature0 are repeat executions,
+not independent stochastic samples or a statistical generalization guarantee.
+
+Measured batch request times: A710/1043/783s, B1719/1434/1578s,
+C1904/2331/2152s (development42, confirmation42, confirmation43).
+Hardware/token/timing metadata is retained per original report; independent
+runner variability prevents claiming a tightly controlled latency comparison.
+Same-author, artificial prefixes/absence cues and limited genre/field coverage
+also constrain generalization. Text occurrence/quote positions do not prove
+current ownership, especially near historical references and bundle boundaries.
+No arbitrary-field/provider/OCR/PDF or production accuracy is established.
+
+**Decision: neither B nor C qualifies for a production-integration proposal on
+these results.** Existing user settings, reference selection, provider paths,
+learning/provenance and Manual confirmed saving stay unchanged. Do not rerun the
+frozen confirmation cases to seek a favorable seed or promote a larger model on
+language scores alone. #20/#12 remain open for actual semantic reliability.
+
+Re-score saved answers without model generation:
+
+```sh
+node tests/quality/extraction/report.js tests/quality/extraction/archive extraction-summary.json
+sha256sum extraction-summary.json
+```
+
+Use the recorded source/data revisions when comparing future evaluator changes;
+input source hashes and original answer bytes distinguish a converter/evaluator
+change from a new model result. Native replay checks representability and
+preservation only; successfully writing a wrong synthetic value does not make it
+semantically correct. The current PR links actual replay and CI evidence.

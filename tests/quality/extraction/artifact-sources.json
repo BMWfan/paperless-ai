@@ -1,0 +1,51 @@
+{
+  "sourceRun": 43463132516,
+  "sourceCommit": "f33937c884964bf611d8c1da761384ffd9606d2f",
+  "artifacts": [
+    {
+      "id": 14067570184,
+      "name": "extraction-C-confirmation-43",
+      "zipSHA256": "sha256:8a33d37c1da2bec176eb7e14821bd855b54dbc0f7423cd61684093548b86d49e"
+    },
+    {
+      "id": 14066275652,
+      "name": "extraction-B-confirmation-43",
+      "zipSHA256": "sha256:7b79b803882e3a4023abe901d169ad4550792798f759358ab6e5c4c9a2e3077e"
+    },
+    {
+      "id": 14062979215,
+      "name": "extraction-C-confirmation-42",
+      "zipSHA256": "sha256:b29e43b3898e739d3b62ff03285942f392b5248ff2faa47aefe4b0f80b317726"
+    },
+    {
+      "id": 14062653283,
+      "name": "extraction-A-confirmation-43",
+      "zipSHA256": "sha256:61a8bcab3d22b3fc723afd1e6215adb77ac7a06fdafda08a6d103a94769c383f"
+    },
+    {
+      "id": 14062571561,
+      "name": "extraction-B-confirmation-42",
+      "zipSHA256": "sha256:41c2ed211ad509b639902c25a80b7f9889dca7543d957aa0345c178d89036a53"
+    },
+    {
+      "id": 14061411383,
+      "name": "extraction-C-development-42",
+      "zipSHA256": "sha256:61b7bf5e30350dbdbffe1601eed588827885f299eab87352b9de16f5c1c755fe"
+    },
+    {
+      "id": 14061341811,
+      "name": "extraction-A-confirmation-42",
+      "zipSHA256": "sha256:8a3bc80793a09455b72d4cb8cc17d626b5a66ed766b6529cd07ef33f8a57a698"
+    },
+    {
+      "id": 14059717011,
+      "name": "extraction-B-development-42",
+      "zipSHA256": "sha256:33c131af4f68958b1873832107842e1bd5dd4a87e6aeabe0df7de67884a6f591"
+    },
+    {
+      "id": 14058770895,
+      "name": "extraction-A-development-42",
+      "zipSHA256": "sha256:7b3387a565c7a99fbfadda9f3119bc7d007cebde41a43d62353e6f31ca4f5f66"
+    }
+  ]
+}

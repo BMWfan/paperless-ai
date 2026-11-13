@@ -1,0 +1,27 @@
+{
+  "sourceRun": 43463132516,
+  "sourceCommit": "f33937c884964bf611d8c1da761384ffd9606d2f",
+  "attempts": 270,
+  "files": {
+    "extraction-A-confirmation-42.json.gz": "37af7f3ea49f5d7515566337ed5b518186ead361b2719428b977665ab6d881c7",
+    "extraction-A-confirmation-43.json.gz": "ee355740a15d9dd7e52676342645be1c975074add82b5d2b4cfcbc802436cb0e",
+    "extraction-A-development-42.json.gz": "be79ca11d61d385aa2dd122f64070ad55d02231e721be8a175b1071098bf4655",
+    "extraction-B-confirmation-42.json.gz": "399c56f072ae9592c40763d92ef86aaa463773be88d7ccc5eeeff474ab0375b1",
+    "extraction-B-confirmation-43.json.gz": "733ba17561310aa88541b4099f2670a45fb1508dfc394fbcb25ecf493fcecbcc",
+    "extraction-B-development-42.json.gz": "be59ca5d7b346ff18e26c3cf9528bf49d94b472e3d47310655851751b0dfc351",
+    "extraction-C-confirmation-42.json.gz": "d008e3d768ea242b9741d5500413e6e13993f1eee6d9dde0a45a2593afdf9ada",
+    "extraction-C-confirmation-43.json.gz": "8f92145030ed8af23f46101b5f4360fd55a4c49ad314a72140e9c0f02fbce11c",
+    "extraction-C-development-42.json.gz": "02c38527640b7fc965463316d7c874807811706f87a71c80e77136de41441b45"
+  },
+  "decodedSHA256": {
+    "extraction-A-confirmation-42.json.gz": "133767d72f2f2c084c2aeeb685a370372b33d9f7e11dd11a6c45e77c26774fa5",
+    "extraction-A-confirmation-43.json.gz": "ec3d44c82c84e4a5baf40e5bf8a6635c2956e3fc37ff4045583636a369565785",
+    "extraction-A-development-42.json.gz": "0b4b75034099c1c6b8b01fdf26e5fe1bbfd5e710b99d9061763c832d8182a019",
+    "extraction-B-confirmation-42.json.gz": "79bd772997348e09ecee01fe060407c1109c1ef0195deecd943fd6a0e77479c1",
+    "extraction-B-confirmation-43.json.gz": "dd0b814d4d068923cb4979621dc80ad7d0bcc180844e6f3168d8ae2c502e4d6b",
+    "extraction-B-development-42.json.gz": "f639646b273ed747cab67a067b31e61c2fbcb4b4857b289a14bf26f621dd3d42",
+    "extraction-C-confirmation-42.json.gz": "4eba56fbfd22cd63ab3ccb52c7f325ab4e1db5278c6730ae0dee6ae02d8d87a5",
+    "extraction-C-confirmation-43.json.gz": "d7a487c69cc8688ce811526571e3cf706221e78034aada3061f3f820c8136547",
+    "extraction-C-development-42.json.gz": "0a30907b34af6c2a38ec9e2ae3a031900461a03e7d4238c09520b80eea798c72"
+  }
+}

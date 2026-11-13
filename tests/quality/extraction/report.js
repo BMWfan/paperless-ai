@@ -1,13 +1,16 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {load,hash,validate,scores,summarize,identifierTotals,referenceInput}=require('./core');
+const {normalizeValue}=require('../../../services/customFieldUpdates');
+const {fieldTypes}=require('../corpus');
+function reportBytes(file){const bytes=fs.readFileSync(file);return file.endsWith('.gz')?require('node:zlib').gunzipSync(bytes,{maxOutputLength:16*1024*1024}):bytes;}
 function aggregate(directory){
   const {cases,protocol,manifest}=load(),training=cases.filter(row=>row.split==='training');
-  const reports=fs.readdirSync(directory).filter(name=>/^extraction-[ABC]-(development|confirmation)-4[23]\.json$/.test(name)).map(name=>({name,bytes:fs.readFileSync(path.join(directory,name))}));
+  const reports=fs.readdirSync(directory).sort().filter(name=>/^extraction-[ABC]-(development|confirmation)-4[23]\.json(?:\.gz)?$/.test(name)).map(name=>({name,bytes:reportBytes(path.join(directory,name)),containerDigest:hash(fs.readFileSync(path.join(directory,name)))}));
   assert.equal(reports.length,9,'all nine measured jobs required');
   const result={revision:protocol.revision,sourceFiles:{},sources:[],groups:{},qualification:{},productionActivation:false,attempts:0};
   const seen=new Set(),contexts=new Map(),expectedContexts=new Map(),runs=new Set(),commits=new Set();
-  for(const {name,bytes}of reports){
+  for(const {name,bytes,containerDigest}of reports){
     const report=JSON.parse(bytes);runs.add(report.run);commits.add(report.commit);const key=`${report.arm}/${report.split}/${report.seed}`;
     assert.ok(!seen.has(key));seen.add(key);assert.ok(protocol.arms[report.arm]);assert.ok(protocol.seeds[report.split].includes(report.seed));
     assert.deepEqual(report.manifest,manifest);assert.equal(report.model,protocol.arms[report.arm].model);assert.equal(report.modelDigest,require('./model-locks.json')[report.model]);
@@ -23,8 +26,21 @@ function aggregate(directory){
       const contextKey=fixture.id;if(contexts.has(contextKey))assert.equal(row.contextDigest,contexts.get(contextKey));else contexts.set(contextKey,row.contextDigest);
     }
     const summary=summarize(report.rows,cases);assert.deepEqual(summary,report.summary);
-    result.groups[key]={...summary,identifiers:identifierTotals(summary),byLanguage:Object.fromEntries(['en','de'].map(language=>[language,summarize(report.rows.filter(row=>cases.find(item=>item.id===row.id).language===language),cases)]))};
-    result.sources.push({name,sha256:hash(bytes),commit:report.commit,run:report.run,modelDigest:report.modelDigest});result.attempts+=report.rows.length;
+    const proposalDiagnostics={};
+    for(const [field,data_type]of Object.entries(fieldTypes)){
+      const detail={correctTypedInput:0,correctTypedRetained:0,correctTypedLost:0,lossReasons:{}};
+      for(const row of report.rows){
+        const expected=cases.find(item=>item.id===row.id).expected.custom_fields[field];
+        if(expected!==null&&normalizeValue(row.actual?.custom_fields?.[field],{data_type})===expected){
+          detail.correctTypedInput++;
+          if(Object.hasOwn(row.validation.accepted,field))detail.correctTypedRetained++;
+          else {detail.correctTypedLost++;const reason=row.validation.rejected[field]||'protocol_failure';detail.lossReasons[reason]=(detail.lossReasons[reason]||0)+1;}
+        }
+      }
+      proposalDiagnostics[field]=detail;
+    }
+    result.groups[key]={...summary,proposalDiagnostics,identifiers:identifierTotals(summary),byLanguage:Object.fromEntries(['en','de'].map(language=>[language,summarize(report.rows.filter(row=>cases.find(item=>item.id===row.id).language===language),cases)]))};
+    result.sources.push({name,sha256:hash(bytes),containerSHA256:containerDigest,commit:report.commit,run:report.run,modelDigest:report.modelDigest});result.attempts+=report.rows.length;
   }
   assert.equal(result.attempts,protocol.maxRequests);assert.equal(runs.size,1);assert.equal(commits.size,1);
   for(const arm of ['B','C']){
@@ -39,4 +55,4 @@ function aggregate(directory){
   return result;
 }
 if(require.main===module){const report=aggregate(process.argv[2]);const output=JSON.stringify(report,null,2)+'\n';if(process.argv[3])fs.writeFileSync(process.argv[3],output);else process.stdout.write(output);}
-module.exports={aggregate};
+module.exports={aggregate,reportBytes};

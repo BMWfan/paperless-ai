@@ -3,12 +3,12 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 require('dotenv').config({path:'data/.env'});
 assert.equal(process.env.PAPERLESS_API_URL,'http://paperless:8000/api');
-const {load,hash}=require('./core'),{aggregate}=require('./report');
+const {load,hash}=require('./core'),{aggregate,reportBytes}=require('./report');
 const {buildCustomFieldUpdates}=require('../../../services/customFieldUpdates');
 const {fieldTypes}=require('../corpus');
 const directory=path.join(__dirname,'archive');
 const archive=require('./archive/manifest.json');
-for(const [name,digest]of Object.entries(archive.files))assert.equal(hash(fs.readFileSync(path.join(directory,name))),digest);
+for(const [name,digest]of Object.entries(archive.files)){assert.equal(hash(fs.readFileSync(path.join(directory,name))),digest);assert.equal(hash(reportBytes(path.join(directory,name))),archive.decodedSHA256[name]);}
 const qualification=aggregate(directory),{cases}=load();
 const result={commit:process.env.GITHUB_SHA||null,sourceRun:archive.sourceRun,attempts:0,typedAssignments:0,unrelatedPreserved:0,documents:0,qualification:qualification.qualification};
 async function api(route,body,method='PATCH'){
@@ -31,7 +31,7 @@ async function examples(){const response=await fetch('http://ai:3000/api/learnin
     assert.ok(document,`Synthetic ingestion: ${fixture.id}`);documents.set(fixture.id,document.id);result.documents++;
   }
   for(const name of Object.keys(archive.files).filter(name=>name.startsWith('extraction-'))){
-    const report=JSON.parse(fs.readFileSync(path.join(directory,name)));
+    const report=JSON.parse(reportBytes(path.join(directory,name)));
     for(const row of report.rows){
       const id=documents.get(row.id);assert.ok(id);
       await api(`/documents/${id}/`,{custom_fields:[{field:definitions.extraction_unrelated.id,value:'preserve unrelated'}]});

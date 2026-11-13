@@ -116,3 +116,15 @@ test('measurement runner archives every attempt once, including HTTP and JSON er
     assert.equal(report.rows[0].error.response,'synthetic unavailable');assert.equal(report.rows[1].response.response,'invalid JSON');assert.equal(report.commit,'synthetic-child-test');
   }finally{await new Promise(resolve=>server.close(resolve));fs.rmSync(directory,{recursive:true,force:true});}
 });
+
+test('archived270 real answers preserve checksums, failures and the unqualified decision',()=>{
+  const fs=require('node:fs'),path=require('node:path'),{hash}=require('./quality/extraction/core'),{aggregate}=require('./quality/extraction/report');
+  const directory=path.join(__dirname,'quality/extraction/archive'),manifest=require('./quality/extraction/archive/manifest.json');
+  assert.equal(manifest.sourceRun,43463132516);assert.equal(Object.keys(manifest.files).length,9);
+  for(const [name,digest]of Object.entries(manifest.files)){assert.equal(hash(fs.readFileSync(path.join(directory,name))),digest,'stored report bytes must not change');assert.equal(hash(require('./quality/extraction/report').reportBytes(path.join(directory,name))),manifest.decodedSHA256[name],'decoded original bytes must not change');}
+  const result=aggregate(directory),expected=require('./quality/extraction/results.json');assert.deepEqual(result,expected);
+  assert.equal(result.attempts,270);assert.equal(result.productionActivation,false);
+  assert.equal(result.qualification.B.qualifiedForLaterProposal,false);assert.equal(result.qualification.C.qualifiedForLaterProposal,false);
+  assert.deepEqual(result.qualification.C.seeds.map(row=>[row.correct,row.wrong]),[[4,3],[3,2]]);
+  assert.equal(result.groups['C/confirmation/42'].proposalDiagnostics.invoice_number.correctTypedLost+result.groups['C/confirmation/42'].proposalDiagnostics.contract_number.correctTypedLost+result.groups['C/confirmation/42'].proposalDiagnostics.policy_number.correctTypedLost,4);
+});
