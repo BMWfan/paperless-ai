@@ -226,7 +226,6 @@ jobs:
           EXTRACTION_SEED: ${{ matrix.seed }}
           EXTRACTION_OUTPUT: extraction-${{ matrix.arm }}-${{ matrix.split }}-${{ matrix.seed }}.json
           NO_PROXY: localhost,127.0.0.1
-          no_proxy: localhost,127.0.0.1
         run: |
           export GITHUB_SHA="$(git rev-parse HEAD)"
           node tests/quality/extraction/run.js
