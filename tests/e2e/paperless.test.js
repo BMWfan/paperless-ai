@@ -273,7 +273,7 @@ test('real manual API honors modes, multi-field protection and legacy revocation
 test('reviewed fields apply only with a current snapshot and retain learning/workflow provenance', {timeout:180000},async()=>{
   const previous=await learning('/settings');
   const json={'Content-Type':'application/json'},key={...json,'x-api-key':'isolated-test-api-key'};
-  const stamp=Date.now(),name=`reviewed-fields-${stamp}.txt`;
+  const stamp=Date.now(),name=`synthetic-reviewed-fields-${stamp}.txt`;
   const content=`Synthetic review ${stamp}\nCurrent number NEW-42\nDue date2032-02-29\nHistorical reference OLD-007`;
   const form=new FormData();form.set('document',new Blob([content],{type:'text/plain'}),name);
   await api('/documents/post_document/',{method:'POST',body:form});
