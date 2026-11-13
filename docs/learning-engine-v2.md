@@ -1,5 +1,16 @@
 # Learning Engine v2
 
+## Reviewed Custom-Field saves
+
+The [Manual field-review contract](custom-field-preview.md) adds explicit
+selection and snapshot/type validation before native writes. Its optional guard
+runs inside the existing writer exclusion, preserving unselected current values
+and the current provenance/learning modes. It introduces no migration or separate
+proposal database. A selected save is distinct from reviewing a stored learning
+event, and neither a text match nor an AI confidence claim confirms a field.
+External native writes can still race the final PATCH; no server-side
+compare-and-set or global atomicity is claimed.
+
 ## Goals
 
 - Automatically detect metadata corrections in Paperless-ngx, with optional confirmation.

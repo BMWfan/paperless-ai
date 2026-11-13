@@ -269,3 +269,88 @@ test('real manual API honors modes, multi-field protection and legacy revocation
   assert.match(html,/Confirmed learning examples/);assert.match(html,/Review history/);assert.match(html,/learning.css/);
   assert.equal((await fetch('http://ai:3000/learning',{redirect:'manual'})).status,302,'the dashboard uses the existing login flow');
 });
+
+test('reviewed fields apply only with a current snapshot and retain learning/workflow provenance', {timeout:180000},async()=>{
+  const previous=await learning('/settings');
+  const json={'Content-Type':'application/json'},key={...json,'x-api-key':'isolated-test-api-key'};
+  const stamp=Date.now(),name=`synthetic-reviewed-fields-${stamp}.txt`;
+  const content=`Synthetic review ${stamp}\nCurrent number NEW-42\nDue date2032-02-29\nHistorical reference OLD-007`;
+  const form=new FormData();form.set('document',new Blob([content],{type:'text/plain'}),name);
+  await api('/documents/post_document/',{method:'POST',body:form});
+  let document;
+  for(let attempt=0;attempt<90;attempt++){
+    document=(await api('/documents/?ordering=-id')).results.find(row=>row.original_file_name===name);if(document)break;
+    await new Promise(resolve=>setTimeout(resolve,1000));
+  }
+  assert.ok(document);
+  const create=(resource,data)=>api(`/${resource}/`,{method:'POST',headers:json,body:JSON.stringify(data)});
+  const number=await create('custom_fields',{name:`Reviewed number ${stamp}`,data_type:'string'});
+  const date=await create('custom_fields',{name:`Reviewed date ${stamp}`,data_type:'date'});
+  const kept=await create('custom_fields',{name:`Reviewed untouched ${stamp}`,data_type:'string'});
+  await api(`/documents/${document.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({custom_fields:[{field:number.id,value:'OLD'},{field:kept.id,value:'Preserve me'}]})});
+  const suggestions=value=>[{field_name:number.name,value},{field_name:date.name,value:'2032-2-29'}];
+  async function preview(value){
+    const current=await api(`/documents/${document.id}/`);
+    const response=await fetch('http://ai:3000/manual/custom-field-preview',{method:'POST',headers:key,
+      body:JSON.stringify({documentId:document.id,content:current.content.slice(0,50000),suggestions:suggestions(value)})});
+    assert.equal(response.status,200);return response.json();
+  }
+  const request=(receipt,fields)=>({documentId:document.id,snapshotDigest:receipt.snapshotDigest,reviewFieldIds:receipt.reviewFieldIds,fields});
+  const apply=body=>fetch('http://ai:3000/manual/custom-field-apply',{method:'POST',headers:key,body:JSON.stringify(body)});
+  const events=async()=> (await learning(`/events?q=${document.id}&limit=200`)).events.filter(row=>row.document_id===document.id);
+  let workflow;
+  try{
+    await learning('/settings',{mode:'manual',enabled:false,stabilizationMs:0});await learning('/scan',{});
+    for(const mode of ['manual','automatic','hybrid','disabled']){
+      await learning('/settings',{mode});const value=`NEW-${mode}`;
+      const receipt=await preview(value),before=await api(`/documents/${document.id}/`),count=(await events()).length;
+      assert.equal((await apply(request(receipt,[]))).status,400);
+      assert.equal((await api(`/documents/${document.id}/`)).modified,before.modified,'no selection does not write');
+      const selected=[{field:number.id,value},{field:date.id,value:'2032-2-29'}];
+      const response=await apply(request(receipt,selected));assert.equal(response.status,200);
+      const after=await api(`/documents/${document.id}/`);assert.equal(after.title,before.title);assert.deepEqual(after.tags,before.tags);
+      const values=new Map(after.custom_fields.map(row=>[row.field,row.value]));
+      assert.equal(values.get(number.id),value);assert.equal(values.get(date.id),'2032-02-29');assert.equal(values.get(kept.id),'Preserve me');
+      if(mode==='manual'){
+        const scan=await fetch('http://ai:3000/api/scan/now',{method:'POST',headers:{'x-api-key':'isolated-test-api-key'}});
+        assert.equal(scan.status,200);
+        const scanned=await api(`/documents/${document.id}/`);
+        assert.deepEqual(scanned.custom_fields,after.custom_fields,'existing processed marker prevents a later scan from reclassifying the manual selection');
+        assert.equal(scanned.title,after.title);
+      }
+      const changes=await events();
+      if(mode==='disabled')assert.equal(changes.length,count);
+      else {assert.equal(changes[0].source,'confirmed_ui');assert.equal(changes[0].status,mode==='manual'?'pending':'confirmed');}
+      assert.equal((await apply(request(receipt,selected))).status,409,'old receipt does not repeat a save');
+    }
+    await learning('/settings',{mode:'automatic'});
+    let receipt=await preview('MUST-NOT-APPLY');
+    await api(`/documents/${document.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({title:'External edit after preview'})});
+    assert.equal((await apply(request(receipt,[{field:number.id,value:'MUST-NOT-APPLY'}]))).status,409);
+    receipt=await preview('MUST-NOT-APPLY');
+    await api(`/custom_fields/${number.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({name:`Renamed ${number.name}`})});
+    assert.equal((await apply(request(receipt,[{field:number.id,value:'MUST-NOT-APPLY'}]))).status,409,'native definition changes invalidate the receipt');
+    await api(`/custom_fields/${number.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({name:number.name})});
+    receipt=await preview('MUST-NOT-APPLY');const beforeInvalid=await api(`/documents/${document.id}/`);
+    assert.equal((await apply(request(receipt,[{field:number.id,value:'MUST-NOT-APPLY'},{field:date.id,value:'2031-02-30'}]))).status,400);
+    assert.deepEqual((await api(`/documents/${document.id}/`)).custom_fields,beforeInvalid.custom_fields,'invalid selected batch has no partial write');
+    const tag=await create('tags',{name:`Reviewed workflow ${stamp}`,matching_algorithm:0});
+    await api(`/documents/${document.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({tags:[tag.id]})});await learning('/scan',{});
+    workflow=await create('workflows',{name:`Reviewed fields workflow ${stamp}`,order:1,enabled:true,
+      triggers:[{type:3,filter_has_tags:[tag.id]}],actions:[{type:1,assign_title:'Workflow-owned reviewed title'}]});
+    receipt=await preview('WORKFLOW-42');
+    assert.equal((await apply(request(receipt,[{field:number.id,value:'WORKFLOW-42'}]))).status,200);
+    let after;
+    for(let attempt=0;attempt<45;attempt++){
+      after=await api(`/documents/${document.id}/`);if(after.title==='Workflow-owned reviewed title')break;
+      await new Promise(resolve=>setTimeout(resolve,1000));
+    }
+    assert.equal(after.title,'Workflow-owned reviewed title');await learning('/scan',{});
+    const changes=await events();
+    assert.ok(!changes.some(row=>row.status==='confirmed'&&row.metadata.title==='Workflow-owned reviewed title'));
+    assert.ok(changes.some(row=>row.source==='unknown'&&row.status==='pending'&&row.metadata.title==='Workflow-owned reviewed title'));
+  }finally{
+    if(workflow)await api(`/workflows/${workflow.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({enabled:false})});
+    await learning('/settings',previous);
+  }
+});

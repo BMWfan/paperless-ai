@@ -1,6 +1,7 @@
 'use strict';
 const {createHash}=require('node:crypto');
 const {normalizeValue}=require('./customFieldUpdates');
+const {snapshotDigest,isReviewableType}=require('./customFieldReview');
 const digest=text=>createHash('sha256').update(text).digest('hex');
 
 function occurrences(content,candidates){
@@ -30,7 +31,7 @@ async function previewCustomFields(paperless,documentId,content,suggestions){
   if(!fullContent||content!==fullContent.slice(0,50000)){
     const error=new Error('Document text changed. Reload the document and analyze again.');error.status=409;throw error;
   }
-  const names=new Map(),rows=[];
+  const names=new Map(),definitions=new Map(),rows=[];
   for(const suggestion of Object.values(suggestions)){
     const name=typeof suggestion?.field_name==='string'?suggestion.field_name.trim():'';
     if(!name||name.length>128)continue;
@@ -40,10 +41,12 @@ async function previewCustomFields(paperless,documentId,content,suggestions){
     if(!Array.isArray(matches?.results)||!Number.isSafeInteger(matches.count)||matches.count<0||
       (matches.count===1&&(!Number.isSafeInteger(matches.results[0]?.id)||matches.results[0].id<=0)))throw new Error('Invalid custom field definitions');
     const definition=matches.count===1?matches.results[0]:null;
+    if(definition)definitions.set(definition.id,definition);
     const raw=suggestion.value;
     const normalized=definition&&raw!=null?normalizeValue(raw,definition):undefined;
     const flags=[];
     if(!definition)flags.push(matches.count>1?'ambiguous_field':'unknown_field');
+    else if(!isReviewableType(definition.data_type))flags.push('unsupported_type');
     if(raw===null||raw===undefined||raw==='')flags.push('not_provided');
     else if(definition&&normalized===undefined)flags.push('invalid_value');
     const evidence=occurrences(content,[typeof raw==='string'?raw:typeof raw==='number'||typeof raw==='boolean'?String(raw):'',
@@ -55,8 +58,13 @@ async function previewCustomFields(paperless,documentId,content,suggestions){
       proposedValue:raw??null,normalizedValue:normalized??null,flags,evidence,semanticStatus:'unverified'});
   }
   const ids=rows.map(row=>row.fieldId).filter(id=>id!==null);
-  for(const row of rows)if(row.fieldId!==null&&ids.filter(id=>id===row.fieldId).length>1)row.flags.push('multiple_proposals');
+  for(const row of rows){
+    if(row.fieldId!==null&&ids.filter(id=>id===row.fieldId).length>1)row.flags.push('multiple_proposals');
+    row.canApply=row.fieldId!==null&&row.normalizedValue!==null&&
+      !row.flags.some(flag=>['unknown_field','ambiguous_field','unsupported_type','not_provided','invalid_value','multiple_proposals'].includes(flag));
+  }
   return {documentId,contentDigest:digest(fullContent),submittedTextDigest:digest(content),
+    snapshotDigest:snapshotDigest(documentId,document,[...definitions.values()]),reviewFieldIds:[...definitions.keys()].sort((a,b)=>a-b),
     modified:document.modified??null,searchScope:'submitted_text',readOnly:true,rows};
 }
 module.exports={previewCustomFields,occurrences};

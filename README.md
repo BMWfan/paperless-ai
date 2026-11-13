@@ -55,7 +55,7 @@ Powered by **Retrieval-Augmented Generation (RAG)**, you can now search semantic
 - Web interface for manual AI tagging
 - Useful when reviewing sensitive documents
 - Accessible via `/manual`
-- Custom field suggestions show current/typed values and unverified text excerpts in a [read-only preview](docs/custom-field-preview.md); Save Tags does not save these values.
+- Review custom field suggestions and unverified text excerpts, then explicitly [save selected values](docs/custom-field-preview.md) after a fresh snapshot/type check. Save Tags remains separate.
 
 ### 🧩 Smart Tagging & Rules
 - Define rules to limit which documents are processed

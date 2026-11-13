@@ -1,70 +1,120 @@
-# Custom field suggestions in Manual Processing
+# Review and save selected Custom Fields
 
-Open `/manual`, select a document and choose **Analyze with AI**. The Custom field
-suggestions section shows the native field name/type, its current value, the AI
-proposal and the value after the shared typed conversion. Text excerpts show up
-to five exact occurrences in the submitted document text. Missing fields,
-invalid types, repeated proposals and absent/multiple occurrences are labelled.
+Open `/manual`, choose a document and **Analyze with AI**. Each suggestion shows
+its native field/type, current value, raw proposal, typed value and up to five
+exact text excerpts. An occurrence is not proof of the right semantic field:
+historical references, attachments and unrelated dates may contain the same
+value. Every proposal's meaning remains unverified by the software.
 
-This is a preview. **Save Tags does not save these custom field values.** There
-is no new approval button or automatic extraction policy. Existing automatic
-processing and learning settings keep their previous behavior. Analysis may
-record its existing unconfirmed prediction; the added preview endpoint only
-reads native documents and field definitions and never calls a writer or learner.
+Nothing is selected by default. Check the meaning and select only values you
+want to apply, then choose **Save selected custom fields**. Invalid, unresolved,
+duplicate and unsupported-type proposals cannot be selected. Missing or repeated
+text occurrences remain visible warnings; they do not substitute for your review.
+**Save Tags remains separate and does not save these Custom Fields.**
 
-An occurrence is not proof of the right semantic field. A historical reference,
-attachment, instruction or unrelated date may contain the same value. Every
-proposal remains unverified, even when a single occurrence is found. A converted
-currency/date format may have no exact text match; the preview does not invent
-a quotation or discard that proposal. Full-text absence is not inferred when
-only a prefix was submitted to analysis.
+Before saving, the app re-reads the document and relevant native definitions
+inside its existing local write exclusion. A changed snapshot, type or definition
+returns409 and requires a fresh analysis. Only the selected values are normalized
+and written; unselected values come from the fresh native document. A selected
+invalid value aborts the batch rather than silently applying only other fields.
+There is no implicit clearing from null/missing AI values. The existing explicit
+manual clearing API remains available unchanged.
 
-## API contract
+After success the preview refreshes with no selection. A network error after
+sending may leave the outcome unknown: reload/check the current document before
+another attempt. The app never automatically repeats a PATCH. Switching documents
+invalidates the displayed selection/results, but cannot cancel a save already
+sent for the original document. Late responses cannot populate another selection.
 
-Authenticated same-origin JSON `POST /manual/custom-field-preview` accepts:
+## API contracts
+
+Both routes require the existing JWT-cookie or API-key authentication and
+same-origin JSON. They set `Cache-Control: no-store` and use only the configured
+native endpoint. No field creation, new credentials, database table or queue.
+
+`POST /manual/custom-field-preview` remains read-only and accepts:
 
 ```json
 {"documentId":42,"content":"Invoice number: INV-007","suggestions":[{"field_name":"Invoice number","value":"INV-007"}]}
 ```
 
-`content` must match the current native document text, capped at50000 characters
-as in the existing Manual analysis screen. There are at most50 suggestions.
-The provider response's existing object or array shape is supported; provider
-prompts and response schemas are unchanged. Definitions are freshly looked up
-using native case-insensitive exact names; ambiguous names remain unresolved.
+The submitted content must match current native text, capped at50000 characters
+as in Manual analysis. At most50 suggestions; existing object/array provider
+shapes are supported. Definitions are freshly resolved by native exact names.
+The response retains `contentDigest`, `submittedTextDigest`, `modified`,
+`searchScope: "submitted_text"`, `readOnly: true`, and rows with raw/current/typed
+values, flags and bounded evidence. Excerpts are at most300 characters and five
+per row; format conversion never fabricates a source quotation.
 
-The response includes `documentId`, full and submitted text SHA256 digests,
-native `modified`, `searchScope: "submitted_text"`, `readOnly: true` and rows with
-`fieldId`, `name`, `type`, `currentValue`, `proposedValue`, `normalizedValue`,
-warning `flags`, bounded `evidence` excerpts/count and
-`semanticStatus: "unverified"`. The full-content hash binds only the snapshot
-read at preview time; it is not a lock, trust score or future write authorization.
-No server-side approval/proposal persistence is introduced.
+Additive `snapshotDigest` binds document-ID, full-content hash, native modified,
+canonical monitored metadata/Custom Fields and relevant definitions (ID, name,
+type, extra selection/currency data). `reviewFieldIds` lists those definitions;
+rows add `canApply`. Old preview clients can ignore these properties and remain
+read-only. The digest is an optimistic precondition, not a signed model output,
+proof of a human click, new access grant or global lock. Existing authenticated
+manual-input trust rules still apply.
 
-Invalid input returns400; changed native text409 (reload and analyze again);
-native document/definition failures502. Authentication follows the existing JWT
-or API-key middleware and origin/JSON rules. Responses use `Cache-Control:
-no-store`. Document text, field names and provider values are rendered with DOM
-text nodes. Excerpts are at most300 characters, at most five per suggestion.
+`POST /manual/custom-field-apply` accepts:
 
-Changing the selected document clears suggestions immediately. Selection and
-analysis responses carry a local generation check so late results cannot populate
-another document. Analyze/save controls stay disabled while selection loads.
-The Manual page initializes its own theme and navigation without loading the
-dashboard chart/modal initializer, whose required dashboard data is absent here.
-Theme selection remains persistent; this also removes an existing startup error.
+```json
+{"documentId":42,"snapshotDigest":"<64 lowercase hexadecimal characters>","reviewFieldIds":[7,8],"fields":[{"field":7,"value":"INV-007"}]}
+```
 
-## Validation and compatibility
+Copy the full `reviewFieldIds` from the preview, even if selecting only a subset.
+It lets the server reconstruct the relevant-definition snapshot. Require1–50
+unique existing IDs/values, all inside that list. Supported selected types:
+string, longtext, integer, float, boolean, select, date and monetary. Null,
+missing, duplicate or invalid values are rejected; new unsupported native types
+remain preserved when unselected. No client-provided list of unselected values
+is trusted. A successful response contains the current `document` and
+`requestedFieldIds`; native workflows can still transform the resulting state,
+so inspect the refreshed values rather than treating this as semantic verification.
 
-SPEC #20 follows the measured failure of label-only evidence in PR #23. This
-feature does not import that experiment or promote it to production. Tests cover
-typed/native read-only behavior, stale text, ambiguous/unknown fields, authentication,
-origin/input limits, historical occurrences, bounded excerpts, literal HTML,
-selection races and responsive rendering with synthetic documents. Use the
-[isolated environment](test-environment.md); never test against production.
+Errors:400 invalid input/type/selection,409 stale state or concurrent local write,
+502 backend/verification failure. `outcome: "not_written"` means no native PATCH
+was attempted; `"unknown"` means a write attempt may have applied and must be
+checked. Browser transport loss is always treated conservatively as unknown.
+The apply handler does not automatically retry or rerun the model. Like the
+existing Manual update route, a verified save marks the document processed so
+later scan starts skip it. A failure recording that marker after the native save
+is reported as unknown, never as not-written. The existing Manual API contract
+is unchanged. This marker does not cancel classification already in progress;
+existing confirmed-metadata protection and learning modes still apply.
 
-No database or configuration migration is needed. Reverting this feature removes
-the additional preview endpoint/section, without changing native metadata,
-learning records or the existing manual update contract. Future confirmed
-extraction writes require a separate design with conflict checks and explicit
-human review; this preview does not supply those guarantees.
+## Learning, concurrency and limits
+
+Explicit saves use the existing manual writer and actor. Manual learning mode
+queues actual changes for review; automatic/hybrid retain their existing rules
+for explicitly confirmed manual changes; disabled mode does not learn. Native
+workflow/hierarchy changes outside the expected PATCH result remain unknown and
+require review. A source match or typing success never activates an example by
+itself; learning-event review and proposal saving are separate actions.
+
+The guard runs inside existing per-document write exclusion and reads again
+after definition validation. It prevents detected stale saves and competing local
+updates. **Paperless-ngx has no compare-and-set PATCH here:** an external writer
+can still race the final GET→PATCH, including unselected-field changes. There is
+no global atomicity or absolute loss-prevention guarantee. Native definition
+changes can also race their validation; failures must be refreshed, never retried
+blindly. This is controlled editing, not improved automatic model accuracy.
+
+Document text, field names and values use DOM text nodes. Manual initializes its
+own theme/navigation, without the dashboard's absent chart/modal state. Selection
+generations, disabled save controls and client-side consumed receipts prevent stale UI
+responses, double submission and automatic replay after uncertain outcomes.
+The stateless server digest is not a one-use nonce; it rejects changed state,
+not every possible repetition of an identical unchanged state.
+
+## Validation and rollback
+
+SPEC #20, following merged PR23/24. Tests cover canonical snapshots, typing and
+definition changes, all learning modes, stale/invalid batches, local exclusion,
+unknown native provenance, authentication/origin, unselected values, uncertain
+responses, real ngx3.4.2 API/workflow behavior and browser selection/races/HTML/
+mobile behavior. Use only the [isolated test environment](test-environment.md).
+Provider fixtures establish behavior, not model accuracy or OCR/PDF quality.
+
+No migration, default/model/provider change or new provenance schema. Revert the
+selection/apply/optional-guard additions to return to read-only previews; existing
+stored metadata and learning history are not undone. Publishing and deployment
+remain separately authorized actions.
