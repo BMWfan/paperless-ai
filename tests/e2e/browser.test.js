@@ -50,14 +50,15 @@ test('learning dashboard supports real review actions, themes and mobile layout'
     assert.equal(await page.locator('h1').textContent(),'Learning');
     await page.locator('#query').fill(String(document.id));
     await page.locator('#filter-form button').click();
-    await page.getByRole('button',{name:'Confirm correction',exact:true}).waitFor();
-    assert.match(await page.locator('#events').textContent(),/Human provenance unverified/);
+    const correction = status => page.locator('#events article').filter({has:page.getByRole('heading',{name:`Document ${document.id} · ${status}`,exact:true})}).filter({hasText:title});
+    await correction('pending').getByRole('button',{name:'Confirm correction',exact:true}).waitFor();
+    assert.match(await correction('pending').textContent(),/Human provenance unverified/);
     fs.mkdirSync('/artifacts',{recursive:true});
     await page.screenshot({path:'/artifacts/learning-desktop-light.png',fullPage:true,animations:'disabled'});
-    await page.getByRole('button',{name:'Confirm correction',exact:true}).click();
-    await page.waitForFunction(()=>!document.querySelector('#events').textContent.includes(' · pending'));
+    await correction('pending').getByRole('button',{name:'Confirm correction',exact:true}).click();
+    await correction('confirmed').waitFor();
     assert.ok((await page.locator('#examples').textContent()).includes(`Document ${document.id}`));
-    const event = page.locator('#events article').filter({hasText:`Document ${document.id} · confirmed`});
+    const event = correction('confirmed');
     await event.getByRole('button',{name:'Show review history',exact:true}).click();
     await page.locator('#history').filter({hasText:`Document ${document.id} · confirmed`}).waitFor();
     await page.locator('#theme').click();
@@ -88,8 +89,9 @@ test('learning dashboard supports real review actions, themes and mobile layout'
     await page.waitForFunction(id=>!document.querySelector('#examples').textContent.includes(`Document ${id} ·`),document.id);
     assert.ok((await paperless.patch(`http://paperless:8000/api/documents/${document.id}/`,{data:{title:'Rejected browser correction'}})).ok());
     await page.getByRole('button',{name:'Scan now',exact:true}).click();
-    await page.getByRole('button',{name:'Reject correction',exact:true}).click();
-    await page.waitForFunction(()=>document.querySelector('#events').textContent.includes(' · rejected'));
+    const rejected = status => page.locator('#events article').filter({has:page.getByRole('heading',{name:`Document ${document.id} · ${status}`,exact:true})}).filter({hasText:'Rejected browser correction'});
+    await rejected('pending').getByRole('button',{name:'Reject correction',exact:true}).click();
+    await rejected('rejected').waitFor();
     assert.equal(await page.locator('#message').textContent(),'');
     assert.deepEqual(errors,[],'no uncaught browser errors');
   } finally {
