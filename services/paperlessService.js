@@ -172,6 +172,12 @@ class PaperlessService {
   }
   
   // Fresh read for review previews; do not trust cached field types or create fields.
+  async getCustomFieldDefinition(fieldId) {
+    this.initialize();
+    const response = await this.client.get(`/custom_fields/${fieldId}/`);
+    return response.data;
+  }
+
   async getCustomFieldDefinitionMatches(fieldName) {
     this.initialize();
     const response = await this.client.get('/custom_fields/', { params: { name__iexact: fieldName } });
@@ -1318,6 +1324,7 @@ async getOrCreateDocumentType(name, options = {}) {
 
   async updateDocument(documentId, updates, options = {}) {
     updates = { ...updates };
+    let guardedPatchStarted = false;
     this.initialize();
     if (!this.client) return;
     try {
@@ -1398,12 +1405,24 @@ async getOrCreateDocumentType(name, options = {}) {
       console.log('[DEBUG] Final update fields:', Object.keys(updateData));
       const engineWrite = require('./learningEngine');
       const { compareDocumentMetadata } = require('./documentSnapshotService');
-      if (engineWrite.inFlight.has(Number(documentId))) throw new Error('Concurrent document write');
+      if (engineWrite.inFlight.has(Number(documentId))) {
+        if (options.customFieldReview) throw require('./customFieldReview').reviewError(409, 'Document update in progress. Refresh before retrying.');
+        throw new Error('Concurrent document write');
+      }
       engineWrite.inFlight.add(Number(documentId));
       try {
         const legacyConfirmed = !options.confirmedUser && await require('../models/document').getConfirmedLearningFeedback(Number(documentId));
-        const latest = await this.getDocument(documentId);
-        if (Object.keys(compareDocumentMetadata(currentDoc, latest)).length) throw new Error('Document changed during classification; retry required');
+        let latest = await this.getDocument(documentId);
+        if (options.customFieldReview) {
+          if (!options.confirmedUser) throw require('./customFieldReview').reviewError(400, 'Explicit confirmation is required');
+          const { prepareReviewedFields, snapshotDigest, reviewError } = require('./customFieldReview');
+          updateData = await prepareReviewedFields(this, Number(documentId), latest, options.customFieldReview);
+          const finalDocument = await this.getDocument(documentId);
+          if (snapshotDigest(Number(documentId), latest) !== snapshotDigest(Number(documentId), finalDocument)) {
+            throw reviewError(409, 'Document changed while preparing the save. Analyze again.');
+          }
+          latest = finalDocument;
+        } else if (Object.keys(compareDocumentMetadata(currentDoc, latest)).length) throw new Error('Document changed during classification; retry required');
         engineWrite.store.observe(latest, 'unknown');
         if (!options.confirmedUser) {
           const protectedValues = engineWrite.store.protectedMetadata(Number(documentId)) ||
@@ -1411,6 +1430,7 @@ async getOrCreateDocumentType(name, options = {}) {
           for (const field of Object.keys(protectedValues || {})) delete updateData[field];
         }
         if (!Object.keys(updateData).length) return latest;
+        guardedPatchStarted = !!options.customFieldReview;
         const response = await this.client.patch(`/documents/${documentId}/`, updateData);
         // A native workflow or tag hierarchy can add metadata to the PATCH response.
         // The payload proves intent only for the expected state, not those extra writes.
@@ -1422,6 +1442,12 @@ async getOrCreateDocumentType(name, options = {}) {
       console.log(`[SUCCESS] Updated metadata for document ${documentId}`);
       return await this.getDocument(documentId);
     } catch (error) {
+      if (guardedPatchStarted) {
+        const uncertain = new Error('Save outcome could not be verified after a native write attempt');
+        uncertain.writeOutcomeUnknown = true;
+        uncertain.cause = error;
+        error = uncertain;
+      }
       console.error(`[ERROR] updating document ${documentId}:`, error.message);
       throw error;
     }

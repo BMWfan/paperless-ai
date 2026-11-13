@@ -164,3 +164,78 @@ test('manual field preview shows native values safely and discards responses aft
     assert.deepEqual(after.custom_fields,before.custom_fields);assert.equal(after.modified,before.modified,'preview does not write metadata');
   }finally{await browser.close();await native.dispose();}
 });
+
+test('manual reviewed saves require selection, reject stale snapshots and never retry lost responses', {timeout:180000},async()=>{
+  const token=fs.readFileSync('/fixture-data/.env','utf8').match(/^PAPERLESS_API_TOKEN=(.+)$/m)[1];
+  const native=await request.newContext({extraHTTPHeaders:{Authorization:`Token ${token}`}});
+  const app=await request.newContext({extraHTTPHeaders:key});
+  const previous=await(await app.get(origin+'/api/learning/settings')).json();
+  const stamp=Date.now(),fieldName=`Browser reviewed number ${stamp}`,invalidName=`Browser reviewed date ${stamp}`;
+  const create=async(name,type)=>{
+    const response=await native.post('http://paperless:8000/api/custom_fields/',{data:{name,data_type:type}});assert.ok(response.ok());return response.json();
+  };
+  const field=await create(fieldName,'string'),invalid=await create(invalidName,'date'),kept=await create(`Browser kept ${stamp}`,'string');
+  const name=`browser-reviewed-save-${stamp}.txt`,content=`Synthetic ${stamp}\nNumbers NEW-42, NEW-FINAL and NEW-LAST.\nHistorical reference OLD-007.`;
+  assert.ok((await native.post('http://paperless:8000/api/documents/post_document/',{multipart:{document:{name,mimeType:'text/plain',buffer:Buffer.from(content)}}})).ok());
+  let document;
+  for(let attempt=0;attempt<90;attempt++){
+    document=(await(await native.get('http://paperless:8000/api/documents/?ordering=-id')).json()).results.find(row=>row.original_file_name===name);
+    if(document)break;await new Promise(resolve=>setTimeout(resolve,1000));
+  }
+  assert.ok(document);
+  assert.ok((await native.patch(`http://paperless:8000/api/documents/${document.id}/`,{data:{custom_fields:[{field:field.id,value:'OLD'},{field:kept.id,value:'Keep native metadata'}]}})).ok());
+  assert.ok((await app.post(origin+'/api/learning/settings',{data:{mode:'manual',enabled:false,stabilizationMs:0}})).ok());
+  assert.ok((await app.post(origin+'/api/learning/scan',{data:{}})).ok());
+  const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
+  try{
+    const context=await browser.newContext({extraHTTPHeaders:key,viewport:{width:1280,height:900}});
+    await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
+    let proposed='NEW-42';
+    await context.route('**/manual/analyze',route=>route.fulfill({json:{document:{title:'Synthetic review',tags:[],custom_fields:[
+      {field_name:fieldName,value:proposed},{field_name:invalidName,value:'2031-02-30'}]}}}));
+    const page=await context.newPage(),errors=[];let saves=0;
+    page.on('pageerror',error=>errors.push(error.message));
+    page.on('request',r=>{if(new URL(r.url()).pathname==='/manual/custom-field-apply')saves++;});
+    await page.goto(origin+'/manual');
+    await page.locator(`#documentSelect option[value="${document.id}"]`).waitFor({state:'attached'});
+    await page.locator('#documentSelect').selectOption(String(document.id));
+    await page.waitForFunction(()=>!document.getElementById('analyzeBtn').disabled);
+    const analyze=async()=>{await page.locator('#analyzeBtn').click();await page.getByRole('checkbox',{name:`Select ${fieldName}`,exact:true}).waitFor();};
+    const select=()=>page.getByRole('checkbox',{name:`Select ${fieldName}`,exact:true});
+    const save=()=>page.getByRole('button',{name:'Save selected custom fields',exact:true});
+    await analyze();assert.equal(await save().isDisabled(),true);assert.equal(await select().isChecked(),false);
+    assert.equal(await page.getByRole('checkbox',{name:`Select ${invalidName}`,exact:true}).isDisabled(),true);
+    assert.equal(saves,0);await select().check();await save().dblclick();
+    await page.locator('#customFieldPreview [role="status"]').filter({hasText:'Save completed'}).waitFor();
+    assert.equal(saves,1,'double click does not issue a second save');assert.equal(await select().isChecked(),false);assert.equal(await save().isDisabled(),true);
+    let current=await(await native.get(`http://paperless:8000/api/documents/${document.id}/`)).json();
+    assert.equal(current.custom_fields.find(row=>row.field===field.id).value,'NEW-42');assert.equal(current.custom_fields.find(row=>row.field===kept.id).value,'Keep native metadata');
+    assert.ok(!current.custom_fields.some(row=>row.field===invalid.id));
+    const events=(await(await app.get(origin+`/api/learning/events?q=${document.id}&limit=200`)).json()).events.filter(row=>row.document_id===document.id);
+    assert.ok(events.some(row=>row.source==='confirmed_ui'&&row.status==='pending'),'manual mode still requires learning review');
+    fs.mkdirSync('/artifacts',{recursive:true});await page.screenshot({path:'/artifacts/manual-reviewed-fields-desktop.png',fullPage:true,animations:'disabled'});
+    await page.setViewportSize({width:390,height:844});
+    assert.ok(await page.locator('#customFieldPreview').evaluate(e=>e.scrollWidth<=e.clientWidth));
+    await page.screenshot({path:'/artifacts/manual-reviewed-fields-mobile.png',fullPage:true,animations:'disabled'});
+    await select().check();
+    assert.ok((await native.patch(`http://paperless:8000/api/documents/${document.id}/`,{data:{title:'External change after preview'}})).ok());
+    await save().click();await page.locator('#customFieldPreview').filter({hasText:'changed'}).waitFor();
+    assert.equal(await page.locator('#customFieldPreview input[type=checkbox]').count(),0);assert.equal(saves,2);
+    proposed='NEW-FINAL';await analyze();await select().check();
+    await page.route('**/manual/custom-field-apply',async route=>{const response=await route.fetch();assert.equal(response.status(),200);await route.abort('failed');});
+    await save().click();await page.locator('#customFieldPreview').filter({hasText:'Save outcome is unknown'}).waitFor();
+    await page.waitForLoadState('networkidle');assert.equal(saves,3,'ambiguous outcome is never retried automatically');
+    current=await(await native.get(`http://paperless:8000/api/documents/${document.id}/`)).json();
+    assert.equal(current.custom_fields.find(row=>row.field===field.id).value,'NEW-FINAL','server applied the request whose browser response was lost');
+    await page.unroute('**/manual/custom-field-apply');
+    proposed='NEW-LAST';await analyze();await select().check();
+    let release,reached;const hold=new Promise(resolve=>{release=resolve;});const started=new Promise(resolve=>{reached=resolve;});
+    await page.route('**/manual/custom-field-apply',async route=>{const response=await route.fetch();reached();await hold;await route.fulfill({response});});
+    await save().click();await started;await page.locator('#documentSelect').selectOption('');release();
+    await page.waitForLoadState('networkidle');
+    assert.match(await page.locator('#customFieldPreview').textContent(),/Analyze this document/);assert.equal(saves,4);
+    assert.deepEqual(errors,[]);
+  }finally{
+    await browser.close();await app.post(origin+'/api/learning/settings',{data:previous});await app.dispose();await native.dispose();
+  }
+});

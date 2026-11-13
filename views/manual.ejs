@@ -162,7 +162,7 @@
         
                         <section class="material-card mb-6" aria-labelledby="customFieldHeading">
                             <h2 id="customFieldHeading" class="card-title">Custom field suggestions</h2>
-                            <p>Preview only. Custom field values are not saved by Save Tags.</p>
+                            <p>Check the suggested values and their meaning, then select fields to save. Save Tags does not save custom field values.</p>
                             <div id="customFieldPreview" aria-live="polite"><p>Analyze a document to see its suggested values and text excerpts.</p></div>
                         </section>
 
@@ -531,7 +531,8 @@ async function handleAnalysis() {
             const fields = await fieldResponse.json();
             if (selectionVersion !== manualSelectionVersion || analyzedDocument !== currentDocument) return;
             if (!fieldResponse.ok) throw new Error(fields.error || 'Custom field preview is unavailable');
-            window.CustomFieldPreview.render(preview, fields);
+            window.CustomFieldPreview.render(preview, fields, { documentId: analyzedDocument, content,
+                suggestions: result.document?.custom_fields || {} });
         } catch (error) {
             if (selectionVersion !== manualSelectionVersion) return;
             window.CustomFieldPreview.message(preview, error.message);
