@@ -1,0 +1,14 @@
+{
+  "revision": "section-evidence-v1",
+  "cases": 40,
+  "splits": {
+    "development": 20,
+    "confirmation": 20
+  },
+  "positiveFieldsPerSplit": 10,
+  "threshold": {
+    "wrongAccepted": 0,
+    "correctRetainedAtLeast": 8
+  },
+  "sha256": "484601a6dec03b4b9b8e0eeedcac3196c13c593b181bddcfbbc95c60190edd7a"
+}

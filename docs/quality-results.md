@@ -86,3 +86,12 @@ proposals. Two newly frozen unmarked-attachment cases still accept wrong IDs.
 It remains outside production: label adjacency and whole-document historical
 abstention do not establish reliable semantic extraction. See the linked
 contract for per-field reports, negative cases and reproducible commands.
+
+## Follow-up: explicit section boundaries
+
+The separate [section-evidence experiment](section-evidence.md) freezes40 new
+single-target cases before implementation. On confirmation it retains10/10
+correct proposals versus4/10 with the old label gate, but both accept two wrong
+unmarked-attachment IDs. It fails the frozen zero-false-acceptance criterion.
+On unheaded old data it abstains completely, losing all375 correct archived
+proposals. No new model inference or production improvement is claimed.

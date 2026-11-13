@@ -104,3 +104,11 @@ diagnostic information but does not resolve document/section ownership. A next
 candidate needs section-scoped or reviewable evidence and a newly frozen
 qualification set; it must not silently tune this gate to the existing
 confirmation answers. SPEC #20 and EPIC #12 remain open.
+
+## Subsequent section experiment
+
+The separate [section-evidence diagnostic](section-evidence.md) reuses this gate
+unchanged within explicit current-section headings. Its newly frozen40 cases
+recover positive values but still accept two wrong attachment identifiers on
+confirmation. Without headings, old-data coverage collapses. Neither experiment
+is promoted; the old predictions/challenges remain immutable.
