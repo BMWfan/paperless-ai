@@ -33,6 +33,11 @@ model errors even if withheld. Scoring ground truth is never used in validation.
 JSON schema/metadata protocol failure is explicit; missing fields are not a
 successful extraction. Do not activate/select a model from green protocol tests.
 
+Identifier equality is case-sensitive and preserves leading zeros; only existing
+typed normalization may canonicalize dates/amount formats. Metadata taxonomy
+scoring retains the existing comparison rules. This contract is fixed before
+any inference.
+
 Per field/model/seed/split: correct/wrong/missing, absent false positives, training
 or historical ID copies, wrong date roles, JSON/type/evidence failures, positive
 coverage, duration/tokens. Proposal gate on BOTH confirmation seeds: zero wrong

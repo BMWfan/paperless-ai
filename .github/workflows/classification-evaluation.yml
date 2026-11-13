@@ -15,10 +15,17 @@ on:
       - 'services/learningContext.js'
       - 'services/serviceUtils.js'
   workflow_dispatch:
+    inputs:
+      extraction_stage:
+        description: 'Approved extraction experiment: lock manifests or measure frozen arms'
+        type: choice
+        options: [none, locks, measure]
+        default: none
 permissions:
   contents: read
 jobs:
   evaluation:
+    if: github.event_name != 'workflow_dispatch' || inputs.extraction_stage == 'none'
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
@@ -46,7 +53,7 @@ jobs:
         run: docker compose -f docker-compose.test.yml --profile extended down -v --remove-orphans
 
   quality:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && inputs.extraction_stage == 'none'
     name: Quality ${{ matrix.label }} seed ${{ matrix.seed }}
     runs-on: ubuntu-24.04
     timeout-minutes: 45
@@ -137,3 +144,29 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify downloaded manifest without inference or publication
         run: docker build --build-arg "QUALITY_MODEL=$QUALITY_MODEL" -f tests/e2e/Dockerfile.quality-model .
+
+  extraction-locks:
+    if: github.event_name == 'workflow_dispatch' && inputs.extraction_stage == 'locks'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download approved model manifests without inference
+        run: |
+          docker run -d --name extraction-locks -e OLLAMA_NO_CLOUD=1 ollama/ollama:0.12.6
+          for attempt in $(seq 1 60); do docker exec extraction-locks ollama list >/dev/null 2>&1 && break; sleep 1; done
+          docker exec extraction-locks ollama pull qwen2.5:1.5b
+          docker exec extraction-locks ollama pull qwen2.5:3b
+          mkdir extraction-locks
+          docker cp extraction-locks:/root/.ollama/models/manifests/registry.ollama.ai/library/qwen2.5/1.5b extraction-locks/qwen15b.json
+          docker cp extraction-locks:/root/.ollama/models/manifests/registry.ollama.ai/library/qwen2.5/3b extraction-locks/qwen3b.json
+          sha256sum extraction-locks/*.json
+          echo "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b  extraction-locks/qwen15b.json" | sha256sum -c -
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extraction-model-manifests
+          path: extraction-locks/*.json
+          if-no-files-found: error
+      - name: Remove only manifest preparation container
+        if: always()
+        run: docker rm -f extraction-locks
