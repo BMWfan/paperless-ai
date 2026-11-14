@@ -127,6 +127,18 @@ test('migration failure rolls back tables/backfill and leaves the v3 database re
   assert.deepEqual(raw(f.file,db=>dump(db)),before,'no partial schema marker or backfill');
   raw(f.file,db=>db.exec('DROP TRIGGER fail_migration'));f.reopen();assert.equal(sources(f.store)[0].event,event);
 });
+test('v3 migration across many snapshots retains every eligible source across batch boundaries',t=>{
+  const f=fixture(t);f.store.configure({mode:'automatic'});
+  const events=[];
+  for(let id=1;id<=72;id++){
+    const doc=base(id);f.store.observe(doc);events.push(correction(f.store,doc,`A-${id}`));
+  }
+  asV3(f.file);f.reopen();const actual=sources(f.store);
+  assert.equal(actual.length,72);assert.equal(f.store.examples().length,72);
+  assert.deepEqual(actual.map(row=>row.event).sort((a,b)=>a-b),events);
+  assert.ok(actual.every(row=>row.fields.length===1&&row.fields[0]===1));
+  f.reopen();assert.deepEqual(sources(f.store),actual);
+});
 test('an unknown version4 marker without the required tables fails closed without rewriting it',t=>{
   const f=fixture(t),doc=base();f.store.observe(doc);asV3(f.file);
   raw(f.file,db=>db.exec(`INSERT INTO learning_migrations VALUES(4);

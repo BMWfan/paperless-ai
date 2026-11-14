@@ -80,9 +80,10 @@ blindly repeats backfill. A transaction failure rolls back old and new learning
 state together; migration failure closes the connection and leaves no partial
 version4 marker/tables/backfill.
 
-Reconciliation/backfill streams snapshots and active events rather than loading
-all stored metadata into JS memory at once. Work is still proportional to the
-existing snapshot/field count; production-scale startup duration is not measured.
+Reconciliation/backfill reads bounded keyset pages of64 snapshots/events rather
+than loading all stored metadata into JS memory at once. Reads finish before
+writing; no live SQLite iterator is held during writes. Work is still proportional
+to snapshot/field count; production-scale startup duration is not measured.
 
 An existing version4 marker without the required field tables is an incompatible
 schema lineage: startup fails closed rather than overwriting that marker or

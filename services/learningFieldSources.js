@@ -80,16 +80,28 @@ function initializeFieldSources(db){
     db.prepare('DELETE FROM learning_field_sources WHERE document_id=?').run(documentId);
     db.prepare('UPDATE learning_field_state SET generation=generation+1 WHERE document_id=?').run(documentId);
   }
-  // On reopen, do not trust snapshots written by a version unaware of this ledger.
-  for(const snapshot of db.prepare('SELECT * FROM learning_document_snapshots').iterate()){
-    synchronize(snapshot.document_id,JSON.parse(snapshot.metadata_json),snapshot.revision,snapshot.revision);
+  // Materialize a bounded page before writing: better-sqlite3 deliberately
+  // forbids writes while a live iterator holds the same connection busy.
+  function batches(statement,key,consume){
+    let last=null;
+    for(;;){
+      const rows=statement.all(last,last);if(!rows.length)return;
+      for(const row of rows)consume(row);
+      last=rows[rows.length-1][key];
+    }
   }
+  // On reopen, do not trust snapshots written by a version unaware of this ledger.
+  batches(db.prepare(`SELECT * FROM learning_document_snapshots
+    WHERE (? IS NULL OR document_id>?) ORDER BY document_id LIMIT 64`),'document_id',snapshot=>{
+    synchronize(snapshot.document_id,JSON.parse(snapshot.metadata_json),snapshot.revision,snapshot.revision);
+  });
   if(!migrated){
     const events=db.prepare(`SELECT c.* FROM learning_examples e
       JOIN learning_change_events c ON c.id=e.event_id AND c.document_id=e.document_id AND c.status='confirmed'
       JOIN learning_document_snapshots s ON s.document_id=e.document_id
-      WHERE e.metadata_json=s.metadata_json AND c.metadata_json=e.metadata_json`).iterate();
-    for(const event of events){capture(event);confirm(event);}
+      WHERE e.metadata_json=s.metadata_json AND c.metadata_json=e.metadata_json
+        AND (? IS NULL OR c.id>?) ORDER BY c.id LIMIT 64`);
+    batches(events,'id',event=>{capture(event);confirm(event);});
     db.prepare('INSERT INTO learning_migrations VALUES(4)').run();
   }
   function corrections(){
