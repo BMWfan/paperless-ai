@@ -59,6 +59,9 @@ test('matching is literal, bounded, Unicode-safe and abstains on conflicting or 
   assert.equal(matchPatterns(patterns,'Ärztliche I: WRONG').candidates.length,0);
   assert.equal(matchPatterns(patterns,'Ärztliche [ID]: FIRST\nÄrztliche [ID]: SECOND').ambiguous,1);
   assert.deepEqual(derivePatterns([source('OLD-42','Invoice 123')],target),[]);
+  assert.deepEqual(derivePatterns([source('A\u0308B','ÄB Kennung')],target),[],'canonical Unicode spelling cannot hide the old value inside a label');
+  const conflicting=derivePatterns([source(),{...source('TRAIN-002','Contract reference'),event_id:2,document_id:2}],target);
+  assert.equal(matchPatterns(conflicting,'Invoice (no.): FIRST\nContract reference: SECOND').ambiguous,1);
   assert.deepEqual(derivePatterns([{...source(),content_preview:'x'.repeat(1980)+'\nInvoice (no.): TRAIN-001'}],target),[]);
   assert.equal(matchPatterns(derivePatterns([source()],target),'x'.repeat(49990)+'\nInvoice (no.): NEW-42').candidates.length,0);
   assert.equal(matchPatterns(patterns,'Ärztliche [ID]: '+'x'.repeat(129)).candidates.length,0);
@@ -88,14 +91,15 @@ test('readonly preview resolves fresh native string fields and cannot retarget a
     assert.equal((await learnedFieldPreview({...paperless,getCustomFieldDefinition:async()=>definition},store,99,target.content)).rows.length,0);
   }
   assert.equal((await learnedFieldPreview({...paperless,getCustomFieldDefinition:async()=>{throw {response:{status:404}};}},store,99,target.content)).rows.length,0);
+  assert.equal((await learnedFieldPreview({...paperless,getCustomFieldDefinitionMatches:async()=>({count:2,results:[]})},store,99,target.content)).rows.length,0);
   let reads=0;
   await assert.rejects(learnedFieldPreview({...paperless,getDocument:async()=>({...target,title:++reads===1?'first':'changed'})},store,99,target.content),error=>error.status===409);
 });
 test('learned API requires authentication, same-origin JSON and bounded native text',async t=>{
   const express=require('express'),{authenticateJWT}=require('../routes/auth'),{sameOriginJSON}=require('../routes/learning');
   const {createLearnedFieldPreviewHandler}=require('../routes/learnedFieldHints');
-  const previous=process.env.API_KEY;process.env.API_KEY='isolated-hint-test-key';let calls=0;
-  const store={settings:()=>({mode:'manual'}),fieldCorrections:()=>{calls++;return [source()];}};
+  const previous=process.env.API_KEY;process.env.API_KEY='isolated-hint-test-key';let calls=0,outage=false;
+  const store={settings:()=>({mode:'manual'}),fieldCorrections:()=>{calls++;if(outage)throw Error('Private backend diagnostic');return [source()];}};
   const app=express();app.use(express.json(),require('cookie-parser')());app.post('/hints',authenticateJWT,sameOriginJSON,createLearnedFieldPreviewHandler(native(),()=>store));
   const server=app.listen(0,'127.0.0.1');await new Promise(resolve=>server.once('listening',resolve));
   t.after(()=>{server.closeAllConnections();server.close();if(previous===undefined)delete process.env.API_KEY;else process.env.API_KEY=previous;});
@@ -106,6 +110,7 @@ test('learned API requires authentication, same-origin JSON and bounded native t
   assert.equal(calls,0);assert.equal((await post({...body,content:'stale'})).status,409);
   const response=await post(body);assert.equal(response.status,200);assert.equal(response.headers.get('cache-control'),'no-store');
   assert.equal((await response.json()).rows[0].proposedValue,'NEW-0042');assert.equal(calls,1);
+  outage=true;const failed=await post(body);assert.equal(failed.status,502);assert.ok(!(await failed.text()).includes('Private backend diagnostic'));
 });
 test('frozen bilingual diagnostics report historical-role errors without claiming automatic qualification',()=>{
   const {diagnostic}=require('./field-hints/report'),result=diagnostic();

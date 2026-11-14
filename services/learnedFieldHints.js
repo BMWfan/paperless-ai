@@ -31,7 +31,7 @@ function derivePatterns(sources,document){
       if(!positive(row.field)||value===undefined||row.value!==value||before.get(row.field)===value||current.get(row.field)!==value)continue;
       if(!fields.has(row.field)&&fields.size>=50)continue;
       const matches=parsed.filter(line=>line.value===value);
-      if(matches.length!==1||matches[0].label.toLowerCase().includes(value.toLowerCase()))continue;
+      if(matches.length!==1||matches[0].label.toLowerCase().includes(value.normalize('NFC').toLowerCase()))continue;
       fields.add(row.field);
       const label=matches[0].label,key=JSON.stringify([row.field,label]);
       if(!patterns.has(key))patterns.set(key,{field:row.field,label,sources:[]});
