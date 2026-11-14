@@ -57,6 +57,7 @@ test('learning dashboard supports real review actions, themes and mobile layout'
     await page.screenshot({path:'/artifacts/learning-desktop-light.png',fullPage:true,animations:'disabled'});
     await correction('pending').getByRole('button',{name:'Confirm correction',exact:true}).click();
     await correction('confirmed').waitFor();
+    assert.match(await correction('confirmed').textContent(),/Revoking this document example also revokes its retained field sources/);
     assert.ok((await page.locator('#examples').textContent()).includes(`Document ${document.id}`));
     const event = correction('confirmed');
     await event.getByRole('button',{name:'Show review history',exact:true}).click();
