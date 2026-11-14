@@ -43,23 +43,25 @@ the current document's own identifier.
   discard the last line when either text reaches its cap, even if its true end
   might coincide with the cap. No extraction from a possibly truncated line.
 - Only freshly resolved, uniquely named native string fields qualify. Missing,
-  deleted, renamed/retargeted, ambiguous or differently typed definitions cannot
-  be silently retargeted. Existing string normalization enforces128 Unicode code
-  points. The initial document and relevant-definition snapshot must still match
-  after native resolution.
+  deleted, ambiguous or differently typed definitions are skipped. Changes during
+  resolution cannot silently retarget a proposal: the initial document and
+  relevant-definition snapshot must still match. Renaming a field before retrieval
+  does not prove its historical semantic meaning. Existing string normalization
+  enforces128 Unicode code points.
 - Up to50 candidate fields, at most3 source-event references per label/candidate.
   Multiple current matches or conflicting candidate lines cause abstention for
   that field. Repeated identical patterns are combined. No native full-document
   synchronization or pattern cache/table is introduced. Additive field-state and
   source bindings live in the existing SQLite file; they do not store executable
-  patterns. Revocation or observed field-version changes affect the next request's source query; an already displayed draft
+  patterns. Revocation or observed field-version changes affect the next request's
+  source query; an already displayed draft
   is still explicit human input and is not remotely erased.
 
 Labels are derived on demand; the old confirmed value is used only to locate
 the training label, never as a fallback for a new document. Only current captures,
 labels and bounded source IDs leave this service. Existing native current values
-remain visible under the ordinary Manual contract. Actual confirmed examples, field-state bindings and
-history remain in the existing learning store. The document-level examples API
+remain visible under the ordinary Manual contract. Actual confirmed examples,
+field-state bindings and history remain in the existing learning store. The document-level examples API
 and event activeExample flag still describe complete document snapshots, not
 the independent field bindings. Revoke the current document example to remove
 all its field sources, including earlier field events.
