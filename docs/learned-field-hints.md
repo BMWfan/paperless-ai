@@ -96,12 +96,12 @@ published development/confirmation split, each balanced EN/DE with6 positive and
 6 negative cases. This is not a blind or independent real-world corpus.
 
 ```sh
-node tests/quality/field-hints/report.js
+node tests/field-hints/report.js
 # Full verification: docs/test-environment.md and unchanged learning-e2e workflow
 ```
 
-[Archived deterministic results](../tests/quality/field-hints/results.json) and
-[contract](../tests/quality/field-hints/CONTRACT.md) report each split:
+[Archived deterministic results](../tests/field-hints/results.json) and
+[contract](../tests/field-hints/CONTRACT.md) report each split:
 
 | Measurement | Development | Confirmation |
 | --- | ---: | ---: |

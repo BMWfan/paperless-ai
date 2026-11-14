@@ -108,8 +108,8 @@ test('learned API requires authentication, same-origin JSON and bounded native t
   assert.equal((await response.json()).rows[0].proposedValue,'NEW-0042');assert.equal(calls,1);
 });
 test('frozen bilingual diagnostics report historical-role errors without claiming automatic qualification',()=>{
-  const {diagnostic}=require('./quality/field-hints/report'),result=diagnostic();
-  assert.deepEqual(result,require('./quality/field-hints/results.json'));
+  const {diagnostic}=require('./field-hints/report'),result=diagnostic();
+  assert.deepEqual(result,require('./field-hints/results.json'));
   assert.equal(result.cases,24);assert.equal(result.automaticQualification,false);
   for(const split of ['development','confirmation']){
     assert.deepEqual(result.groups[split],{positive:6,correctPositive:6,negative:6,negativeWithSuggestion:2,wrongSuggestions:2,abstentions:4,historicalRoleErrors:2});

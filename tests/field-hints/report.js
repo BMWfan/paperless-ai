@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path');
 const {createHash}=require('node:crypto');
-const {derivePatterns,matchPatterns}=require('../../../services/learnedFieldHints');
+const {derivePatterns,matchPatterns}=require('../../services/learnedFieldHints');
 function diagnostic(){
   const raw=fs.readFileSync(path.join(__dirname,'cases.json'));
   const manifest=require('./manifest.json');
