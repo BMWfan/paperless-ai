@@ -81,14 +81,14 @@ function initializeFieldSources(db){
     db.prepare('UPDATE learning_field_state SET generation=generation+1 WHERE document_id=?').run(documentId);
   }
   // On reopen, do not trust snapshots written by a version unaware of this ledger.
-  for(const snapshot of db.prepare('SELECT * FROM learning_document_snapshots').all()){
+  for(const snapshot of db.prepare('SELECT * FROM learning_document_snapshots').iterate()){
     synchronize(snapshot.document_id,JSON.parse(snapshot.metadata_json),snapshot.revision,snapshot.revision);
   }
   if(!migrated){
     const events=db.prepare(`SELECT c.* FROM learning_examples e
       JOIN learning_change_events c ON c.id=e.event_id AND c.document_id=e.document_id AND c.status='confirmed'
       JOIN learning_document_snapshots s ON s.document_id=e.document_id
-      WHERE e.metadata_json=s.metadata_json AND c.metadata_json=e.metadata_json`).all();
+      WHERE e.metadata_json=s.metadata_json AND c.metadata_json=e.metadata_json`).iterate();
     for(const event of events){capture(event);confirm(event);}
     db.prepare('INSERT INTO learning_migrations VALUES(4)').run();
   }
