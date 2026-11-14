@@ -163,6 +163,7 @@
                         <section class="material-card mb-6" aria-labelledby="customFieldHeading">
                             <h2 id="customFieldHeading" class="card-title">Custom field suggestions</h2>
                             <p>Check the suggested values and their meaning, then select fields to save. Save Tags does not save custom field values.</p>
+                            <button id="learnedFieldsBtn" type="button" disabled>Find learned field suggestions</button>
                             <div id="customFieldPreview" aria-live="polite"><p>Analyze a document to see its suggested values and text excerpts.</p></div>
                         </section>
 
@@ -215,6 +216,7 @@ let currentDocument = null;
 let currentCorrespondent = null;
 let isUpdating = false;
 let manualSelectionVersion = 0;
+let manualFieldRequestVersion = 0;
 
 // Show message (error or success)
 function showMessage(message, type = 'error') {
@@ -400,9 +402,11 @@ function updateHiddenTagsInput() {
 // Document Handling Functions
 async function handleDocumentSelection(documentId) {
     const selectionVersion = ++manualSelectionVersion;
+    ++manualFieldRequestVersion;
     document.getElementById('saveTagsBtn').disabled = true;
     currentDocument = documentId || null;
     document.getElementById('analyzeBtn').disabled = true;
+    document.getElementById('learnedFieldsBtn').disabled = true;
     document.getElementById('chatBtn').disabled = true;
     document.getElementById('aiStatus').classList.add('hidden');
     window.CustomFieldPreview.message(document.getElementById('customFieldPreview'), 'Analyze this document to see suggested values.');
@@ -449,6 +453,7 @@ async function handleDocumentSelection(documentId) {
         updateCorrespondentDisplay(data.correspondent);
         updateTitleDisplay(data.title);
         document.getElementById('analyzeBtn').disabled = false;
+        document.getElementById('learnedFieldsBtn').disabled = false;
         document.getElementById('chatBtn').disabled = false;
         document.getElementById('saveTagsBtn').disabled = false;
     } catch (error) {
@@ -457,13 +462,44 @@ async function handleDocumentSelection(documentId) {
     }
 }
 
+async function handleLearnedFields() {
+    if (!currentDocument) return;
+    const documentId = currentDocument, selectionVersion = manualSelectionVersion;
+    const requestVersion = ++manualFieldRequestVersion;
+    const preview = document.getElementById('customFieldPreview');
+    const current = () => selectionVersion === manualSelectionVersion && requestVersion === manualFieldRequestVersion;
+    document.getElementById('learnedFieldsBtn').disabled = true;
+    document.getElementById('analyzeBtn').disabled = true;
+    window.CustomFieldPreview.message(preview, 'Finding learned field suggestions without calling a model…');
+    try {
+        const content = document.getElementById('contentPreview').textContent.slice(0,50000);
+        const response = await fetch('/manual/learned-field-preview', {
+            method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({documentId,content})
+        });
+        const result = await response.json();
+        if (!current()) return;
+        if (!response.ok) throw new Error(result.error || 'Learned field suggestions are unavailable');
+        window.CustomFieldPreview.render(preview,result,{documentId,content,
+            suggestions:result.rows.map(row=>({field_name:row.name,value:row.proposedValue}))});
+    } catch (error) {
+        if (current()) window.CustomFieldPreview.message(preview,error.message);
+    } finally {
+        if (current()) {
+            document.getElementById('learnedFieldsBtn').disabled = false;
+            document.getElementById('analyzeBtn').disabled = false;
+        }
+    }
+}
+
 // Analysis Functions
 async function handleAnalysis() {
     if (!currentDocument) return;
     const selectionVersion = manualSelectionVersion;
+    const fieldRequestVersion = ++manualFieldRequestVersion;
     const analyzedDocument = currentDocument;
     const preview = document.getElementById('customFieldPreview');
     document.getElementById('analyzeBtn').disabled = true;
+    document.getElementById('learnedFieldsBtn').disabled = true;
     window.CustomFieldPreview.message(preview, 'Analyzing field suggestions…');
 
     const aiStatus = document.getElementById('aiStatus');
@@ -506,7 +542,7 @@ async function handleAnalysis() {
         }
 
         const result = await response.json();
-        if (selectionVersion !== manualSelectionVersion || analyzedDocument !== currentDocument) return;
+        if (selectionVersion !== manualSelectionVersion || analyzedDocument !== currentDocument || fieldRequestVersion !== manualFieldRequestVersion) return;
 
         let suggestedTags = [];
         if (result.document && result.document.tags) {
@@ -529,24 +565,25 @@ async function handleAnalysis() {
                     suggestions: result.document?.custom_fields || {} })
             });
             const fields = await fieldResponse.json();
-            if (selectionVersion !== manualSelectionVersion || analyzedDocument !== currentDocument) return;
+            if (selectionVersion !== manualSelectionVersion || analyzedDocument !== currentDocument || fieldRequestVersion !== manualFieldRequestVersion) return;
             if (!fieldResponse.ok) throw new Error(fields.error || 'Custom field preview is unavailable');
             window.CustomFieldPreview.render(preview, fields, { documentId: analyzedDocument, content,
                 suggestions: result.document?.custom_fields || {} });
         } catch (error) {
-            if (selectionVersion !== manualSelectionVersion) return;
+            if (selectionVersion !== manualSelectionVersion || fieldRequestVersion !== manualFieldRequestVersion) return;
             window.CustomFieldPreview.message(preview, error.message);
         }
         showMessage('Analysis completed successfully', 'success');
     } catch (error) {
-        if (selectionVersion !== manualSelectionVersion) return;
+        if (selectionVersion !== manualSelectionVersion || fieldRequestVersion !== manualFieldRequestVersion) return;
         window.CustomFieldPreview.message(preview, 'Analysis failed. No field preview is available.');
         showMessage('Error during analysis: ' + error.message);
         console.error('Analysis error:', error);
     } finally {
-        if (selectionVersion === manualSelectionVersion) {
+        if (selectionVersion === manualSelectionVersion && fieldRequestVersion === manualFieldRequestVersion) {
             aiStatus.classList.add('hidden');
             document.getElementById('analyzeBtn').disabled = false;
+            document.getElementById('learnedFieldsBtn').disabled = false;
         }
     }
 }
@@ -607,6 +644,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Analyze button
     document.getElementById('analyzeBtn').addEventListener('click', handleAnalysis);
+    document.getElementById('learnedFieldsBtn').addEventListener('click', handleLearnedFields);
 
     // Chat button
     document.getElementById('chatBtn').addEventListener('click', handleChat);

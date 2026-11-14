@@ -71,6 +71,11 @@ an operator explicitly edits the document. Paperless has no atomic compare-and-s
 in this integration: an external writer can still race the final PATCH; this is a
 known remaining limitation.
 
+The optional [learned-field hint source](learned-field-hints.md) derives literal
+identifier labels only from actual changed fields in active confirmed events.
+It adds read-only Manual suggestions and does not change automatic provider
+context or introduce a second pattern store.
+
 The common context selector ranks confirmed examples by lexical overlap, supports
 title/type-only feedback, quotes data as untrusted JSON, and fits complete records
 within a 1500-token cl100k budget. This is a retrieval heuristic, not a measure of

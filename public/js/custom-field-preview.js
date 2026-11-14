@@ -10,11 +10,13 @@
   const generations=new WeakMap();
   function next(container){const generation=(generations.get(container)||0)+1;generations.set(container,generation);return generation;}
   function message(container,text){next(container);container.replaceChildren(node('p',text));}
-  function render(container,result,refreshRequest,notice='',originals=result.rows.map(row=>row.proposedValue)){
+  function render(container,result,refreshRequest,notice='',originals=result.rows.map(row=>row.proposedValue),origins=result.rows.map(row=>row.origin||null)){
     const generation=next(container),current=()=>generations.get(container)===generation;
     const selected=new Map(),checkboxes=[],editors=[],drafts=result.rows.map(row=>({field_name:row.name,value:row.proposedValue}));
     container.replaceChildren();
-    if(!result.rows.length)return message(container,'No custom field values were suggested.');
+    if(!result.rows.length)return message(container,result.emptyMessage||'No custom field values were suggested.');
+    if(origins.some(origin=>origin?.kind==='learned_pattern'))container.append(node('p','Learned labels are suggestions only. A matching label may belong to a historical attachment. Review the current document before selecting values.'));
+    if(result.ambiguousPatterns)container.append(node('p',`${result.ambiguousPatterns} fields skipped because learned matches conflict.`));
     const selectable=!!refreshRequest&&!!result.snapshotDigest&&Array.isArray(result.reviewFieldIds);
     const controls=node('div'),button=node('button','Save selected custom fields'),status=node('p',notice);
     const check=node('button','Check edited values');check.type='button';check.disabled=true;
@@ -27,6 +29,8 @@
       for(const control of [...checkboxes,...editors])control.disabled=true;
     }
     for(const [index,row] of result.rows.entries()){
+      const origin=origins[index];
+      if(origin?.kind==='learned_pattern'&&(row.fieldId!==origin.fieldId||row.type!=='string')){row.canApply=false;row.canEdit=false;}
       const article=node('article');article.className='custom-field-proposal';
       article.append(node('h3',row.name),node('p',row.type?`${row.type} · Field ${row.fieldId}`:'Field could not be resolved'));
       if(selectable){
@@ -42,8 +46,12 @@
         label.append(checkbox,document.createTextNode(' Select this value after checking its meaning.'));article.append(label);
       }
       const values=node('dl');
-      for(const [label,value]of [['Current value',row.currentValue],['AI suggestion',originals[index]],['Draft proposal',row.proposedValue],['Typed value',row.normalizedValue]])values.append(node('dt',label),node('dd',display(value)));
+      for(const [label,value]of [['Current value',row.currentValue],[origin?.kind==='learned_pattern'?'Original learned suggestion':'AI suggestion',originals[index]],['Draft proposal',row.proposedValue],['Typed value',row.normalizedValue]])values.append(node('dt',label),node('dd',display(value)));
       article.append(values,node('p','Field meaning is unverified. A text occurrence is not proof of the correct field.'));
+      if(origin?.kind==='learned_pattern'){
+        article.append(node('p',`Learned label ${origin.label} · original suggestion at current text line ${origin.line}`));
+        for(const ref of origin.sources)article.append(node('p',`Source document ${ref.documentId} · confirmed learning event ${ref.eventId}`));
+      }
       if(selectable&&row.canEdit){
         const label=node('label'),editor=node(row.type==='longtext'?'textarea':'input');
         if(row.type!=='longtext')editor.type='text';
@@ -72,7 +80,7 @@
         const response=await fetch('/manual/custom-field-preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(request)});
         const preview=await response.json();if(!current())return;
         if(!response.ok){message(container,preview.error||'Preview failed. Reload before saving.');return;}
-        render(container,preview,request,'Edited values checked. Review their meaning and select values to save.',originals);
+        render(container,preview,request,'Edited values checked. Review their meaning and select values to save.',originals,origins);
       }catch{if(current())message(container,'Edited values could not be checked. Nothing was saved. Reload before saving.');}
     });
     button.addEventListener('click',async()=>{
@@ -92,7 +100,7 @@
         const refreshed=await fetch('/manual/custom-field-preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(refreshRequest)});
         const preview=await refreshed.json();if(!current())return;
         if(!refreshed.ok)throw new Error('Preview refresh failed');
-        render(container,preview,refreshRequest,'Save completed. Review the current values below.',originals);
+        render(container,preview,refreshRequest,'Save completed. Review the current values below.',originals,origins);
       }catch{
         if(!current())return;
         message(container,saved?'Save completed, but the preview could not refresh. Reload before another save.':

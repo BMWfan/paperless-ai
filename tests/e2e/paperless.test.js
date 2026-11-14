@@ -357,3 +357,47 @@ test('reviewed fields apply only with a current snapshot and retain learning/wor
     await learning('/settings',previous);
   }
 });
+
+test('confirmed field correction yields only current-text hints and revocation removes them', {timeout:180000},async()=>{
+  const previous=await learning('/settings'),json={'Content-Type':'application/json'},key={...json,'x-api-key':'isolated-test-api-key'},stamp=Date.now();
+  const create=(resource,data)=>api(`/${resource}/`,{method:'POST',headers:json,body:JSON.stringify(data)});
+  const field=await create('custom_fields',{name:`Learned number ${stamp}`,data_type:'string'});
+  const correspondent=await create('correspondents',{name:`Learned sender ${stamp}`});
+  const type=await create('document_types',{name:`Learned type ${stamp}`});
+  const documents=[];
+  for(const value of ['TRAIN-001','NEW-0007']){
+    const name=`hint-${stamp}-${value}.txt`,form=new FormData();form.set('document',new Blob([`Synthetic learned field ${stamp}\nInvoice reference: ${value}`],{type:'text/plain'}),name);
+    await api('/documents/post_document/',{method:'POST',body:form});let doc;
+    for(let attempt=0;attempt<90;attempt++){
+      doc=(await api('/documents/?ordering=-id')).results.find(row=>row.original_file_name===name);if(doc)break;
+      await new Promise(resolve=>setTimeout(resolve,1000));
+    }
+    assert.ok(doc);documents.push(await api(`/documents/${doc.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({correspondent:correspondent.id,document_type:type.id,custom_fields:[{field:field.id,value:'Previous'}]})}));
+  }
+  const [source,target]=documents;
+  const hints=async()=>{
+    const current=await api(`/documents/${target.id}/`);
+    const response=await fetch('http://ai:3000/manual/learned-field-preview',{method:'POST',headers:key,body:JSON.stringify({documentId:target.id,content:current.content.slice(0,50000)})});
+    assert.equal(response.status,200);return response.json();
+  };
+  try{
+    await learning('/settings',{mode:'manual',enabled:false,stabilizationMs:0});await learning('/scan',{});
+    await api(`/documents/${source.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({custom_fields:[{field:field.id,value:'TRAIN-001'}]})});await learning('/scan',{});
+    const event=(await learning(`/events?q=${source.id}&limit=200`)).events.find(row=>row.document_id===source.id&&row.status==='pending');assert.ok(event);
+    assert.equal((await hints()).rows.length,0,'pending external correction does not train');
+    await learning(`/events/${event.id}/review`,{decision:'confirmed'});
+    const before=await api(`/documents/${target.id}/`),result=await hints();
+    assert.equal(result.readOnly,true);assert.equal(result.rows.length,1);assert.equal(result.rows[0].proposedValue,'NEW-0007');
+    assert.deepEqual(result.rows[0].origin.sources,[{documentId:source.id,eventId:event.id}]);
+    assert.ok(!JSON.stringify(result).includes('TRAIN-001'),'old training value is not an outgoing copy template');
+    assert.equal((await api(`/documents/${target.id}/`)).modified,before.modified,'hint retrieval does not write');
+    await learning('/settings',{mode:'disabled'});assert.equal((await hints()).rows.length,0);await learning('/settings',{mode:'manual'});
+    const saved=await fetch('http://ai:3000/manual/custom-field-apply',{method:'POST',headers:key,body:JSON.stringify({documentId:target.id,snapshotDigest:result.snapshotDigest,reviewFieldIds:result.reviewFieldIds,fields:[{field:field.id,value:'NEW-0007'}]})});
+    assert.equal(saved.status,200);
+    const after=await api(`/documents/${target.id}/`);assert.equal(after.custom_fields.find(row=>row.field===field.id).value,'NEW-0007');
+    const events=(await learning(`/events?q=${target.id}&limit=200`)).events.filter(row=>row.document_id===target.id);
+    assert.ok(events.some(row=>row.source==='confirmed_ui'&&row.status==='pending'),'save does not bypass manual learning review');
+    await learning(`/events/${event.id}/review`,{decision:'deleted'});assert.equal((await hints()).rows.length,0);
+    assert.equal((await api(`/documents/${target.id}/`)).custom_fields.find(row=>row.field===field.id).value,'NEW-0007','revocation does not undo saved native data');
+  }finally{await learning('/settings',previous);}
+});
