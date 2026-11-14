@@ -24,11 +24,13 @@ the current document's own identifier.
 
 ## Eligibility and boundaries
 
-- Read at most500 active v2 examples joined to their confirmed event and current
-  metadata snapshot. Only fields actually changed in that event qualify, with
-  the same nonempty trimmed string in the example. Title-only confirmation does
-  not turn unchanged fields into explicit field corrections. Pending, rejected,
-  revoked, stale and legacy examples do not supply labels.
+- Read at most500 confirmed field-source events with current generation bindings.
+  Only fields actually changed and explicitly confirmed at that generation qualify.
+  Independent title/tag changes retain the original field event; a title-only
+  confirmation creates no new field proof. Observed field/presence/scope changes,
+  stale generations and document-wide revocation invalidate sources. Pending,
+  rejected, revoked and legacy examples do not supply labels. See the
+  [field lifecycle/migration contract](field-learning-continuity.md).
 - Both native correspondent and document-type IDs must be positive and match;
   exclude the target itself. Missing native scope means abstention, not a model
   query. `mode: disabled` returns no hints; `enabled` still only controls scans.
@@ -48,15 +50,19 @@ the current document's own identifier.
 - Up to50 candidate fields, at most3 source-event references per label/candidate.
   Multiple current matches or conflicting candidate lines cause abstention for
   that field. Repeated identical patterns are combined. No native full-document
-  synchronization and no pattern cache/table are introduced. Revocation or
-  staleness affects the next request's source query; an already displayed draft
+  synchronization or pattern cache/table is introduced. Additive field-state and
+  source bindings live in the existing SQLite file; they do not store executable
+  patterns. Revocation or observed field-version changes affect the next request's source query; an already displayed draft
   is still explicit human input and is not remotely erased.
 
 Labels are derived on demand; the old confirmed value is used only to locate
 the training label, never as a fallback for a new document. Only current captures,
 labels and bounded source IDs leave this service. Existing native current values
-remain visible under the ordinary Manual contract. Actual confirmed examples and
-history remain in the existing learning store.
+remain visible under the ordinary Manual contract. Actual confirmed examples, field-state bindings and
+history remain in the existing learning store. The document-level examples API
+and event activeExample flag still describe complete document snapshots, not
+the independent field bindings. Revoke the current document example to remove
+all its field sources, including earlier field events.
 
 ## API and frontend
 
@@ -123,6 +129,8 @@ checks do not establish production/OCR/PDF accuracy.
 ## Rollback
 
 Remove the new read-only route/service, optional store query, Manual button and
-origin display additions. Existing field editor, native values, events, confirmed
-examples and migrations remain intact. No data migration or cleanup is needed.
+origin display additions. Existing field editor, native values, events and confirmed
+examples remain intact. Migration4 is additive: leave its field-state tables and
+history in place when rolling back code; never reset/drop them automatically.
+Reopening the newer code reconciles untracked snapshot revisions conservatively.
 Owner merge, publication and deployment remain separately authorized actions.

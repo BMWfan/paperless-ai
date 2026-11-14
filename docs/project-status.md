@@ -1,4 +1,4 @@
-# Project status — baseline after PR28
+# Project status — baseline after PR29
 
 This is a dated source/acceptance audit, not a release announcement. GitHub issues,
 PRs and their exact checked commits remain the source of truth. Historical
@@ -6,7 +6,12 @@ validation records are not evidence for later heads.
 
 ## Integrated in main at this audit
 
-Baseline: `c2e7a77583c987abaf0602ffa233e169dc17d620` (owner-approved PR28).
+Baseline: `05d5b9b6e508c5524868dff261fba0cb220f64f2` (owner-approved PR29).
+PR29 integrates optional Manual label hints; main-CI43575629746 passed.
+The current approved L-package adds [persistent field-source generations](field-learning-continuity.md)
+with conservative additive migration and revocation, without changing the
+unqualified model/context or automatic application. Exact verification belongs
+to its PR; this is not a release or complete semantic-quality qualification.
 PR28 integrates the correction editor with read-only rechecks; its direct main
 Learning run43570858372 passed. The next approved feature is optional
 [learned identifier-label hints](learned-field-hints.md), without automatic

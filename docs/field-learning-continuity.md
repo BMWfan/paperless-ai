@@ -80,6 +80,11 @@ blindly repeats backfill. A transaction failure rolls back old and new learning
 state together; migration failure closes the connection and leaves no partial
 version4 marker/tables/backfill.
 
+An existing version4 marker without the required field tables is an incompatible
+schema lineage: startup fails closed rather than overwriting that marker or
+guessing its meaning. Keep such data intact and diagnose it separately; a fresh
+disposable test DB is not evidence of migrating that incompatible lineage.
+
 ## Ordered verification
 
 1. SQLite lifecycle: original source survives title/tag changes, unknown title-only

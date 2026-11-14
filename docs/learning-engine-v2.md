@@ -74,7 +74,11 @@ known remaining limitation.
 The optional [learned-field hint source](learned-field-hints.md) derives literal
 identifier labels only from actual changed fields in active confirmed events.
 It adds read-only Manual suggestions and does not change automatic provider
-context or introduce a second pattern store.
+context or introduce a second pattern store. [Migration4](field-learning-continuity.md)
+adds field-generation/source bindings inside the existing SQLite DB. Confirmed
+field proof survives independent title changes, but not observed field/scope
+changes, stale generations or document-wide revocation. Document-level examples
+and their existing complete-metadata protection remain separate and unchanged.
 
 The common context selector ranks confirmed examples by lexical overlap, supports
 title/type-only feedback, quotes data as untrusted JSON, and fits complete records

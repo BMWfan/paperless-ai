@@ -3,13 +3,15 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 const { normalizeDocumentMetadata, compareDocumentMetadata } = require('./documentSnapshotService');
+const {initializeFieldSources}=require('./learningFieldSources');
 
 function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'documents.db')) {
   fs.mkdirSync(path.dirname(databasePath), { recursive: true });
   const db = new Database(databasePath);
   db.pragma('journal_mode = WAL');
   db.pragma('busy_timeout = 5000');
-  db.transaction(() => {
+  let fieldSources;
+  try { db.transaction(() => {
     db.exec(`CREATE TABLE IF NOT EXISTS learning_migrations(version INTEGER PRIMARY KEY);
       CREATE TABLE IF NOT EXISTS learning_document_snapshots (
         document_id INTEGER PRIMARY KEY, metadata_json TEXT NOT NULL,
@@ -52,7 +54,8 @@ function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'docu
       db.exec("ALTER TABLE learning_review_history ADD COLUMN actor TEXT NOT NULL DEFAULT 'system'");
     }
     db.prepare('INSERT OR IGNORE INTO learning_migrations VALUES(3)').run();
-  })();
+    fieldSources=initializeFieldSources(db);
+  })(); } catch(error) { db.close(); throw error; }
   const settings = () => JSON.parse(db.prepare('SELECT json FROM learning_settings WHERE id=1').get().json);
   const suppressLegacy = (id, reason, actor = 'system') => db.prepare(
     'INSERT OR IGNORE INTO learning_legacy_overrides(document_id,reason,actor) VALUES(?,?,?)'
@@ -74,10 +77,13 @@ function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'docu
       // Do not resurrect stale corrections after a later document edit.
       const latest = db.prepare('SELECT metadata_json FROM learning_document_snapshots WHERE document_id=?').get(event.document_id);
       if (!latest || latest.metadata_json !== event.metadata_json) throw new Error('Stale correction; refresh document first');
+      fieldSources.assertCurrent(event);
       saveExample.run(event);
+      fieldSources.confirm(event);
       suppressLegacy(event.document_id, 'v2_managed', actor);
     }
     if (decision === 'deleted') {
+      fieldSources.revoke(event.document_id);
       db.prepare('DELETE FROM learning_examples WHERE event_id=?').run(id);
       suppressLegacy(event.document_id, 'revoked', actor);
     }
@@ -106,11 +112,14 @@ function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'docu
     db.prepare('DELETE FROM learning_candidates WHERE document_id=?').run(documentId);
     db.prepare(`INSERT INTO learning_document_snapshots(document_id,metadata_json,source,revision) VALUES(?,?,?,1)
       ON CONFLICT(document_id) DO UPDATE SET metadata_json=excluded.metadata_json,source=excluded.source,updated_at=CURRENT_TIMESTAMP,revision=revision+1`).run(documentId,json,source);
+    const revision=(prior?.revision||0)+1;
+    fieldSources.synchronize(documentId,normalized,prior?.revision||0,revision);
     let eventId;
     let pendingReview = false;
     if (changed && source !== 'self_write' && settings().mode !== 'disabled') {
       eventId = Number(db.prepare(`INSERT INTO learning_change_events(document_id,changes_json,metadata_json,source,content_preview)
         VALUES(?,?,?,?,?)`).run(documentId,JSON.stringify(changes),json,source,String(document.content || '').slice(0,2000)).lastInsertRowid);
+      fieldSources.capture({id:eventId,document_id:documentId,metadata_json:json,changes_json:JSON.stringify(changes)});
       // Only authenticated, explicit in-app feedback can qualify for automatic acceptance.
       const automatic = source === 'confirmed_ui' && ['automatic','hybrid'].includes(settings().mode);
       if (automatic) review(eventId,'confirmed',options.actor);
@@ -160,14 +169,7 @@ function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'docu
         ${includeStale ? '' : 'WHERE e.metadata_json=s.metadata_json'} ORDER BY e.updated_at DESC ${includeStale ? '' : 'LIMIT 500'}`)
         .all().map(row => ({ ...row, active: !!row.active, metadata: JSON.parse(row.metadata_json) }));
     },
-    fieldCorrections() {
-      return db.prepare(`SELECT e.document_id,e.event_id,e.metadata_json,c.changes_json,c.content_preview
-        FROM learning_examples e JOIN learning_change_events c ON c.id=e.event_id
-        JOIN learning_document_snapshots s ON s.document_id=e.document_id
-        WHERE c.status='confirmed' AND e.metadata_json=s.metadata_json AND c.metadata_json=e.metadata_json
-        ORDER BY e.updated_at DESC,e.event_id DESC LIMIT 500`).all()
-        .map(row=>({...row,metadata:JSON.parse(row.metadata_json),changes:JSON.parse(row.changes_json)}));
-    },
+    fieldCorrections() { return fieldSources.corrections(); },
     protectedMetadata(id) { const row = db.prepare('SELECT metadata_json FROM learning_examples WHERE document_id=?').get(id); return row ? JSON.parse(row.metadata_json) : null; },
     isLegacySuppressed(id) { return !!db.prepare('SELECT 1 FROM learning_legacy_overrides WHERE document_id=?').get(id); },
     legacyExamples() {

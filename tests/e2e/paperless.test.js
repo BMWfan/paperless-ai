@@ -386,6 +386,11 @@ test('confirmed field correction yields only current-text hints and revocation r
     const event=(await learning(`/events?q=${source.id}&limit=200`)).events.find(row=>row.document_id===source.id&&row.status==='pending');assert.ok(event);
     assert.equal((await hints()).rows.length,0,'pending external correction does not train');
     await learning(`/events/${event.id}/review`,{decision:'confirmed'});
+    const title=`Independent source title ${stamp}`;
+    await api(`/documents/${source.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({title})});await learning('/scan',{});
+    assert.equal((await hints()).rows[0].origin.sources[0].eventId,event.id,'unknown title alone keeps field proof');
+    const titleEvent=(await learning(`/events?q=${source.id}&limit=200`)).events.find(row=>row.document_id===source.id&&row.status==='pending'&&row.metadata.title===title);
+    assert.ok(titleEvent);await learning(`/events/${titleEvent.id}/review`,{decision:'confirmed'});
     const before=await api(`/documents/${target.id}/`),result=await hints();
     assert.equal(result.readOnly,true);assert.equal(result.rows.length,1);assert.equal(result.rows[0].proposedValue,'NEW-0007');
     assert.deepEqual(result.rows[0].origin.sources,[{documentId:source.id,eventId:event.id}]);
@@ -397,7 +402,14 @@ test('confirmed field correction yields only current-text hints and revocation r
     const after=await api(`/documents/${target.id}/`);assert.equal(after.custom_fields.find(row=>row.field===field.id).value,'NEW-0007');
     const events=(await learning(`/events?q=${target.id}&limit=200`)).events.filter(row=>row.document_id===target.id);
     assert.ok(events.some(row=>row.source==='confirmed_ui'&&row.status==='pending'),'save does not bypass manual learning review');
-    await learning(`/events/${event.id}/review`,{decision:'deleted'});assert.equal((await hints()).rows.length,0);
+    for(const value of ['Temporary change','TRAIN-001']){
+      await api(`/documents/${source.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({custom_fields:[{field:field.id,value}]})});await learning('/scan',{});
+      assert.equal((await hints()).rows.length,0,'A to B to A does not restore old field permission');
+    }
+    const currentEvent=(await learning(`/events?q=${source.id}&limit=200`)).events.find(row=>row.document_id===source.id&&row.status==='pending'&&row.metadata.custom_fields.some(item=>item.field===field.id&&item.value==='TRAIN-001'));
+    assert.ok(currentEvent);await learning(`/events/${currentEvent.id}/review`,{decision:'confirmed'});
+    assert.equal((await hints()).rows[0].origin.sources[0].eventId,currentEvent.id,'fresh explicit field review creates fresh proof');
+    await learning(`/events/${currentEvent.id}/review`,{decision:'deleted'});assert.equal((await hints()).rows.length,0);
     assert.equal((await api(`/documents/${target.id}/`)).custom_fields.find(row=>row.field===field.id).value,'NEW-0007','revocation does not undo saved native data');
   }finally{await learning('/settings',previous);}
 });
