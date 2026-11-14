@@ -1,0 +1,314 @@
+[
+  {
+    "id": "development-en-positive-0",
+    "split": "development",
+    "language": "en",
+    "cohort": "present",
+    "training": "Invoice number: TRAIN-001",
+    "current": "Invoice number: NEW-0042",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "NEW-0042"
+  },
+  {
+    "id": "development-en-positive-1",
+    "split": "development",
+    "language": "en",
+    "cohort": "present",
+    "training": "Invoice (no.): TRAIN-001",
+    "current": "Invoice (no.): 000007",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "000007"
+  },
+  {
+    "id": "development-en-positive-2",
+    "split": "development",
+    "language": "en",
+    "cohort": "present",
+    "training": "Policy [id]: TRAIN-001",
+    "current": "Policy [id]: ÄB-19",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "ÄB-19"
+  },
+  {
+    "id": "development-en-no-label",
+    "split": "development",
+    "language": "en",
+    "cohort": "no-label",
+    "training": "Invoice number: TRAIN-001",
+    "current": "No identifier is supplied.",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "development-en-multiple",
+    "split": "development",
+    "language": "en",
+    "cohort": "multiple",
+    "training": "Invoice number: TRAIN-001",
+    "current": "Invoice number: OLD-4\nInvoice number: NEW-7",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "development-en-historical",
+    "split": "development",
+    "language": "en",
+    "cohort": "historical",
+    "training": "Invoice number: TRAIN-001",
+    "current": "Historical attachment, not the current identifier:\nInvoice number: OLD-4",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "development-de-positive-0",
+    "split": "development",
+    "language": "de",
+    "cohort": "present",
+    "training": "Rechnungsnummer: TRAIN-001",
+    "current": "Rechnungsnummer: NEW-0042",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "NEW-0042"
+  },
+  {
+    "id": "development-de-positive-1",
+    "split": "development",
+    "language": "de",
+    "cohort": "present",
+    "training": "Rechnung (Nr.): TRAIN-001",
+    "current": "Rechnung (Nr.): 000007",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "000007"
+  },
+  {
+    "id": "development-de-positive-2",
+    "split": "development",
+    "language": "de",
+    "cohort": "present",
+    "training": "Policen [Kennung]: TRAIN-001",
+    "current": "Policen [Kennung]: ÄB-19",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "ÄB-19"
+  },
+  {
+    "id": "development-de-no-label",
+    "split": "development",
+    "language": "de",
+    "cohort": "no-label",
+    "training": "Rechnungsnummer: TRAIN-001",
+    "current": "Keine Kennung angegeben.",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "development-de-multiple",
+    "split": "development",
+    "language": "de",
+    "cohort": "multiple",
+    "training": "Rechnungsnummer: TRAIN-001",
+    "current": "Rechnungsnummer: OLD-4\nRechnungsnummer: NEW-7",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "development-de-historical",
+    "split": "development",
+    "language": "de",
+    "cohort": "historical",
+    "training": "Rechnungsnummer: TRAIN-001",
+    "current": "Historischer Anhang, keine aktuelle Kennung:\nRechnungsnummer: OLD-4",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "confirmation-en-positive-0",
+    "split": "confirmation",
+    "language": "en",
+    "cohort": "present",
+    "training": "Contract reference: TRAIN-001",
+    "current": "Contract reference: NEW-0042",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "NEW-0042"
+  },
+  {
+    "id": "confirmation-en-positive-1",
+    "split": "confirmation",
+    "language": "en",
+    "cohort": "present",
+    "training": "Invoice ref.: TRAIN-001",
+    "current": "Invoice ref.: 000007",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "000007"
+  },
+  {
+    "id": "confirmation-en-positive-2",
+    "split": "confirmation",
+    "language": "en",
+    "cohort": "present",
+    "training": "Policy identifier: TRAIN-001",
+    "current": "Policy identifier: ÄB-19",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "ÄB-19"
+  },
+  {
+    "id": "confirmation-en-no-label",
+    "split": "confirmation",
+    "language": "en",
+    "cohort": "no-label",
+    "training": "Contract reference: TRAIN-001",
+    "current": "No identifier is supplied.",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "confirmation-en-multiple",
+    "split": "confirmation",
+    "language": "en",
+    "cohort": "multiple",
+    "training": "Contract reference: TRAIN-001",
+    "current": "Contract reference: OLD-4\nContract reference: NEW-7",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "confirmation-en-historical",
+    "split": "confirmation",
+    "language": "en",
+    "cohort": "historical",
+    "training": "Contract reference: TRAIN-001",
+    "current": "Historical attachment, not the current identifier:\nContract reference: OLD-4",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "confirmation-de-positive-0",
+    "split": "confirmation",
+    "language": "de",
+    "cohort": "present",
+    "training": "Vertragskennung: TRAIN-001",
+    "current": "Vertragskennung: NEW-0042",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "NEW-0042"
+  },
+  {
+    "id": "confirmation-de-positive-1",
+    "split": "confirmation",
+    "language": "de",
+    "cohort": "present",
+    "training": "Rechnungsreferenz: TRAIN-001",
+    "current": "Rechnungsreferenz: 000007",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "000007"
+  },
+  {
+    "id": "confirmation-de-positive-2",
+    "split": "confirmation",
+    "language": "de",
+    "cohort": "present",
+    "training": "Versicherungsschein-ID: TRAIN-001",
+    "current": "Versicherungsschein-ID: ÄB-19",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": "ÄB-19"
+  },
+  {
+    "id": "confirmation-de-no-label",
+    "split": "confirmation",
+    "language": "de",
+    "cohort": "no-label",
+    "training": "Vertragskennung: TRAIN-001",
+    "current": "Keine Kennung angegeben.",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "confirmation-de-multiple",
+    "split": "confirmation",
+    "language": "de",
+    "cohort": "multiple",
+    "training": "Vertragskennung: TRAIN-001",
+    "current": "Vertragskennung: OLD-4\nVertragskennung: NEW-7",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  },
+  {
+    "id": "confirmation-de-historical",
+    "split": "confirmation",
+    "language": "de",
+    "cohort": "historical",
+    "training": "Vertragskennung: TRAIN-001",
+    "current": "Historischer Anhang, keine aktuelle Kennung:\nVertragskennung: OLD-4",
+    "scope": {
+      "correspondent": 5,
+      "document_type": 7
+    },
+    "expected": null
+  }
+]
