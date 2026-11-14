@@ -160,6 +160,14 @@ function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'docu
         ${includeStale ? '' : 'WHERE e.metadata_json=s.metadata_json'} ORDER BY e.updated_at DESC ${includeStale ? '' : 'LIMIT 500'}`)
         .all().map(row => ({ ...row, active: !!row.active, metadata: JSON.parse(row.metadata_json) }));
     },
+    fieldCorrections() {
+      return db.prepare(`SELECT e.document_id,e.event_id,e.metadata_json,c.changes_json,c.content_preview
+        FROM learning_examples e JOIN learning_change_events c ON c.id=e.event_id
+        JOIN learning_document_snapshots s ON s.document_id=e.document_id
+        WHERE c.status='confirmed' AND e.metadata_json=s.metadata_json AND c.metadata_json=e.metadata_json
+        ORDER BY e.updated_at DESC,e.event_id DESC LIMIT 500`).all()
+        .map(row=>({...row,metadata:JSON.parse(row.metadata_json),changes:JSON.parse(row.changes_json)}));
+    },
     protectedMetadata(id) { const row = db.prepare('SELECT metadata_json FROM learning_examples WHERE document_id=?').get(id); return row ? JSON.parse(row.metadata_json) : null; },
     isLegacySuppressed(id) { return !!db.prepare('SELECT 1 FROM learning_legacy_overrides WHERE document_id=?').get(id); },
     legacyExamples() {

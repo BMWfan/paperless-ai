@@ -1,4 +1,4 @@
-# Project status — baseline after PR27
+# Project status — baseline after PR28
 
 This is a dated source/acceptance audit, not a release announcement. GitHub issues,
 PRs and their exact checked commits remain the source of truth. Historical
@@ -6,13 +6,16 @@ validation records are not evidence for later heads.
 
 ## Integrated in main at this audit
 
-Baseline: `872228d99c5b3ea5a685a945ca3543daec5a5fc5` (owner-approved PR27).
+Baseline: `c2e7a77583c987abaf0602ffa233e169dc17d620` (owner-approved PR28).
+PR28 integrates the correction editor with read-only rechecks; its direct main
+Learning run43570858372 passed. The next approved feature is optional
+[learned identifier-label hints](learned-field-hints.md), without automatic
+application or modification of the unqualified production retrieval heuristic.
 PR25 integrated confirmed saving; PR26 preserves the failed section diagnostic;
 PR27 archives the unqualified model/extraction experiment without activation.
 Its postmerge [Learning run43527747171](https://github.com/BMWfan/paperless-ai/actions/runs/43527747171)
-passed. The correction editor is the next owner-approved M-plan on
-`feat/manual-field-corrections`; its implementation/verification is tracked in
-[SPEC20](https://github.com/BMWfan/paperless-ai/issues/20#issuecomment-6867699704).
+passed. The correction editor is integrated by PR28; SPEC20 holds its exact
+implementation/verification and the next approved label-hint M-plan.
 PR25's direct main-push [Learning run43378895338](https://github.com/BMWfan/paperless-ai/actions/runs/43378895338)
 passed. The earlier main audit below remains dated evidence for185607a.
 

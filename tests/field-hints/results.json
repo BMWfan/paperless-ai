@@ -1,0 +1,232 @@
+{
+  "revision": "field-hints-v1",
+  "cases": 24,
+  "groups": {
+    "development": {
+      "positive": 6,
+      "correctPositive": 6,
+      "negative": 6,
+      "negativeWithSuggestion": 2,
+      "wrongSuggestions": 2,
+      "abstentions": 4,
+      "historicalRoleErrors": 2
+    },
+    "development/en": {
+      "positive": 3,
+      "correctPositive": 3,
+      "negative": 3,
+      "negativeWithSuggestion": 1,
+      "wrongSuggestions": 1,
+      "abstentions": 2,
+      "historicalRoleErrors": 1
+    },
+    "development/de": {
+      "positive": 3,
+      "correctPositive": 3,
+      "negative": 3,
+      "negativeWithSuggestion": 1,
+      "wrongSuggestions": 1,
+      "abstentions": 2,
+      "historicalRoleErrors": 1
+    },
+    "confirmation": {
+      "positive": 6,
+      "correctPositive": 6,
+      "negative": 6,
+      "negativeWithSuggestion": 2,
+      "wrongSuggestions": 2,
+      "abstentions": 4,
+      "historicalRoleErrors": 2
+    },
+    "confirmation/en": {
+      "positive": 3,
+      "correctPositive": 3,
+      "negative": 3,
+      "negativeWithSuggestion": 1,
+      "wrongSuggestions": 1,
+      "abstentions": 2,
+      "historicalRoleErrors": 1
+    },
+    "confirmation/de": {
+      "positive": 3,
+      "correctPositive": 3,
+      "negative": 3,
+      "negativeWithSuggestion": 1,
+      "wrongSuggestions": 1,
+      "abstentions": 2,
+      "historicalRoleErrors": 1
+    }
+  },
+  "rows": [
+    {
+      "id": "development-en-positive-0",
+      "expected": "NEW-0042",
+      "actual": "NEW-0042",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "development-en-positive-1",
+      "expected": "000007",
+      "actual": "000007",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "development-en-positive-2",
+      "expected": "ÄB-19",
+      "actual": "ÄB-19",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "development-en-no-label",
+      "expected": null,
+      "actual": null,
+      "correct": false,
+      "wrong": false
+    },
+    {
+      "id": "development-en-multiple",
+      "expected": null,
+      "actual": null,
+      "correct": false,
+      "wrong": false
+    },
+    {
+      "id": "development-en-historical",
+      "expected": null,
+      "actual": "OLD-4",
+      "correct": false,
+      "wrong": true
+    },
+    {
+      "id": "development-de-positive-0",
+      "expected": "NEW-0042",
+      "actual": "NEW-0042",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "development-de-positive-1",
+      "expected": "000007",
+      "actual": "000007",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "development-de-positive-2",
+      "expected": "ÄB-19",
+      "actual": "ÄB-19",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "development-de-no-label",
+      "expected": null,
+      "actual": null,
+      "correct": false,
+      "wrong": false
+    },
+    {
+      "id": "development-de-multiple",
+      "expected": null,
+      "actual": null,
+      "correct": false,
+      "wrong": false
+    },
+    {
+      "id": "development-de-historical",
+      "expected": null,
+      "actual": "OLD-4",
+      "correct": false,
+      "wrong": true
+    },
+    {
+      "id": "confirmation-en-positive-0",
+      "expected": "NEW-0042",
+      "actual": "NEW-0042",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-en-positive-1",
+      "expected": "000007",
+      "actual": "000007",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-en-positive-2",
+      "expected": "ÄB-19",
+      "actual": "ÄB-19",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-en-no-label",
+      "expected": null,
+      "actual": null,
+      "correct": false,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-en-multiple",
+      "expected": null,
+      "actual": null,
+      "correct": false,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-en-historical",
+      "expected": null,
+      "actual": "OLD-4",
+      "correct": false,
+      "wrong": true
+    },
+    {
+      "id": "confirmation-de-positive-0",
+      "expected": "NEW-0042",
+      "actual": "NEW-0042",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-de-positive-1",
+      "expected": "000007",
+      "actual": "000007",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-de-positive-2",
+      "expected": "ÄB-19",
+      "actual": "ÄB-19",
+      "correct": true,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-de-no-label",
+      "expected": null,
+      "actual": null,
+      "correct": false,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-de-multiple",
+      "expected": null,
+      "actual": null,
+      "correct": false,
+      "wrong": false
+    },
+    {
+      "id": "confirmation-de-historical",
+      "expected": null,
+      "actual": "OLD-4",
+      "correct": false,
+      "wrong": true
+    }
+  ],
+  "automaticQualification": false,
+  "limitation": "Literal labels do not establish current-document ownership. Manual review only; no model inference."
+}

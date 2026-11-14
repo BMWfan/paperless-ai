@@ -3236,6 +3236,8 @@ router.post('/manual/updateDocument', express.json(), require('./learning').same
 
 router.post('/manual/custom-field-preview', authenticateJWT, express.json(), require('./learning').sameOriginJSON,
   require('./customFieldPreview').createCustomFieldPreviewHandler(paperlessService));
+router.post('/manual/learned-field-preview', authenticateJWT, express.json(), require('./learning').sameOriginJSON,
+  require('./learnedFieldHints').createLearnedFieldPreviewHandler(paperlessService,()=>require('../services/learningEngine').store));
 
 router.post('/manual/custom-field-apply', authenticateJWT, express.json(), require('./learning').sameOriginJSON,
   require('./customFieldApply').createCustomFieldApplyHandler(paperlessService, documentModel));

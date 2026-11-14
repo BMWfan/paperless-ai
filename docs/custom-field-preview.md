@@ -48,6 +48,10 @@ a reload; they do not send a save. Saving corrected values uses the same existin
 learning modes and actor as selecting the original proposal. In manual learning
 mode the resulting learning event still needs its separate review.
 
+For provider-free label suggestions from eligible confirmed corrections, see
+[learned field hints](learned-field-hints.md). Their origin remains visible through
+editing; the same explicit save and learning-review rules apply.
+
 ## API contracts
 
 Both routes require the existing JWT-cookie or API-key authentication and

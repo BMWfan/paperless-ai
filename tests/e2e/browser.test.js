@@ -273,3 +273,65 @@ test('manual reviewed saves require selection, reject stale snapshots and never 
     await browser.close();await app.post(origin+'/api/learning/settings',{data:previous});await app.dispose();await native.dispose();
   }
 });
+
+test('learned field suggestions preserve provenance through editing and require explicit save', {timeout:180000},async()=>{
+  const token=fs.readFileSync('/fixture-data/.env','utf8').match(/^PAPERLESS_API_TOKEN=(.+)$/m)[1];
+  const native=await request.newContext({extraHTTPHeaders:{Authorization:`Token ${token}`}}),app=await request.newContext({extraHTTPHeaders:key});
+  const post=async(path,data)=>{const response=await app.post(origin+'/api/learning'+path,{data});assert.ok(response.ok());return response.json();};
+  const previous=await(await app.get(origin+'/api/learning/settings')).json(),stamp=Date.now();
+  const create=async(resource,data)=>{const response=await native.post(`http://paperless:8000/api/${resource}/`,{data});assert.ok(response.ok());return response.json();};
+  const field=await create('custom_fields',{name:`Browser learned reference ${stamp}`,data_type:'string'});
+  const sender=await create('correspondents',{name:`Browser learned sender ${stamp}`}),type=await create('document_types',{name:`Browser learned type ${stamp}`});
+  const documents=[];
+  for(const value of ['TRAIN-001','NEW-007']){
+    const name=`synthetic-browser-learned-${stamp}-${value}.txt`;
+    assert.ok((await native.post('http://paperless:8000/api/documents/post_document/',{multipart:{document:{name,mimeType:'text/plain',buffer:Buffer.from(`Synthetic ${stamp}\nInvoice reference: ${value}\nAlternative current identifier NEW-008`)}}})).ok());
+    let document;
+    for(let attempt=0;attempt<90;attempt++){
+      document=(await(await native.get('http://paperless:8000/api/documents/?ordering=-id')).json()).results.find(row=>row.original_file_name===name);
+      if(document)break;await new Promise(resolve=>setTimeout(resolve,1000));
+    }
+    assert.ok(document);assert.ok((await native.patch(`http://paperless:8000/api/documents/${document.id}/`,{data:{correspondent:sender.id,document_type:type.id,custom_fields:[{field:field.id,value:'Previous'}]}})).ok());documents.push(document);
+  }
+  const [source,target]=documents;let browser;
+  try{
+    await post('/settings',{mode:'manual',enabled:false,stabilizationMs:0});await post('/scan',{});
+    assert.ok((await native.patch(`http://paperless:8000/api/documents/${source.id}/`,{data:{custom_fields:[{field:field.id,value:'TRAIN-001'}]}})).ok());await post('/scan',{});
+    const event=(await(await app.get(origin+`/api/learning/events?q=${source.id}&limit=200`)).json()).events.find(row=>row.document_id===source.id&&row.status==='pending');assert.ok(event);
+    await post(`/events/${event.id}/review`,{decision:'confirmed'});
+    browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
+    const context=await browser.newContext({extraHTTPHeaders:key,viewport:{width:1280,height:900}});
+    await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
+    const page=await context.newPage(),errors=[];let models=0,saves=0;
+    page.on('pageerror',error=>errors.push(error.message));page.on('request',r=>{if(r.url().endsWith('/manual/analyze'))models++;if(r.url().endsWith('/manual/custom-field-apply'))saves++;});
+    await page.goto(origin+'/manual');await page.locator(`#documentSelect option[value="${target.id}"]`).waitFor({state:'attached'});
+    await page.locator('#documentSelect').selectOption(String(target.id));
+    const find=()=>page.getByRole('button',{name:'Find learned field suggestions',exact:true});
+    await page.waitForFunction(()=>!document.getElementById('learnedFieldsBtn').disabled);
+    const before=await(await native.get(`http://paperless:8000/api/documents/${target.id}/`)).json();await find().click();
+    const row=page.locator('#customFieldPreview article').filter({has:page.getByRole('heading',{name:field.name,exact:true})});
+    await row.waitFor();assert.match(await row.textContent(),/Original learned suggestionNEW-007/);assert.match(await row.textContent(),new RegExp(`Source document ${source.id} · confirmed learning event ${event.id}`));
+    assert.ok(!(await row.textContent()).includes('TRAIN-001'));assert.equal(models,0);assert.equal(saves,0);
+    assert.equal((await(await native.get(`http://paperless:8000/api/documents/${target.id}/`)).json()).modified,before.modified);
+    const select=()=>page.getByRole('checkbox',{name:`Select ${field.name}`,exact:true}),save=()=>page.getByRole('button',{name:'Save selected custom fields',exact:true});
+    assert.equal(await select().isChecked(),false);await page.getByRole('textbox',{name:`Edit ${field.name}`,exact:true}).fill('NEW-008');assert.equal(await save().isDisabled(),true);
+    await page.getByRole('button',{name:'Check edited values',exact:true}).click();await page.getByRole('status').filter({hasText:'Edited values checked'}).waitFor();
+    assert.match(await row.textContent(),/Original learned suggestionNEW-007/);assert.match(await row.textContent(),/confirmed learning event/);
+    fs.mkdirSync('/artifacts',{recursive:true});await row.screenshot({path:'/artifacts/learned-field-editor-desktop.png',animations:'disabled'});
+    await page.setViewportSize({width:390,height:844});assert.ok(await row.evaluate(e=>e.scrollWidth<=e.clientWidth));
+    await row.screenshot({path:'/artifacts/learned-field-editor-mobile.png',animations:'disabled'});
+    await select().check();await save().click();await page.getByRole('status').filter({hasText:'Save completed'}).waitFor();assert.equal(saves,1);assert.equal(models,0);
+    assert.equal((await(await native.get(`http://paperless:8000/api/documents/${target.id}/`)).json()).custom_fields.find(item=>item.field===field.id).value,'NEW-008');
+    let release,reached;const hold=new Promise(resolve=>{release=resolve;}),started=new Promise(resolve=>{reached=resolve;});
+    await page.route('**/manual/learned-field-preview',async route=>{const response=await route.fetch();reached();await hold;await route.fulfill({response});});
+    await find().click();await started;await page.locator('#documentSelect').selectOption('');release();await page.waitForLoadState('networkidle');
+    assert.match(await page.locator('#customFieldPreview').textContent(),/Analyze this document/);
+    await page.unroute('**/manual/learned-field-preview');await page.locator('#documentSelect').selectOption(String(target.id));await page.waitForFunction(()=>!document.getElementById('learnedFieldsBtn').disabled);
+    await page.route('**/manual/learned-field-preview',route=>route.fulfill({status:502,json:{error:'Synthetic learned lookup unavailable'}}));
+    await find().click();await page.getByText('Synthetic learned lookup unavailable',{exact:true}).waitFor();assert.equal(await page.locator('#customFieldPreview input').count(),0);assert.equal(saves,1);
+    await page.unroute('**/manual/learned-field-preview');await post(`/events/${event.id}/review`,{decision:'deleted'});
+    await find().click();await page.getByText('No learned field suggestions.',{exact:false}).waitFor();assert.equal(models,0);assert.equal(saves,1);assert.deepEqual(errors,[]);
+  }finally{
+    if(browser)await browser.close();await app.post(origin+'/api/learning/settings',{data:previous});await app.dispose();await native.dispose();
+  }
+});

@@ -56,6 +56,7 @@ Powered by **Retrieval-Augmented Generation (RAG)**, you can now search semantic
 - Useful when reviewing sensitive documents
 - Accessible via `/manual`
 - Review custom field suggestions and unverified text excerpts, correct drafts with a read-only recheck, then explicitly [save selected values](docs/custom-field-preview.md) after a fresh snapshot/type check. Save Tags remains separate.
+- Optional [learned identifier-label hints](docs/learned-field-hints.md) reuse confirmed field corrections without copying an old value or calling a model; Manual review remains required.
 
 ### 🧩 Smart Tagging & Rules
 - Define rules to limit which documents are processed
