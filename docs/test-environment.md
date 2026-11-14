@@ -34,10 +34,10 @@ synthetic database, document and app volumes; do not run `reset` for that case.
 
 ### Saved Codex environment settings
 
-Select repository `BMWfan/paperless-ai` with the approved branch containing the
-version under test. Until the 3.4.2 qualification PR is integrated, its branch is
-`test/paperless-ngx-3.4.2`; the older learning branch alone does not contain this
-upgrade. Use this install command:
+Select repository `BMWfan/paperless-ai` with the approved feature branch
+containing the version under test. Paperless-ngx 3.4.2 qualification is integrated
+in main; start new approved work from that integrated baseline rather than an
+older learning or upgrade branch. Use this install command:
 
 ```sh
 cd /workspace/paperless-ai

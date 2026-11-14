@@ -26,6 +26,28 @@ another attempt. The app never automatically repeats a PATCH. Switching document
 invalidates the displayed selection/results, but cannot cancel a save already
 sent for the original document. Late responses cannot populate another selection.
 
+## Correct a proposal before saving
+
+For a uniquely resolved supported field, **Correct this proposal** edits a draft.
+The original **AI suggestion**, current native value, draft proposal and typed
+value remain distinct. Invalid or missing original values can be corrected;
+unresolved, ambiguous, duplicate and unsupported fields have no editor.
+
+Any edit clears all selections and disables saving. Choose **Check edited values**
+to re-read the native document/definitions, normalize the drafts and refresh their
+text excerpts without writing or calling the model. Nothing is selected after
+checking: review the updated values and their meaning, then explicitly select
+and save. Empty input cannot clear a field. Dates use YYYY-MM-DD, booleans
+true/false, selections an existing exact option label or ID; numeric zero and
+false remain valid. Text matching and successful typing still do not establish
+which invoice, contract or date the field belongs to.
+
+Editors are disabled during checking/saving. A document switch or new analysis
+invalidates pending check results. Failed checks clear the controls and require
+a reload; they do not send a save. Saving corrected values uses the same existing
+learning modes and actor as selecting the original proposal. In manual learning
+mode the resulting learning event still needs its separate review.
+
 ## API contracts
 
 Both routes require the existing JWT-cookie or API-key authentication and
@@ -49,7 +71,11 @@ per row; format conversion never fabricates a source quotation.
 Additive `snapshotDigest` binds document-ID, full-content hash, native modified,
 canonical monitored metadata/Custom Fields and relevant definitions (ID, name,
 type, extra selection/currency data). `reviewFieldIds` lists those definitions;
-rows add `canApply`. Old preview clients can ignore these properties and remain
+rows add `canApply` and `canEdit`. `canEdit` requires a unique supported field
+without duplicate proposals, but permits an invalid/missing proposal so it can be
+corrected. Editing clients send drafts to the same read-only preview route; no
+new endpoint or signed model-output contract is introduced. Old preview clients
+can ignore these properties and remain
 read-only. The digest is an optimistic precondition, not a signed model output,
 proof of a human click, new access grant or global lock. Existing authenticated
 manual-input trust rules still apply.
@@ -107,7 +133,9 @@ not every possible repetition of an identical unchanged state.
 
 ## Validation and rollback
 
-SPEC #20, following merged PR23/24. Tests cover canonical snapshots, typing and
+SPEC #20, following merged PR23/24/25/27. The correction-editor M-plan is
+[recorded in SPEC20](https://github.com/BMWfan/paperless-ai/issues/20#issuecomment-6867699704).
+Tests cover canonical snapshots, typing and
 definition changes, all learning modes, stale/invalid batches, local exclusion,
 unknown native provenance, authentication/origin, unselected values, uncertain
 responses, real ngx3.4.2 API/workflow behavior and browser selection/races/HTML/
@@ -115,6 +143,7 @@ mobile behavior. Use only the [isolated test environment](test-environment.md).
 Provider fixtures establish behavior, not model accuracy or OCR/PDF quality.
 
 No migration, default/model/provider change or new provenance schema. Revert the
-selection/apply/optional-guard additions to return to read-only previews; existing
-stored metadata and learning history are not undone. Publishing and deployment
+editor/UI and additive `canEdit` property to return to selection-only review.
+Reverting the earlier selection/apply/optional-guard additions returns to read-only
+previews; existing stored metadata and learning history are not undone. Publishing and deployment
 remain separately authorized actions.

@@ -60,6 +60,8 @@ async function previewCustomFields(paperless,documentId,content,suggestions){
   const ids=rows.map(row=>row.fieldId).filter(id=>id!==null);
   for(const row of rows){
     if(row.fieldId!==null&&ids.filter(id=>id===row.fieldId).length>1)row.flags.push('multiple_proposals');
+    row.canEdit=row.fieldId!==null&&isReviewableType(row.type)&&
+      !row.flags.some(flag=>['unknown_field','ambiguous_field','unsupported_type','multiple_proposals'].includes(flag));
     row.canApply=row.fieldId!==null&&row.normalizedValue!==null&&
       !row.flags.some(flag=>['unknown_field','ambiguous_field','unsupported_type','not_provided','invalid_value','multiple_proposals'].includes(flag));
   }

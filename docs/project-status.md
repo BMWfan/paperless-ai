@@ -1,4 +1,4 @@
-# Project status — baseline after PR26
+# Project status — baseline after PR27
 
 This is a dated source/acceptance audit, not a release announcement. GitHub issues,
 PRs and their exact checked commits remain the source of truth. Historical
@@ -6,8 +6,13 @@ validation records are not evidence for later heads.
 
 ## Integrated in main at this audit
 
-Baseline: `96fac1157eed5fe3bcb5b562af78b24b8b875fe0` (owner-approved PR26).
-PR25 integrated confirmed saving; PR26 preserves the failed section diagnostic.
+Baseline: `872228d99c5b3ea5a685a945ca3543daec5a5fc5` (owner-approved PR27).
+PR25 integrated confirmed saving; PR26 preserves the failed section diagnostic;
+PR27 archives the unqualified model/extraction experiment without activation.
+Its postmerge [Learning run43527747171](https://github.com/BMWfan/paperless-ai/actions/runs/43527747171)
+passed. The correction editor is the next owner-approved M-plan on
+`feat/manual-field-corrections`; its implementation/verification is tracked in
+[SPEC20](https://github.com/BMWfan/paperless-ai/issues/20#issuecomment-6867699704).
 PR25's direct main-push [Learning run43378895338](https://github.com/BMWfan/paperless-ai/actions/runs/43378895338)
 passed. The earlier main audit below remains dated evidence for185607a.
 
@@ -53,10 +58,12 @@ proposals retained but two wrong unmarked-attachment IDs accepted; old unheaded
 data loses all coverage. The candidate is not qualified and is not activated.
 Use its PR for exact current-head verification/review; PR26 was separately owner-approved and integrated. No production activation.
 The approved [model qualification](extraction-model-qualification.md) now adds
-a separate opt-in inference/replay profile on feat/extraction-model-qualification;
+a separate opt-in inference/replay profile integrated by PR27;
 its270 real answers are now archived. B/C fail confirmation (wrong ID
 acceptances remain and positive coverage declines); no production promotion.
-Exact current native replay/CI evidence and tested heads remain in its PR. Merge and activation remain separate approvals.
+PR27 records70 root regressions and350 native replay assignments from270 snapshots
+on60 documents at its approved head884cdbe. Integration does not activate an arm;
+future activation and publication remain separately gated.
 
 ## Remaining requirements
 

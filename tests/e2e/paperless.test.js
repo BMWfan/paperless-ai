@@ -289,10 +289,10 @@ test('reviewed fields apply only with a current snapshot and retain learning/wor
   const kept=await create('custom_fields',{name:`Reviewed untouched ${stamp}`,data_type:'string'});
   await api(`/documents/${document.id}/`,{method:'PATCH',headers:json,body:JSON.stringify({custom_fields:[{field:number.id,value:'OLD'},{field:kept.id,value:'Preserve me'}]})});
   const suggestions=value=>[{field_name:number.name,value},{field_name:date.name,value:'2032-2-29'}];
-  async function preview(value){
+  async function preview(value,dateValue='2032-2-29'){
     const current=await api(`/documents/${document.id}/`);
     const response=await fetch('http://ai:3000/manual/custom-field-preview',{method:'POST',headers:key,
-      body:JSON.stringify({documentId:document.id,content:current.content.slice(0,50000),suggestions:suggestions(value)})});
+      body:JSON.stringify({documentId:document.id,content:current.content.slice(0,50000),suggestions:suggestions(value).map(row=>row.field_name===date.name?{...row,value:dateValue}:row)})});
     assert.equal(response.status,200);return response.json();
   }
   const request=(receipt,fields)=>({documentId:document.id,snapshotDigest:receipt.snapshotDigest,reviewFieldIds:receipt.reviewFieldIds,fields});
@@ -303,7 +303,10 @@ test('reviewed fields apply only with a current snapshot and retain learning/wor
     await learning('/settings',{mode:'manual',enabled:false,stabilizationMs:0});await learning('/scan',{});
     for(const mode of ['manual','automatic','hybrid','disabled']){
       await learning('/settings',{mode});const value=`NEW-${mode}`;
-      const receipt=await preview(value),before=await api(`/documents/${document.id}/`),count=(await events()).length;
+      const before=await api(`/documents/${document.id}/`),count=(await events()).length;
+      const original=await preview('OLD-007','2031-02-30');assert.equal(original.rows[1].canEdit,true);assert.equal(original.rows[1].canApply,false);
+      const receipt=await preview(value);
+      assert.equal(receipt.snapshotDigest,original.snapshotDigest);assert.equal((await api(`/documents/${document.id}/`)).modified,before.modified,'correction check is read-only in every learning mode');
       assert.equal((await apply(request(receipt,[]))).status,400);
       assert.equal((await api(`/documents/${document.id}/`)).modified,before.modified,'no selection does not write');
       const selected=[{field:number.id,value},{field:date.id,value:'2032-2-29'}];

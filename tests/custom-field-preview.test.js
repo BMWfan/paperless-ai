@@ -33,10 +33,33 @@ test('preview reports ambiguous fields, invalid values, duplicate proposals and 
   const result=await previewCustomFields(paperless,1,content,[{field_name:'Unknown',value:'ABC-42'},{field_name:'Ambiguous',value:'ABC-42'},
     {field_name:'Date',value:'2031-02-30'},{field_name:'Number',value:'ABC-42'},{field_name:'Number',value:null}]);
   assert.ok(result.rows[0].flags.includes('unknown_field'));assert.ok(result.rows[1].flags.includes('ambiguous_field'));
+  assert.equal(result.rows[0].canEdit,false);assert.equal(result.rows[1].canEdit,false);
+  assert.equal(result.rows[2].canEdit,true,'invalid but uniquely resolved dates can be corrected');
+  assert.equal(result.rows[2].canApply,false);assert.equal(result.rows[3].canEdit,false);assert.equal(result.rows[4].canEdit,false);
   assert.ok(result.rows[2].flags.includes('invalid_value'));assert.equal(result.rows[3].evidence.count,2);
   assert.ok(result.rows[3].flags.includes('multiple_proposals'));assert.ok(result.rows[4].flags.includes('not_provided'));
   const evidence=occurrences('N-42 '.repeat(20),['N-42']);assert.equal(evidence.count,20);assert.equal(evidence.excerpts.length,5);
   assert.ok(occurrences('x'.repeat(1000),['x'.repeat(1000)]).excerpts[0].text.length<=300);
+});
+
+test('edited preview reuses native typing and evidence without writing or promoting semantic meaning',async()=>{
+  const types=['string','longtext','integer','float','boolean','select','date','monetary','documentlink'];
+  const values=['INV-007','Current document','0','0','false','Approved','2032-2-29','42.50 EUR','7'];
+  const content='Current document INV-007 2032-02-29 EUR 42.50 false 0';
+  const document={content,custom_fields:[],modified:'2030-01-01'};
+  const paperless={async getDocument(){return structuredClone(document);},async getCustomFieldDefinitionMatches(name){
+    return {count:1,results:[{id:types.indexOf(name)+1,name,data_type:name,extra_data:{select_options:[{id:'approved-id',label:'Approved'}]}}]};
+  }};
+  const suggestions=types.map(field_name=>({field_name,value:null}));
+  const before=JSON.stringify(document),original=await previewCustomFields(paperless,1,content,suggestions);
+  assert.ok(original.rows.slice(0,8).every(row=>row.canEdit&&!row.canApply));assert.equal(original.rows[8].canEdit,false);
+  const checked=await previewCustomFields(paperless,1,content,types.map((field_name,i)=>({field_name,value:values[i]})));
+  assert.equal(checked.snapshotDigest,original.snapshotDigest,'editing proposals does not change native snapshot');
+  assert.deepEqual(checked.rows.slice(0,8).map(row=>row.normalizedValue),['INV-007','Current document',0,0,false,'approved-id','2032-02-29','EUR42.50']);
+  assert.ok(checked.rows.slice(0,8).every(row=>row.canApply&&row.semanticStatus==='unverified'));
+  assert.equal(checked.rows[0].evidence.count,1);assert.equal(checked.rows[8].canApply,false);
+  const invalid=await previewCustomFields(paperless,1,content,[{field_name:'date',value:'2031-02-30'},{field_name:'string',value:''}]);
+  assert.ok(invalid.rows.every(row=>row.canEdit&&!row.canApply));assert.equal(JSON.stringify(document),before);
 });
 
 test('preview binds the submitted prefix to the current document and fails on unreadable definitions',async()=>{
