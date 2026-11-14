@@ -284,7 +284,7 @@ test('learned field suggestions preserve provenance through editing and require 
   const sender=await create('correspondents',{name:`Browser learned sender ${stamp}`}),type=await create('document_types',{name:`Browser learned type ${stamp}`});
   const documents=[];
   for(const value of ['TRAIN-001','NEW-007']){
-    const name=`browser-learned-${stamp}-${value}.txt`;
+    const name=`synthetic-browser-learned-${stamp}-${value}.txt`;
     assert.ok((await native.post('http://paperless:8000/api/documents/post_document/',{multipart:{document:{name,mimeType:'text/plain',buffer:Buffer.from(`Synthetic ${stamp}\nInvoice reference: ${value}\nAlternative current identifier NEW-008`)}}})).ok());
     let document;
     for(let attempt=0;attempt<90;attempt++){

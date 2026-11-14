@@ -366,7 +366,7 @@ test('confirmed field correction yields only current-text hints and revocation r
   const type=await create('document_types',{name:`Learned type ${stamp}`});
   const documents=[];
   for(const value of ['TRAIN-001','NEW-0007']){
-    const name=`hint-${stamp}-${value}.txt`,form=new FormData();form.set('document',new Blob([`Synthetic learned field ${stamp}\nInvoice reference: ${value}`],{type:'text/plain'}),name);
+    const name=`synthetic-hint-${stamp}-${value}.txt`,form=new FormData();form.set('document',new Blob([`Synthetic learned field ${stamp}\nInvoice reference: ${value}`],{type:'text/plain'}),name);
     await api('/documents/post_document/',{method:'POST',body:form});let doc;
     for(let attempt=0;attempt<90;attempt++){
       doc=(await api('/documents/?ordering=-id')).results.find(row=>row.original_file_name===name);if(doc)break;
