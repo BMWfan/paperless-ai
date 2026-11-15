@@ -1,0 +1,16 @@
+{
+  "core.js": "9ced88b6fe20190e83fec433a94607184389e3a757671a4b957f21f01a9d14fc",
+  "run.js": "e820c707ef17a70d7db829114f0c6cc17eedc1ceed16506ca6033f578982a0e5",
+  "report.js": "f3db6d1f9bb8f6205430aee4ffcca8ed4ec1880cc64f36f21d9e1686e9f80824",
+  "replay.js": "50044e336d0316be19bbb77f00dd5741b3d610d651f0c003158d084e20075f17",
+  "../context-projection.test.js": "4c7ae8566877b1f63ca6d6e0a553c0e8e041f299015894911b0321df90e09c3c",
+  "../../.github/workflows/classification-evaluation.yml": "cfb5f18b86a4e99ed2f385287f5847437cc801d85c5ed3fc3f071442a3aeb9ec",
+  "CONTRACT.md": "4253f2acfdfb10052aee0192897a0899f3cb48431afb66d99de100713e975f3d",
+  "manifest.json": "047893af9409859a356abaf9fd37200eccb619d8762be2ba5c25216b6a50dc20",
+  "../quality/extraction/core.js": "ce5e6286832abc075d207da7a3ed2066d70df8ca9f9944d849a41c7dfc202d1b",
+  "../quality/scoring.js": "739ee1bd3d035614a9c1e2d5f6b4d1786f94dfdfa2aead26131aa4a9934202ee",
+  "../quality/corpus.js": "b2c64c87ae7812cc8df67eaf5ffd486a10ff03089325eaa5dd1983d82dd88cf8",
+  "../../services/learningContext.js": "c01343bf3eb665559cbbe0e30c9e6796a54961152ad3664c380e746d4d7fd4c7",
+  "../../services/ollamaService.js": "84299e4eb3fd9c9498eabc1a5dadf30057fe1127e8d9b428927e3820f47fe931",
+  "../../services/customFieldUpdates.js": "fe3cf81b7b43176dc4a34a3061e13beadd428ef6bd66eaa98dbf3b4c8beac316"
+}

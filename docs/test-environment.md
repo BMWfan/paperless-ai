@@ -294,3 +294,13 @@ See [the isolated opt-in native profile](native-ai-coexistence.md) and the
 [source-based synergy assessment](paperless-ngx-synergies.md). The standard stack
 keeps native AI disabled. The initial experiment requires separate runtime
 qualification and model digest pinning; it does not imply production activation.
+
+## Reference-context projection profile
+
+The approved [projection measurement](reference-context-projection.md) adds manual
+`projection` (180 real attempts, at most2 parallel) and `projection-replay`
+(archived typed values only) to classification-evaluation.yml. Normal PR smoke
+remains separate; do not dispatch the old measure profile for this experiment.
+Run the frozen harness tests before measurement; do not rerun measured answers
+or store model weights in the8GB Cloud workspace. Native replay uses the same
+isolated official ngx stack and cannot qualify fixture responses as model data.
