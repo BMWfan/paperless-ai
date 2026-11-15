@@ -106,3 +106,16 @@ false assignments per seed. C's quote checking also loses correct values and
 positive amount coverage. Raw records and reproducible counters remain archived;
 no model/prompt/default is promoted. These new-data results do not overwrite or
 rescore the earlier pilot's distinct corpus/contract.
+
+
+## Follow-up: categorical projection with identical selected references
+
+The [approved projection experiment](reference-context-projection.md) freezes a
+new70-case bilingual corpus before code and archives180 responses from source
+ba138ec/run43717958579. A preserves raw production-selected references; B keeps
+exactly those IDs and only categorical metadata. Both have0 protocol failures.
+Confirmation B improves current-ID coverage from5/10 to8/10 but accepts14 then13
+wrong historical IDs (A23/21), and correspondent/language regress. Contract-number
+and end-date false acceptances also increase. Both frozen gates fail; B is not
+promoted. Raw/typed/per-field/cohort reports and original bytes remain reproducible;
+no extra model run, production improvement or blind independent accuracy is claimed.

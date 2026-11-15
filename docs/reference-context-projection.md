@@ -85,10 +85,75 @@ recreated to fill gaps.
 
 ## Status and rollback
 
-Harness verification and the180-attempt measurement are pending at this draft.
-No model-quality improvement is claimed. Prior studies stay immutable and
+Harness ba138ec passes98/98 root tests, targeted ESLint and YAML validation.
+Learning [run43717912673](https://github.com/BMWfan/paperless-ai/actions/runs/43717912673)
+confirms98 root/3 Python/5 real API/4 browser cases, restart and3.4.1→3.4.2
+upgrade, with no failed/skipped cases. Regular classification
+[run43717912650](https://github.com/BMWfan/paperless-ai/actions/runs/43717912650)
+passes the20 legacy0.5B responses, old typed replay and both model-integrity jobs.
+The one approved180-attempt [measurement43717958579](https://github.com/BMWfan/paperless-ai/actions/runs/43717958579)
+completed at ba138ec298fa2913d21826b1fc04f171401fea33, attempt1. All180
+requests returned complete model responses with zero transport/JSON/schema
+failures. Six GitHub ZIP digests and their original decoded payloads were
+independently verified before lossless gzip archiving. Native replay is pending.
+No model-quality qualification is claimed. GitHub standard runners can have
+different CPU models (recorded per report); timings and output differences are
+not a controlled hardware benchmark or independent statistical proof. Prior studies stay immutable and
 remain separate evidence. SPEC20/EPIC12 remain open until their actual semantic
 requirements are met. Optional full Python RAG/hosted-provider/OCR accuracy is
 outside this experiment. No release, deployment, production migration or access
 expansion is authorized. Reverting this test/docs/profile-only change requires
 no data migration; production behavior is unchanged.
+
+
+## Measured result — no qualification or promotion
+
+The [recomputed report](../tests/context-projection/report.json),
+[cohort/timing diagnostics](../tests/context-projection/diagnostics.json) and
+[artifact provenance](../tests/context-projection/artifact-sources.json) retain
+all180 answers. Wrong accepted IDs count assignments, not unique documents;
+current-ID coverage has10 possible positives per group.
+
+| Split / seed | A correct IDs | B correct IDs | A wrong accepted IDs | B wrong accepted IDs |
+| --- | --- | --- | --- | --- |
+| Development42 | 3/10 | 8/10 | 23 | 12 |
+| Confirmation42 | 5/10 | 8/10 | 23 | 14 |
+| Confirmation43 | 5/10 | 8/10 | 21 | 13 |
+
+B reaches the80% coverage threshold in both confirmations but fails the frozen
+zero-wrong-ID criterion. All14/13 B false identifiers match historical IDs in
+the current input. A's additional literal-source audit records7/5 source copies;
+B records none. That descriptive audit does not prove causality or replace the
+unchanged primary score. Removing reference instance values does not establish
+ownership of historical/attachment values inside the current document.
+
+Per-field regressions also matter: B increases wrong accepted contract numbers
+and end dates in both seeds and wrong amounts in seed42. Correct present
+amounts/due dates improve, but that does not compensate for critical false values.
+
+| Confirmation / arm | Type correct/30 | Tags correct/30 | Correspondent correct/30 | Language correct/30 |
+| --- | --- | --- | --- | --- |
+| 42 A | 20 | 20 | 18 | 27 |
+| 42 B | 19 | 19 | 7 | 16 |
+| 43 A | 17 | 17 | 20 | 26 |
+| 43 B | 20 | 20 | 5 | 15 |
+
+Thus B also fails metadata non-regression. Raw and typed scores, missing values,
+invalid-type rejections, errors, language/cohort breakdowns and all original
+responses remain available; rejection is never counted as a successful positive
+extraction. Gzip decoding restores the original report bytes, not a regenerated
+JSON serialization.
+
+Observed total request times A/B were1447/361 seconds (development),1463/434
+(seed42),1374/365 (seed43). Prompt/generated token totals are in the report.
+Runner CPUs differ (Intel Xeon8573C, AMD EPYC7763/9V74); these timings are not a
+controlled speed benchmark. Model version/options/manifest and selected IDs were
+fixed, but public-host variability, same-author synthetic templates and seeds at
+temperature0 limit generalization and causal/statistical claims.
+
+Decision: qualifiedForLaterProposal=false, productionActivation=false. No new
+model, context, prompt, default or automatic application is activated. No extra
+tuning run is authorized by this negative result. A later proposal would need to
+address current-vs-historical ownership and sender/language regression, with new
+pre-approved data/gates/budget. Existing controlled correction/review remains the
+safe user workflow; SPEC20/EPIC12 remain open.

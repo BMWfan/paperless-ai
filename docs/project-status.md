@@ -23,7 +23,9 @@ passed. Automatic semantic extraction remains unqualified.
 The approved [reference-context projection](reference-context-projection.md)
 compares raw references against categorical metadata using exactly the same
 selected source IDs and pinned1.5B model. Its new data, gates and protocol are
-frozen before candidate code. Measurement/replay results are pending; production
+frozen before candidate code. All180 answers are archived and independently rescored. B retains8/10
+current IDs but accepts14/13 wrong IDs across confirmation seeds and regresses
+metadata, so it is not qualified. Native replay is pending; production
 context, writer and field-source behavior stay unchanged. This is not project-wide
 completion, a release or activation.
 
