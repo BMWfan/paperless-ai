@@ -1,4 +1,4 @@
-# Project status — baseline after PR28
+# Project status — baseline after PR29
 
 This is a dated source/acceptance audit, not a release announcement. GitHub issues,
 PRs and their exact checked commits remain the source of truth. Historical
@@ -6,18 +6,27 @@ validation records are not evidence for later heads.
 
 ## Integrated in main at this audit
 
-Baseline: `c2e7a77583c987abaf0602ffa233e169dc17d620` (owner-approved PR28).
-PR28 integrates the correction editor with read-only rechecks; its direct main
-Learning run43570858372 passed. The next approved feature is optional
-[learned identifier-label hints](learned-field-hints.md), without automatic
-application or modification of the unqualified production retrieval heuristic.
-PR25 integrated confirmed saving; PR26 preserves the failed section diagnostic;
-PR27 archives the unqualified model/extraction experiment without activation.
-Its postmerge [Learning run43527747171](https://github.com/BMWfan/paperless-ai/actions/runs/43527747171)
-passed. The correction editor is integrated by PR28; SPEC20 holds its exact
-implementation/verification and the next approved label-hint M-plan.
-PR25's direct main-push [Learning run43378895338](https://github.com/BMWfan/paperless-ai/actions/runs/43378895338)
-passed. The earlier main audit below remains dated evidence for185607a.
+Baseline: `05d5b9b6e508c5524868dff261fba0cb220f64f2` (owner-approved PR29).
+PR25 integrates confirmed saving, PR28 the correction editor and PR29 optional
+[Manual label hints](learned-field-hints.md). PR26/27 preserve negative diagnostic
+and model results without activation. Direct main Learning runs
+[43575629746](https://github.com/BMWfan/paperless-ai/actions/runs/43575629746) (PR29)
+and [43570858372](https://github.com/BMWfan/paperless-ai/actions/runs/43570858372) (PR28)
+passed. Automatic semantic extraction remains unqualified.
+
+## Current change under review
+
+[PR30](https://github.com/BMWfan/paperless-ai/pull/30) implements the approved
+[persistent field-source generation contract](field-learning-continuity.md).
+Its additive migration retains field proof through independent title changes,
+with conservative invalidation/revocation, without changing the model/context
+or automatic application. It requires its own owner merge approval; exact tested
+SHA/results remain in the PR. This is not a release or project-wide completion.
+
+The table below describes the integrated baseline. Earlier main runs
+[43527747171](https://github.com/BMWfan/paperless-ai/actions/runs/43527747171) (PR27)
+and [43378895338](https://github.com/BMWfan/paperless-ai/actions/runs/43378895338) (PR25)
+remain historical evidence, as does the185607a audit below.
 
 | Requirement | Delivered state | Evidence / limit |
 | --- | --- | --- |

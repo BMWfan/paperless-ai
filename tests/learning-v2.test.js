@@ -92,7 +92,7 @@ test('additive migration preserves legacy feedback and existing v1 snapshots on 
   const check = new Database(file);
   try {
     assert.equal(check.prepare('SELECT title FROM learning_feedback WHERE document_id=7').get().title,'Legacy correction');
-    assert.deepEqual(check.prepare('SELECT version FROM learning_migrations ORDER BY version').all().map(row=>row.version),[2,3]);
+    assert.deepEqual(check.prepare('SELECT version FROM learning_migrations ORDER BY version').all().map(row=>row.version),[2,3,4]);
     assert.equal(check.prepare('SELECT COUNT(*) AS n FROM learning_document_snapshots').get().n,1);
   } finally { check.close(); }
 });

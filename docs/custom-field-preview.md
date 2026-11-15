@@ -119,6 +119,12 @@ for explicitly confirmed manual changes; disabled mode does not learn. Native
 workflow/hierarchy changes outside the expected PATCH result remain unknown and
 require review. A source match or typing success never activates an example by
 itself; learning-event review and proposal saving are separate actions.
+Confirmed field sources follow the [generation lifecycle](field-learning-continuity.md):
+independent title changes retain original field proof, while a later observed
+field change or document-wide revocation removes it. Confirming an older event
+after A→B→A or revocation can return409 for a stale field generation; refresh
+alone cannot restore that event's approval. Review a current correction or record
+a new actual field correction. No action for confirming unchanged fields is added.
 
 The guard runs inside existing per-document write exclusion and reads again
 after definition validation. It prevents detected stale saves and competing local

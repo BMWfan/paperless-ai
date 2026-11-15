@@ -57,6 +57,7 @@ test('learning dashboard supports real review actions, themes and mobile layout'
     await page.screenshot({path:'/artifacts/learning-desktop-light.png',fullPage:true,animations:'disabled'});
     await correction('pending').getByRole('button',{name:'Confirm correction',exact:true}).click();
     await correction('confirmed').waitFor();
+    assert.match(await correction('confirmed').textContent(),/Revoking this document example also revokes its retained field sources/);
     assert.ok((await page.locator('#examples').textContent()).includes(`Document ${document.id}`));
     const event = correction('confirmed');
     await event.getByRole('button',{name:'Show review history',exact:true}).click();
@@ -299,6 +300,10 @@ test('learned field suggestions preserve provenance through editing and require 
     assert.ok((await native.patch(`http://paperless:8000/api/documents/${source.id}/`,{data:{custom_fields:[{field:field.id,value:'TRAIN-001'}]}})).ok());await post('/scan',{});
     const event=(await(await app.get(origin+`/api/learning/events?q=${source.id}&limit=200`)).json()).events.find(row=>row.document_id===source.id&&row.status==='pending');assert.ok(event);
     await post(`/events/${event.id}/review`,{decision:'confirmed'});
+    const changedTitle=`Independent browser title ${stamp}`;
+    assert.ok((await native.patch(`http://paperless:8000/api/documents/${source.id}/`,{data:{title:changedTitle}})).ok());await post('/scan',{});
+    const titleEvent=(await(await app.get(origin+`/api/learning/events?q=${source.id}&limit=200`)).json()).events.find(row=>row.document_id===source.id&&row.status==='pending'&&row.metadata.title===changedTitle);assert.ok(titleEvent);
+    await post(`/events/${titleEvent.id}/review`,{decision:'confirmed'});
     browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
     const context=await browser.newContext({extraHTTPHeaders:key,viewport:{width:1280,height:900}});
     await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
@@ -329,7 +334,7 @@ test('learned field suggestions preserve provenance through editing and require 
     await page.unroute('**/manual/learned-field-preview');await page.locator('#documentSelect').selectOption(String(target.id));await page.waitForFunction(()=>!document.getElementById('learnedFieldsBtn').disabled);
     await page.route('**/manual/learned-field-preview',route=>route.fulfill({status:502,json:{error:'Synthetic learned lookup unavailable'}}));
     await find().click();await page.getByText('Synthetic learned lookup unavailable',{exact:true}).waitFor();assert.equal(await page.locator('#customFieldPreview input').count(),0);assert.equal(saves,1);
-    await page.unroute('**/manual/learned-field-preview');await post(`/events/${event.id}/review`,{decision:'deleted'});
+    await page.unroute('**/manual/learned-field-preview');await post(`/events/${titleEvent.id}/review`,{decision:'deleted'});
     await find().click();await page.getByText('No learned field suggestions.',{exact:false}).waitFor();assert.equal(models,0);assert.equal(saves,1);assert.deepEqual(errors,[]);
   }finally{
     if(browser)await browser.close();await app.post(origin+'/api/learning/settings',{data:previous});await app.dispose();await native.dispose();

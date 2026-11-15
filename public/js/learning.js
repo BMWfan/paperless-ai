@@ -59,9 +59,10 @@
     $('events').replaceChildren();
     for (const event of page.events) {
       const inactive = event.status === 'confirmed' && !event.activeExample;
-      const article = node('article'); article.append(node('h3',`Document ${event.document_id} · ${event.status}${inactive ? ' · Inactive or superseded' : ''}`));
+      const article = node('article'); article.append(node('h3',`Document ${event.document_id} · ${event.status}${inactive ? ' · Document example inactive or superseded' : ''}`));
       article.append(node('p',`${event.created_at} · Source: ${event.source}${event.source === 'unknown' ? ' · Human provenance unverified' : ''}`),metadataTable(event.changes));
       const actions = node('div'); actions.className = 'learning-actions';
+      if(event.retainedExample)article.append(node('p','Revoking this document example also revokes its retained field sources.'));
       for (const decision of event.status === 'pending' ? ['confirmed','rejected'] : event.retainedExample ? ['deleted'] : []) {
         actions.append(actionButton({confirmed:'Confirm correction',rejected:'Reject correction',deleted:'Revoke example'}[decision],async () => { await api(`/events/${event.id}/review`,{decision}); await load(); }));
       }
@@ -82,7 +83,7 @@
   }
   async function loadSummary() {
     const summary = await api('/summary'); $('summary').replaceChildren();
-    for (const [label,value] of [['Pending',summary.pending || 0],['Active examples',summary.activeExamples],['Legacy examples',summary.legacyExamples],['Rejected',summary.rejected || 0]]) {
+    for (const [label,value] of [['Pending',summary.pending || 0],['Active document examples',summary.activeExamples],['Legacy examples',summary.legacyExamples],['Rejected',summary.rejected || 0]]) {
       const card = node('div'); card.append(node('strong',value),node('span',label)); $('summary').append(card);
     }
     $('monitor-status').textContent = summary.monitor?.lastError ? `Last detection failed: ${summary.monitor.lastError}. The next scheduled scan will retry.` : summary.monitor?.lastFinished ? `Last scan: ${summary.monitor.lastFinished}` : 'No scan has run in this application session.';

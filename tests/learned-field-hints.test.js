@@ -17,19 +17,20 @@ function training(store,id=1){
   store.observe(document);document.custom_fields[0].value='TRAIN-001';
   return store.observe(document,'confirmed_ui',{actor:'user:42'}).eventId;
 }
-test('field sources require confirmed active events and actual changed fields, never title-only snapshots',t=>{
+test('field sources retain original field proof through title-only snapshots',t=>{
   const store=openLearningStore(':memory:');t.after(()=>store.close());store.configure({mode:'manual'});
   const id=training(store);assert.deepEqual(store.fieldCorrections(),[]);
   store.review(id,'confirmed','user:42');assert.equal(store.fieldCorrections().length,1);
   assert.equal(derivePatterns(store.fieldCorrections(),target).length,1);
   const doc={...target,id:1,title:'Title-only edit',content:'Invoice (no.): TRAIN-001',custom_fields:[{field:1,value:'TRAIN-001'}]};
   const title=store.observe(doc,'confirmed_ui').eventId;store.review(title,'confirmed','user:42');
-  assert.equal(store.fieldCorrections().length,1);assert.equal(derivePatterns(store.fieldCorrections(),target).length,0);
+  assert.equal(store.fieldCorrections().length,1);assert.equal(derivePatterns(store.fieldCorrections(),target).length,1);
+  assert.equal(store.fieldCorrections()[0].event_id,id,'title confirmation retains the original field source');
   const revoked=training(store,2);store.review(revoked,'confirmed','user:42');store.review(revoked,'deleted','user:42');
   assert.ok(!store.fieldCorrections().some(row=>row.document_id===2));
   const rejected=training(store,3);store.review(rejected,'rejected','user:42');assert.ok(!store.fieldCorrections().some(row=>row.document_id===3));
   const stale=training(store,4);store.review(stale,'confirmed','user:42');
-  store.observe({...doc,id:4,title:'Changed again'},'self_write');assert.ok(!store.fieldCorrections().some(row=>row.document_id===4));
+  store.observe({...doc,id:4,custom_fields:[{field:1,value:'Changed again'}]},'self_write');assert.ok(!store.fieldCorrections().some(row=>row.document_id===4));
 });
 test('patterns transfer labels, never old values, and require exact positive native scope',()=>{
   const first=derivePatterns([source()],target),changed=derivePatterns([source('DIFFERENT-009')],target);
