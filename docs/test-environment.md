@@ -304,3 +304,11 @@ remains separate; do not dispatch the old measure profile for this experiment.
 Run the frozen harness tests before measurement; do not rerun measured answers
 or store model weights in the8GB Cloud workspace. Native replay uses the same
 isolated official ngx stack and cannot qualify fixture responses as model data.
+
+The first projection replay exposed native RFC822 detection for text beginning
+with `From:`. Replay uploads now use a plain-text transport heading; original model
+inputs/answers/scores remain unchanged. `measurement-lock.json` preserves the
+original measured runtime; `harness-lock.json` verifies the current audit/native
+repair. Native task failures are reported directly. See the linked experiment
+for both failed and successful run evidence, checksums and the byte-identical
+180-answer re-aggregation proof.

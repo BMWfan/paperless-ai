@@ -25,7 +25,9 @@ compares raw references against categorical metadata using exactly the same
 selected source IDs and pinned1.5B model. Its new data, gates and protocol are
 frozen before candidate code. All180 answers are archived and independently rescored. B retains8/10
 current IDs but accepts14/13 wrong IDs across confirmation seeds and regresses
-metadata, so it is not qualified. Native replay is pending; production
+metadata, so it is not qualified. Corrected native replay verifies489 typed
+assignments/180 snapshots/60 documents with no active learning. Its first MIME
+transport failure and repair are documented; production
 context, writer and field-source behavior stay unchanged. This is not project-wide
 completion, a release or activation.
 

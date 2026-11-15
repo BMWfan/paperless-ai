@@ -1,0 +1,61 @@
+{
+  "commit": "71aeca665cf815632f3c1e80f6838087f72f6f4d",
+  "sourceRun": 43717958579,
+  "attempts": 180,
+  "typedAssignments": 489,
+  "unrelatedPreserved": 180,
+  "documents": 60,
+  "qualification": {
+    "42": {
+      "passed": false,
+      "reasons": [
+        "wrong_identifier",
+        "contract_number:wrong_increase",
+        "amount:wrong_increase",
+        "end_date:wrong_increase",
+        "document_type:correct_regression",
+        "document_type:wrong_regression",
+        "tags:correct_regression",
+        "tags:wrong_regression",
+        "correspondent:correct_regression",
+        "correspondent:wrong_regression",
+        "language:correct_regression",
+        "language:wrong_regression"
+      ],
+      "controlIdentifiers": {
+        "present": 10,
+        "correct": 5,
+        "wrong": 23
+      },
+      "candidateIdentifiers": {
+        "present": 10,
+        "correct": 8,
+        "wrong": 14
+      }
+    },
+    "43": {
+      "passed": false,
+      "reasons": [
+        "wrong_identifier",
+        "contract_number:wrong_increase",
+        "end_date:wrong_increase",
+        "correspondent:correct_regression",
+        "correspondent:wrong_regression",
+        "language:correct_regression",
+        "language:wrong_regression"
+      ],
+      "controlIdentifiers": {
+        "present": 10,
+        "correct": 5,
+        "wrong": 21
+      },
+      "candidateIdentifiers": {
+        "present": 10,
+        "correct": 8,
+        "wrong": 13
+      }
+    }
+  },
+  "qualifiedForLaterProposal": false,
+  "productionActivation": false
+}

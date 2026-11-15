@@ -95,7 +95,9 @@ The one approved180-attempt [measurement43717958579](https://github.com/BMWfan/p
 completed at ba138ec298fa2913d21826b1fc04f171401fea33, attempt1. All180
 requests returned complete model responses with zero transport/JSON/schema
 failures. Six GitHub ZIP digests and their original decoded payloads were
-independently verified before lossless gzip archiving. Native replay is pending.
+independently verified before lossless gzip archiving. Corrected native replay
+[run43724411931](https://github.com/BMWfan/paperless-ai/actions/runs/43724411931)
+passes at71aeca665cf815632f3c1e80f6838087f72f6f4d.
 No model-quality qualification is claimed. GitHub standard runners can have
 different CPU models (recorded per report); timings and output differences are
 not a controlled hardware benchmark or independent statistical proof. Prior studies stay immutable and
@@ -185,4 +187,35 @@ The only aggregation change is this historical-versus-current source-lock
 separation; all180 recomputed report bytes match the pre-repair report exactly.
 This versioned native-only repair does not regenerate, replace or rescore any
 model answer. Seven focused regressions, all99 Node22 root tests and ESLint pass with no
-failed/skipped tests. Corrected full native replay evidence remains pending in PR31.
+failed/skipped tests. Corrected native replay is successful; see evidence below.
+
+
+## Native verification and final review evidence
+
+[Native replay output](../tests/context-projection/native-replay.json) and its
+[independent artifact checksums](../tests/context-projection/native-replay-evidence.json)
+record60 documents,180 checked snapshots,489 typed assignments and180 preserved
+unrelated values. The replay asserts zero active learning examples before and
+after, and performs no inference. Its artifact14165188913 ZIP SHA256 is
+60364f591c5d7941da2e2b042d5f771de461ba27c77130ed64d4ae19a32a3f5e.
+Typed/native acceptance verifies format/round-trip, not semantic correctness;
+wrong historical identifiers are intentionally retained in this synthetic replay.
+
+Learning [run43724396981](https://github.com/BMWfan/paperless-ai/actions/runs/43724396981)
+at71aeca6 passes99 root/3 Python/5 real API/4 browser cases, restart and official
+ngx3.4.1→3.4.2 upgrade without failed/skipped cases. Exact final-head checks and
+the same-agent separate review are recorded in [PR31](https://github.com/BMWfan/paperless-ai/pull/31).
+No independent human/agent review is claimed. These are bounded scenario checks,
+not a blind accuracy, OCR/PDF, all-version or production qualification.
+
+Legacy accounting: initial ba138ec run43717912650 produced20 regular0.5B
+responses with no logged retry/request failure. Intermediate runs43723375049
+and43724397047 were cancelled during stack startup, with their inference steps
+explicitly skipped. The final relevant head receives its ordinary checks; its
+20-answer legacy result is recorded separately in PR31, never mixed into180.
+
+No production source, default, writer, learning migration, official ngx source,
+release/deployment or access policy was changed. The cached local synthetic stack
+used only for the MIME diagnosis was stopped with its data preserved; no foreign
+Docker data was removed. Owner merge approval remains separate. SPEC20/EPIC12
+remain open because semantic ownership and unattended extraction remain unqualified.
