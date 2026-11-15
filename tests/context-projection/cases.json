@@ -1,0 +1,2305 @@
+{
+  "revision": "reference-projection-cases-v1",
+  "cases": [
+    {
+      "id": "rcp-training-en-training-0",
+      "family": "rcp-training-en-training-0",
+      "split": "training",
+      "language": "en",
+      "kind": "invoice",
+      "cohort": "training",
+      "content": "From: Veloria Reference Invoice Ltd\nSERVICE INVOICE\nReviewed source document.\nInvoice number: RCP-T-EN-0001-007\nTotal payable: EUR 71.25\nPayment due: 2040-02-11",
+      "expected": {
+        "title": "Reviewed Invoice RCP-T-EN-0001-007",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veloria Reference Invoice Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "RCP-T-EN-0001-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR71.25",
+          "due_date": "2040-02-11",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-training-en-training-1",
+      "family": "rcp-training-en-training-1",
+      "split": "training",
+      "language": "en",
+      "kind": "contract",
+      "cohort": "training",
+      "content": "From: Veloria Reference Contract Ltd\nSERVICE AGREEMENT\nReviewed source document.\nContract reference: RCP-T-EN-0002-007\nTotal payable: EUR 72.25\nAgreement ends: 2042-03-12",
+      "expected": {
+        "title": "Reviewed Contract RCP-T-EN-0002-007",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veloria Reference Contract Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-T-EN-0002-007",
+          "policy_number": null,
+          "amount": "EUR72.25",
+          "due_date": null,
+          "end_date": "2042-03-12"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-training-en-training-2",
+      "family": "rcp-training-en-training-2",
+      "split": "training",
+      "language": "en",
+      "kind": "insurance",
+      "cohort": "training",
+      "content": "From: Veloria Reference Insurance Ltd\nINSURANCE CERTIFICATE\nReviewed source document.\nPolicy number: RCP-T-EN-0003-007\nTotal payable: EUR 73.25\nAgreement ends: 2042-04-13",
+      "expected": {
+        "title": "Reviewed Insurance policy RCP-T-EN-0003-007",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Veloria Reference Insurance Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "RCP-T-EN-0003-007",
+          "amount": "EUR73.25",
+          "due_date": null,
+          "end_date": "2042-04-13"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-training-en-training-3",
+      "family": "rcp-training-en-training-3",
+      "split": "training",
+      "language": "en",
+      "kind": "letter",
+      "cohort": "training",
+      "content": "From: Veloria Reference Letter Ltd\nGENERAL CORRESPONDENCE\nReviewed source document.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.",
+      "expected": {
+        "title": "Reviewed Letter RCP-T-NOTE-0004",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veloria Reference Letter Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-training-en-training-4",
+      "family": "rcp-training-en-training-4",
+      "split": "training",
+      "language": "en",
+      "kind": "payment",
+      "cohort": "training",
+      "content": "From: Veloria Reference Payment Ltd\nPAYMENT ACKNOWLEDGEMENT\nReviewed source document.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.",
+      "expected": {
+        "title": "Reviewed Payment confirmation RCP-T-NOTE-0005",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Veloria Reference Payment Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-training-de-training-0",
+      "family": "rcp-training-de-training-0",
+      "split": "training",
+      "language": "de",
+      "kind": "invoice",
+      "cohort": "training",
+      "content": "Absender: Veloria Reference Invoice GmbH\nDIENSTLEISTUNGSRECHNUNG\nBestätigtes Referenzdokument.\nRechnungsnummer: RCP-T-DE-0006-007\nGesamtbetrag: EUR 76.25\nZahlungsfrist: 2040-07-16",
+      "expected": {
+        "title": "Reviewed Invoice RCP-T-DE-0006-007",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veloria Reference Invoice GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "RCP-T-DE-0006-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR76.25",
+          "due_date": "2040-07-16",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-training-de-training-1",
+      "family": "rcp-training-de-training-1",
+      "split": "training",
+      "language": "de",
+      "kind": "contract",
+      "cohort": "training",
+      "content": "Absender: Veloria Reference Contract GmbH\nDIENSTLEISTUNGSVERTRAG\nBestätigtes Referenzdokument.\nVertragskennung: RCP-T-DE-0007-007\nGesamtbetrag: EUR 77.25\nLaufzeit endet: 2042-08-17",
+      "expected": {
+        "title": "Reviewed Contract RCP-T-DE-0007-007",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veloria Reference Contract GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-T-DE-0007-007",
+          "policy_number": null,
+          "amount": "EUR77.25",
+          "due_date": null,
+          "end_date": "2042-08-17"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-training-de-training-2",
+      "family": "rcp-training-de-training-2",
+      "split": "training",
+      "language": "de",
+      "kind": "insurance",
+      "cohort": "training",
+      "content": "Absender: Veloria Reference Insurance GmbH\nVERSICHERUNGSNACHWEIS\nBestätigtes Referenzdokument.\nVersicherungsscheinnummer: RCP-T-DE-0008-007\nGesamtbetrag: EUR 78.25\nLaufzeit endet: 2042-09-18",
+      "expected": {
+        "title": "Reviewed Insurance policy RCP-T-DE-0008-007",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Veloria Reference Insurance GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "RCP-T-DE-0008-007",
+          "amount": "EUR78.25",
+          "due_date": null,
+          "end_date": "2042-09-18"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-training-de-training-3",
+      "family": "rcp-training-de-training-3",
+      "split": "training",
+      "language": "de",
+      "kind": "letter",
+      "cohort": "training",
+      "content": "Absender: Veloria Reference Letter GmbH\nALLGEMEINES SCHREIBEN\nBestätigtes Referenzdokument.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.",
+      "expected": {
+        "title": "Reviewed Letter RCP-T-NOTE-0009",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veloria Reference Letter GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-training-de-training-4",
+      "family": "rcp-training-de-training-4",
+      "split": "training",
+      "language": "de",
+      "kind": "payment",
+      "cohort": "training",
+      "content": "Absender: Veloria Reference Payment GmbH\nZAHLUNGSBESTÄTIGUNG\nBestätigtes Referenzdokument.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.",
+      "expected": {
+        "title": "Reviewed Payment confirmation RCP-T-NOTE-0010",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Veloria Reference Payment GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-present-0",
+      "family": "rcp-development-en-present-0",
+      "split": "development",
+      "language": "en",
+      "kind": "invoice",
+      "cohort": "present",
+      "content": "From: Marune D Present 1 Ltd\nSERVICE INVOICE\nThis is the live record. Earlier references are not its identifiers.\nInvoice number: RCP-D-EN-0011-007\nTotal payable: EUR 81.25\nPayment due: 2040-03-21\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-D-EN-0011-01\nContract reference: RCP-H-D-EN-0011-02\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune D Present 1 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "RCP-D-EN-0011-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR81.25",
+          "due_date": "2040-03-21",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0011-01",
+        "RCP-H-D-EN-0011-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-present-1",
+      "family": "rcp-development-en-present-1",
+      "split": "development",
+      "language": "en",
+      "kind": "contract",
+      "cohort": "present",
+      "content": "Archived enclosure; these belong to earlier records:\nContract reference: RCP-H-D-EN-0012-01\nInvoice number: RCP-H-D-EN-0012-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune D Present 2 Ltd\nSERVICE AGREEMENT\nThis is the live record. Earlier references are not its identifiers.\nContract reference: RCP-D-EN-0012-007\nTotal payable: EUR 82.25\nAgreement ends: 2042-04-22",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune D Present 2 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-D-EN-0012-007",
+          "policy_number": null,
+          "amount": "EUR82.25",
+          "due_date": null,
+          "end_date": "2042-04-22"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0012-01",
+        "RCP-H-D-EN-0012-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-present-2",
+      "family": "rcp-development-en-present-2",
+      "split": "development",
+      "language": "en",
+      "kind": "insurance",
+      "cohort": "present",
+      "content": "From: Marune D Present 3 Ltd\nINSURANCE CERTIFICATE\nThis is the live record. Earlier references are not its identifiers.\nArchived enclosure; these belong to earlier records:\nPolicy number: RCP-H-D-EN-0013-01\nContract reference: RCP-H-D-EN-0013-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nDetails of the live record:\nPolicy number: RCP-D-EN-0013-007\nTotal payable: EUR 83.25\nAgreement ends: 2042-05-23",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Marune D Present 3 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "RCP-D-EN-0013-007",
+          "amount": "EUR83.25",
+          "due_date": null,
+          "end_date": "2042-05-23"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0013-01",
+        "RCP-H-D-EN-0013-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-present-3",
+      "family": "rcp-development-en-present-3",
+      "split": "development",
+      "language": "en",
+      "kind": "invoice",
+      "cohort": "present",
+      "content": "From: Marune D Present 4 Ltd\nSERVICE INVOICE\nThis is the live record. Earlier references are not its identifiers.\nInvoice number: RCP-D-EN-0014-007\nTotal payable: EUR 84.25\nPayment due: 2040-06-24\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-D-EN-0014-01\nContract reference: RCP-H-D-EN-0014-02\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune D Present 4 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "RCP-D-EN-0014-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR84.25",
+          "due_date": "2040-06-24",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0014-01",
+        "RCP-H-D-EN-0014-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-present-4",
+      "family": "rcp-development-en-present-4",
+      "split": "development",
+      "language": "en",
+      "kind": "contract",
+      "cohort": "present",
+      "content": "Archived enclosure; these belong to earlier records:\nContract reference: RCP-H-D-EN-0015-01\nInvoice number: RCP-H-D-EN-0015-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune D Present 5 Ltd\nSERVICE AGREEMENT\nThis is the live record. Earlier references are not its identifiers.\nContract reference: RCP-D-EN-0015-007\nTotal payable: EUR 85.25\nAgreement ends: 2042-07-25",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune D Present 5 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-D-EN-0015-007",
+          "policy_number": null,
+          "amount": "EUR85.25",
+          "due_date": null,
+          "end_date": "2042-07-25"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0015-01",
+        "RCP-H-D-EN-0015-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-missing-0",
+      "family": "rcp-development-en-missing-0",
+      "split": "development",
+      "language": "en",
+      "kind": "invoice",
+      "cohort": "missing",
+      "content": "From: Marune D Missing 1 Ltd\nSERVICE INVOICE\nThis is the live record. Earlier references are not its identifiers.\nThe identifier of this copy has not been printed.\nTotal payable: EUR 86.25\nPayment due: 2040-08-10\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-D-EN-0016-01\nContract reference: RCP-H-D-EN-0016-02\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune D Missing 1 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR86.25",
+          "due_date": "2040-08-10",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0016-01",
+        "RCP-H-D-EN-0016-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-missing-1",
+      "family": "rcp-development-en-missing-1",
+      "split": "development",
+      "language": "en",
+      "kind": "contract",
+      "cohort": "missing",
+      "content": "Archived enclosure; these belong to earlier records:\nContract reference: RCP-H-D-EN-0017-01\nInvoice number: RCP-H-D-EN-0017-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune D Missing 2 Ltd\nSERVICE AGREEMENT\nThis is the live record. Earlier references are not its identifiers.\nThe identifier of this copy has not been printed.\nTotal payable: EUR 87.25\nAgreement ends: 2042-09-11",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune D Missing 2 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR87.25",
+          "due_date": null,
+          "end_date": "2042-09-11"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0017-01",
+        "RCP-H-D-EN-0017-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-missing-2",
+      "family": "rcp-development-en-missing-2",
+      "split": "development",
+      "language": "en",
+      "kind": "insurance",
+      "cohort": "missing",
+      "content": "From: Marune D Missing 3 Ltd\nINSURANCE CERTIFICATE\nThis is the live record. Earlier references are not its identifiers.\nArchived enclosure; these belong to earlier records:\nPolicy number: RCP-H-D-EN-0018-01\nContract reference: RCP-H-D-EN-0018-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nDetails of the live record:\nThe identifier of this copy has not been printed.\nTotal payable: EUR 88.25\nAgreement ends: 2042-01-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Marune D Missing 3 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR88.25",
+          "due_date": null,
+          "end_date": "2042-01-12"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0018-01",
+        "RCP-H-D-EN-0018-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-missing-3",
+      "family": "rcp-development-en-missing-3",
+      "split": "development",
+      "language": "en",
+      "kind": "invoice",
+      "cohort": "missing",
+      "content": "From: Marune D Missing 4 Ltd\nSERVICE INVOICE\nThis is the live record. Earlier references are not its identifiers.\nThe identifier of this copy has not been printed.\nTotal payable: EUR 89.25\nPayment due: 2040-02-13\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-D-EN-0019-01\nContract reference: RCP-H-D-EN-0019-02\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune D Missing 4 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR89.25",
+          "due_date": "2040-02-13",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0019-01",
+        "RCP-H-D-EN-0019-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-missing-4",
+      "family": "rcp-development-en-missing-4",
+      "split": "development",
+      "language": "en",
+      "kind": "contract",
+      "cohort": "missing",
+      "content": "Archived enclosure; these belong to earlier records:\nContract reference: RCP-H-D-EN-0020-01\nInvoice number: RCP-H-D-EN-0020-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune D Missing 5 Ltd\nSERVICE AGREEMENT\nThis is the live record. Earlier references are not its identifiers.\nThe identifier of this copy has not been printed.\nTotal payable: EUR 90.25\nAgreement ends: 2042-03-14",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune D Missing 5 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR90.25",
+          "due_date": null,
+          "end_date": "2042-03-14"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0020-01",
+        "RCP-H-D-EN-0020-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-inapplicable-0",
+      "family": "rcp-development-en-inapplicable-0",
+      "split": "development",
+      "language": "en",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "From: Marune D Inapplicable 1 Ltd\nGENERAL CORRESPONDENCE\nThis is the live record. Earlier references are not its identifiers.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-D-EN-0021-01\nContract reference: RCP-H-D-EN-0021-02\nPolicy number: RCP-H-D-EN-0021-03\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune D Inapplicable 1 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0021-01",
+        "RCP-H-D-EN-0021-02",
+        "RCP-H-D-EN-0021-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-inapplicable-1",
+      "family": "rcp-development-en-inapplicable-1",
+      "split": "development",
+      "language": "en",
+      "kind": "payment",
+      "cohort": "inapplicable",
+      "content": "Archived enclosure; these belong to earlier records:\nInvoice number: RCP-H-D-EN-0022-01\nContract reference: RCP-H-D-EN-0022-02\nPolicy number: RCP-H-D-EN-0022-03\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune D Inapplicable 2 Ltd\nPAYMENT ACKNOWLEDGEMENT\nThis is the live record. Earlier references are not its identifiers.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Marune D Inapplicable 2 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0022-01",
+        "RCP-H-D-EN-0022-02",
+        "RCP-H-D-EN-0022-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-inapplicable-2",
+      "family": "rcp-development-en-inapplicable-2",
+      "split": "development",
+      "language": "en",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "From: Marune D Inapplicable 3 Ltd\nGENERAL CORRESPONDENCE\nThis is the live record. Earlier references are not its identifiers.\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-D-EN-0023-01\nContract reference: RCP-H-D-EN-0023-02\nPolicy number: RCP-H-D-EN-0023-03\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nDetails of the live record:\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune D Inapplicable 3 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0023-01",
+        "RCP-H-D-EN-0023-02",
+        "RCP-H-D-EN-0023-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-inapplicable-3",
+      "family": "rcp-development-en-inapplicable-3",
+      "split": "development",
+      "language": "en",
+      "kind": "payment",
+      "cohort": "inapplicable",
+      "content": "From: Marune D Inapplicable 4 Ltd\nPAYMENT ACKNOWLEDGEMENT\nThis is the live record. Earlier references are not its identifiers.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-D-EN-0024-01\nContract reference: RCP-H-D-EN-0024-02\nPolicy number: RCP-H-D-EN-0024-03\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Marune D Inapplicable 4 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0024-01",
+        "RCP-H-D-EN-0024-02",
+        "RCP-H-D-EN-0024-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-en-inapplicable-4",
+      "family": "rcp-development-en-inapplicable-4",
+      "split": "development",
+      "language": "en",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "Archived enclosure; these belong to earlier records:\nInvoice number: RCP-H-D-EN-0025-01\nContract reference: RCP-H-D-EN-0025-02\nPolicy number: RCP-H-D-EN-0025-03\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune D Inapplicable 5 Ltd\nGENERAL CORRESPONDENCE\nThis is the live record. Earlier references are not its identifiers.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune D Inapplicable 5 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-EN-0025-01",
+        "RCP-H-D-EN-0025-02",
+        "RCP-H-D-EN-0025-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-present-0",
+      "family": "rcp-development-de-present-0",
+      "split": "development",
+      "language": "de",
+      "kind": "invoice",
+      "cohort": "present",
+      "content": "Absender: Marune D Present 1 GmbH\nDIENSTLEISTUNGSRECHNUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nRechnungsnummer: RCP-D-DE-0026-007\nGesamtbetrag: EUR 96.25\nZahlungsfrist: 2040-09-20\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-D-DE-0026-01\nVertragskennung: RCP-H-D-DE-0026-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune D Present 1 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "RCP-D-DE-0026-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR96.25",
+          "due_date": "2040-09-20",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0026-01",
+        "RCP-H-D-DE-0026-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-present-1",
+      "family": "rcp-development-de-present-1",
+      "split": "development",
+      "language": "de",
+      "kind": "contract",
+      "cohort": "present",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVertragskennung: RCP-H-D-DE-0027-01\nRechnungsnummer: RCP-H-D-DE-0027-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune D Present 2 GmbH\nDIENSTLEISTUNGSVERTRAG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nVertragskennung: RCP-D-DE-0027-007\nGesamtbetrag: EUR 97.25\nLaufzeit endet: 2042-01-21",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune D Present 2 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-D-DE-0027-007",
+          "policy_number": null,
+          "amount": "EUR97.25",
+          "due_date": null,
+          "end_date": "2042-01-21"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0027-01",
+        "RCP-H-D-DE-0027-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-present-2",
+      "family": "rcp-development-de-present-2",
+      "split": "development",
+      "language": "de",
+      "kind": "insurance",
+      "cohort": "present",
+      "content": "Absender: Marune D Present 3 GmbH\nVERSICHERUNGSNACHWEIS\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVersicherungsscheinnummer: RCP-H-D-DE-0028-01\nVertragskennung: RCP-H-D-DE-0028-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAngaben zum aktuellen Vorgang:\nVersicherungsscheinnummer: RCP-D-DE-0028-007\nGesamtbetrag: EUR 98.25\nLaufzeit endet: 2042-02-22",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Marune D Present 3 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "RCP-D-DE-0028-007",
+          "amount": "EUR98.25",
+          "due_date": null,
+          "end_date": "2042-02-22"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0028-01",
+        "RCP-H-D-DE-0028-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-present-3",
+      "family": "rcp-development-de-present-3",
+      "split": "development",
+      "language": "de",
+      "kind": "invoice",
+      "cohort": "present",
+      "content": "Absender: Marune D Present 4 GmbH\nDIENSTLEISTUNGSRECHNUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nRechnungsnummer: RCP-D-DE-0029-007\nGesamtbetrag: EUR 99.25\nZahlungsfrist: 2040-03-23\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-D-DE-0029-01\nVertragskennung: RCP-H-D-DE-0029-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune D Present 4 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "RCP-D-DE-0029-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR99.25",
+          "due_date": "2040-03-23",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0029-01",
+        "RCP-H-D-DE-0029-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-present-4",
+      "family": "rcp-development-de-present-4",
+      "split": "development",
+      "language": "de",
+      "kind": "contract",
+      "cohort": "present",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVertragskennung: RCP-H-D-DE-0030-01\nRechnungsnummer: RCP-H-D-DE-0030-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune D Present 5 GmbH\nDIENSTLEISTUNGSVERTRAG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nVertragskennung: RCP-D-DE-0030-007\nGesamtbetrag: EUR 100.25\nLaufzeit endet: 2042-04-24",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune D Present 5 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-D-DE-0030-007",
+          "policy_number": null,
+          "amount": "EUR100.25",
+          "due_date": null,
+          "end_date": "2042-04-24"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0030-01",
+        "RCP-H-D-DE-0030-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-missing-0",
+      "family": "rcp-development-de-missing-0",
+      "split": "development",
+      "language": "de",
+      "kind": "invoice",
+      "cohort": "missing",
+      "content": "Absender: Marune D Missing 1 GmbH\nDIENSTLEISTUNGSRECHNUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 101.25\nZahlungsfrist: 2040-05-25\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-D-DE-0031-01\nVertragskennung: RCP-H-D-DE-0031-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune D Missing 1 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR101.25",
+          "due_date": "2040-05-25",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0031-01",
+        "RCP-H-D-DE-0031-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-missing-1",
+      "family": "rcp-development-de-missing-1",
+      "split": "development",
+      "language": "de",
+      "kind": "contract",
+      "cohort": "missing",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVertragskennung: RCP-H-D-DE-0032-01\nRechnungsnummer: RCP-H-D-DE-0032-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune D Missing 2 GmbH\nDIENSTLEISTUNGSVERTRAG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 102.25\nLaufzeit endet: 2042-06-10",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune D Missing 2 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR102.25",
+          "due_date": null,
+          "end_date": "2042-06-10"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0032-01",
+        "RCP-H-D-DE-0032-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-missing-2",
+      "family": "rcp-development-de-missing-2",
+      "split": "development",
+      "language": "de",
+      "kind": "insurance",
+      "cohort": "missing",
+      "content": "Absender: Marune D Missing 3 GmbH\nVERSICHERUNGSNACHWEIS\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVersicherungsscheinnummer: RCP-H-D-DE-0033-01\nVertragskennung: RCP-H-D-DE-0033-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAngaben zum aktuellen Vorgang:\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 103.25\nLaufzeit endet: 2042-07-11",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Marune D Missing 3 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR103.25",
+          "due_date": null,
+          "end_date": "2042-07-11"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0033-01",
+        "RCP-H-D-DE-0033-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-missing-3",
+      "family": "rcp-development-de-missing-3",
+      "split": "development",
+      "language": "de",
+      "kind": "invoice",
+      "cohort": "missing",
+      "content": "Absender: Marune D Missing 4 GmbH\nDIENSTLEISTUNGSRECHNUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 104.25\nZahlungsfrist: 2040-08-12\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-D-DE-0034-01\nVertragskennung: RCP-H-D-DE-0034-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune D Missing 4 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR104.25",
+          "due_date": "2040-08-12",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0034-01",
+        "RCP-H-D-DE-0034-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-missing-4",
+      "family": "rcp-development-de-missing-4",
+      "split": "development",
+      "language": "de",
+      "kind": "contract",
+      "cohort": "missing",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVertragskennung: RCP-H-D-DE-0035-01\nRechnungsnummer: RCP-H-D-DE-0035-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune D Missing 5 GmbH\nDIENSTLEISTUNGSVERTRAG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 105.25\nLaufzeit endet: 2042-09-13",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune D Missing 5 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR105.25",
+          "due_date": null,
+          "end_date": "2042-09-13"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0035-01",
+        "RCP-H-D-DE-0035-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-inapplicable-0",
+      "family": "rcp-development-de-inapplicable-0",
+      "split": "development",
+      "language": "de",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "Absender: Marune D Inapplicable 1 GmbH\nALLGEMEINES SCHREIBEN\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-D-DE-0036-01\nVertragskennung: RCP-H-D-DE-0036-02\nVersicherungsscheinnummer: RCP-H-D-DE-0036-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune D Inapplicable 1 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0036-01",
+        "RCP-H-D-DE-0036-02",
+        "RCP-H-D-DE-0036-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-inapplicable-1",
+      "family": "rcp-development-de-inapplicable-1",
+      "split": "development",
+      "language": "de",
+      "kind": "payment",
+      "cohort": "inapplicable",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-D-DE-0037-01\nVertragskennung: RCP-H-D-DE-0037-02\nVersicherungsscheinnummer: RCP-H-D-DE-0037-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune D Inapplicable 2 GmbH\nZAHLUNGSBESTÄTIGUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Marune D Inapplicable 2 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0037-01",
+        "RCP-H-D-DE-0037-02",
+        "RCP-H-D-DE-0037-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-inapplicable-2",
+      "family": "rcp-development-de-inapplicable-2",
+      "split": "development",
+      "language": "de",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "Absender: Marune D Inapplicable 3 GmbH\nALLGEMEINES SCHREIBEN\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-D-DE-0038-01\nVertragskennung: RCP-H-D-DE-0038-02\nVersicherungsscheinnummer: RCP-H-D-DE-0038-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAngaben zum aktuellen Vorgang:\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune D Inapplicable 3 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0038-01",
+        "RCP-H-D-DE-0038-02",
+        "RCP-H-D-DE-0038-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-inapplicable-3",
+      "family": "rcp-development-de-inapplicable-3",
+      "split": "development",
+      "language": "de",
+      "kind": "payment",
+      "cohort": "inapplicable",
+      "content": "Absender: Marune D Inapplicable 4 GmbH\nZAHLUNGSBESTÄTIGUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-D-DE-0039-01\nVertragskennung: RCP-H-D-DE-0039-02\nVersicherungsscheinnummer: RCP-H-D-DE-0039-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Marune D Inapplicable 4 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0039-01",
+        "RCP-H-D-DE-0039-02",
+        "RCP-H-D-DE-0039-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-development-de-inapplicable-4",
+      "family": "rcp-development-de-inapplicable-4",
+      "split": "development",
+      "language": "de",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-D-DE-0040-01\nVertragskennung: RCP-H-D-DE-0040-02\nVersicherungsscheinnummer: RCP-H-D-DE-0040-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune D Inapplicable 5 GmbH\nALLGEMEINES SCHREIBEN\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune D Inapplicable 5 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-D-DE-0040-01",
+        "RCP-H-D-DE-0040-02",
+        "RCP-H-D-DE-0040-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-present-0",
+      "family": "rcp-confirmation-en-present-0",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "invoice",
+      "cohort": "present",
+      "content": "From: Marune C Present 1 Ltd\nSERVICE INVOICE\nThis is the live record. Earlier references are not its identifiers.\nInvoice number: RCP-C-EN-0041-007\nTotal payable: EUR 111.25\nPayment due: 2040-06-19\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-C-EN-0041-01\nContract reference: RCP-H-C-EN-0041-02\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune C Present 1 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "RCP-C-EN-0041-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR111.25",
+          "due_date": "2040-06-19",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0041-01",
+        "RCP-H-C-EN-0041-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-present-1",
+      "family": "rcp-confirmation-en-present-1",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "contract",
+      "cohort": "present",
+      "content": "Archived enclosure; these belong to earlier records:\nContract reference: RCP-H-C-EN-0042-01\nInvoice number: RCP-H-C-EN-0042-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune C Present 2 Ltd\nSERVICE AGREEMENT\nThis is the live record. Earlier references are not its identifiers.\nContract reference: RCP-C-EN-0042-007\nTotal payable: EUR 112.25\nAgreement ends: 2042-07-20",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune C Present 2 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-C-EN-0042-007",
+          "policy_number": null,
+          "amount": "EUR112.25",
+          "due_date": null,
+          "end_date": "2042-07-20"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0042-01",
+        "RCP-H-C-EN-0042-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-present-2",
+      "family": "rcp-confirmation-en-present-2",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "insurance",
+      "cohort": "present",
+      "content": "From: Marune C Present 3 Ltd\nINSURANCE CERTIFICATE\nThis is the live record. Earlier references are not its identifiers.\nArchived enclosure; these belong to earlier records:\nPolicy number: RCP-H-C-EN-0043-01\nContract reference: RCP-H-C-EN-0043-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nDetails of the live record:\nPolicy number: RCP-C-EN-0043-007\nTotal payable: EUR 113.25\nAgreement ends: 2042-08-21",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Marune C Present 3 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "RCP-C-EN-0043-007",
+          "amount": "EUR113.25",
+          "due_date": null,
+          "end_date": "2042-08-21"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0043-01",
+        "RCP-H-C-EN-0043-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-present-3",
+      "family": "rcp-confirmation-en-present-3",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "invoice",
+      "cohort": "present",
+      "content": "From: Marune C Present 4 Ltd\nSERVICE INVOICE\nThis is the live record. Earlier references are not its identifiers.\nInvoice number: RCP-C-EN-0044-007\nTotal payable: EUR 114.25\nPayment due: 2040-09-22\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-C-EN-0044-01\nContract reference: RCP-H-C-EN-0044-02\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune C Present 4 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "RCP-C-EN-0044-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR114.25",
+          "due_date": "2040-09-22",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0044-01",
+        "RCP-H-C-EN-0044-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-present-4",
+      "family": "rcp-confirmation-en-present-4",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "contract",
+      "cohort": "present",
+      "content": "Archived enclosure; these belong to earlier records:\nContract reference: RCP-H-C-EN-0045-01\nInvoice number: RCP-H-C-EN-0045-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune C Present 5 Ltd\nSERVICE AGREEMENT\nThis is the live record. Earlier references are not its identifiers.\nContract reference: RCP-C-EN-0045-007\nTotal payable: EUR 115.25\nAgreement ends: 2042-01-23",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune C Present 5 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-C-EN-0045-007",
+          "policy_number": null,
+          "amount": "EUR115.25",
+          "due_date": null,
+          "end_date": "2042-01-23"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0045-01",
+        "RCP-H-C-EN-0045-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-missing-0",
+      "family": "rcp-confirmation-en-missing-0",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "invoice",
+      "cohort": "missing",
+      "content": "From: Marune C Missing 1 Ltd\nSERVICE INVOICE\nThis is the live record. Earlier references are not its identifiers.\nThe identifier of this copy has not been printed.\nTotal payable: EUR 116.25\nPayment due: 2040-02-24\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-C-EN-0046-01\nContract reference: RCP-H-C-EN-0046-02\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune C Missing 1 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR116.25",
+          "due_date": "2040-02-24",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0046-01",
+        "RCP-H-C-EN-0046-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-missing-1",
+      "family": "rcp-confirmation-en-missing-1",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "contract",
+      "cohort": "missing",
+      "content": "Archived enclosure; these belong to earlier records:\nContract reference: RCP-H-C-EN-0047-01\nInvoice number: RCP-H-C-EN-0047-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune C Missing 2 Ltd\nSERVICE AGREEMENT\nThis is the live record. Earlier references are not its identifiers.\nThe identifier of this copy has not been printed.\nTotal payable: EUR 117.25\nAgreement ends: 2042-03-25",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune C Missing 2 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR117.25",
+          "due_date": null,
+          "end_date": "2042-03-25"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0047-01",
+        "RCP-H-C-EN-0047-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-missing-2",
+      "family": "rcp-confirmation-en-missing-2",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "insurance",
+      "cohort": "missing",
+      "content": "From: Marune C Missing 3 Ltd\nINSURANCE CERTIFICATE\nThis is the live record. Earlier references are not its identifiers.\nArchived enclosure; these belong to earlier records:\nPolicy number: RCP-H-C-EN-0048-01\nContract reference: RCP-H-C-EN-0048-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nDetails of the live record:\nThe identifier of this copy has not been printed.\nTotal payable: EUR 118.25\nAgreement ends: 2042-04-10",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Marune C Missing 3 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR118.25",
+          "due_date": null,
+          "end_date": "2042-04-10"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0048-01",
+        "RCP-H-C-EN-0048-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-missing-3",
+      "family": "rcp-confirmation-en-missing-3",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "invoice",
+      "cohort": "missing",
+      "content": "From: Marune C Missing 4 Ltd\nSERVICE INVOICE\nThis is the live record. Earlier references are not its identifiers.\nThe identifier of this copy has not been printed.\nTotal payable: EUR 119.25\nPayment due: 2040-05-11\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-C-EN-0049-01\nContract reference: RCP-H-C-EN-0049-02\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune C Missing 4 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR119.25",
+          "due_date": "2040-05-11",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0049-01",
+        "RCP-H-C-EN-0049-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-missing-4",
+      "family": "rcp-confirmation-en-missing-4",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "contract",
+      "cohort": "missing",
+      "content": "Archived enclosure; these belong to earlier records:\nContract reference: RCP-H-C-EN-0050-01\nInvoice number: RCP-H-C-EN-0050-02\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune C Missing 5 Ltd\nSERVICE AGREEMENT\nThis is the live record. Earlier references are not its identifiers.\nThe identifier of this copy has not been printed.\nTotal payable: EUR 120.25\nAgreement ends: 2042-06-12",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune C Missing 5 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR120.25",
+          "due_date": null,
+          "end_date": "2042-06-12"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0050-01",
+        "RCP-H-C-EN-0050-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-inapplicable-0",
+      "family": "rcp-confirmation-en-inapplicable-0",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "From: Marune C Inapplicable 1 Ltd\nGENERAL CORRESPONDENCE\nThis is the live record. Earlier references are not its identifiers.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-C-EN-0051-01\nContract reference: RCP-H-C-EN-0051-02\nPolicy number: RCP-H-C-EN-0051-03\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune C Inapplicable 1 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0051-01",
+        "RCP-H-C-EN-0051-02",
+        "RCP-H-C-EN-0051-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-inapplicable-1",
+      "family": "rcp-confirmation-en-inapplicable-1",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "payment",
+      "cohort": "inapplicable",
+      "content": "Archived enclosure; these belong to earlier records:\nInvoice number: RCP-H-C-EN-0052-01\nContract reference: RCP-H-C-EN-0052-02\nPolicy number: RCP-H-C-EN-0052-03\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune C Inapplicable 2 Ltd\nPAYMENT ACKNOWLEDGEMENT\nThis is the live record. Earlier references are not its identifiers.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Marune C Inapplicable 2 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0052-01",
+        "RCP-H-C-EN-0052-02",
+        "RCP-H-C-EN-0052-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-inapplicable-2",
+      "family": "rcp-confirmation-en-inapplicable-2",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "From: Marune C Inapplicable 3 Ltd\nGENERAL CORRESPONDENCE\nThis is the live record. Earlier references are not its identifiers.\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-C-EN-0053-01\nContract reference: RCP-H-C-EN-0053-02\nPolicy number: RCP-H-C-EN-0053-03\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nDetails of the live record:\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune C Inapplicable 3 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0053-01",
+        "RCP-H-C-EN-0053-02",
+        "RCP-H-C-EN-0053-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-inapplicable-3",
+      "family": "rcp-confirmation-en-inapplicable-3",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "payment",
+      "cohort": "inapplicable",
+      "content": "From: Marune C Inapplicable 4 Ltd\nPAYMENT ACKNOWLEDGEMENT\nThis is the live record. Earlier references are not its identifiers.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.\n\nArchived enclosure; these belong to earlier records:\nInvoice number: RCP-H-C-EN-0054-01\nContract reference: RCP-H-C-EN-0054-02\nPolicy number: RCP-H-C-EN-0054-03\nOld total: EUR 19.60; old deadline: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Marune C Inapplicable 4 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0054-01",
+        "RCP-H-C-EN-0054-02",
+        "RCP-H-C-EN-0054-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-en-inapplicable-4",
+      "family": "rcp-confirmation-en-inapplicable-4",
+      "split": "confirmation",
+      "language": "en",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "Archived enclosure; these belong to earlier records:\nInvoice number: RCP-H-C-EN-0055-01\nContract reference: RCP-H-C-EN-0055-02\nPolicy number: RCP-H-C-EN-0055-03\nOld total: EUR 19.60; old deadline: 2031-03-11.\n\nFrom: Marune C Inapplicable 5 Ltd\nGENERAL CORRESPONDENCE\nThis is the live record. Earlier references are not its identifiers.\nThis notice restates no invoice, contract or policy identifier and no monetary or deadline data.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune C Inapplicable 5 Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-EN-0055-01",
+        "RCP-H-C-EN-0055-02",
+        "RCP-H-C-EN-0055-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-present-0",
+      "family": "rcp-confirmation-de-present-0",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "invoice",
+      "cohort": "present",
+      "content": "Absender: Marune C Present 1 GmbH\nDIENSTLEISTUNGSRECHNUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nRechnungsnummer: RCP-C-DE-0056-007\nGesamtbetrag: EUR 126.25\nZahlungsfrist: 2040-03-18\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-C-DE-0056-01\nVertragskennung: RCP-H-C-DE-0056-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune C Present 1 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "RCP-C-DE-0056-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR126.25",
+          "due_date": "2040-03-18",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0056-01",
+        "RCP-H-C-DE-0056-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-present-1",
+      "family": "rcp-confirmation-de-present-1",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "contract",
+      "cohort": "present",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVertragskennung: RCP-H-C-DE-0057-01\nRechnungsnummer: RCP-H-C-DE-0057-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune C Present 2 GmbH\nDIENSTLEISTUNGSVERTRAG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nVertragskennung: RCP-C-DE-0057-007\nGesamtbetrag: EUR 127.25\nLaufzeit endet: 2042-04-19",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune C Present 2 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-C-DE-0057-007",
+          "policy_number": null,
+          "amount": "EUR127.25",
+          "due_date": null,
+          "end_date": "2042-04-19"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0057-01",
+        "RCP-H-C-DE-0057-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-present-2",
+      "family": "rcp-confirmation-de-present-2",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "insurance",
+      "cohort": "present",
+      "content": "Absender: Marune C Present 3 GmbH\nVERSICHERUNGSNACHWEIS\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVersicherungsscheinnummer: RCP-H-C-DE-0058-01\nVertragskennung: RCP-H-C-DE-0058-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAngaben zum aktuellen Vorgang:\nVersicherungsscheinnummer: RCP-C-DE-0058-007\nGesamtbetrag: EUR 128.25\nLaufzeit endet: 2042-05-20",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Marune C Present 3 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "RCP-C-DE-0058-007",
+          "amount": "EUR128.25",
+          "due_date": null,
+          "end_date": "2042-05-20"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0058-01",
+        "RCP-H-C-DE-0058-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-present-3",
+      "family": "rcp-confirmation-de-present-3",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "invoice",
+      "cohort": "present",
+      "content": "Absender: Marune C Present 4 GmbH\nDIENSTLEISTUNGSRECHNUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nRechnungsnummer: RCP-C-DE-0059-007\nGesamtbetrag: EUR 129.25\nZahlungsfrist: 2040-06-21\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-C-DE-0059-01\nVertragskennung: RCP-H-C-DE-0059-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune C Present 4 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "RCP-C-DE-0059-007",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR129.25",
+          "due_date": "2040-06-21",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0059-01",
+        "RCP-H-C-DE-0059-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-present-4",
+      "family": "rcp-confirmation-de-present-4",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "contract",
+      "cohort": "present",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVertragskennung: RCP-H-C-DE-0060-01\nRechnungsnummer: RCP-H-C-DE-0060-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune C Present 5 GmbH\nDIENSTLEISTUNGSVERTRAG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nVertragskennung: RCP-C-DE-0060-007\nGesamtbetrag: EUR 130.25\nLaufzeit endet: 2042-07-22",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune C Present 5 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "RCP-C-DE-0060-007",
+          "policy_number": null,
+          "amount": "EUR130.25",
+          "due_date": null,
+          "end_date": "2042-07-22"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0060-01",
+        "RCP-H-C-DE-0060-02"
+      ],
+      "abstentionCase": false,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-missing-0",
+      "family": "rcp-confirmation-de-missing-0",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "invoice",
+      "cohort": "missing",
+      "content": "Absender: Marune C Missing 1 GmbH\nDIENSTLEISTUNGSRECHNUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 131.25\nZahlungsfrist: 2040-08-23\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-C-DE-0061-01\nVertragskennung: RCP-H-C-DE-0061-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune C Missing 1 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR131.25",
+          "due_date": "2040-08-23",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0061-01",
+        "RCP-H-C-DE-0061-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-missing-1",
+      "family": "rcp-confirmation-de-missing-1",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "contract",
+      "cohort": "missing",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVertragskennung: RCP-H-C-DE-0062-01\nRechnungsnummer: RCP-H-C-DE-0062-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune C Missing 2 GmbH\nDIENSTLEISTUNGSVERTRAG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 132.25\nLaufzeit endet: 2042-09-24",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune C Missing 2 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR132.25",
+          "due_date": null,
+          "end_date": "2042-09-24"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0062-01",
+        "RCP-H-C-DE-0062-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-missing-2",
+      "family": "rcp-confirmation-de-missing-2",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "insurance",
+      "cohort": "missing",
+      "content": "Absender: Marune C Missing 3 GmbH\nVERSICHERUNGSNACHWEIS\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVersicherungsscheinnummer: RCP-H-C-DE-0063-01\nVertragskennung: RCP-H-C-DE-0063-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAngaben zum aktuellen Vorgang:\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 133.25\nLaufzeit endet: 2042-01-25",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Marune C Missing 3 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR133.25",
+          "due_date": null,
+          "end_date": "2042-01-25"
+        }
+      },
+      "targetIdentifier": "policy_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0063-01",
+        "RCP-H-C-DE-0063-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-missing-3",
+      "family": "rcp-confirmation-de-missing-3",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "invoice",
+      "cohort": "missing",
+      "content": "Absender: Marune C Missing 4 GmbH\nDIENSTLEISTUNGSRECHNUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 134.25\nZahlungsfrist: 2040-02-10\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-C-DE-0064-01\nVertragskennung: RCP-H-C-DE-0064-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Marune C Missing 4 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR134.25",
+          "due_date": "2040-02-10",
+          "end_date": null
+        }
+      },
+      "targetIdentifier": "invoice_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0064-01",
+        "RCP-H-C-DE-0064-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-missing-4",
+      "family": "rcp-confirmation-de-missing-4",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "contract",
+      "cohort": "missing",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nVertragskennung: RCP-H-C-DE-0065-01\nRechnungsnummer: RCP-H-C-DE-0065-02\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune C Missing 5 GmbH\nDIENSTLEISTUNGSVERTRAG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDie Kennung dieser Ausfertigung ist nicht angegeben.\nGesamtbetrag: EUR 135.25\nLaufzeit endet: 2042-03-11",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Marune C Missing 5 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR135.25",
+          "due_date": null,
+          "end_date": "2042-03-11"
+        }
+      },
+      "targetIdentifier": "contract_number",
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0065-01",
+        "RCP-H-C-DE-0065-02"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-inapplicable-0",
+      "family": "rcp-confirmation-de-inapplicable-0",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "Absender: Marune C Inapplicable 1 GmbH\nALLGEMEINES SCHREIBEN\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-C-DE-0066-01\nVertragskennung: RCP-H-C-DE-0066-02\nVersicherungsscheinnummer: RCP-H-C-DE-0066-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune C Inapplicable 1 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0066-01",
+        "RCP-H-C-DE-0066-02",
+        "RCP-H-C-DE-0066-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-inapplicable-1",
+      "family": "rcp-confirmation-de-inapplicable-1",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "payment",
+      "cohort": "inapplicable",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-C-DE-0067-01\nVertragskennung: RCP-H-C-DE-0067-02\nVersicherungsscheinnummer: RCP-H-C-DE-0067-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune C Inapplicable 2 GmbH\nZAHLUNGSBESTÄTIGUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Marune C Inapplicable 2 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0067-01",
+        "RCP-H-C-DE-0067-02",
+        "RCP-H-C-DE-0067-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-inapplicable-2",
+      "family": "rcp-confirmation-de-inapplicable-2",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "Absender: Marune C Inapplicable 3 GmbH\nALLGEMEINES SCHREIBEN\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-C-DE-0068-01\nVertragskennung: RCP-H-C-DE-0068-02\nVersicherungsscheinnummer: RCP-H-C-DE-0068-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAngaben zum aktuellen Vorgang:\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune C Inapplicable 3 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0068-01",
+        "RCP-H-C-DE-0068-02",
+        "RCP-H-C-DE-0068-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-inapplicable-3",
+      "family": "rcp-confirmation-de-inapplicable-3",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "payment",
+      "cohort": "inapplicable",
+      "content": "Absender: Marune C Inapplicable 4 GmbH\nZAHLUNGSBESTÄTIGUNG\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.\n\nArchivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-C-DE-0069-01\nVertragskennung: RCP-H-C-DE-0069-02\nVersicherungsscheinnummer: RCP-H-C-DE-0069-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Marune C Inapplicable 4 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0069-01",
+        "RCP-H-C-DE-0069-02",
+        "RCP-H-C-DE-0069-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    },
+    {
+      "id": "rcp-confirmation-de-inapplicable-4",
+      "family": "rcp-confirmation-de-inapplicable-4",
+      "split": "confirmation",
+      "language": "de",
+      "kind": "letter",
+      "cohort": "inapplicable",
+      "content": "Archivierter Anhang; die folgenden Angaben gehören zu früheren Vorgängen:\nRechnungsnummer: RCP-H-C-DE-0070-01\nVertragskennung: RCP-H-C-DE-0070-02\nVersicherungsscheinnummer: RCP-H-C-DE-0070-03\nAlter Betrag: EUR 19.60; alte Frist: 2031-03-11.\n\nAbsender: Marune C Inapplicable 5 GmbH\nALLGEMEINES SCHREIBEN\nDies ist der aktuelle Vorgang. Frühere Verweise sind keine Kennungen dieses Vorgangs.\nDieses Schreiben nennt keine eigene Rechnungs-, Vertrags- oder Policenkennung und keine Beträge oder Fristen.",
+      "expected": {
+        "title": "Synthetic",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Marune C Inapplicable 5 GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "targetIdentifier": null,
+      "forbiddenCurrentIdentifiers": [
+        "RCP-H-C-DE-0070-01",
+        "RCP-H-C-DE-0070-02",
+        "RCP-H-C-DE-0070-03"
+      ],
+      "abstentionCase": true,
+      "annotation": "Synthetic curated role-based ground truth. Archive fragments are not values of the live document. Never supplied as held-out model input."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "revision": "reference-projection-freeze-v1",
+  "splits": {
+    "training": 10,
+    "development": 30,
+    "confirmation": 30
+  },
+  "files": {
+    "cases.json": "74ab35138ef9ada87d3afe7d68ea073aa4638659219555775d611cbf863d088d",
+    "protocol.json": "f656c0137449bb297cf7c01eb2e32b2d6827a301940178f11fb65025b263f1a3",
+    "CONTRACT.md": "4253f2acfdfb10052aee0192897a0899f3cb48431afb66d99de100713e975f3d",
+    "../quality/extraction/core.js": "ce5e6286832abc075d207da7a3ed2066d70df8ca9f9944d849a41c7dfc202d1b",
+    "../quality/scoring.js": "739ee1bd3d035614a9c1e2d5f6b4d1786f94dfdfa2aead26131aa4a9934202ee",
+    "../quality/corpus.js": "b2c64c87ae7812cc8df67eaf5ffd486a10ff03089325eaa5dd1983d82dd88cf8",
+    "../quality/extraction/model-locks.json": "80e4db9939b06b412c6987bf713cea64a23073badc7b6a9003bfe34bdee155c0",
+    "../quality/extraction/qwen15b.json": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+    "../../services/learningContext.js": "c01343bf3eb665559cbbe0e30c9e6796a54961152ad3664c380e746d4d7fd4c7",
+    "../../services/ollamaService.js": "84299e4eb3fd9c9498eabc1a5dadf30057fe1127e8d9b428927e3820f47fe931",
+    "../../services/customFieldUpdates.js": "fe3cf81b7b43176dc4a34a3061e13beadd428ef6bd66eaa98dbf3b4c8beac316"
+  }
+}
