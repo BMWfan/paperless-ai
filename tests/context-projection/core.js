@@ -3,7 +3,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const shared=require('../quality/extraction/core');
 const {selectContext,rankExamples}=require('../../services/learningContext');
 const {get_encoding}=require('tiktoken');
-const sourceFiles=['core.js','run.js','report.js','replay.js','../context-projection.test.js','../../.github/workflows/classification-evaluation.yml','CONTRACT.md','manifest.json','../quality/extraction/core.js','../quality/scoring.js','../quality/corpus.js','../../services/learningContext.js','../../services/ollamaService.js','../../services/customFieldUpdates.js'];
+const sourceFiles=['core.js','run.js','report.js','replay.js','ingestion.js','measurement-lock.json','../context-projection.test.js','../../.github/workflows/classification-evaluation.yml','CONTRACT.md','manifest.json','../quality/extraction/core.js','../quality/scoring.js','../quality/corpus.js','../../services/learningContext.js','../../services/ollamaService.js','../../services/customFieldUpdates.js'];
 const sourceDigests=()=>Object.fromEntries(sourceFiles.map(file=>[file,shared.hash(fs.readFileSync(path.join(__dirname,file)))]));
 function load(){
   const manifest=require('./manifest.json');

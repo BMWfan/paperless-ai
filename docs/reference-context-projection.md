@@ -157,3 +157,32 @@ tuning run is authorized by this negative result. A later proposal would need to
 address current-vs-historical ownership and sender/language regression, with new
 pre-approved data/gates/budget. Existing controlled correction/review remains the
 safe user workflow; SPEC20/EPIC12 remain open.
+
+
+## Native import correction after measurement
+
+The first model-free native replay at1440c18,
+[run43723383493](https://github.com/BMWfan/paperless-ai/actions/runs/43723383493),
+failed while waiting for its first document. The same synthetic upload was
+reproduced locally: native libmagic detects the leading `From:` line as
+`message/rfc822`; email-to-PDF conversion is unavailable in this text-only stack.
+This is expected native MIME dispatch, not evidence of an ngx defect or an
+upstream issue. Official ngx code and configuration remain unchanged.
+
+Only replay transport now prefixes `Paperless-AI synthetic replay fixture.` and
+a blank line. The original document content follows unchanged. A real native
+probe confirms `text/plain`, successful ingestion and the retained current ID.
+Model prompts, reference selection, data/protocol, raw answers, scoring and gates
+are unchanged. Native task failures now surface their recorded error immediately
+rather than waiting90 seconds without diagnosis.
+
+The original ba138ec harness-lock bytes are retained as measurement-lock.json
+(SHA256974263ea1df81f7f1551b063d9ddb6dfa678f5680a29860788f6b6c3e06f0930),
+verified byte-for-byte against Git. Archived reports continue to require those
+original measurement source digests. harness-lock.json separately verifies the
+current replay/audit source, including the new wrapper and the original lock.
+The only aggregation change is this historical-versus-current source-lock
+separation; all180 recomputed report bytes match the pre-repair report exactly.
+This versioned native-only repair does not regenerate, replace or rescore any
+model answer. Seven focused regressions, all99 Node22 root tests and ESLint pass with no
+failed/skipped tests. Corrected full native replay evidence remains pending in PR31.

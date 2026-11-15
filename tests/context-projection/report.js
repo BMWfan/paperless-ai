@@ -13,7 +13,7 @@ function aggregate(directory,{fixtureOnly=false}={}){
     const file=path.join(directory,name),data=bytes(file),report=JSON.parse(data),key=`${report.arm}/${report.split}/${report.seed}`;
     assert.ok(!seen.has(key));seen.add(key);assert.ok(protocol.arms[report.arm]);assert.ok(protocol.seeds[report.split]?.includes(report.seed));
     assert.equal(name.replace(/\.gz$/,''),`projection-${report.arm}-${report.split}-${report.seed}.json`);
-    assert.equal(report.revision,protocol.revision);assert.deepEqual(report.manifest,manifest);assert.deepEqual(report.sourceDigests,require('./harness-lock.json'));
+    assert.equal(report.revision,protocol.revision);assert.deepEqual(report.manifest,manifest);assert.deepEqual(report.sourceDigests,require('./measurement-lock.json')); // Original measurement runtime, before native-only import repair.
     assert.equal(report.model,protocol.model);assert.equal(report.modelDigest,protocol.modelDigest);assert.equal(report.ollamaVersion,protocol.ollamaVersion);
     assert.equal(report.origin,'http://127.0.0.1:11434');assert.equal(report.attempt,1);assert.equal(report.complete,true);assert.equal(report.rows.length,30);assert.equal(report.requestCount,30);
     assert.deepEqual(report.options,{...protocol.options,seed:report.seed});runs.add(report.run);commits.add(report.commit);

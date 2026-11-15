@@ -6,6 +6,7 @@ assert.equal(process.env.PAPERLESS_API_URL,'http://paperless:8000/api');
 const {load,hash}=require('./core'),{aggregate,bytes}=require('./report');
 const {buildCustomFieldUpdates}=require('../../services/customFieldUpdates');
 const {fieldTypes}=require('../quality/corpus');
+const {wrapSyntheticText}=require('./ingestion');
 const directory=path.join(__dirname,'archive');
 const archive=require('./artifact-sources.json');
 for(const [name,digest]of Object.entries(archive.files)){assert.equal(hash(fs.readFileSync(path.join(directory,name))),digest);assert.equal(hash(bytes(path.join(directory,name))),archive.decodedSHA256[name]);}
@@ -22,10 +23,12 @@ async function examples(){const response=await fetch('http://ai:3000/api/learnin
   for(const [name,data_type]of Object.entries({...fieldTypes,projection_unrelated:'string'}))definitions[name]=await api('/custom_fields/',{name,data_type},'POST');
   const documents=new Map();
   for(const fixture of cases.filter(row=>row.split!=='training')){
-    const filename=`synthetic-projection-${fixture.id}.txt`,form=new FormData();form.set('document',new Blob([fixture.content],{type:'text/plain'}),filename);
-    await api('/documents/post_document/',form,'POST');let document;
+    const filename=`synthetic-projection-${fixture.id}.txt`,form=new FormData();form.set('document',new Blob([wrapSyntheticText(fixture.content)],{type:'text/plain'}),filename);
+    const task=await api('/documents/post_document/',form,'POST');let document;
     for(let attempt=0;attempt<90;attempt++){
       document=(await api('/documents/?ordering=-id&page_size=100')).results.find(row=>row.original_file_name===filename);if(document)break;
+      const taskRows=await api('/tasks/');const state=(Array.isArray(taskRows)?taskRows:taskRows.results).find(row=>row.task_id===task);
+      assert.notEqual(state?.status,'failure',`Synthetic ingestion ${fixture.id}: ${state?.result_data?.error_message||'native task failed'}`);
       await new Promise(resolve=>setTimeout(resolve,1000));
     }
     assert.ok(document,`Synthetic ingestion: ${fixture.id}`);documents.set(fixture.id,document.id);result.documents++;

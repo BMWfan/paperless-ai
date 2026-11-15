@@ -54,7 +54,7 @@ function writeReport(dir,arm,split,seed){
     return {id:fixture.id,context,contextDigest:hash(context),controlContextDigest:hash(value.contexts.A),selectedReferences:value.selectedIds,rankedReferences:value.rankedIds,referenceTokens:value.tokens,prompt,systemDigest:hash(system),durationMs:1,terminal:true,
       actual,response:{done:true,eval_count:1,prompt_eval_count:1,response:JSON.stringify(actual)},request:{model:protocol.model,prompt,system,stream:false,format:protocol.baselineSchema,options:{...protocol.options,seed}},validation:checked,scores:scores(actual,checked.accepted,fixture,training),provenance:provenance(actual,fixture,training)};
   });
-  const report={revision:protocol.revision,arm,split,seed,model:protocol.model,modelDigest:protocol.modelDigest,ollamaVersion:protocol.ollamaVersion,origin:'http://127.0.0.1:11434',attempt:1,complete:true,requestCount:30,options:{...protocol.options,seed},manifest,sourceDigests:sourceDigests(),run:'fixture-only',commit:'not-model-evidence',fixtureOnly:true,rows,
+  const report={revision:protocol.revision,arm,split,seed,model:protocol.model,modelDigest:protocol.modelDigest,ollamaVersion:protocol.ollamaVersion,origin:'http://127.0.0.1:11434',attempt:1,complete:true,requestCount:30,options:{...protocol.options,seed},manifest,sourceDigests:require('./context-projection/measurement-lock.json'),run:'fixture-only',commit:'not-model-evidence',fixtureOnly:true,rows,
     summary:summarize(rows,cases),summaryByLanguage:Object.fromEntries(['en','de'].map(language=>[language,summarize(rows.filter(row=>cases.find(item=>item.id===row.id).language===language),cases)]))};
   const file=path.join(dir,`projection-${arm}-${split}-${seed}.json`);fs.writeFileSync(file,JSON.stringify(report));return file;
 }
@@ -101,4 +101,12 @@ test('manual workflow profile is read-only and schedules exactly six projection 
   assert.equal((section.match(/- \{arm:/g)||[]).length,6);assert.ok(section.includes("inputs.extraction_stage == 'projection'"));assert.ok(section.includes('max-parallel: 2'));
   assert.ok(text.includes('permissions:\n  contents: read'));assert.ok(section.includes('test "$GITHUB_RUN_ATTEMPT" = 1'));assert.ok(section.includes('ollama/ollama:0.12.6'));
   assert.ok(!section.includes('secrets.'));assert.ok(!section.includes('NO_proxy'));assert.ok(section.includes('artifact-sources.json'));
+});
+
+test('native replay wraps transport only and preserves the original measurement source lock',()=>{
+  const {wrapSyntheticText}=require('./context-projection/ingestion');
+  const source=cases.find(row=>row.split==='development').content;assert.ok(source.startsWith('From:'));
+  const wrapped=wrapSyntheticText(source);assert.equal(wrapped,'Paperless-AI synthetic replay fixture.\n\n'+source);assert.ok(!wrapped.startsWith('From:'));
+  assert.equal(hash(fs.readFileSync('tests/context-projection/measurement-lock.json')),'974263ea1df81f7f1551b063d9ddb6dfa678f5680a29860788f6b6c3e06f0930');
+  assert.equal(require('./context-projection/measurement-lock.json')['run.js'],hash(fs.readFileSync('tests/context-projection/run.js')),'model runner remains unchanged');
 });
