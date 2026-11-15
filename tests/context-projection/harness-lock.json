@@ -1,0 +1,18 @@
+{
+  "core.js": "48fdee43a07fb57e9df2231a94b069c796cfef9c465f1fd03d884d263161c8a2",
+  "run.js": "e820c707ef17a70d7db829114f0c6cc17eedc1ceed16506ca6033f578982a0e5",
+  "report.js": "922ad71fcf186e7e3ba2ae7e04d0a07cc88eba9b4acdb471df976d49860c0e2f",
+  "replay.js": "e26ba4e137f1e5777fb73103dd5738e5990d2bea44a640637e02067d11ef17bf",
+  "ingestion.js": "d4891a10f4e3d29cb518d2be36acfc668f36a687599229b3de21838e6c7f9fb7",
+  "measurement-lock.json": "974263ea1df81f7f1551b063d9ddb6dfa678f5680a29860788f6b6c3e06f0930",
+  "../context-projection.test.js": "3534865450664ad103e040f47ffe3a590a6373b64745a8e80cfd04a31cdd0ee7",
+  "../../.github/workflows/classification-evaluation.yml": "cfb5f18b86a4e99ed2f385287f5847437cc801d85c5ed3fc3f071442a3aeb9ec",
+  "CONTRACT.md": "4253f2acfdfb10052aee0192897a0899f3cb48431afb66d99de100713e975f3d",
+  "manifest.json": "047893af9409859a356abaf9fd37200eccb619d8762be2ba5c25216b6a50dc20",
+  "../quality/extraction/core.js": "ce5e6286832abc075d207da7a3ed2066d70df8ca9f9944d849a41c7dfc202d1b",
+  "../quality/scoring.js": "739ee1bd3d035614a9c1e2d5f6b4d1786f94dfdfa2aead26131aa4a9934202ee",
+  "../quality/corpus.js": "b2c64c87ae7812cc8df67eaf5ffd486a10ff03089325eaa5dd1983d82dd88cf8",
+  "../../services/learningContext.js": "c01343bf3eb665559cbbe0e30c9e6796a54961152ad3664c380e746d4d7fd4c7",
+  "../../services/ollamaService.js": "84299e4eb3fd9c9498eabc1a5dadf30057fe1127e8d9b428927e3820f47fe931",
+  "../../services/customFieldUpdates.js": "fe3cf81b7b43176dc4a34a3061e13beadd428ef6bd66eaa98dbf3b4c8beac316"
+}

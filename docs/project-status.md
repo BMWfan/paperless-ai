@@ -1,4 +1,4 @@
-# Project status — baseline after PR29
+# Project status — baseline after PR30
 
 This is a dated source/acceptance audit, not a release announcement. GitHub issues,
 PRs and their exact checked commits remain the source of truth. Historical
@@ -6,7 +6,11 @@ validation records are not evidence for later heads.
 
 ## Integrated in main at this audit
 
-Baseline: `05d5b9b6e508c5524868dff261fba0cb220f64f2` (owner-approved PR29).
+Baseline: `b9661037fc891c294dfe3095ac16e88633171ec7` (owner-approved PR30).
+PR30 integrates persistent field-source generations; its direct main Learning
+[run43690682976](https://github.com/BMWfan/paperless-ai/actions/runs/43690682976) passed.
+PR30 final-head evidence covers92 root/3 Python/5 real API/4 browser cases,
+restart and3.4.1→3.4.2 upgrade; no general model-accuracy claim follows.
 PR25 integrates confirmed saving, PR28 the correction editor and PR29 optional
 [Manual label hints](learned-field-hints.md). PR26/27 preserve negative diagnostic
 and model results without activation. Direct main Learning runs
@@ -16,12 +20,16 @@ passed. Automatic semantic extraction remains unqualified.
 
 ## Current change under review
 
-[PR30](https://github.com/BMWfan/paperless-ai/pull/30) implements the approved
-[persistent field-source generation contract](field-learning-continuity.md).
-Its additive migration retains field proof through independent title changes,
-with conservative invalidation/revocation, without changing the model/context
-or automatic application. It requires its own owner merge approval; exact tested
-SHA/results remain in the PR. This is not a release or project-wide completion.
+The approved [reference-context projection](reference-context-projection.md)
+compares raw references against categorical metadata using exactly the same
+selected source IDs and pinned1.5B model. Its new data, gates and protocol are
+frozen before candidate code. All180 answers are archived and independently rescored. B retains8/10
+current IDs but accepts14/13 wrong IDs across confirmation seeds and regresses
+metadata, so it is not qualified. Corrected native replay verifies489 typed
+assignments/180 snapshots/60 documents with no active learning. Its first MIME
+transport failure and repair are documented; production
+context, writer and field-source behavior stay unchanged. This is not project-wide
+completion, a release or activation.
 
 The table below describes the integrated baseline. Earlier main runs
 [43527747171](https://github.com/BMWfan/paperless-ai/actions/runs/43527747171) (PR27)

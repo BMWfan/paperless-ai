@@ -1,0 +1,3155 @@
+{
+  "revision": "reference-projection-v1",
+  "attempts": 180,
+  "sources": [
+    {
+      "file": "projection-A-confirmation-42.json.gz",
+      "sha256": "8e8478d5c6e3be5a2db5d018697128c75b8b789951977c6975c6b54b36a4c06e",
+      "storedSha256": "7002e13fc9215a129f1ef700426a3eb2c49d58ebce1d2bcc816d20456d45abb5",
+      "commit": "ba138ec298fa2913d21826b1fc04f171401fea33",
+      "run": "43717958579"
+    },
+    {
+      "file": "projection-A-confirmation-43.json.gz",
+      "sha256": "331967e6821fa3a6918dafdd54f6067db0ee7f7d6e952289cc94f06d1dc77380",
+      "storedSha256": "43e489fab53cd6b2f8c7a26b62a695e35472f99f595ebaa57c16fee6dbfd1e96",
+      "commit": "ba138ec298fa2913d21826b1fc04f171401fea33",
+      "run": "43717958579"
+    },
+    {
+      "file": "projection-A-development-42.json.gz",
+      "sha256": "6f4621d223630caab0f9743ba5ef4a2275ba890a73ec5b95e5523855fcdebeb0",
+      "storedSha256": "1c417fcc8e427322582349544ae67d9c41f5134cec7224f7b043230c76906f20",
+      "commit": "ba138ec298fa2913d21826b1fc04f171401fea33",
+      "run": "43717958579"
+    },
+    {
+      "file": "projection-B-confirmation-42.json.gz",
+      "sha256": "530d9809e67bddc1a693258eb971d41fecb181f04c09b4a949660678fae58e61",
+      "storedSha256": "a8af4cd53adc147cc61999de98dc8da9d2ee3d267623d379aad701d0fe40b2c4",
+      "commit": "ba138ec298fa2913d21826b1fc04f171401fea33",
+      "run": "43717958579"
+    },
+    {
+      "file": "projection-B-confirmation-43.json.gz",
+      "sha256": "f41ad27e99072971b3723553248f77ee5bb663836210b2de3eaaf068de603f0e",
+      "storedSha256": "fabcfc09b35bee23265d7822d9bb258d0414c17b71db33a79ca9ca24235f8da4",
+      "commit": "ba138ec298fa2913d21826b1fc04f171401fea33",
+      "run": "43717958579"
+    },
+    {
+      "file": "projection-B-development-42.json.gz",
+      "sha256": "7a9a2055f77dc20b6a2d6f566ae097bcbe4e5c304ecb3125ce1e065c5d28637f",
+      "storedSha256": "03e9d674845d38a10898f039153dc612fa6b047a7bb2d3915c6a7577089412f9",
+      "commit": "ba138ec298fa2913d21826b1fc04f171401fea33",
+      "run": "43717958579"
+    }
+  ],
+  "groups": {
+    "A/confirmation/42": {
+      "documents": 30,
+      "failedAttempts": 0,
+      "fields": {
+        "invoice_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 15,
+            "wrong": 15,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 15,
+            "wrong": 15,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 15,
+          "absentFalsePositive": 13,
+          "errors": {
+            "training_value_copy": 7,
+            "historical_value_copy": 8
+          }
+        },
+        "contract_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 25,
+            "wrong": 3,
+            "missing": 2
+          },
+          "validated": {
+            "correct": 25,
+            "wrong": 3,
+            "missing": 2
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 3,
+          "absentFalsePositive": 3,
+          "errors": {
+            "historical_value_copy": 3
+          }
+        },
+        "policy_number": {
+          "present": 2,
+          "absent": 28,
+          "missingTarget": 2,
+          "inapplicable": 26,
+          "raw": {
+            "correct": 25,
+            "wrong": 5,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 25,
+            "wrong": 5,
+            "missing": 0
+          },
+          "correctPresent": 1,
+          "wrongAccepted": 5,
+          "absentFalsePositive": 4,
+          "errors": {
+            "wrong_value": 1,
+            "historical_value_copy": 3,
+            "invented_absent_value": 1
+          }
+        },
+        "amount": {
+          "present": 20,
+          "absent": 10,
+          "missingTarget": 0,
+          "inapplicable": 10,
+          "raw": {
+            "correct": 18,
+            "wrong": 12,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 18,
+            "wrong": 12,
+            "missing": 0
+          },
+          "correctPresent": 13,
+          "wrongAccepted": 12,
+          "absentFalsePositive": 5,
+          "errors": {
+            "wrong_value": 7,
+            "invented_absent_value": 5
+          }
+        },
+        "due_date": {
+          "present": 8,
+          "absent": 22,
+          "missingTarget": 0,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 13,
+            "wrong": 17,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 13,
+            "wrong": 17,
+            "missing": 0
+          },
+          "correctPresent": 4,
+          "wrongAccepted": 17,
+          "absentFalsePositive": 13,
+          "errors": {
+            "wrong_date_role": 5,
+            "wrong_value": 4,
+            "invented_absent_value": 8
+          }
+        },
+        "end_date": {
+          "present": 12,
+          "absent": 18,
+          "missingTarget": 0,
+          "inapplicable": 18,
+          "raw": {
+            "correct": 25,
+            "wrong": 0,
+            "missing": 5
+          },
+          "validated": {
+            "correct": 25,
+            "wrong": 0,
+            "missing": 5
+          },
+          "correctPresent": 7,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 20,
+          "wrong": 10,
+          "missing": 0
+        },
+        "tags": {
+          "correct": 20,
+          "wrong": 10,
+          "missing": 0
+        },
+        "correspondent": {
+          "correct": 18,
+          "wrong": 12,
+          "missing": 0
+        },
+        "language": {
+          "correct": 27,
+          "wrong": 3,
+          "missing": 0
+        }
+      },
+      "rejections": {},
+      "durationMs": 1462622,
+      "promptTokens": 53629,
+      "generatedTokens": 4042
+    },
+    "A/confirmation/43": {
+      "documents": 30,
+      "failedAttempts": 0,
+      "fields": {
+        "invoice_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 14,
+            "wrong": 16,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 14,
+            "wrong": 16,
+            "missing": 0
+          },
+          "correctPresent": 3,
+          "wrongAccepted": 16,
+          "absentFalsePositive": 15,
+          "errors": {
+            "historical_value_copy": 9,
+            "training_value_copy": 5,
+            "invented_absent_value": 2
+          }
+        },
+        "contract_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 27,
+            "wrong": 0,
+            "missing": 3
+          },
+          "validated": {
+            "correct": 27,
+            "wrong": 0,
+            "missing": 3
+          },
+          "correctPresent": 1,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "policy_number": {
+          "present": 2,
+          "absent": 28,
+          "missingTarget": 2,
+          "inapplicable": 26,
+          "raw": {
+            "correct": 25,
+            "wrong": 5,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 25,
+            "wrong": 5,
+            "missing": 0
+          },
+          "correctPresent": 1,
+          "wrongAccepted": 5,
+          "absentFalsePositive": 4,
+          "errors": {
+            "wrong_value": 1,
+            "invented_absent_value": 2,
+            "historical_value_copy": 2
+          }
+        },
+        "amount": {
+          "present": 20,
+          "absent": 10,
+          "missingTarget": 0,
+          "inapplicable": 10,
+          "raw": {
+            "correct": 16,
+            "wrong": 14,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 16,
+            "wrong": 14,
+            "missing": 0
+          },
+          "correctPresent": 12,
+          "wrongAccepted": 14,
+          "absentFalsePositive": 6,
+          "errors": {
+            "wrong_value": 8,
+            "invented_absent_value": 6
+          }
+        },
+        "due_date": {
+          "present": 8,
+          "absent": 22,
+          "missingTarget": 0,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 10,
+            "wrong": 20,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 20,
+            "missing": 0
+          },
+          "correctPresent": 5,
+          "wrongAccepted": 20,
+          "absentFalsePositive": 17,
+          "errors": {
+            "invented_absent_value": 11,
+            "wrong_date_role": 6,
+            "wrong_value": 3
+          }
+        },
+        "end_date": {
+          "present": 12,
+          "absent": 18,
+          "missingTarget": 0,
+          "inapplicable": 18,
+          "raw": {
+            "correct": 23,
+            "wrong": 0,
+            "missing": 7
+          },
+          "validated": {
+            "correct": 23,
+            "wrong": 0,
+            "missing": 7
+          },
+          "correctPresent": 5,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 17,
+          "wrong": 13,
+          "missing": 0
+        },
+        "tags": {
+          "correct": 17,
+          "wrong": 13,
+          "missing": 0
+        },
+        "correspondent": {
+          "correct": 20,
+          "wrong": 10,
+          "missing": 0
+        },
+        "language": {
+          "correct": 26,
+          "wrong": 4,
+          "missing": 0
+        }
+      },
+      "rejections": {},
+      "durationMs": 1373801,
+      "promptTokens": 53629,
+      "generatedTokens": 4108
+    },
+    "A/development/42": {
+      "documents": 30,
+      "failedAttempts": 0,
+      "fields": {
+        "invoice_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 17,
+            "wrong": 13,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 17,
+            "wrong": 13,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 13,
+          "absentFalsePositive": 11,
+          "errors": {
+            "training_value_copy": 7,
+            "historical_value_copy": 6
+          }
+        },
+        "contract_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 23,
+            "wrong": 5,
+            "missing": 2
+          },
+          "validated": {
+            "correct": 23,
+            "wrong": 5,
+            "missing": 2
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 5,
+          "absentFalsePositive": 3,
+          "errors": {
+            "wrong_value": 2,
+            "historical_value_copy": 3
+          }
+        },
+        "policy_number": {
+          "present": 2,
+          "absent": 28,
+          "missingTarget": 2,
+          "inapplicable": 26,
+          "raw": {
+            "correct": 25,
+            "wrong": 5,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 25,
+            "wrong": 5,
+            "missing": 0
+          },
+          "correctPresent": 1,
+          "wrongAccepted": 5,
+          "absentFalsePositive": 4,
+          "errors": {
+            "wrong_value": 1,
+            "historical_value_copy": 3,
+            "invented_absent_value": 1
+          }
+        },
+        "amount": {
+          "present": 20,
+          "absent": 10,
+          "missingTarget": 0,
+          "inapplicable": 10,
+          "raw": {
+            "correct": 17,
+            "wrong": 13,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 18,
+            "wrong": 12,
+            "missing": 0
+          },
+          "correctPresent": 14,
+          "wrongAccepted": 12,
+          "absentFalsePositive": 6,
+          "errors": {
+            "wrong_value": 6,
+            "invented_absent_value": 6,
+            "format_variant": 1
+          }
+        },
+        "due_date": {
+          "present": 8,
+          "absent": 22,
+          "missingTarget": 0,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 11,
+            "wrong": 19,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 11,
+            "wrong": 19,
+            "missing": 0
+          },
+          "correctPresent": 4,
+          "wrongAccepted": 19,
+          "absentFalsePositive": 15,
+          "errors": {
+            "wrong_value": 4,
+            "wrong_date_role": 7,
+            "invented_absent_value": 8
+          }
+        },
+        "end_date": {
+          "present": 12,
+          "absent": 18,
+          "missingTarget": 0,
+          "inapplicable": 18,
+          "raw": {
+            "correct": 23,
+            "wrong": 0,
+            "missing": 7
+          },
+          "validated": {
+            "correct": 23,
+            "wrong": 0,
+            "missing": 7
+          },
+          "correctPresent": 5,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 20,
+          "wrong": 10,
+          "missing": 0
+        },
+        "tags": {
+          "correct": 20,
+          "wrong": 10,
+          "missing": 0
+        },
+        "correspondent": {
+          "correct": 19,
+          "wrong": 11,
+          "missing": 0
+        },
+        "language": {
+          "correct": 24,
+          "wrong": 6,
+          "missing": 0
+        }
+      },
+      "rejections": {},
+      "durationMs": 1447436,
+      "promptTokens": 53615,
+      "generatedTokens": 4042
+    },
+    "B/confirmation/42": {
+      "documents": 30,
+      "failedAttempts": 0,
+      "fields": {
+        "invoice_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 22,
+            "wrong": 8,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 22,
+            "wrong": 8,
+            "missing": 0
+          },
+          "correctPresent": 4,
+          "wrongAccepted": 8,
+          "absentFalsePositive": 8,
+          "errors": {
+            "historical_value_copy": 8
+          }
+        },
+        "contract_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 24,
+            "wrong": 4,
+            "missing": 2
+          },
+          "validated": {
+            "correct": 24,
+            "wrong": 4,
+            "missing": 2
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 4,
+          "absentFalsePositive": 4,
+          "errors": {
+            "historical_value_copy": 4
+          }
+        },
+        "policy_number": {
+          "present": 2,
+          "absent": 28,
+          "missingTarget": 2,
+          "inapplicable": 26,
+          "raw": {
+            "correct": 28,
+            "wrong": 2,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 28,
+            "wrong": 2,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 2,
+          "absentFalsePositive": 2,
+          "errors": {
+            "historical_value_copy": 2
+          }
+        },
+        "amount": {
+          "present": 20,
+          "absent": 10,
+          "missingTarget": 0,
+          "inapplicable": 10,
+          "raw": {
+            "correct": 1,
+            "wrong": 29,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 16,
+            "wrong": 14,
+            "missing": 0
+          },
+          "correctPresent": 15,
+          "wrongAccepted": 14,
+          "absentFalsePositive": 9,
+          "errors": {
+            "format_variant": 15,
+            "invented_absent_value": 9,
+            "wrong_value": 5
+          }
+        },
+        "due_date": {
+          "present": 8,
+          "absent": 22,
+          "missingTarget": 0,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 9,
+            "wrong": 21,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 13,
+            "wrong": 17,
+            "missing": 0
+          },
+          "correctPresent": 7,
+          "wrongAccepted": 17,
+          "absentFalsePositive": 16,
+          "errors": {
+            "invented_absent_value": 14,
+            "wrong_date_role": 6,
+            "wrong_value": 1
+          }
+        },
+        "end_date": {
+          "present": 12,
+          "absent": 18,
+          "missingTarget": 0,
+          "inapplicable": 18,
+          "raw": {
+            "correct": 24,
+            "wrong": 3,
+            "missing": 3
+          },
+          "validated": {
+            "correct": 25,
+            "wrong": 2,
+            "missing": 3
+          },
+          "correctPresent": 7,
+          "wrongAccepted": 2,
+          "absentFalsePositive": 0,
+          "errors": {
+            "invented_absent_value": 1,
+            "wrong_value": 2
+          }
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 19,
+          "wrong": 11,
+          "missing": 0
+        },
+        "tags": {
+          "correct": 19,
+          "wrong": 11,
+          "missing": 0
+        },
+        "correspondent": {
+          "correct": 7,
+          "wrong": 23,
+          "missing": 0
+        },
+        "language": {
+          "correct": 16,
+          "wrong": 14,
+          "missing": 0
+        }
+      },
+      "rejections": {
+        "invalid_type": 5
+      },
+      "durationMs": 433709,
+      "promptTokens": 18994,
+      "generatedTokens": 3952
+    },
+    "B/confirmation/43": {
+      "documents": 30,
+      "failedAttempts": 0,
+      "fields": {
+        "invoice_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 24,
+            "wrong": 6,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 24,
+            "wrong": 6,
+            "missing": 0
+          },
+          "correctPresent": 4,
+          "wrongAccepted": 6,
+          "absentFalsePositive": 6,
+          "errors": {
+            "historical_value_copy": 6
+          }
+        },
+        "contract_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 24,
+            "wrong": 4,
+            "missing": 2
+          },
+          "validated": {
+            "correct": 24,
+            "wrong": 4,
+            "missing": 2
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 4,
+          "absentFalsePositive": 4,
+          "errors": {
+            "historical_value_copy": 4
+          }
+        },
+        "policy_number": {
+          "present": 2,
+          "absent": 28,
+          "missingTarget": 2,
+          "inapplicable": 26,
+          "raw": {
+            "correct": 27,
+            "wrong": 3,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 27,
+            "wrong": 3,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 3,
+          "absentFalsePositive": 3,
+          "errors": {
+            "historical_value_copy": 3
+          }
+        },
+        "amount": {
+          "present": 20,
+          "absent": 10,
+          "missingTarget": 0,
+          "inapplicable": 10,
+          "raw": {
+            "correct": 1,
+            "wrong": 29,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 17,
+            "wrong": 13,
+            "missing": 0
+          },
+          "correctPresent": 15,
+          "wrongAccepted": 13,
+          "absentFalsePositive": 8,
+          "errors": {
+            "format_variant": 15,
+            "invented_absent_value": 9,
+            "wrong_value": 5
+          }
+        },
+        "due_date": {
+          "present": 8,
+          "absent": 22,
+          "missingTarget": 0,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 9,
+            "wrong": 21,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 13,
+            "wrong": 17,
+            "missing": 0
+          },
+          "correctPresent": 7,
+          "wrongAccepted": 17,
+          "absentFalsePositive": 16,
+          "errors": {
+            "invented_absent_value": 14,
+            "wrong_date_role": 6,
+            "wrong_value": 1
+          }
+        },
+        "end_date": {
+          "present": 12,
+          "absent": 18,
+          "missingTarget": 0,
+          "inapplicable": 18,
+          "raw": {
+            "correct": 25,
+            "wrong": 1,
+            "missing": 4
+          },
+          "validated": {
+            "correct": 25,
+            "wrong": 1,
+            "missing": 4
+          },
+          "correctPresent": 7,
+          "wrongAccepted": 1,
+          "absentFalsePositive": 0,
+          "errors": {
+            "wrong_value": 1
+          }
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 20,
+          "wrong": 10,
+          "missing": 0
+        },
+        "tags": {
+          "correct": 20,
+          "wrong": 10,
+          "missing": 0
+        },
+        "correspondent": {
+          "correct": 5,
+          "wrong": 25,
+          "missing": 0
+        },
+        "language": {
+          "correct": 15,
+          "wrong": 15,
+          "missing": 0
+        }
+      },
+      "rejections": {
+        "invalid_type": 5
+      },
+      "durationMs": 365326,
+      "promptTokens": 18994,
+      "generatedTokens": 3959
+    },
+    "B/development/42": {
+      "documents": 30,
+      "failedAttempts": 0,
+      "fields": {
+        "invoice_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 24,
+            "wrong": 6,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 24,
+            "wrong": 6,
+            "missing": 0
+          },
+          "correctPresent": 4,
+          "wrongAccepted": 6,
+          "absentFalsePositive": 6,
+          "errors": {
+            "historical_value_copy": 6
+          }
+        },
+        "contract_number": {
+          "present": 4,
+          "absent": 26,
+          "missingTarget": 4,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 24,
+            "wrong": 4,
+            "missing": 2
+          },
+          "validated": {
+            "correct": 24,
+            "wrong": 4,
+            "missing": 2
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 4,
+          "absentFalsePositive": 4,
+          "errors": {
+            "historical_value_copy": 4
+          }
+        },
+        "policy_number": {
+          "present": 2,
+          "absent": 28,
+          "missingTarget": 2,
+          "inapplicable": 26,
+          "raw": {
+            "correct": 28,
+            "wrong": 2,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 28,
+            "wrong": 2,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 2,
+          "absentFalsePositive": 2,
+          "errors": {
+            "historical_value_copy": 2
+          }
+        },
+        "amount": {
+          "present": 20,
+          "absent": 10,
+          "missingTarget": 0,
+          "inapplicable": 10,
+          "raw": {
+            "correct": 1,
+            "wrong": 29,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 12,
+            "wrong": 18,
+            "missing": 0
+          },
+          "correctPresent": 11,
+          "wrongAccepted": 18,
+          "absentFalsePositive": 9,
+          "errors": {
+            "format_variant": 11,
+            "wrong_value": 9,
+            "invented_absent_value": 9
+          }
+        },
+        "due_date": {
+          "present": 8,
+          "absent": 22,
+          "missingTarget": 0,
+          "inapplicable": 22,
+          "raw": {
+            "correct": 8,
+            "wrong": 22,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 12,
+            "wrong": 18,
+            "missing": 0
+          },
+          "correctPresent": 7,
+          "wrongAccepted": 18,
+          "absentFalsePositive": 17,
+          "errors": {
+            "invented_absent_value": 15,
+            "wrong_date_role": 6,
+            "wrong_value": 1
+          }
+        },
+        "end_date": {
+          "present": 12,
+          "absent": 18,
+          "missingTarget": 0,
+          "inapplicable": 18,
+          "raw": {
+            "correct": 24,
+            "wrong": 1,
+            "missing": 5
+          },
+          "validated": {
+            "correct": 25,
+            "wrong": 0,
+            "missing": 5
+          },
+          "correctPresent": 7,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {
+            "invented_absent_value": 1
+          }
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 20,
+          "wrong": 10,
+          "missing": 0
+        },
+        "tags": {
+          "correct": 20,
+          "wrong": 10,
+          "missing": 0
+        },
+        "correspondent": {
+          "correct": 5,
+          "wrong": 25,
+          "missing": 0
+        },
+        "language": {
+          "correct": 15,
+          "wrong": 15,
+          "missing": 0
+        }
+      },
+      "rejections": {
+        "invalid_type": 5
+      },
+      "durationMs": 360579,
+      "promptTokens": 18980,
+      "generatedTokens": 3892
+    }
+  },
+  "byLanguage": {
+    "A/confirmation/42": {
+      "en": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 9,
+              "wrong": 6,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 9,
+              "wrong": 6,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 6,
+            "absentFalsePositive": 6,
+            "errors": {
+              "training_value_copy": 3,
+              "historical_value_copy": 3
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 12,
+              "wrong": 3,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 12,
+              "wrong": 3,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 3,
+            "absentFalsePositive": 3,
+            "errors": {
+              "historical_value_copy": 3
+            }
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 4,
+            "absentFalsePositive": 3,
+            "errors": {
+              "wrong_value": 1,
+              "historical_value_copy": 3
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 8,
+              "wrong": 7,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 8,
+              "wrong": 7,
+              "missing": 0
+            },
+            "correctPresent": 7,
+            "wrongAccepted": 7,
+            "absentFalsePositive": 4,
+            "errors": {
+              "wrong_value": 3,
+              "invented_absent_value": 4
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 9,
+            "absentFalsePositive": 7,
+            "errors": {
+              "wrong_date_role": 2,
+              "wrong_value": 2,
+              "invented_absent_value": 5
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 14,
+              "wrong": 0,
+              "missing": 1
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 0,
+              "missing": 1
+            },
+            "correctPresent": 5,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "language": {
+            "correct": 15,
+            "wrong": 0,
+            "missing": 0
+          }
+        },
+        "rejections": {},
+        "durationMs": 721678,
+        "promptTokens": 26089,
+        "generatedTokens": 2121
+      },
+      "de": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 9,
+            "absentFalsePositive": 7,
+            "errors": {
+              "training_value_copy": 4,
+              "historical_value_copy": 5
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "validated": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "invented_absent_value": 1
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "correctPresent": 6,
+            "wrongAccepted": 5,
+            "absentFalsePositive": 1,
+            "errors": {
+              "wrong_value": 4,
+              "invented_absent_value": 1
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 7,
+              "wrong": 8,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 7,
+              "wrong": 8,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 8,
+            "absentFalsePositive": 6,
+            "errors": {
+              "invented_absent_value": 3,
+              "wrong_date_role": 3,
+              "wrong_value": 2
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 11,
+              "wrong": 0,
+              "missing": 4
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 0,
+              "missing": 4
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 7,
+            "wrong": 8,
+            "missing": 0
+          },
+          "language": {
+            "correct": 12,
+            "wrong": 3,
+            "missing": 0
+          }
+        },
+        "rejections": {},
+        "durationMs": 740944,
+        "promptTokens": 27540,
+        "generatedTokens": 1921
+      }
+    },
+    "A/confirmation/43": {
+      "en": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 9,
+            "absentFalsePositive": 9,
+            "errors": {
+              "historical_value_copy": 6,
+              "training_value_copy": 3
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 14,
+              "wrong": 0,
+              "missing": 1
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 0,
+              "missing": 1
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 4,
+            "absentFalsePositive": 3,
+            "errors": {
+              "wrong_value": 1,
+              "invented_absent_value": 1,
+              "historical_value_copy": 2
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "correctPresent": 5,
+            "wrongAccepted": 9,
+            "absentFalsePositive": 4,
+            "errors": {
+              "wrong_value": 5,
+              "invented_absent_value": 4
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 3,
+              "wrong": 12,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 3,
+              "wrong": 12,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 12,
+            "absentFalsePositive": 10,
+            "errors": {
+              "invented_absent_value": 7,
+              "wrong_date_role": 3,
+              "wrong_value": 2
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 11,
+              "wrong": 0,
+              "missing": 4
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 0,
+              "missing": 4
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 8,
+            "wrong": 7,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 8,
+            "wrong": 7,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "language": {
+            "correct": 15,
+            "wrong": 0,
+            "missing": 0
+          }
+        },
+        "rejections": {},
+        "durationMs": 667030,
+        "promptTokens": 26089,
+        "generatedTokens": 2144
+      },
+      "de": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 8,
+              "wrong": 7,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 8,
+              "wrong": 7,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 7,
+            "absentFalsePositive": 6,
+            "errors": {
+              "training_value_copy": 2,
+              "historical_value_copy": 3,
+              "invented_absent_value": 2
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "validated": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "invented_absent_value": 1
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "correctPresent": 7,
+            "wrongAccepted": 5,
+            "absentFalsePositive": 2,
+            "errors": {
+              "wrong_value": 3,
+              "invented_absent_value": 2
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 7,
+              "wrong": 8,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 7,
+              "wrong": 8,
+              "missing": 0
+            },
+            "correctPresent": 3,
+            "wrongAccepted": 8,
+            "absentFalsePositive": 7,
+            "errors": {
+              "invented_absent_value": 4,
+              "wrong_date_role": 3,
+              "wrong_value": 1
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 12,
+              "wrong": 0,
+              "missing": 3
+            },
+            "validated": {
+              "correct": 12,
+              "wrong": 0,
+              "missing": 3
+            },
+            "correctPresent": 3,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "language": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          }
+        },
+        "rejections": {},
+        "durationMs": 706771,
+        "promptTokens": 27540,
+        "generatedTokens": 1964
+      }
+    },
+    "A/development/42": {
+      "en": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 7,
+              "wrong": 8,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 7,
+              "wrong": 8,
+              "missing": 0
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 8,
+            "absentFalsePositive": 6,
+            "errors": {
+              "training_value_copy": 5,
+              "historical_value_copy": 3
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 5,
+            "absentFalsePositive": 3,
+            "errors": {
+              "wrong_value": 2,
+              "historical_value_copy": 3
+            }
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 4,
+            "absentFalsePositive": 3,
+            "errors": {
+              "wrong_value": 1,
+              "historical_value_copy": 3
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 9,
+              "wrong": 6,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 9,
+              "wrong": 6,
+              "missing": 0
+            },
+            "correctPresent": 8,
+            "wrongAccepted": 6,
+            "absentFalsePositive": 4,
+            "errors": {
+              "wrong_value": 2,
+              "invented_absent_value": 4
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 9,
+            "absentFalsePositive": 7,
+            "errors": {
+              "wrong_value": 2,
+              "wrong_date_role": 3,
+              "invented_absent_value": 4
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "validated": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "correctPresent": 4,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "language": {
+            "correct": 12,
+            "wrong": 3,
+            "missing": 0
+          }
+        },
+        "rejections": {},
+        "durationMs": 711136,
+        "promptTokens": 26079,
+        "generatedTokens": 2099
+      },
+      "de": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 5,
+            "absentFalsePositive": 5,
+            "errors": {
+              "historical_value_copy": 3,
+              "training_value_copy": 2
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "validated": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "invented_absent_value": 1
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 8,
+              "wrong": 7,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 9,
+              "wrong": 6,
+              "missing": 0
+            },
+            "correctPresent": 6,
+            "wrongAccepted": 6,
+            "absentFalsePositive": 2,
+            "errors": {
+              "wrong_value": 4,
+              "format_variant": 1,
+              "invented_absent_value": 2
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 5,
+              "wrong": 10,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 5,
+              "wrong": 10,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 10,
+            "absentFalsePositive": 8,
+            "errors": {
+              "invented_absent_value": 4,
+              "wrong_date_role": 4,
+              "wrong_value": 2
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 10,
+              "wrong": 0,
+              "missing": 5
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 0,
+              "missing": 5
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 10,
+            "wrong": 5,
+            "missing": 0
+          },
+          "language": {
+            "correct": 12,
+            "wrong": 3,
+            "missing": 0
+          }
+        },
+        "rejections": {},
+        "durationMs": 736300,
+        "promptTokens": 27536,
+        "generatedTokens": 1943
+      }
+    },
+    "B/confirmation/42": {
+      "en": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 5,
+            "absentFalsePositive": 5,
+            "errors": {
+              "historical_value_copy": 5
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 4,
+            "absentFalsePositive": 4,
+            "errors": {
+              "historical_value_copy": 4
+            }
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "historical_value_copy": 1
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 1,
+              "wrong": 14,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "correctPresent": 10,
+            "wrongAccepted": 4,
+            "absentFalsePositive": 4,
+            "errors": {
+              "format_variant": 10,
+              "invented_absent_value": 4
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 5,
+              "wrong": 10,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 8,
+              "wrong": 7,
+              "missing": 0
+            },
+            "correctPresent": 4,
+            "wrongAccepted": 7,
+            "absentFalsePositive": 7,
+            "errors": {
+              "invented_absent_value": 6,
+              "wrong_date_role": 4
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 15,
+              "wrong": 0,
+              "missing": 0
+            },
+            "correctPresent": 6,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {
+              "invented_absent_value": 1
+            }
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 5,
+            "wrong": 10,
+            "missing": 0
+          },
+          "language": {
+            "correct": 15,
+            "wrong": 0,
+            "missing": 0
+          }
+        },
+        "rejections": {
+          "invalid_type": 4
+        },
+        "durationMs": 212715,
+        "promptTokens": 9124,
+        "generatedTokens": 2006
+      },
+      "de": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 12,
+              "wrong": 3,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 12,
+              "wrong": 3,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 3,
+            "absentFalsePositive": 3,
+            "errors": {
+              "historical_value_copy": 3
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "validated": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "historical_value_copy": 1
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 0,
+              "wrong": 15,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 5,
+              "wrong": 10,
+              "missing": 0
+            },
+            "correctPresent": 5,
+            "wrongAccepted": 10,
+            "absentFalsePositive": 5,
+            "errors": {
+              "format_variant": 5,
+              "wrong_value": 5,
+              "invented_absent_value": 5
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 4,
+              "wrong": 11,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 5,
+              "wrong": 10,
+              "missing": 0
+            },
+            "correctPresent": 3,
+            "wrongAccepted": 10,
+            "absentFalsePositive": 9,
+            "errors": {
+              "wrong_date_role": 2,
+              "invented_absent_value": 8,
+              "wrong_value": 1
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 10,
+              "wrong": 2,
+              "missing": 3
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 2,
+              "missing": 3
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 2,
+            "absentFalsePositive": 0,
+            "errors": {
+              "wrong_value": 2
+            }
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 8,
+            "wrong": 7,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 8,
+            "wrong": 7,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 2,
+            "wrong": 13,
+            "missing": 0
+          },
+          "language": {
+            "correct": 1,
+            "wrong": 14,
+            "missing": 0
+          }
+        },
+        "rejections": {
+          "invalid_type": 1
+        },
+        "durationMs": 220994,
+        "promptTokens": 9870,
+        "generatedTokens": 1946
+      }
+    },
+    "B/confirmation/43": {
+      "en": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 5,
+            "absentFalsePositive": 5,
+            "errors": {
+              "historical_value_copy": 5
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 4,
+            "absentFalsePositive": 4,
+            "errors": {
+              "historical_value_copy": 4
+            }
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 13,
+              "wrong": 2,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 13,
+              "wrong": 2,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 2,
+            "absentFalsePositive": 2,
+            "errors": {
+              "historical_value_copy": 2
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 1,
+              "wrong": 14,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "correctPresent": 10,
+            "wrongAccepted": 4,
+            "absentFalsePositive": 4,
+            "errors": {
+              "format_variant": 10,
+              "invented_absent_value": 4
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 5,
+              "wrong": 10,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 8,
+              "wrong": 7,
+              "missing": 0
+            },
+            "correctPresent": 4,
+            "wrongAccepted": 7,
+            "absentFalsePositive": 7,
+            "errors": {
+              "invented_absent_value": 7,
+              "wrong_date_role": 3
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 15,
+              "wrong": 0,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 15,
+              "wrong": 0,
+              "missing": 0
+            },
+            "correctPresent": 6,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 5,
+            "wrong": 10,
+            "missing": 0
+          },
+          "language": {
+            "correct": 15,
+            "wrong": 0,
+            "missing": 0
+          }
+        },
+        "rejections": {
+          "invalid_type": 3
+        },
+        "durationMs": 180248,
+        "promptTokens": 9124,
+        "generatedTokens": 2040
+      },
+      "de": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "historical_value_copy": 1
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "validated": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "historical_value_copy": 1
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 0,
+              "wrong": 15,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 6,
+              "wrong": 9,
+              "missing": 0
+            },
+            "correctPresent": 5,
+            "wrongAccepted": 9,
+            "absentFalsePositive": 4,
+            "errors": {
+              "format_variant": 5,
+              "wrong_value": 5,
+              "invented_absent_value": 5
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 4,
+              "wrong": 11,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 5,
+              "wrong": 10,
+              "missing": 0
+            },
+            "correctPresent": 3,
+            "wrongAccepted": 10,
+            "absentFalsePositive": 9,
+            "errors": {
+              "invented_absent_value": 7,
+              "wrong_date_role": 3,
+              "wrong_value": 1
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 10,
+              "wrong": 1,
+              "missing": 4
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 1,
+              "missing": 4
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 0,
+            "errors": {
+              "wrong_value": 1
+            }
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 0,
+            "wrong": 15,
+            "missing": 0
+          },
+          "language": {
+            "correct": 0,
+            "wrong": 15,
+            "missing": 0
+          }
+        },
+        "rejections": {
+          "invalid_type": 2
+        },
+        "durationMs": 185078,
+        "promptTokens": 9870,
+        "generatedTokens": 1919
+      }
+    },
+    "B/development/42": {
+      "en": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 5,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 5,
+            "absentFalsePositive": 5,
+            "errors": {
+              "historical_value_copy": 5
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 11,
+              "wrong": 4,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 4,
+            "absentFalsePositive": 4,
+            "errors": {
+              "historical_value_copy": 4
+            }
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "historical_value_copy": 1
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 1,
+              "wrong": 14,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 7,
+              "wrong": 8,
+              "missing": 0
+            },
+            "correctPresent": 6,
+            "wrongAccepted": 8,
+            "absentFalsePositive": 4,
+            "errors": {
+              "format_variant": 6,
+              "wrong_value": 4,
+              "invented_absent_value": 4
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 5,
+              "wrong": 10,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 9,
+              "wrong": 6,
+              "missing": 0
+            },
+            "correctPresent": 4,
+            "wrongAccepted": 6,
+            "absentFalsePositive": 6,
+            "errors": {
+              "invented_absent_value": 7,
+              "wrong_date_role": 3
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 15,
+              "wrong": 0,
+              "missing": 0
+            },
+            "correctPresent": 6,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {
+              "invented_absent_value": 1
+            }
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 11,
+            "wrong": 4,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 4,
+            "wrong": 11,
+            "missing": 0
+          },
+          "language": {
+            "correct": 15,
+            "wrong": 0,
+            "missing": 0
+          }
+        },
+        "rejections": {
+          "invalid_type": 5
+        },
+        "durationMs": 176875,
+        "promptTokens": 9114,
+        "generatedTokens": 1981
+      },
+      "de": {
+        "documents": 15,
+        "failedAttempts": 0,
+        "fields": {
+          "invoice_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 2,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "historical_value_copy": 1
+            }
+          },
+          "contract_number": {
+            "present": 2,
+            "absent": 13,
+            "missingTarget": 2,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "validated": {
+              "correct": 13,
+              "wrong": 0,
+              "missing": 2
+            },
+            "correctPresent": 0,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          },
+          "policy_number": {
+            "present": 1,
+            "absent": 14,
+            "missingTarget": 1,
+            "inapplicable": 13,
+            "raw": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 14,
+              "wrong": 1,
+              "missing": 0
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 1,
+            "absentFalsePositive": 1,
+            "errors": {
+              "historical_value_copy": 1
+            }
+          },
+          "amount": {
+            "present": 10,
+            "absent": 5,
+            "missingTarget": 0,
+            "inapplicable": 5,
+            "raw": {
+              "correct": 0,
+              "wrong": 15,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 5,
+              "wrong": 10,
+              "missing": 0
+            },
+            "correctPresent": 5,
+            "wrongAccepted": 10,
+            "absentFalsePositive": 5,
+            "errors": {
+              "format_variant": 5,
+              "wrong_value": 5,
+              "invented_absent_value": 5
+            }
+          },
+          "due_date": {
+            "present": 4,
+            "absent": 11,
+            "missingTarget": 0,
+            "inapplicable": 11,
+            "raw": {
+              "correct": 3,
+              "wrong": 12,
+              "missing": 0
+            },
+            "validated": {
+              "correct": 3,
+              "wrong": 12,
+              "missing": 0
+            },
+            "correctPresent": 3,
+            "wrongAccepted": 12,
+            "absentFalsePositive": 11,
+            "errors": {
+              "invented_absent_value": 8,
+              "wrong_date_role": 3,
+              "wrong_value": 1
+            }
+          },
+          "end_date": {
+            "present": 6,
+            "absent": 9,
+            "missingTarget": 0,
+            "inapplicable": 9,
+            "raw": {
+              "correct": 10,
+              "wrong": 0,
+              "missing": 5
+            },
+            "validated": {
+              "correct": 10,
+              "wrong": 0,
+              "missing": 5
+            },
+            "correctPresent": 1,
+            "wrongAccepted": 0,
+            "absentFalsePositive": 0,
+            "errors": {}
+          }
+        },
+        "metadata": {
+          "document_type": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "tags": {
+            "correct": 9,
+            "wrong": 6,
+            "missing": 0
+          },
+          "correspondent": {
+            "correct": 1,
+            "wrong": 14,
+            "missing": 0
+          },
+          "language": {
+            "correct": 0,
+            "wrong": 15,
+            "missing": 0
+          }
+        },
+        "rejections": {},
+        "durationMs": 183704,
+        "promptTokens": 9866,
+        "generatedTokens": 1911
+      }
+    }
+  },
+  "provenance": {
+    "A/confirmation/42": {
+      "training_literal_copy": 7,
+      "historical_literal_copy": 14
+    },
+    "A/confirmation/43": {
+      "historical_literal_copy": 11,
+      "training_literal_copy": 5
+    },
+    "A/development/42": {
+      "training_literal_copy": 7,
+      "historical_literal_copy": 12
+    },
+    "B/confirmation/42": {
+      "historical_literal_copy": 14
+    },
+    "B/confirmation/43": {
+      "historical_literal_copy": 13
+    },
+    "B/development/42": {
+      "historical_literal_copy": 12
+    }
+  },
+  "qualification": {
+    "42": {
+      "passed": false,
+      "reasons": [
+        "wrong_identifier",
+        "contract_number:wrong_increase",
+        "amount:wrong_increase",
+        "end_date:wrong_increase",
+        "document_type:correct_regression",
+        "document_type:wrong_regression",
+        "tags:correct_regression",
+        "tags:wrong_regression",
+        "correspondent:correct_regression",
+        "correspondent:wrong_regression",
+        "language:correct_regression",
+        "language:wrong_regression"
+      ],
+      "controlIdentifiers": {
+        "present": 10,
+        "correct": 5,
+        "wrong": 23
+      },
+      "candidateIdentifiers": {
+        "present": 10,
+        "correct": 8,
+        "wrong": 14
+      }
+    },
+    "43": {
+      "passed": false,
+      "reasons": [
+        "wrong_identifier",
+        "contract_number:wrong_increase",
+        "end_date:wrong_increase",
+        "correspondent:correct_regression",
+        "correspondent:wrong_regression",
+        "language:correct_regression",
+        "language:wrong_regression"
+      ],
+      "controlIdentifiers": {
+        "present": 10,
+        "correct": 5,
+        "wrong": 21
+      },
+      "candidateIdentifiers": {
+        "present": 10,
+        "correct": 8,
+        "wrong": 13
+      }
+    }
+  },
+  "fixtureOnly": false,
+  "productionActivation": false,
+  "qualifiedForLaterProposal": false
+}
