@@ -14,3 +14,7 @@
 - On small amd64 cloud runtimes using Docker's `vfs` driver, use `python3 tests/e2e/cloud-test.py test`. This prepares the current source and runs unit, API, real Paperless, and restart checks. Use `reset` to reset synthetic test data or `stop` to preserve it. See `docs/test-environment.md` for advanced commands. Never change the managed storage driver or prune unrelated workloads; the helper selects only cache IDs created by its own build.
 - Add meaningful automated coverage, run relevant tests before completion, investigate failures and explicitly report unrun tests and platform limitations.
 - `npm test` starts nodemon. Use Node 22 and `node --test tests/*.test.js`, preferably via `docker compose -f docker-compose.test.yml run --rm --no-deps runner sh -c 'node --test tests/*.test.js'`. Host Node 24 has shown a native SQLite addon cleanup abort.
+
+## Token-efficient development
+
+Follow the scoped-context and actual-token measurement guidance in [`.github/SDD-LIGHT.md`](.github/SDD-LIGHT.md#token-efficient-execution-spec-33). Start with relevant paths and tests, keep handoffs concise, and never sacrifice synthetic-data isolation, Paperless-ngx compatibility, tests, security or explicit owner approval for fewer tokens.
