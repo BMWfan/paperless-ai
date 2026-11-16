@@ -1,0 +1,3694 @@
+{
+  "cases": [
+    {
+      "id": "iar-training-en-training-0",
+      "family": "orvanta-T-en-training-0",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Training Training Aster Ltd\nSERVICE INVOICE\nThe following details identify this record.\nInvoice number: IAR-T-EN-001-Q\nTotal payable: EUR 410.40\nPayment due: 2050-06-19\nSigned for the current record.\n",
+      "expected": {
+        "title": "SERVICE INVOICE IAR-T-EN-001-Q",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Training Training Aster Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "IAR-T-EN-001-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR410.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 118,
+          "end": 132,
+          "value": "IAR-T-EN-001-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-training-en-training-1",
+      "family": "orvanta-T-en-training-1",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Training Training Birke Ltd\nSERVICE CONTRACT\nThe following details identify this record.\nContract number: IAR-T-EN-002-Q\nTotal payable: EUR 411.40\nEnd date: 2052-09-23\nSigned for the current record.\n",
+      "expected": {
+        "title": "SERVICE CONTRACT IAR-T-EN-002-Q",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Training Training Birke Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "IAR-T-EN-002-Q",
+          "policy_number": null,
+          "amount": "EUR411.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 120,
+          "end": 134,
+          "value": "IAR-T-EN-002-Q",
+          "role": "own_current",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-training-en-training-2",
+      "family": "orvanta-T-en-training-2",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Training Training Cedar Ltd\nINSURANCE POLICY\nThe following details identify this record.\nPolicy number: IAR-T-EN-003-Q\nTotal payable: EUR 412.40\nEnd date: 2052-09-23\nPolicy number: IAR-T-EN-003-Q\nSigned for the current record.\n",
+      "expected": {
+        "title": "INSURANCE POLICY IAR-T-EN-003-Q",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Training Training Cedar Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "IAR-T-EN-003-Q",
+          "amount": "EUR412.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 118,
+          "end": 132,
+          "value": "IAR-T-EN-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 195,
+          "end": 209,
+          "value": "IAR-T-EN-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-training-en-training-3",
+      "family": "orvanta-T-en-training-3",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": false,
+      "content": "From: Orvanta Training Training Dahlia Ltd\nBUSINESS LETTER\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n",
+      "expected": {
+        "title": "BUSINESS LETTER IAR-T-EN-004-Q",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Training Training Dahlia Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-training-en-training-4",
+      "family": "orvanta-T-en-training-4",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": false,
+      "content": "From: Orvanta Training Training Elm Ltd\nPAYMENT CONFIRMATION\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n",
+      "expected": {
+        "title": "PAYMENT CONFIRMATION IAR-T-EN-005-Q",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Training Training Elm Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-training-de-training-0",
+      "family": "orvanta-T-de-training-0",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Training Training Aster GmbH\nDIENSTLEISTUNGSRECHNUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nRechnungsnummer: IAR-T-DE-001-Q\nAktueller Gesamtbetrag: EUR 410.40\nFällig am: 2050-06-19\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSRECHNUNG IAR-T-DE-001-Q",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Training Training Aster GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "IAR-T-DE-001-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR410.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 137,
+          "end": 151,
+          "value": "IAR-T-DE-001-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-training-de-training-1",
+      "family": "orvanta-T-de-training-1",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Training Training Birke GmbH\nDIENSTLEISTUNGSVERTRAG\nDie folgenden Angaben gehören zu diesem Vorgang.\nVertragsnummer: IAR-T-DE-002-Q\nAktueller Gesamtbetrag: EUR 411.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSVERTRAG IAR-T-DE-002-Q",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Training Training Birke GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "IAR-T-DE-002-Q",
+          "policy_number": null,
+          "amount": "EUR411.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 135,
+          "end": 149,
+          "value": "IAR-T-DE-002-Q",
+          "role": "own_current",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-training-de-training-2",
+      "family": "orvanta-T-de-training-2",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Training Training Cedar GmbH\nVERSICHERUNGSPOLICE\nDie folgenden Angaben gehören zu diesem Vorgang.\nVersicherungsnummer: IAR-T-DE-003-Q\nAktueller Gesamtbetrag: EUR 412.40\nEnddatum: 2052-09-23\nVersicherungsnummer: IAR-T-DE-003-Q\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "VERSICHERUNGSPOLICE IAR-T-DE-003-Q",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Training Training Cedar GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "IAR-T-DE-003-Q",
+          "amount": "EUR412.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 137,
+          "end": 151,
+          "value": "IAR-T-DE-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 229,
+          "end": 243,
+          "value": "IAR-T-DE-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-training-de-training-3",
+      "family": "orvanta-T-de-training-3",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Training Training Dahlia GmbH\nGESCHÄFTSBRIEF\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "GESCHÄFTSBRIEF IAR-T-DE-004-Q",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Training Training Dahlia GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-training-de-training-4",
+      "family": "orvanta-T-de-training-4",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Training Training Elm GmbH\nZAHLUNGSBESTÄTIGUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "ZAHLUNGSBESTÄTIGUNG IAR-T-DE-005-Q",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Training Training Elm GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [],
+      "forbiddenCurrentIdentifiers": [],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-present-0",
+      "family": "orvanta-D-en-present-0",
+      "split": "development",
+      "language": "en",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Development Present Aster Ltd\nSERVICE INVOICE\nThe following details identify this record.\nInvoice number: IAR-D-EN-001-Q\nTotal payable: EUR 410.40\nPayment due: 2050-06-19\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-001-A\nContract number: IAR-OLD-D-EN-001-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE INVOICE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Development Present Aster Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "IAR-D-EN-001-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR410.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 120,
+          "end": 134,
+          "value": "IAR-D-EN-001-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        },
+        {
+          "start": 274,
+          "end": 292,
+          "value": "IAR-OLD-D-EN-001-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 310,
+          "end": 328,
+          "value": "IAR-OLD-D-EN-001-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-001-A",
+        "IAR-OLD-D-EN-001-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-present-1",
+      "family": "orvanta-D-en-present-1",
+      "split": "development",
+      "language": "en",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Earlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-002-A\nContract number: IAR-OLD-D-EN-002-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n\nFrom: Orvanta Development Present Birke Ltd\nSERVICE CONTRACT\nThe following details identify this record.\nContract number: IAR-D-EN-002-Q\nTotal payable: EUR 411.40\nEnd date: 2052-09-23\nSigned for the current record.\n",
+      "expected": {
+        "title": "SERVICE CONTRACT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Development Present Birke Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "IAR-D-EN-002-Q",
+          "policy_number": null,
+          "amount": "EUR411.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 57,
+          "end": 75,
+          "value": "IAR-OLD-D-EN-002-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 93,
+          "end": 111,
+          "value": "IAR-OLD-D-EN-002-B",
+          "role": "historical",
+          "field": "contract_number"
+        },
+        {
+          "start": 284,
+          "end": 298,
+          "value": "IAR-D-EN-002-Q",
+          "role": "own_current",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-002-A",
+        "IAR-OLD-D-EN-002-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-present-2",
+      "family": "orvanta-D-en-present-2",
+      "split": "development",
+      "language": "en",
+      "cohort": "present",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Development Present Cedar Ltd\nINSURANCE POLICY\nThe following details identify this record.\nPolicy number: IAR-D-EN-003-Q\nTotal payable: EUR 412.40\nEnd date: 2052-09-23\nPolicy number: IAR-D-EN-003-Q\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-D-EN-003-Q\nContract number: IAR-OLD-D-EN-003-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "INSURANCE POLICY",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Development Present Cedar Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "IAR-D-EN-003-Q",
+          "amount": "EUR412.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 120,
+          "end": 134,
+          "value": "IAR-D-EN-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 197,
+          "end": 211,
+          "value": "IAR-D-EN-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 301,
+          "end": 315,
+          "value": "IAR-D-EN-003-Q",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 333,
+          "end": 351,
+          "value": "IAR-OLD-D-EN-003-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-D-EN-003-Q",
+        "IAR-OLD-D-EN-003-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-present-3",
+      "family": "orvanta-D-en-present-3",
+      "split": "development",
+      "language": "en",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Development Present Dahlia Ltd\nSERVICE INVOICE\nThe following details identify this record.\nInvoice number: IAR-D-EN-004-Q\nTotal payable: EUR 413.40\nPayment due: 2050-06-19\nSigned for the current record.\n\nEnclosed copy from an unrelated supplier:\nInvoice number: IAR-OLD-D-EN-004-A\nContract number: IAR-OLD-D-EN-004-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE INVOICE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Development Present Dahlia Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "IAR-D-EN-004-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR413.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 121,
+          "end": 135,
+          "value": "IAR-D-EN-004-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        },
+        {
+          "start": 276,
+          "end": 294,
+          "value": "IAR-OLD-D-EN-004-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 312,
+          "end": 330,
+          "value": "IAR-OLD-D-EN-004-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-004-A",
+        "IAR-OLD-D-EN-004-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-present-4",
+      "family": "orvanta-D-en-present-4",
+      "split": "development",
+      "language": "en",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Development Present Elm Ltd\nSERVICE CONTRACT\nThe following details identify this record.\nThis contract bears the identifier STRATUSDEV\nTotal payable: EUR 414.40\nEnd date: 2052-09-23\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-005-A\nContract number: IAR-OLD-D-EN-005-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE CONTRACT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Development Present Elm Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "STRATUSDEV",
+          "policy_number": null,
+          "amount": "EUR414.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 138,
+          "end": 148,
+          "value": "STRATUSDEV",
+          "role": "own_current",
+          "field": "contract_number"
+        },
+        {
+          "start": 285,
+          "end": 303,
+          "value": "IAR-OLD-D-EN-005-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 321,
+          "end": 339,
+          "value": "IAR-OLD-D-EN-005-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-005-A",
+        "IAR-OLD-D-EN-005-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": true,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-missing-0",
+      "family": "orvanta-D-en-missing-0",
+      "split": "development",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "From: Orvanta Development Missing Aster Ltd\nSERVICE INVOICE\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 415.40\nPayment due: 2050-06-19\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-006-A\nContract number: IAR-OLD-D-EN-006-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE INVOICE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Development Missing Aster Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR415.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 284,
+          "end": 302,
+          "value": "IAR-OLD-D-EN-006-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 320,
+          "end": 338,
+          "value": "IAR-OLD-D-EN-006-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-006-A",
+        "IAR-OLD-D-EN-006-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-missing-1",
+      "family": "orvanta-D-en-missing-1",
+      "split": "development",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "Earlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-007-A\nContract number: IAR-OLD-D-EN-007-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n\nFrom: Orvanta Development Missing Birke Ltd\nSERVICE CONTRACT\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 416.40\nEnd date: 2052-09-23\nSigned for the current record.\n",
+      "expected": {
+        "title": "SERVICE CONTRACT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Development Missing Birke Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR416.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 57,
+          "end": 75,
+          "value": "IAR-OLD-D-EN-007-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 93,
+          "end": 111,
+          "value": "IAR-OLD-D-EN-007-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-007-A",
+        "IAR-OLD-D-EN-007-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-missing-2",
+      "family": "orvanta-D-en-missing-2",
+      "split": "development",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": true,
+      "content": "From: Orvanta Development Missing Cedar Ltd\nINSURANCE POLICY\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 417.40\nEnd date: 2052-09-23\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-008-A\nContract number: IAR-OLD-D-EN-008-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "INSURANCE POLICY",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Development Missing Cedar Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR417.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 282,
+          "end": 300,
+          "value": "IAR-OLD-D-EN-008-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 318,
+          "end": 336,
+          "value": "IAR-OLD-D-EN-008-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-008-A",
+        "IAR-OLD-D-EN-008-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-missing-3",
+      "family": "orvanta-D-en-missing-3",
+      "split": "development",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "From: Orvanta Development Missing Dahlia Ltd\nSERVICE INVOICE\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 418.40\nPayment due: 2050-06-19\nSigned for the current record.\n\nEnclosed copy from an unrelated supplier:\nInvoice number: IAR-OLD-D-EN-009-A\nContract number: IAR-OLD-D-EN-009-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE INVOICE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Development Missing Dahlia Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR418.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 286,
+          "end": 304,
+          "value": "IAR-OLD-D-EN-009-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 322,
+          "end": 340,
+          "value": "IAR-OLD-D-EN-009-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-009-A",
+        "IAR-OLD-D-EN-009-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-missing-4",
+      "family": "orvanta-D-en-missing-4",
+      "split": "development",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "From: Orvanta Development Missing Elm Ltd\nSERVICE CONTRACT\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 419.40\nEnd date: 2052-09-23\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-010-A\nContract number: IAR-OLD-D-EN-010-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE CONTRACT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Development Missing Elm Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR419.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 280,
+          "end": 298,
+          "value": "IAR-OLD-D-EN-010-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 316,
+          "end": 334,
+          "value": "IAR-OLD-D-EN-010-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-010-A",
+        "IAR-OLD-D-EN-010-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-inapplicable-0",
+      "family": "orvanta-D-en-inapplicable-0",
+      "split": "development",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Orvanta Development Inapplicable Aster Ltd\nBUSINESS LETTER\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-011-A\nContract number: IAR-OLD-D-EN-011-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "BUSINESS LETTER",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Aster Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 268,
+          "end": 286,
+          "value": "IAR-OLD-D-EN-011-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 304,
+          "end": 322,
+          "value": "IAR-OLD-D-EN-011-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-011-A",
+        "IAR-OLD-D-EN-011-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-inapplicable-1",
+      "family": "orvanta-D-en-inapplicable-1",
+      "split": "development",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Earlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-012-A\nContract number: IAR-OLD-D-EN-012-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n\nFrom: Orvanta Development Inapplicable Birke Ltd\nPAYMENT CONFIRMATION\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n",
+      "expected": {
+        "title": "PAYMENT CONFIRMATION",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Birke Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 57,
+          "end": 75,
+          "value": "IAR-OLD-D-EN-012-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 93,
+          "end": 111,
+          "value": "IAR-OLD-D-EN-012-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-012-A",
+        "IAR-OLD-D-EN-012-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-inapplicable-2",
+      "family": "orvanta-D-en-inapplicable-2",
+      "split": "development",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Orvanta Development Inapplicable Cedar Ltd\nBUSINESS LETTER\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-013-A\nContract number: IAR-OLD-D-EN-013-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "BUSINESS LETTER",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Cedar Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 268,
+          "end": 286,
+          "value": "IAR-OLD-D-EN-013-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 304,
+          "end": 322,
+          "value": "IAR-OLD-D-EN-013-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-013-A",
+        "IAR-OLD-D-EN-013-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-inapplicable-3",
+      "family": "orvanta-D-en-inapplicable-3",
+      "split": "development",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Orvanta Development Inapplicable Dahlia Ltd\nPAYMENT CONFIRMATION\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n\nEnclosed copy from an unrelated supplier:\nInvoice number: IAR-OLD-D-EN-014-A\nContract number: IAR-OLD-D-EN-014-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "PAYMENT CONFIRMATION",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Dahlia Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 275,
+          "end": 293,
+          "value": "IAR-OLD-D-EN-014-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 311,
+          "end": 329,
+          "value": "IAR-OLD-D-EN-014-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-014-A",
+        "IAR-OLD-D-EN-014-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-en-inapplicable-4",
+      "family": "orvanta-D-en-inapplicable-4",
+      "split": "development",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Orvanta Development Inapplicable Elm Ltd\nBUSINESS LETTER\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-D-EN-015-A\nContract number: IAR-OLD-D-EN-015-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "BUSINESS LETTER",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Elm Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 266,
+          "end": 284,
+          "value": "IAR-OLD-D-EN-015-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 302,
+          "end": 320,
+          "value": "IAR-OLD-D-EN-015-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-EN-015-A",
+        "IAR-OLD-D-EN-015-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-present-0",
+      "family": "orvanta-D-de-present-0",
+      "split": "development",
+      "language": "de",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Development Present Aster GmbH\nDIENSTLEISTUNGSRECHNUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nRechnungsnummer: IAR-D-DE-001-Q\nAktueller Gesamtbetrag: EUR 410.40\nFällig am: 2050-06-19\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-001-A\nVertragsnummer: IAR-OLD-D-DE-001-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSRECHNUNG",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Development Present Aster GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "IAR-D-DE-001-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR410.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 139,
+          "end": 153,
+          "value": "IAR-D-DE-001-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        },
+        {
+          "start": 314,
+          "end": 332,
+          "value": "IAR-OLD-D-DE-001-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 349,
+          "end": 367,
+          "value": "IAR-OLD-D-DE-001-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-001-A",
+        "IAR-OLD-D-DE-001-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-present-1",
+      "family": "orvanta-D-de-present-1",
+      "split": "development",
+      "language": "de",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Frühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-002-A\nVertragsnummer: IAR-OLD-D-DE-002-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n\nAbsender: Orvanta Development Present Birke GmbH\nDIENSTLEISTUNGSVERTRAG\nDie folgenden Angaben gehören zu diesem Vorgang.\nVertragsnummer: IAR-D-DE-002-Q\nAktueller Gesamtbetrag: EUR 411.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSVERTRAG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Development Present Birke GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "IAR-D-DE-002-Q",
+          "policy_number": null,
+          "amount": "EUR411.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 62,
+          "end": 80,
+          "value": "IAR-OLD-D-DE-002-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 97,
+          "end": 115,
+          "value": "IAR-OLD-D-DE-002-B",
+          "role": "historical",
+          "field": "contract_number"
+        },
+        {
+          "start": 303,
+          "end": 317,
+          "value": "IAR-D-DE-002-Q",
+          "role": "own_current",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-002-A",
+        "IAR-OLD-D-DE-002-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-present-2",
+      "family": "orvanta-D-de-present-2",
+      "split": "development",
+      "language": "de",
+      "cohort": "present",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Development Present Cedar GmbH\nVERSICHERUNGSPOLICE\nDie folgenden Angaben gehören zu diesem Vorgang.\nVersicherungsnummer: IAR-D-DE-003-Q\nAktueller Gesamtbetrag: EUR 412.40\nEnddatum: 2052-09-23\nVersicherungsnummer: IAR-D-DE-003-Q\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-D-DE-003-Q\nVertragsnummer: IAR-OLD-D-DE-003-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "VERSICHERUNGSPOLICE",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Development Present Cedar GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "IAR-D-DE-003-Q",
+          "amount": "EUR412.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 139,
+          "end": 153,
+          "value": "IAR-D-DE-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 231,
+          "end": 245,
+          "value": "IAR-D-DE-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 349,
+          "end": 363,
+          "value": "IAR-D-DE-003-Q",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 380,
+          "end": 398,
+          "value": "IAR-OLD-D-DE-003-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-D-DE-003-Q",
+        "IAR-OLD-D-DE-003-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-present-3",
+      "family": "orvanta-D-de-present-3",
+      "split": "development",
+      "language": "de",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Development Present Dahlia GmbH\nDIENSTLEISTUNGSRECHNUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nRechnungsnummer: IAR-D-DE-004-Q\nAktueller Gesamtbetrag: EUR 413.40\nFällig am: 2050-06-19\nUnterschrift für den aktuellen Vorgang.\n\nBeigefügte Kopie eines anderen Lieferanten:\nRechnungsnummer: IAR-OLD-D-DE-004-A\nVertragsnummer: IAR-OLD-D-DE-004-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSRECHNUNG",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Development Present Dahlia GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "IAR-D-DE-004-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR413.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 140,
+          "end": 154,
+          "value": "IAR-D-DE-004-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        },
+        {
+          "start": 314,
+          "end": 332,
+          "value": "IAR-OLD-D-DE-004-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 349,
+          "end": 367,
+          "value": "IAR-OLD-D-DE-004-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-004-A",
+        "IAR-OLD-D-DE-004-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-present-4",
+      "family": "orvanta-D-de-present-4",
+      "split": "development",
+      "language": "de",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Development Present Elm GmbH\nDIENSTLEISTUNGSVERTRAG\nDie folgenden Angaben gehören zu diesem Vorgang.\nVertragsnummer: IAR-D-DE-005-Q\nAktueller Gesamtbetrag: EUR 414.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-005-A\nVertragsnummer: IAR-OLD-D-DE-005-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n\nAnlage: unabhängiges Bestandsverzeichnis, keine Vertragskennungen:\nLagerposten AUX-D-00-Z\nLagerposten AUX-D-01-Z\nLagerposten AUX-D-02-Z\nLagerposten AUX-D-03-Z\nLagerposten AUX-D-04-Z\nLagerposten AUX-D-05-Z\nLagerposten AUX-D-06-Z\nLagerposten AUX-D-07-Z\nLagerposten AUX-D-08-Z\nLagerposten AUX-D-09-Z\nLagerposten AUX-D-10-Z\nLagerposten AUX-D-11-Z\nLagerposten AUX-D-12-Z\nLagerposten AUX-D-13-Z\nLagerposten AUX-D-14-Z\nLagerposten AUX-D-15-Z\nLagerposten AUX-D-16-Z\nLagerposten AUX-D-17-Z\nLagerposten AUX-D-18-Z\nLagerposten AUX-D-19-Z\nLagerposten AUX-D-20-Z\nLagerposten AUX-D-21-Z\nLagerposten AUX-D-22-Z\nLagerposten AUX-D-23-Z\nLagerposten AUX-D-24-Z\nLagerposten AUX-D-25-Z\nLagerposten AUX-D-26-Z\nLagerposten AUX-D-27-Z\nLagerposten AUX-D-28-Z\nLagerposten AUX-D-29-Z\nLagerposten AUX-D-30-Z\nLagerposten AUX-D-31-Z\nLagerposten AUX-D-32-Z\nLagerposten AUX-D-33-Z\nLagerposten AUX-D-34-Z\nLagerposten AUX-D-35-Z\nLagerposten AUX-D-36-Z\nLagerposten AUX-D-37-Z\nLagerposten AUX-D-38-Z\nLagerposten AUX-D-39-Z\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSVERTRAG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Development Present Elm GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "IAR-D-DE-005-Q",
+          "policy_number": null,
+          "amount": "EUR414.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 135,
+          "end": 149,
+          "value": "IAR-D-DE-005-Q",
+          "role": "own_current",
+          "field": "contract_number"
+        },
+        {
+          "start": 309,
+          "end": 327,
+          "value": "IAR-OLD-D-DE-005-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 344,
+          "end": 362,
+          "value": "IAR-OLD-D-DE-005-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-005-A",
+        "IAR-OLD-D-DE-005-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": true
+      }
+    },
+    {
+      "id": "iar-development-de-missing-0",
+      "family": "orvanta-D-de-missing-0",
+      "split": "development",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Development Missing Aster GmbH\nDIENSTLEISTUNGSRECHNUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 415.40\nFällig am: 2050-06-19\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-006-A\nVertragsnummer: IAR-OLD-D-DE-006-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSRECHNUNG",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Development Missing Aster GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR415.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 336,
+          "end": 354,
+          "value": "IAR-OLD-D-DE-006-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 371,
+          "end": 389,
+          "value": "IAR-OLD-D-DE-006-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-006-A",
+        "IAR-OLD-D-DE-006-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-missing-1",
+      "family": "orvanta-D-de-missing-1",
+      "split": "development",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "Frühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-007-A\nVertragsnummer: IAR-OLD-D-DE-007-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n\nAbsender: Orvanta Development Missing Birke GmbH\nDIENSTLEISTUNGSVERTRAG\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 416.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSVERTRAG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Development Missing Birke GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR416.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 62,
+          "end": 80,
+          "value": "IAR-OLD-D-DE-007-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 97,
+          "end": 115,
+          "value": "IAR-OLD-D-DE-007-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-007-A",
+        "IAR-OLD-D-DE-007-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-missing-2",
+      "family": "orvanta-D-de-missing-2",
+      "split": "development",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Development Missing Cedar GmbH\nVERSICHERUNGSPOLICE\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 417.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-008-A\nVertragsnummer: IAR-OLD-D-DE-008-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "VERSICHERUNGSPOLICE",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Development Missing Cedar GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR417.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 331,
+          "end": 349,
+          "value": "IAR-OLD-D-DE-008-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 366,
+          "end": 384,
+          "value": "IAR-OLD-D-DE-008-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-008-A",
+        "IAR-OLD-D-DE-008-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-missing-3",
+      "family": "orvanta-D-de-missing-3",
+      "split": "development",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Development Missing Dahlia GmbH\nDIENSTLEISTUNGSRECHNUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 418.40\nFällig am: 2050-06-19\nUnterschrift für den aktuellen Vorgang.\n\nBeigefügte Kopie eines anderen Lieferanten:\nRechnungsnummer: IAR-OLD-D-DE-009-A\nVertragsnummer: IAR-OLD-D-DE-009-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSRECHNUNG",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Development Missing Dahlia GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR418.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 336,
+          "end": 354,
+          "value": "IAR-OLD-D-DE-009-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 371,
+          "end": 389,
+          "value": "IAR-OLD-D-DE-009-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-009-A",
+        "IAR-OLD-D-DE-009-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-missing-4",
+      "family": "orvanta-D-de-missing-4",
+      "split": "development",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Development Missing Elm GmbH\nDIENSTLEISTUNGSVERTRAG\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 419.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-010-A\nVertragsnummer: IAR-OLD-D-DE-010-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSVERTRAG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Development Missing Elm GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR419.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 332,
+          "end": 350,
+          "value": "IAR-OLD-D-DE-010-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 367,
+          "end": 385,
+          "value": "IAR-OLD-D-DE-010-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-010-A",
+        "IAR-OLD-D-DE-010-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-inapplicable-0",
+      "family": "orvanta-D-de-inapplicable-0",
+      "split": "development",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Development Inapplicable Aster GmbH\nGESCHÄFTSBRIEF\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-011-A\nVertragsnummer: IAR-OLD-D-DE-011-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "GESCHÄFTSBRIEF",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Aster GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 301,
+          "end": 319,
+          "value": "IAR-OLD-D-DE-011-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 336,
+          "end": 354,
+          "value": "IAR-OLD-D-DE-011-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-011-A",
+        "IAR-OLD-D-DE-011-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-inapplicable-1",
+      "family": "orvanta-D-de-inapplicable-1",
+      "split": "development",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Frühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-012-A\nVertragsnummer: IAR-OLD-D-DE-012-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n\nAbsender: Orvanta Development Inapplicable Birke GmbH\nZAHLUNGSBESTÄTIGUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "ZAHLUNGSBESTÄTIGUNG",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Birke GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 62,
+          "end": 80,
+          "value": "IAR-OLD-D-DE-012-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 97,
+          "end": 115,
+          "value": "IAR-OLD-D-DE-012-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-012-A",
+        "IAR-OLD-D-DE-012-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-inapplicable-2",
+      "family": "orvanta-D-de-inapplicable-2",
+      "split": "development",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Development Inapplicable Cedar GmbH\nGESCHÄFTSBRIEF\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-013-A\nVertragsnummer: IAR-OLD-D-DE-013-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "GESCHÄFTSBRIEF",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Cedar GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 301,
+          "end": 319,
+          "value": "IAR-OLD-D-DE-013-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 336,
+          "end": 354,
+          "value": "IAR-OLD-D-DE-013-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-013-A",
+        "IAR-OLD-D-DE-013-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-inapplicable-3",
+      "family": "orvanta-D-de-inapplicable-3",
+      "split": "development",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Development Inapplicable Dahlia GmbH\nZAHLUNGSBESTÄTIGUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n\nBeigefügte Kopie eines anderen Lieferanten:\nRechnungsnummer: IAR-OLD-D-DE-014-A\nVertragsnummer: IAR-OLD-D-DE-014-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "ZAHLUNGSBESTÄTIGUNG",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Dahlia GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 306,
+          "end": 324,
+          "value": "IAR-OLD-D-DE-014-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 341,
+          "end": 359,
+          "value": "IAR-OLD-D-DE-014-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-014-A",
+        "IAR-OLD-D-DE-014-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-development-de-inapplicable-4",
+      "family": "orvanta-D-de-inapplicable-4",
+      "split": "development",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Development Inapplicable Elm GmbH\nGESCHÄFTSBRIEF\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-D-DE-015-A\nVertragsnummer: IAR-OLD-D-DE-015-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "GESCHÄFTSBRIEF",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Development Inapplicable Elm GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 299,
+          "end": 317,
+          "value": "IAR-OLD-D-DE-015-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 334,
+          "end": 352,
+          "value": "IAR-OLD-D-DE-015-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-D-DE-015-A",
+        "IAR-OLD-D-DE-015-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-present-0",
+      "family": "orvanta-C-en-present-0",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Confirmation Present Aster Ltd\nSERVICE INVOICE\nThe following details identify this record.\nInvoice number: IAR-C-EN-001-Q\nTotal payable: EUR 410.40\nPayment due: 2050-06-19\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-001-A\nContract number: IAR-OLD-C-EN-001-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE INVOICE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Confirmation Present Aster Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "IAR-C-EN-001-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR410.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 121,
+          "end": 135,
+          "value": "IAR-C-EN-001-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        },
+        {
+          "start": 275,
+          "end": 293,
+          "value": "IAR-OLD-C-EN-001-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 311,
+          "end": 329,
+          "value": "IAR-OLD-C-EN-001-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-001-A",
+        "IAR-OLD-C-EN-001-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-present-1",
+      "family": "orvanta-C-en-present-1",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Earlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-002-A\nContract number: IAR-OLD-C-EN-002-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n\nFrom: Orvanta Confirmation Present Birke Ltd\nSERVICE CONTRACT\nThe following details identify this record.\nContract number: IAR-C-EN-002-Q\nTotal payable: EUR 411.40\nEnd date: 2052-09-23\nSigned for the current record.\n",
+      "expected": {
+        "title": "SERVICE CONTRACT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Confirmation Present Birke Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "IAR-C-EN-002-Q",
+          "policy_number": null,
+          "amount": "EUR411.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 57,
+          "end": 75,
+          "value": "IAR-OLD-C-EN-002-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 93,
+          "end": 111,
+          "value": "IAR-OLD-C-EN-002-B",
+          "role": "historical",
+          "field": "contract_number"
+        },
+        {
+          "start": 285,
+          "end": 299,
+          "value": "IAR-C-EN-002-Q",
+          "role": "own_current",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-002-A",
+        "IAR-OLD-C-EN-002-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-present-2",
+      "family": "orvanta-C-en-present-2",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Confirmation Present Cedar Ltd\nINSURANCE POLICY\nThe following details identify this record.\nPolicy number: IAR-C-EN-003-Q\nTotal payable: EUR 412.40\nEnd date: 2052-09-23\nPolicy number: IAR-C-EN-003-Q\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-C-EN-003-Q\nContract number: IAR-OLD-C-EN-003-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "INSURANCE POLICY",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Confirmation Present Cedar Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "IAR-C-EN-003-Q",
+          "amount": "EUR412.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 121,
+          "end": 135,
+          "value": "IAR-C-EN-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 198,
+          "end": 212,
+          "value": "IAR-C-EN-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 302,
+          "end": 316,
+          "value": "IAR-C-EN-003-Q",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 334,
+          "end": 352,
+          "value": "IAR-OLD-C-EN-003-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-C-EN-003-Q",
+        "IAR-OLD-C-EN-003-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-present-3",
+      "family": "orvanta-C-en-present-3",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Confirmation Present Dahlia Ltd\nSERVICE INVOICE\nThe following details identify this record.\nInvoice number: IAR-C-EN-004-Q\nTotal payable: EUR 413.40\nPayment due: 2050-06-19\nSigned for the current record.\n\nEnclosed copy from an unrelated supplier:\nInvoice number: IAR-OLD-C-EN-004-A\nContract number: IAR-OLD-C-EN-004-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE INVOICE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Confirmation Present Dahlia Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "IAR-C-EN-004-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR413.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 122,
+          "end": 136,
+          "value": "IAR-C-EN-004-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        },
+        {
+          "start": 277,
+          "end": 295,
+          "value": "IAR-OLD-C-EN-004-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 313,
+          "end": 331,
+          "value": "IAR-OLD-C-EN-004-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-004-A",
+        "IAR-OLD-C-EN-004-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-present-4",
+      "family": "orvanta-C-en-present-4",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "From: Orvanta Confirmation Present Elm Ltd\nSERVICE CONTRACT\nThe following details identify this record.\nThis contract bears the identifier CUMULUSCONF\nTotal payable: EUR 414.40\nEnd date: 2052-09-23\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-005-A\nContract number: IAR-OLD-C-EN-005-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE CONTRACT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Confirmation Present Elm Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "CUMULUSCONF",
+          "policy_number": null,
+          "amount": "EUR414.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 139,
+          "end": 150,
+          "value": "CUMULUSCONF",
+          "role": "own_current",
+          "field": "contract_number"
+        },
+        {
+          "start": 287,
+          "end": 305,
+          "value": "IAR-OLD-C-EN-005-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 323,
+          "end": 341,
+          "value": "IAR-OLD-C-EN-005-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-005-A",
+        "IAR-OLD-C-EN-005-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": true,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-missing-0",
+      "family": "orvanta-C-en-missing-0",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "From: Orvanta Confirmation Missing Aster Ltd\nSERVICE INVOICE\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 415.40\nPayment due: 2050-06-19\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-006-A\nContract number: IAR-OLD-C-EN-006-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE INVOICE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Aster Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR415.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 285,
+          "end": 303,
+          "value": "IAR-OLD-C-EN-006-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 321,
+          "end": 339,
+          "value": "IAR-OLD-C-EN-006-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-006-A",
+        "IAR-OLD-C-EN-006-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-missing-1",
+      "family": "orvanta-C-en-missing-1",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "Earlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-007-A\nContract number: IAR-OLD-C-EN-007-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n\nFrom: Orvanta Confirmation Missing Birke Ltd\nSERVICE CONTRACT\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 416.40\nEnd date: 2052-09-23\nSigned for the current record.\n",
+      "expected": {
+        "title": "SERVICE CONTRACT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Birke Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR416.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 57,
+          "end": 75,
+          "value": "IAR-OLD-C-EN-007-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 93,
+          "end": 111,
+          "value": "IAR-OLD-C-EN-007-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-007-A",
+        "IAR-OLD-C-EN-007-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-missing-2",
+      "family": "orvanta-C-en-missing-2",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": true,
+      "content": "From: Orvanta Confirmation Missing Cedar Ltd\nINSURANCE POLICY\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 417.40\nEnd date: 2052-09-23\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-008-A\nContract number: IAR-OLD-C-EN-008-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "INSURANCE POLICY",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Cedar Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR417.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 283,
+          "end": 301,
+          "value": "IAR-OLD-C-EN-008-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 319,
+          "end": 337,
+          "value": "IAR-OLD-C-EN-008-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-008-A",
+        "IAR-OLD-C-EN-008-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-missing-3",
+      "family": "orvanta-C-en-missing-3",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "From: Orvanta Confirmation Missing Dahlia Ltd\nSERVICE INVOICE\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 418.40\nPayment due: 2050-06-19\nSigned for the current record.\n\nEnclosed copy from an unrelated supplier:\nInvoice number: IAR-OLD-C-EN-009-A\nContract number: IAR-OLD-C-EN-009-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE INVOICE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Dahlia Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR418.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 287,
+          "end": 305,
+          "value": "IAR-OLD-C-EN-009-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 323,
+          "end": 341,
+          "value": "IAR-OLD-C-EN-009-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-009-A",
+        "IAR-OLD-C-EN-009-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-missing-4",
+      "family": "orvanta-C-en-missing-4",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "From: Orvanta Confirmation Missing Elm Ltd\nSERVICE CONTRACT\nThe following details identify this record.\nNo identifier was printed for this copy.\nTotal payable: EUR 419.40\nEnd date: 2052-09-23\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-010-A\nContract number: IAR-OLD-C-EN-010-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "SERVICE CONTRACT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Elm Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR419.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 281,
+          "end": 299,
+          "value": "IAR-OLD-C-EN-010-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 317,
+          "end": 335,
+          "value": "IAR-OLD-C-EN-010-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-010-A",
+        "IAR-OLD-C-EN-010-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-inapplicable-0",
+      "family": "orvanta-C-en-inapplicable-0",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Orvanta Confirmation Inapplicable Aster Ltd\nBUSINESS LETTER\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-011-A\nContract number: IAR-OLD-C-EN-011-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "BUSINESS LETTER",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Aster Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 269,
+          "end": 287,
+          "value": "IAR-OLD-C-EN-011-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 305,
+          "end": 323,
+          "value": "IAR-OLD-C-EN-011-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-011-A",
+        "IAR-OLD-C-EN-011-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-inapplicable-1",
+      "family": "orvanta-C-en-inapplicable-1",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Earlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-012-A\nContract number: IAR-OLD-C-EN-012-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n\nFrom: Orvanta Confirmation Inapplicable Birke Ltd\nPAYMENT CONFIRMATION\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n",
+      "expected": {
+        "title": "PAYMENT CONFIRMATION",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Birke Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 57,
+          "end": 75,
+          "value": "IAR-OLD-C-EN-012-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 93,
+          "end": 111,
+          "value": "IAR-OLD-C-EN-012-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-012-A",
+        "IAR-OLD-C-EN-012-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-inapplicable-2",
+      "family": "orvanta-C-en-inapplicable-2",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Orvanta Confirmation Inapplicable Cedar Ltd\nBUSINESS LETTER\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-013-A\nContract number: IAR-OLD-C-EN-013-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "BUSINESS LETTER",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Cedar Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 269,
+          "end": 287,
+          "value": "IAR-OLD-C-EN-013-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 305,
+          "end": 323,
+          "value": "IAR-OLD-C-EN-013-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-013-A",
+        "IAR-OLD-C-EN-013-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-inapplicable-3",
+      "family": "orvanta-C-en-inapplicable-3",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Orvanta Confirmation Inapplicable Dahlia Ltd\nPAYMENT CONFIRMATION\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n\nEnclosed copy from an unrelated supplier:\nInvoice number: IAR-OLD-C-EN-014-A\nContract number: IAR-OLD-C-EN-014-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "PAYMENT CONFIRMATION",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Dahlia Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 276,
+          "end": 294,
+          "value": "IAR-OLD-C-EN-014-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 312,
+          "end": 330,
+          "value": "IAR-OLD-C-EN-014-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-014-A",
+        "IAR-OLD-C-EN-014-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-en-inapplicable-4",
+      "family": "orvanta-C-en-inapplicable-4",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Orvanta Confirmation Inapplicable Elm Ltd\nBUSINESS LETTER\nThe following details identify this record.\nThis record has no invoice, contract or policy identifier of its own.\nSigned for the current record.\n\nEarlier correspondence, not this record:\nInvoice number: IAR-OLD-C-EN-015-A\nContract number: IAR-OLD-C-EN-015-B\nOld amount: EUR 27.60; old deadline: 2030-05-09.\n",
+      "expected": {
+        "title": "BUSINESS LETTER",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Elm Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 267,
+          "end": 285,
+          "value": "IAR-OLD-C-EN-015-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 303,
+          "end": 321,
+          "value": "IAR-OLD-C-EN-015-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-EN-015-A",
+        "IAR-OLD-C-EN-015-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-present-0",
+      "family": "orvanta-C-de-present-0",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Confirmation Present Aster GmbH\nDIENSTLEISTUNGSRECHNUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nRechnungsnummer: IAR-C-DE-001-Q\nAktueller Gesamtbetrag: EUR 410.40\nFällig am: 2050-06-19\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-001-A\nVertragsnummer: IAR-OLD-C-DE-001-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSRECHNUNG",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Confirmation Present Aster GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "IAR-C-DE-001-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR410.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 140,
+          "end": 154,
+          "value": "IAR-C-DE-001-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        },
+        {
+          "start": 315,
+          "end": 333,
+          "value": "IAR-OLD-C-DE-001-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 350,
+          "end": 368,
+          "value": "IAR-OLD-C-DE-001-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-001-A",
+        "IAR-OLD-C-DE-001-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-present-1",
+      "family": "orvanta-C-de-present-1",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Frühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-002-A\nVertragsnummer: IAR-OLD-C-DE-002-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n\nAbsender: Orvanta Confirmation Present Birke GmbH\nDIENSTLEISTUNGSVERTRAG\nDie folgenden Angaben gehören zu diesem Vorgang.\nVertragsnummer: IAR-C-DE-002-Q\nAktueller Gesamtbetrag: EUR 411.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSVERTRAG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Confirmation Present Birke GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "IAR-C-DE-002-Q",
+          "policy_number": null,
+          "amount": "EUR411.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 62,
+          "end": 80,
+          "value": "IAR-OLD-C-DE-002-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 97,
+          "end": 115,
+          "value": "IAR-OLD-C-DE-002-B",
+          "role": "historical",
+          "field": "contract_number"
+        },
+        {
+          "start": 304,
+          "end": 318,
+          "value": "IAR-C-DE-002-Q",
+          "role": "own_current",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-002-A",
+        "IAR-OLD-C-DE-002-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-present-2",
+      "family": "orvanta-C-de-present-2",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Confirmation Present Cedar GmbH\nVERSICHERUNGSPOLICE\nDie folgenden Angaben gehören zu diesem Vorgang.\nVersicherungsnummer: IAR-C-DE-003-Q\nAktueller Gesamtbetrag: EUR 412.40\nEnddatum: 2052-09-23\nVersicherungsnummer: IAR-C-DE-003-Q\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-C-DE-003-Q\nVertragsnummer: IAR-OLD-C-DE-003-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "VERSICHERUNGSPOLICE",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Confirmation Present Cedar GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "IAR-C-DE-003-Q",
+          "amount": "EUR412.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 140,
+          "end": 154,
+          "value": "IAR-C-DE-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 232,
+          "end": 246,
+          "value": "IAR-C-DE-003-Q",
+          "role": "own_current",
+          "field": "policy_number"
+        },
+        {
+          "start": 350,
+          "end": 364,
+          "value": "IAR-C-DE-003-Q",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 381,
+          "end": 399,
+          "value": "IAR-OLD-C-DE-003-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-C-DE-003-Q",
+        "IAR-OLD-C-DE-003-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-present-3",
+      "family": "orvanta-C-de-present-3",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Confirmation Present Dahlia GmbH\nDIENSTLEISTUNGSRECHNUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nRechnungsnummer: IAR-C-DE-004-Q\nAktueller Gesamtbetrag: EUR 413.40\nFällig am: 2050-06-19\nUnterschrift für den aktuellen Vorgang.\n\nBeigefügte Kopie eines anderen Lieferanten:\nRechnungsnummer: IAR-OLD-C-DE-004-A\nVertragsnummer: IAR-OLD-C-DE-004-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSRECHNUNG",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Confirmation Present Dahlia GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "IAR-C-DE-004-Q",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR413.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 141,
+          "end": 155,
+          "value": "IAR-C-DE-004-Q",
+          "role": "own_current",
+          "field": "invoice_number"
+        },
+        {
+          "start": 315,
+          "end": 333,
+          "value": "IAR-OLD-C-DE-004-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 350,
+          "end": 368,
+          "value": "IAR-OLD-C-DE-004-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-004-A",
+        "IAR-OLD-C-DE-004-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-present-4",
+      "family": "orvanta-C-de-present-4",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Absender: Orvanta Confirmation Present Elm GmbH\nDIENSTLEISTUNGSVERTRAG\nDie folgenden Angaben gehören zu diesem Vorgang.\nVertragsnummer: IAR-C-DE-005-Q\nAktueller Gesamtbetrag: EUR 414.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-005-A\nVertragsnummer: IAR-OLD-C-DE-005-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n\nAnlage: unabhängiges Bestandsverzeichnis, keine Vertragskennungen:\nLagerposten AUX-C-00-Z\nLagerposten AUX-C-01-Z\nLagerposten AUX-C-02-Z\nLagerposten AUX-C-03-Z\nLagerposten AUX-C-04-Z\nLagerposten AUX-C-05-Z\nLagerposten AUX-C-06-Z\nLagerposten AUX-C-07-Z\nLagerposten AUX-C-08-Z\nLagerposten AUX-C-09-Z\nLagerposten AUX-C-10-Z\nLagerposten AUX-C-11-Z\nLagerposten AUX-C-12-Z\nLagerposten AUX-C-13-Z\nLagerposten AUX-C-14-Z\nLagerposten AUX-C-15-Z\nLagerposten AUX-C-16-Z\nLagerposten AUX-C-17-Z\nLagerposten AUX-C-18-Z\nLagerposten AUX-C-19-Z\nLagerposten AUX-C-20-Z\nLagerposten AUX-C-21-Z\nLagerposten AUX-C-22-Z\nLagerposten AUX-C-23-Z\nLagerposten AUX-C-24-Z\nLagerposten AUX-C-25-Z\nLagerposten AUX-C-26-Z\nLagerposten AUX-C-27-Z\nLagerposten AUX-C-28-Z\nLagerposten AUX-C-29-Z\nLagerposten AUX-C-30-Z\nLagerposten AUX-C-31-Z\nLagerposten AUX-C-32-Z\nLagerposten AUX-C-33-Z\nLagerposten AUX-C-34-Z\nLagerposten AUX-C-35-Z\nLagerposten AUX-C-36-Z\nLagerposten AUX-C-37-Z\nLagerposten AUX-C-38-Z\nLagerposten AUX-C-39-Z\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSVERTRAG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Confirmation Present Elm GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "IAR-C-DE-005-Q",
+          "policy_number": null,
+          "amount": "EUR414.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 136,
+          "end": 150,
+          "value": "IAR-C-DE-005-Q",
+          "role": "own_current",
+          "field": "contract_number"
+        },
+        {
+          "start": 310,
+          "end": 328,
+          "value": "IAR-OLD-C-DE-005-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 345,
+          "end": 363,
+          "value": "IAR-OLD-C-DE-005-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-005-A",
+        "IAR-OLD-C-DE-005-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": true
+      }
+    },
+    {
+      "id": "iar-confirmation-de-missing-0",
+      "family": "orvanta-C-de-missing-0",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Confirmation Missing Aster GmbH\nDIENSTLEISTUNGSRECHNUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 415.40\nFällig am: 2050-06-19\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-006-A\nVertragsnummer: IAR-OLD-C-DE-006-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSRECHNUNG",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Aster GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR415.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 337,
+          "end": 355,
+          "value": "IAR-OLD-C-DE-006-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 372,
+          "end": 390,
+          "value": "IAR-OLD-C-DE-006-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-006-A",
+        "IAR-OLD-C-DE-006-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-missing-1",
+      "family": "orvanta-C-de-missing-1",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "Frühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-007-A\nVertragsnummer: IAR-OLD-C-DE-007-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n\nAbsender: Orvanta Confirmation Missing Birke GmbH\nDIENSTLEISTUNGSVERTRAG\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 416.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSVERTRAG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Birke GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR416.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 62,
+          "end": 80,
+          "value": "IAR-OLD-C-DE-007-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 97,
+          "end": 115,
+          "value": "IAR-OLD-C-DE-007-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-007-A",
+        "IAR-OLD-C-DE-007-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-missing-2",
+      "family": "orvanta-C-de-missing-2",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Confirmation Missing Cedar GmbH\nVERSICHERUNGSPOLICE\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 417.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-008-A\nVertragsnummer: IAR-OLD-C-DE-008-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "VERSICHERUNGSPOLICE",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Cedar GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR417.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 332,
+          "end": 350,
+          "value": "IAR-OLD-C-DE-008-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 367,
+          "end": 385,
+          "value": "IAR-OLD-C-DE-008-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-008-A",
+        "IAR-OLD-C-DE-008-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-missing-3",
+      "family": "orvanta-C-de-missing-3",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Confirmation Missing Dahlia GmbH\nDIENSTLEISTUNGSRECHNUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 418.40\nFällig am: 2050-06-19\nUnterschrift für den aktuellen Vorgang.\n\nBeigefügte Kopie eines anderen Lieferanten:\nRechnungsnummer: IAR-OLD-C-DE-009-A\nVertragsnummer: IAR-OLD-C-DE-009-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSRECHNUNG",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Dahlia GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR418.40",
+          "due_date": "2050-06-19",
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 337,
+          "end": 355,
+          "value": "IAR-OLD-C-DE-009-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 372,
+          "end": 390,
+          "value": "IAR-OLD-C-DE-009-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-009-A",
+        "IAR-OLD-C-DE-009-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-missing-4",
+      "family": "orvanta-C-de-missing-4",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Confirmation Missing Elm GmbH\nDIENSTLEISTUNGSVERTRAG\nDie folgenden Angaben gehören zu diesem Vorgang.\nAuf dieser Ausfertigung wurde keine Kennung gedruckt.\nAktueller Gesamtbetrag: EUR 419.40\nEnddatum: 2052-09-23\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-010-A\nVertragsnummer: IAR-OLD-C-DE-010-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "DIENSTLEISTUNGSVERTRAG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Orvanta Confirmation Missing Elm GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR419.40",
+          "due_date": null,
+          "end_date": "2052-09-23"
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 333,
+          "end": 351,
+          "value": "IAR-OLD-C-DE-010-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 368,
+          "end": 386,
+          "value": "IAR-OLD-C-DE-010-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-010-A",
+        "IAR-OLD-C-DE-010-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-inapplicable-0",
+      "family": "orvanta-C-de-inapplicable-0",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Confirmation Inapplicable Aster GmbH\nGESCHÄFTSBRIEF\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-011-A\nVertragsnummer: IAR-OLD-C-DE-011-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "GESCHÄFTSBRIEF",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Aster GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 302,
+          "end": 320,
+          "value": "IAR-OLD-C-DE-011-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 337,
+          "end": 355,
+          "value": "IAR-OLD-C-DE-011-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-011-A",
+        "IAR-OLD-C-DE-011-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-inapplicable-1",
+      "family": "orvanta-C-de-inapplicable-1",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Frühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-012-A\nVertragsnummer: IAR-OLD-C-DE-012-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n\nAbsender: Orvanta Confirmation Inapplicable Birke GmbH\nZAHLUNGSBESTÄTIGUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n",
+      "expected": {
+        "title": "ZAHLUNGSBESTÄTIGUNG",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Birke GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 62,
+          "end": 80,
+          "value": "IAR-OLD-C-DE-012-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 97,
+          "end": 115,
+          "value": "IAR-OLD-C-DE-012-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-012-A",
+        "IAR-OLD-C-DE-012-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-inapplicable-2",
+      "family": "orvanta-C-de-inapplicable-2",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Confirmation Inapplicable Cedar GmbH\nGESCHÄFTSBRIEF\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-013-A\nVertragsnummer: IAR-OLD-C-DE-013-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "GESCHÄFTSBRIEF",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Cedar GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 302,
+          "end": 320,
+          "value": "IAR-OLD-C-DE-013-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 337,
+          "end": 355,
+          "value": "IAR-OLD-C-DE-013-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-013-A",
+        "IAR-OLD-C-DE-013-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-inapplicable-3",
+      "family": "orvanta-C-de-inapplicable-3",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Confirmation Inapplicable Dahlia GmbH\nZAHLUNGSBESTÄTIGUNG\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n\nBeigefügte Kopie eines anderen Lieferanten:\nRechnungsnummer: IAR-OLD-C-DE-014-A\nVertragsnummer: IAR-OLD-C-DE-014-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "ZAHLUNGSBESTÄTIGUNG",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Dahlia GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 307,
+          "end": 325,
+          "value": "IAR-OLD-C-DE-014-A",
+          "role": "other_document",
+          "field": "invoice_number"
+        },
+        {
+          "start": 342,
+          "end": 360,
+          "value": "IAR-OLD-C-DE-014-B",
+          "role": "other_document",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-014-A",
+        "IAR-OLD-C-DE-014-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    },
+    {
+      "id": "iar-confirmation-de-inapplicable-4",
+      "family": "orvanta-C-de-inapplicable-4",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Orvanta Confirmation Inapplicable Elm GmbH\nGESCHÄFTSBRIEF\nDie folgenden Angaben gehören zu diesem Vorgang.\nDieser Vorgang hat keine eigene Rechnungs-, Vertrags- oder Versicherungsnummer.\nUnterschrift für den aktuellen Vorgang.\n\nFrühere Korrespondenz, nicht dieser Vorgang:\nRechnungsnummer: IAR-OLD-C-DE-015-A\nVertragsnummer: IAR-OLD-C-DE-015-B\nAlter Betrag: EUR 27.60; alte Frist: 2030-05-09.\n",
+      "expected": {
+        "title": "GESCHÄFTSBRIEF",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Orvanta Confirmation Inapplicable Elm GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "goldSpans": [
+        {
+          "start": 300,
+          "end": 318,
+          "value": "IAR-OLD-C-DE-015-A",
+          "role": "historical",
+          "field": "invoice_number"
+        },
+        {
+          "start": 335,
+          "end": 353,
+          "value": "IAR-OLD-C-DE-015-B",
+          "role": "historical",
+          "field": "contract_number"
+        }
+      ],
+      "forbiddenCurrentIdentifiers": [
+        "IAR-OLD-C-DE-015-A",
+        "IAR-OLD-C-DE-015-B"
+      ],
+      "annotation": {
+        "candidateGapChallenge": false,
+        "candidateOverflowChallenge": false
+      }
+    }
+  ]
+}
