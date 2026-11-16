@@ -115,7 +115,9 @@ only its living workflow digest. Original measurement-lock stays immutable; old
 
 ## Current status and rollback
 
-No measured role result yet; no quality improvement claimed. Initial local test
+The one approved measurement completed with180 original attempts at6b781b9.
+Independent aggregation fails both confirmation gates; no quality improvement
+or promotion is claimed. Initial local test
 run had8/9 passes: changing a workflow artifact name during that run correctly
 triggered source-digest mismatch. The repeated stable run passes all9 focused tests, ESLint and byte-identical
 old180-answer aggregation. The full local Node22 suite passes108/108 with no
@@ -128,3 +130,77 @@ Removing experimental files/manual profiles needs no migration or metadata reset
 No UI/manual marking, production promotion, merge, publication, deployment or
 repository/access changes are authorized by a successful test. The optional
 full Python RAG and hosted-provider/OCR quality remain outside this package.
+
+
+## Measured outcome — do not promote
+
+Source6b781b9ae004c5908b33ab2c07e12d3a7f395a7c,
+[run43801443810](https://github.com/BMWfan/paperless-ai/actions/runs/43801443810),
+attempt1. Six original ZIP SHA256 values were checked against GitHub; decoded
+payload bytes are losslessly gzip-preserved with
+[provenance](../tests/identifier-roles/artifact-sources.json). No answers were
+regenerated, repaired or selectively replaced.
+
+The [recomputed report](../tests/identifier-roles/report.json) reconstructs all
+inputs, lexical candidates, validations/resolution, scores and gates. Source
+positions are evaluated only for B; A has no source predictions and its source
+counters are null/not_available, never a claimed zero-error source benchmark.
+
+| Split / seed | A correct /10 | A wrong accepted IDs | A protocol failures | B correct /10 | B wrong IDs / sources | B protocol failures |
+| --- | --- | --- | --- | --- | --- | --- |
+| Development42 | 7 | 14 | 0 | 0 | 8 /8 | 23 |
+| Confirmation42 | 6 | 16 | 0 | 0 | 12 /12 | 21 |
+| Confirmation43 | 6 | 16 | 0 | 0 | 2 /2 | 27 |
+
+Every group contains30 documents/30 actual HTTP attempts, not30 positive IDs.
+Each B group retains the planned positive occurrence-overflow abstention and the
+unlabelled-ID enumeration gap. All10 positive cases remain in the denominator.
+B's role/field consistency errors are protocol failures (for example own_current
+with null field), not silently repaired partial answers. The resolver's rejections
+are not correct positive extractions. Fewer accepted wrong values in seed43 do
+not indicate progress:27/30 answers fail the contract and no current ID survives.
+
+[Raw-role diagnostics](../tests/identifier-roles/raw-role-diagnostics.json) count
+parsed claims even in protocol-invalid answers, without admitting or repairing
+them. In confirmation42/43 the model declares133/139 occurrences own_current;
+123/130 of these have a different gold role.36/86 own_current claims have null
+field. Thus failure is not only JSON/contract compliance: sender/amount/date/old
+reference occurrences are wrongly classified as current identifiers. Raw claims,
+accepted values, source errors and full cohort/language counts remain separate.
+
+Both confirmation seeds fail protocol_failure, wrong_identifier, wrong_source,
+positive_coverage and coverage_decline. qualifiedForLaterProposal=false;
+productionActivation=false. This automatic approach with this model/contract is
+not qualified. Do not deploy it, tune on these answers or launch another model
+round automatically. The data do not prove that every role-based approach or
+larger model must fail. Subsequent alternatives need a separately agreed plan.
+
+All model reports expose their actual runtime/CPU and token telemetry. Sum of
+Ollama-reported prompt_eval_count is224393 and eval_count26272 across180 attempts;
+these are inference telemetry from the approved experiment, **not Codex task-token
+or billing counters**. CPU differences, same-author templates and non-independent
+temperature0 seeds limit inference; no production/OCR/hosted-provider claim.
+
+## SPEC33 scoped-continuation pilot
+
+The [PR32 handoff](https://github.com/BMWfan/paperless-ai/pull/32#issuecomment-6908272907)
+applies the main-branch AGENTS/SDD-Light SPEC33 guidance to this existing approved
+continuation. No new branch, duplicate issue, model run or dependency was created
+for token measurement. Current main1255421 differs from the experiment baseline
+only in AGENTS.md, SDD-Light and two handoff/benchmark templates; relevant runtime
+source and interfaces are unchanged. The updated instructions were read and
+applied without changing the frozen measured runtime.
+
+Complete platform counters for this entire Codex continuation are unavailable:
+input/output tokens, cached subset, total tool calls, full duration and billed
+cost are **UNMEASURED**. No estimate is substituted from text size or the separate
+Ollama telemetry. A bounded metadata-lookup parse was retried; no scoring/model
+code was reworked during continuation. This single pilot is not an A/B study and
+cannot establish token/cost savings. Pre-existing108-root-test CI remains dated
+historical evidence; current continuation reruns9 focused tests/ESLint and both
+new180-answer and byte-identical old180-answer aggregation. Final PR checks and
+native replay evidence are recorded separately when complete.
+
+Native model-free replay is pending. It verifies format/preservation only and
+cannot turn this negative semantic result into qualification. No production
+activation, merge, publication or deployment has occurred.

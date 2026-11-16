@@ -1,0 +1,59 @@
+{
+  "sourceRun": 43801443810,
+  "sourceCommit": "6b781b9ae004c5908b33ab2c07e12d3a7f395a7c",
+  "runAttempt": 1,
+  "files": {
+    "identifier-roles-B-development-42.json.gz": "edc2bc92f51f9ded9ccd393cb8dcc2f19c5545e71864dd6deaf416bcf51bad7f",
+    "identifier-roles-A-confirmation-43.json.gz": "edf6e77ac9db2cab86ee19b53b5e6955f9fa0030060380d6080c9e46fdcdddcf",
+    "identifier-roles-B-confirmation-43.json.gz": "7b4e6410e01e029e4d78f46e411afd433337fa2c5dd4f814f92ef35fe4fb2f84",
+    "identifier-roles-B-confirmation-42.json.gz": "7d3a6950d96f2672b4102806d0f646dea09dbcab4266a219b7911d11569b3674",
+    "identifier-roles-A-confirmation-42.json.gz": "e2a2e8a3350fabbdfb3b13a4ffce77bacc4b7fbbb093c67b2ccc0df517a181c3",
+    "identifier-roles-A-development-42.json.gz": "92f6f87cabdf49f821d7ad657ce4c8af1f4bee063024aaa6352ea9e255db39f6"
+  },
+  "decodedSHA256": {
+    "identifier-roles-B-development-42.json.gz": "bc2874ac05da9b20bc28cfd506a64b2eee908e4dcf10b469500adfd6a70ef941",
+    "identifier-roles-A-confirmation-43.json.gz": "8a8f58cb88a123f5b6163657bc0b7ac21d1cf3e1e8b145370f077f751ef612fb",
+    "identifier-roles-B-confirmation-43.json.gz": "7b057cb594e24b45233d68bed1fe0303ae9eb3e7d688b3311571e26c50c42f62",
+    "identifier-roles-B-confirmation-42.json.gz": "4787c1fb9928da471b606fb75f7dfaa58b2d0e4bde6db3cab44b2ae4200ac003",
+    "identifier-roles-A-confirmation-42.json.gz": "0b206289b72d7119de79faeb1b35ece6088227ca6cf384dfee2a58cae0a976b0",
+    "identifier-roles-A-development-42.json.gz": "6cd1d7b3843966ad6885c2ecc3369bb82e4b89e704e59f1f783aa13b4452a17b"
+  },
+  "artifacts": [
+    {
+      "id": 14197121056,
+      "name": "identifier-roles-B-development-42",
+      "zipSHA256": "6573fbe7cd40d48bc0d0816425fedf4f6c54167c3bdab8dcc3fed48d975e94e4",
+      "decodedSHA256": "bc2874ac05da9b20bc28cfd506a64b2eee908e4dcf10b469500adfd6a70ef941"
+    },
+    {
+      "id": 14199130657,
+      "name": "identifier-roles-A-confirmation-43",
+      "zipSHA256": "53427139a3dafd87a5dd5d7b81b221137fc54aa286f8f6e5d92f9e52b494241c",
+      "decodedSHA256": "8a8f58cb88a123f5b6163657bc0b7ac21d1cf3e1e8b145370f077f751ef612fb"
+    },
+    {
+      "id": 14198271897,
+      "name": "identifier-roles-B-confirmation-43",
+      "zipSHA256": "02bd3cf92683b88665929c49ab796e85d20bc802a75f18abe19fb1c982a45233",
+      "decodedSHA256": "7b057cb594e24b45233d68bed1fe0303ae9eb3e7d688b3311571e26c50c42f62"
+    },
+    {
+      "id": 14198155443,
+      "name": "identifier-roles-B-confirmation-42",
+      "zipSHA256": "ce830c8b299ddb78c0bb266b7b8331fcd60cc3c2e07091741d5a4da0816c447d",
+      "decodedSHA256": "4787c1fb9928da471b606fb75f7dfaa58b2d0e4bde6db3cab44b2ae4200ac003"
+    },
+    {
+      "id": 14197708581,
+      "name": "identifier-roles-A-confirmation-42",
+      "zipSHA256": "0f73589805dd609768f66469e47464e0b6650c4f4f1142a27293d50d0f699ecf",
+      "decodedSHA256": "0b206289b72d7119de79faeb1b35ece6088227ca6cf384dfee2a58cae0a976b0"
+    },
+    {
+      "id": 14196768365,
+      "name": "identifier-roles-A-development-42",
+      "zipSHA256": "e4c64a09dfaa3a54ea27514b4e9d30317f212ace883fccb4ce3c59d839b8a3c5",
+      "decodedSHA256": "6cd1d7b3843966ad6885c2ecc3369bb82e4b89e704e59f1f783aa13b4452a17b"
+    }
+  ]
+}

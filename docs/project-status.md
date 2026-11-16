@@ -26,8 +26,10 @@ passed. Automatic semantic extraction remains unqualified.
 The approved [automatic identifier-role experiment](automatic-identifier-roles.md)
 enumerates current-text occurrences and predicts roles before resolving identifier
 values. It replaces the withdrawn manual-selection plan; no user marking is
-required. New data/gates were frozen before code. Results are pending, and no
-production provider/writer/default/database behavior is changed. This is not
+required. New data/gates were frozen before code. All180 original answers are archived;
+B has0/10 correct IDs,12/2 wrong IDs/sources and21/27 protocol failures in
+confirmation, so both gates fail. No production provider/writer/default/database
+behavior is changed. This is not
 project-wide completion or automatic activation.
 
 The table below describes the integrated baseline. Earlier main runs
