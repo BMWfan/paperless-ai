@@ -194,13 +194,51 @@ applied without changing the frozen measured runtime.
 Complete platform counters for this entire Codex continuation are unavailable:
 input/output tokens, cached subset, total tool calls, full duration and billed
 cost are **UNMEASURED**. No estimate is substituted from text size or the separate
-Ollama telemetry. A bounded metadata-lookup parse was retried; no scoring/model
-code was reworked during continuation. This single pilot is not an A/B study and
+Ollama telemetry. A bounded metadata lookup was retried; two optional legacy-cancellation requests
+received401 without credential/configuration changes. Native replay exposed an
+import-path typo and received the dependency-only correction documented below.
+No model, enumeration, resolver, scoring, corpus or gate behavior was changed. This single pilot is not an A/B study and
 cannot establish token/cost savings. Pre-existing108-root-test CI remains dated
 historical evidence; current continuation reruns9 focused tests/ESLint and both
 new180-answer and byte-identical old180-answer aggregation. Final PR checks and
 native replay evidence are recorded separately when complete.
 
-Native model-free replay is pending. It verifies format/preservation only and
-cannot turn this negative semantic result into qualification. No production
-activation, merge, publication or deployment has occurred.
+Native model-free replay outcomes and complete raw result/checksum evidence are
+recorded in [PR32](https://github.com/BMWfan/paperless-ai/pull/32). They verify
+format/preservation only and cannot turn this negative semantic result into
+qualification. Exact final-head checks and own review are recorded there as well.
+No production activation, merge, publication or deployment is implied.
+
+
+## Native dependency correction and source identities
+
+First model-free replay [43825623530](https://github.com/BMWfan/paperless-ai/actions/runs/43825623530)
+at24ea77e failed before processing documents: the test script imported the
+nonexistent `../context-identifier-roles/ingestion` instead of the existing
+`../context-projection/ingestion` helper. This is a fork test-script defect, not
+an upstream ngx defect. Correcting that import reuses the already verified
+MIME-safe synthetic wrapper. A dependency-only preflight now loads real helper
+modules and exits before archive/native I/O; its explicit output is not native
+integration evidence. The focused suite now has10 tests, all passing with ESLint.
+
+The original6b781b9 harness-lock bytes are preserved as measurement-lock.json,
+SHA25630a035119bebb52008963108feb6713861b5403b8d897b288c757fde57a7b211. Current harness-lock.json separately checks the repaired
+native/audit dependencies. Aggregation compares archived source metadata with
+the original measurement lock; only that comparison and source-file bookkeeping
+changed. Enumeration, schema, resolver, scores, gates, data, original responses
+and model runner are unchanged. Both original180-answer reports recompute
+byte-for-byte after the repair, and a regression pins original lock/runner hashes.
+
+```sh
+# Dependency smoke check only; no model/native network request:
+PAPERLESS_API_URL=http://paperless:8000/api \
+  IDENTIFIER_ROLES_REPLAY_PREFLIGHT=1 node tests/identifier-roles/replay.js
+```
+
+Final native/CI results are maintained in the PR with exact tested head/run and
+complete original native result text plus independent ZIP/payload hashes. This
+avoids creating another source head solely to record an unchanged result. The
+raw model corpus, summaries and qualification decision remain committed here;
+no model answer is regenerated. Regular legacy smoke accounting is also recorded
+per actual head in the PR; a401 prevented cancelling the archival intermediate
+run, so it is counted if completed instead of falsely marked skipped.

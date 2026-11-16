@@ -71,7 +71,7 @@ function writeReport(dir,arm,split,seed){
     const prepared=input(fixture,arm),actual=arm==='A'?fixture.expected:goldResponse(fixture,prepared),validation=validateArm(actual,prepared,arm,fixture.content),request={model:protocol.model,system:prepared.system,prompt:prepared.prompt,stream:false,format:prepared.format,options:{...protocol.options,seed}};
     return {id:fixture.id,input:prepared,inputDigest:hash(JSON.stringify(prepared)),request,actual,response:{done:true,eval_count:1,prompt_eval_count:1,response:JSON.stringify(actual)},validation,scores:scoreRow(actual,validation,prepared,fixture,training,arm),terminal:true,durationMs:1};
   });
-  const report={revision:protocol.revision,model:protocol.model,modelDigest:protocol.modelDigest,ollamaVersion:protocol.ollamaVersion,arm,split,seed,origin:'http://127.0.0.1:11434',attempt:1,run:'fixture-only',commit:'not-inference',fixtureOnly:true,complete:true,requestCount:30,options:{...protocol.options,seed},manifest,sourceDigests:sourceDigests(),rows,summary:summarize(rows,cases)};
+  const report={revision:protocol.revision,model:protocol.model,modelDigest:protocol.modelDigest,ollamaVersion:protocol.ollamaVersion,arm,split,seed,origin:'http://127.0.0.1:11434',attempt:1,run:'fixture-only',commit:'not-inference',fixtureOnly:true,complete:true,requestCount:30,options:{...protocol.options,seed},manifest,sourceDigests:require('./identifier-roles/measurement-lock.json'),rows,summary:summarize(rows,cases)};
   for(const [key,property,values]of [['summaryByLanguage','language',['en','de']],['summaryByCohort','cohort',['present','missing','inapplicable']]])report[key]=Object.fromEntries(values.map(value=>[value,summarize(rows.filter(r=>cases.find(c=>c.id===r.id)[property]===value),cases)]));
   const file=path.join(dir,`identifier-roles-${arm}-${split}-${seed}.json`);fs.writeFileSync(file,JSON.stringify(report));return file;
 }
@@ -102,4 +102,12 @@ test('new workflow is manual/read-only/six groups and old measurement source loc
   assert.equal((section.match(/- \{arm:/g)||[]).length,6);assert.ok(section.includes("inputs.extraction_stage == 'identifier-roles'"));assert.ok(section.includes('max-parallel: 2'));assert.ok(section.includes('test "$GITHUB_RUN_ATTEMPT" = 1'));assert.ok(!section.includes('secrets.'));assert.ok(workflow.includes('permissions:\n  contents: read'));
   assert.equal(hash(fs.readFileSync('tests/context-projection/measurement-lock.json')),'974263ea1df81f7f1551b063d9ddb6dfa678f5680a29860788f6b6c3e06f0930');
   assert.ok(ids.every(field=>protocol.baselineSchema.properties.custom_fields.properties[field]));
+});
+
+test('native replay dependency preflight imports the real helper without API calls and retains the original measurement lock',()=>{
+  const {spawnSync}=require('node:child_process');
+  const run=spawnSync(process.execPath,['tests/identifier-roles/replay.js'],{env:{...process.env,PAPERLESS_API_URL:'http://paperless:8000/api',IDENTIFIER_ROLES_REPLAY_PREFLIGHT:'1'},encoding:'utf8',timeout:20000});
+  assert.equal(run.status,0,run.stderr);assert.match(run.stdout,/IDENTIFIER_ROLES_REPLAY_DEPENDENCIES_OK/);
+  assert.equal(hash(fs.readFileSync('tests/identifier-roles/measurement-lock.json')),'30a035119bebb52008963108feb6713861b5403b8d897b288c757fde57a7b211');
+  assert.equal(require('./identifier-roles/measurement-lock.json')['run.js'],hash(fs.readFileSync('tests/identifier-roles/run.js')));
 });

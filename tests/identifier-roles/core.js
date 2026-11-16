@@ -5,7 +5,7 @@ const {normalizeValue}=require('../../services/customFieldUpdates');
 const {selectContext,rankExamples}=require('../../services/learningContext');
 const {get_encoding}=require('tiktoken');
 const ids=shared.ids,roles=['own_current','historical','other_document','unclear','not_identifier'];
-const sourceFiles=['core.js','run.js','report.js','replay.js','CONTRACT.md','manifest.json','../identifier-roles.test.js','../../.github/workflows/classification-evaluation.yml','../quality/extraction/core.js','../quality/scoring.js','../quality/corpus.js','../context-projection/ingestion.js','../../services/learningContext.js','../../services/ollamaService.js','../../services/customFieldUpdates.js'];
+const sourceFiles=['core.js','run.js','report.js','replay.js','measurement-lock.json','CONTRACT.md','manifest.json','../identifier-roles.test.js','../../.github/workflows/classification-evaluation.yml','../quality/extraction/core.js','../quality/scoring.js','../quality/corpus.js','../context-projection/ingestion.js','../../services/learningContext.js','../../services/ollamaService.js','../../services/customFieldUpdates.js'];
 const sourceDigests=()=>Object.fromEntries(sourceFiles.map(file=>[file,shared.hash(fs.readFileSync(path.join(__dirname,file)))]));
 function load(){
   const manifest=require('./manifest.json');

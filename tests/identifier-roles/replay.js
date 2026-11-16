@@ -6,7 +6,12 @@ assert.equal(process.env.PAPERLESS_API_URL,'http://paperless:8000/api');
 const {load,hash}=require('./core'),{aggregate,bytes}=require('./report');
 const {buildCustomFieldUpdates}=require('../../services/customFieldUpdates');
 const fieldTypes={invoice_number:'string',contract_number:'string',policy_number:'string',amount:'monetary',due_date:'date',end_date:'date'};
-const {wrapSyntheticText}=require('../context-identifier-roles/ingestion');
+const {wrapSyntheticText}=require('../context-projection/ingestion');
+// Dependency-only smoke check; deliberately performs no native I/O or inference.
+if(process.env.IDENTIFIER_ROLES_REPLAY_PREFLIGHT==='1'){
+  assert.equal(typeof wrapSyntheticText,'function');assert.equal(typeof buildCustomFieldUpdates,'function');
+  console.log('IDENTIFIER_ROLES_REPLAY_DEPENDENCIES_OK');process.exit(0);
+}
 const directory=path.join(__dirname,'archive');
 const archive=require('./artifact-sources.json');
 for(const [name,digest]of Object.entries(archive.files)){assert.equal(hash(fs.readFileSync(path.join(directory,name))),digest);assert.equal(hash(bytes(path.join(directory,name))),archive.decodedSHA256[name]);}

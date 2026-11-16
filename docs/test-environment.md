@@ -323,3 +323,10 @@ measurement. Keep all original role lists/errors and current-source mistakes,
 even when the final value happens to equal a current value. Old measured locks
 and reports remain unchanged; only the living PR31 workflow digest is refreshed
 and its old180-answer report must stay byte-identical. No manual source selection.
+
+The role replay's dependency-only preflight is documented in the role experiment.
+It loads the real native helper without API calls and catches import-path errors;
+it is distinct from the full official ngx replay. The original role measurement
+source lock is retained separately from the repaired audit/native runtime, with
+byte-identical old/new180-answer reports. Exact native outcomes and full original
+result/checksum evidence are linked from the experiment to PR32.

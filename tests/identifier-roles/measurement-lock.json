@@ -1,0 +1,17 @@
+{
+  "core.js": "421152b8f13f52f82e547c609ba104a0b64c34d341ffc1fe077bcaa3c026b9b2",
+  "run.js": "92cc09785341d719e708c2baefd769a5371f5eee1f33ccefcaf2edeadb8d433c",
+  "report.js": "ce085013db74a772b029f98d4a7865c085be315d91f8b05debf1ebc359e34680",
+  "replay.js": "38d4edb14c4499497b9ec33bbbfe42b2041bb9f2c660202ffda48190c769a1bc",
+  "CONTRACT.md": "9d693721c78dd3a8e69655241453abe05d9bbc44d324b8f5a86d46c712d4a691",
+  "manifest.json": "94bf37cb1eb23d0bd81d71a1faba424bb458f614c4e68140c1cc93d4f1e87060",
+  "../identifier-roles.test.js": "2030c681d1b8b35f5d5109e60b63ecfaed0d94eb0eebca1a405f1e14f47c896c",
+  "../../.github/workflows/classification-evaluation.yml": "fcd2bd3c5948279fc32641bb1032f18b3cc8a60adbdded4a0f82df81eedb3169",
+  "../quality/extraction/core.js": "ce5e6286832abc075d207da7a3ed2066d70df8ca9f9944d849a41c7dfc202d1b",
+  "../quality/scoring.js": "739ee1bd3d035614a9c1e2d5f6b4d1786f94dfdfa2aead26131aa4a9934202ee",
+  "../quality/corpus.js": "b2c64c87ae7812cc8df67eaf5ffd486a10ff03089325eaa5dd1983d82dd88cf8",
+  "../context-projection/ingestion.js": "d4891a10f4e3d29cb518d2be36acfc668f36a687599229b3de21838e6c7f9fb7",
+  "../../services/learningContext.js": "c01343bf3eb665559cbbe0e30c9e6796a54961152ad3664c380e746d4d7fd4c7",
+  "../../services/ollamaService.js": "84299e4eb3fd9c9498eabc1a5dadf30057fe1127e8d9b428927e3820f47fe931",
+  "../../services/customFieldUpdates.js": "fe3cf81b7b43176dc4a34a3061e13beadd428ef6bd66eaa98dbf3b4c8beac316"
+}
