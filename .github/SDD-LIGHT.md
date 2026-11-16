@@ -60,3 +60,23 @@ provider mocks alone do not establish ngx compatibility. Use the isolated stack
 and synthetic data, never production endpoints, documents or credentials.
 Changes to CI, release workflows or repository settings need explicit scope in
 their own specification. Home Assistant/HACS release steps are not applicable.
+
+## Token-efficient execution (SPEC #33)
+
+Optimize **total task tokens**, not merely initial prompt size. Explicit user instructions, applicable specifications, security, testing, and owner gates always take precedence. Summaries are navigation, not substitutes for source evidence.
+
+1. **Start narrow:** identify the issue, expected behavior, relevant file paths and nearest tests before reading source. Prefer filenames and focused searches over repository-wide dumps, full logs or unrelated history.
+2. **Expand progressively:** retrieve relevant regions and bounded tool output; expand for dependencies, actual API contracts, failing traces and security concerns. Never hide failures by truncation; inspect any truncated evidence before concluding.
+3. **Keep tasks focused:** S uses issue/PR evidence; M retains spec, plan, tasks and verification; L adds architecture, compatibility, migrations, risk and rollback. Do not collapse required documents to save tokens.
+4. **Compact handoffs:** use [the handoff template](spec-templates/handoff.md), normally <=200 words, linking issue, PR, branch/commit, changed paths, decisions, actual test outcomes, blockers and next action. Replace stale summaries rather than copying conversations; inspect original sources when continuing.
+5. **Avoid redundant tools:** batch independent lookups where safe; inspect diffs before whole files. Do not introduce a memory MCP, embeddings, paid services or new dependencies solely for context reduction.
+6. **Preserve Paperless-AI quality:** verify relevant unit/API tests and isolated `docker-compose.test.yml` integration using synthetic documents when applicable. Distinguish provider fixtures, real Paperless-ngx API evidence and measured model quality. Preserve existing production isolation, security, compatibility and owner approvals.
+7. **Measure honestly:** use [the actual-token protocol](spec-templates/token-benchmark.md) to capture complete input/output tokens, cached input subset, tool calls, duration, checks, defects and rework. Mark UNMEASURED when complete counters are unavailable; never infer savings from word/byte counts.
+
+### Context by task size (guidance, not hard caps)
+
+- **S:** issue, applicable instructions, affected source and nearest tests.
+- **M:** add approved scoped specification/plan/tasks, interface contracts, integration tests and dependencies as needed.
+- **L:** add cross-system architecture, Paperless-ngx version/API evidence, migration, compatibility, rollback and risk analysis deliberately.
+
+The [benchmark worksheet](spec-templates/token-benchmark.md) is optional until real, authorized comparable work can be measured. No new paid model runs solely for measurement without owner approval. Token and billed-cost savings remain **UNMEASURED** at introduction.
