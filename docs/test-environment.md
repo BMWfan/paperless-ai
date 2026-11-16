@@ -312,3 +312,21 @@ original measured runtime; `harness-lock.json` verifies the current audit/native
 repair. Native task failures are reported directly. See the linked experiment
 for both failed and successful run evidence, checksums and the byte-identical
 180-answer re-aggregation proof.
+
+## Automatic identifier-role experiment
+
+The approved [role contract](automatic-identifier-roles.md) adds manual
+`identifier-roles` (six jobs,180 one-shot attempts,max2 parallel) and
+`identifier-roles-replay` (archived IDs only). Do not rerun measured answers or
+dispatch a previous profile. Use Node22 and the new focused root tests before
+measurement. Keep all original role lists/errors and current-source mistakes,
+even when the final value happens to equal a current value. Old measured locks
+and reports remain unchanged; only the living PR31 workflow digest is refreshed
+and its old180-answer report must stay byte-identical. No manual source selection.
+
+The role replay's dependency-only preflight is documented in the role experiment.
+It loads the real native helper without API calls and catches import-path errors;
+it is distinct from the full official ngx replay. The original role measurement
+source lock is retained separately from the repaired audit/native runtime, with
+byte-identical old/new180-answer reports. Exact native outcomes and full original
+result/checksum evidence are linked from the experiment to PR32.

@@ -1,0 +1,101 @@
+{
+  "note": "Descriptive raw claims, including protocol-invalid answers. Not repaired, not accepted, not used to change qualification.",
+  "groups": {
+    "B/confirmation/42": {
+      "documents": 30,
+      "protocolFailedDocuments": 21,
+      "parsedAssignments": 241,
+      "declaredRoles": {
+        "own_current": 133,
+        "other_document": 40,
+        "historical": 21,
+        "not_identifier": 47
+      },
+      "rawRoleComparisons": {
+        "not_identifier -> own_current": 96,
+        "own_current -> own_current": 10,
+        "historical -> own_current": 23,
+        "not_identifier -> other_document": 25,
+        "other_document -> own_current": 4,
+        "not_identifier -> historical": 7,
+        "historical -> other_document": 11,
+        "not_identifier -> not_identifier": 45,
+        "other_document -> historical": 4,
+        "historical -> historical": 10,
+        "other_document -> other_document": 4,
+        "historical -> not_identifier": 2
+      },
+      "ownCurrentClaims": 133,
+      "ownCurrentWithNullField": 36,
+      "notIdentifierWithNonNullField": 43,
+      "unknownOccurrenceClaims": 0,
+      "ownCurrentWrongRoleClaims": 123,
+      "ownCurrentWrongFieldClaims": 97,
+      "duplicateOccurrenceClaims": 0
+    },
+    "B/confirmation/43": {
+      "documents": 30,
+      "protocolFailedDocuments": 27,
+      "parsedAssignments": 241,
+      "declaredRoles": {
+        "own_current": 139,
+        "not_identifier": 43,
+        "other_document": 47,
+        "historical": 12
+      },
+      "rawRoleComparisons": {
+        "not_identifier -> own_current": 100,
+        "own_current -> own_current": 9,
+        "historical -> own_current": 26,
+        "not_identifier -> not_identifier": 43,
+        "not_identifier -> other_document": 24,
+        "own_current -> other_document": 1,
+        "other_document -> own_current": 4,
+        "historical -> other_document": 14,
+        "not_identifier -> historical": 6,
+        "other_document -> other_document": 8,
+        "historical -> historical": 6
+      },
+      "ownCurrentClaims": 139,
+      "ownCurrentWithNullField": 86,
+      "notIdentifierWithNonNullField": 19,
+      "unknownOccurrenceClaims": 0,
+      "ownCurrentWrongRoleClaims": 130,
+      "ownCurrentWrongFieldClaims": 68,
+      "duplicateOccurrenceClaims": 1
+    },
+    "B/development/42": {
+      "documents": 30,
+      "protocolFailedDocuments": 23,
+      "parsedAssignments": 241,
+      "declaredRoles": {
+        "own_current": 134,
+        "other_document": 42,
+        "historical": 15,
+        "not_identifier": 50
+      },
+      "rawRoleComparisons": {
+        "not_identifier -> own_current": 96,
+        "own_current -> own_current": 9,
+        "historical -> own_current": 23,
+        "not_identifier -> other_document": 25,
+        "own_current -> other_document": 1,
+        "other_document -> own_current": 6,
+        "historical -> other_document": 12,
+        "not_identifier -> historical": 5,
+        "not_identifier -> not_identifier": 47,
+        "historical -> not_identifier": 1,
+        "other_document -> other_document": 4,
+        "historical -> historical": 10,
+        "other_document -> not_identifier": 2
+      },
+      "ownCurrentClaims": 134,
+      "ownCurrentWithNullField": 45,
+      "notIdentifierWithNonNullField": 30,
+      "unknownOccurrenceClaims": 0,
+      "ownCurrentWrongRoleClaims": 125,
+      "ownCurrentWrongFieldClaims": 87,
+      "duplicateOccurrenceClaims": 0
+    }
+  }
+}

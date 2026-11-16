@@ -1,0 +1,19 @@
+{
+  "revision": "identifier-roles-freeze-v1",
+  "splits": {
+    "training": 10,
+    "development": 30,
+    "confirmation": 30
+  },
+  "files": {
+    "cases.json": "6b251e74517ea7d29bdf904c5b828bf083b1b80a75af333233728bc737ca7530",
+    "protocol.json": "27696865cd21309b84c4dedf532084beca6dfb50192f01a82efa35c9f2a14ec4",
+    "CONTRACT.md": "9d693721c78dd3a8e69655241453abe05d9bbc44d324b8f5a86d46c712d4a691",
+    "../quality/extraction/core.js": "ce5e6286832abc075d207da7a3ed2066d70df8ca9f9944d849a41c7dfc202d1b",
+    "../quality/scoring.js": "739ee1bd3d035614a9c1e2d5f6b4d1786f94dfdfa2aead26131aa4a9934202ee",
+    "../../services/learningContext.js": "c01343bf3eb665559cbbe0e30c9e6796a54961152ad3664c380e746d4d7fd4c7",
+    "../../services/customFieldUpdates.js": "fe3cf81b7b43176dc4a34a3061e13beadd428ef6bd66eaa98dbf3b4c8beac316",
+    "../quality/extraction/model-locks.json": "80e4db9939b06b412c6987bf713cea64a23073badc7b6a9003bfe34bdee155c0",
+    "../context-projection/measurement-lock.json": "974263ea1df81f7f1551b063d9ddb6dfa678f5680a29860788f6b6c3e06f0930"
+  }
+}

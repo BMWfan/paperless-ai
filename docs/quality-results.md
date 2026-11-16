@@ -119,3 +119,16 @@ wrong historical IDs (A23/21), and correspondent/language regress. Contract-numb
 and end-date false acceptances also increase. Both frozen gates fail; B is not
 promoted. Raw/typed/per-field/cohort reports and original bytes remain reproducible;
 no extra model run, production improvement or blind independent accuracy is claimed.
+
+
+## Follow-up: automatic identifier occurrence roles
+
+[Automatic roles](automatic-identifier-roles.md) uses a new frozen70-case corpus
+and180 responses at6b781b9/run43801443810. Both confirmation gates fail: B retains
+0/10 current IDs, accepts12 then2 wrong IDs/sources, and has21 then27 protocol
+failures per30 documents. A retains6/10 with16 wrong IDs in both seeds and0
+protocol failures. Raw role claims also misidentify non-identifiers/historical
+sources; structural output constraints do not establish semantic ownership.
+No model, prompt or production behavior is promoted. Original bytes, source/ZIP
+hashes and raw/accepted/per-field/cohort results remain available. SPEC33's separate
+Codex usage pilot is UNMEASURED and is not an accuracy or token-savings result.

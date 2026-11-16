@@ -1,4 +1,4 @@
-# Project status — baseline after PR30
+# Project status — baseline after PR31
 
 This is a dated source/acceptance audit, not a release announcement. GitHub issues,
 PRs and their exact checked commits remain the source of truth. Historical
@@ -6,7 +6,10 @@ validation records are not evidence for later heads.
 
 ## Integrated in main at this audit
 
-Baseline: `b9661037fc891c294dfe3095ac16e88633171ec7` (owner-approved PR30).
+Baseline: `25dba26e8316a8a94a08ebab1228c881f18c8716` (owner-approved PR31).
+PR31 integrates the failed reference-projection measurement and corrected native
+replay. Direct main run43728893796 passes99 root/3 Python/5 API/4 browser cases,
+restart and3.4.1→3.4.2 upgrade. The original source/locks/results stay historical.
 PR30 integrates persistent field-source generations; its direct main Learning
 [run43690682976](https://github.com/BMWfan/paperless-ai/actions/runs/43690682976) passed.
 PR30 final-head evidence covers92 root/3 Python/5 real API/4 browser cases,
@@ -20,16 +23,14 @@ passed. Automatic semantic extraction remains unqualified.
 
 ## Current change under review
 
-The approved [reference-context projection](reference-context-projection.md)
-compares raw references against categorical metadata using exactly the same
-selected source IDs and pinned1.5B model. Its new data, gates and protocol are
-frozen before candidate code. All180 answers are archived and independently rescored. B retains8/10
-current IDs but accepts14/13 wrong IDs across confirmation seeds and regresses
-metadata, so it is not qualified. Corrected native replay verifies489 typed
-assignments/180 snapshots/60 documents with no active learning. Its first MIME
-transport failure and repair are documented; production
-context, writer and field-source behavior stay unchanged. This is not project-wide
-completion, a release or activation.
+The approved [automatic identifier-role experiment](automatic-identifier-roles.md)
+enumerates current-text occurrences and predicts roles before resolving identifier
+values. It replaces the withdrawn manual-selection plan; no user marking is
+required. New data/gates were frozen before code. All180 original answers are archived;
+B has0/10 correct IDs,12/2 wrong IDs/sources and21/27 protocol failures in
+confirmation, so both gates fail. No production provider/writer/default/database
+behavior is changed. This is not
+project-wide completion or automatic activation.
 
 The table below describes the integrated baseline. Earlier main runs
 [43527747171](https://github.com/BMWfan/paperless-ai/actions/runs/43527747171) (PR27)

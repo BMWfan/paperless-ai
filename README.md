@@ -121,7 +121,7 @@ See the [learning/extraction quality protocol](docs/learning-quality.md) and
 [measured outcomes](docs/quality-results.md) and the unqualified
 [section-evidence diagnostic](docs/section-evidence.md). The opt-in
 [extraction model qualification](docs/extraction-model-qualification.md) remains experimental; a passing test is not a general
-classification-accuracy guarantee. The approved [reference-context projection measurement](docs/reference-context-projection.md) tests reference contamination separately without activating a new production context.
+classification-accuracy guarantee. The approved [automatic identifier-role experiment](docs/automatic-identifier-roles.md) evaluates current versus historical source occurrences without manual marking or production activation. The approved [reference-context projection measurement](docs/reference-context-projection.md) tests reference contamination separately without activating a new production context.
 
 See the [isolated test guide](docs/test-environment.md), [SDD-Light process](.github/SDD-LIGHT.md) and [build/publication policy](docs/release-policy.md). Image publication and merges require separate owner approval.
 
