@@ -349,9 +349,25 @@ Run local metadata-verifier/frozen-input regressions with
 `python3 -m unittest discover -s tests/qwen3-readiness -p 'test_*.py' -v`.
 These fixtures prove verification behavior, not model quality. The later
 20-request smoke and conditional 120-request confirmation remain gated by the
-frozen contract; this first implementation exposes only phase zero. Keep model
+frozen contract; phase two is not yet exposed. Keep model
 weights off the small Cloud runtime. Existing historical measurement locks and
 raw answers remain immutable; only current workflow audit hashes are refreshed.
 Rollback removes this isolated manual stage and its test directory; it does not
 modify production configuration, learned data or native Paperless metadata.
 Complete Codex token/cost counters are unavailable: savings remain UNMEASURED.
+
+Phase zero passed on 2026-11-17 at `efa5658` (run `44051912267`, zero generation
+requests). The independently downloaded ZIP matches GitHub's SHA256
+`193196e1b952cb1a867825b40f8112602bc1360e6dc3b3e35820b8d94f6dd597`.
+Original files and their checksums are committed in `metadata-archive/` and
+`model-lock.json`; the exact model manifest is
+`0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0`.
+
+The `qwen3-smoke` manual profile verifies that pinned manifest, then attempts the
+20 frozen requests exactly once. It preserves partial/error responses and
+unexpected thinking instead of repairing answers. `qwen3-smoke.json` records the
+predeclared stop gate. A negative quality gate is archived as a measured result;
+it is not a reason to rerun CI. Run attempt 1 and an absent `smoke-artifact.json`
+are required. Never dispatch this profile again after measurement. Fixtures run
+with `node --test tests/qwen3-readiness.test.js`; they cannot authorize phase two.
+At this stage there is no phase-two execution profile.

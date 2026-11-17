@@ -7,7 +7,7 @@
   "CONTRACT.md": "9d693721c78dd3a8e69655241453abe05d9bbc44d324b8f5a86d46c712d4a691",
   "manifest.json": "94bf37cb1eb23d0bd81d71a1faba424bb458f614c4e68140c1cc93d4f1e87060",
   "../identifier-roles.test.js": "c7ef1e7907ecb240ac1cb18d55f8155c80c792ba74a1b4e4a11064260d562f2b",
-  "../../.github/workflows/classification-evaluation.yml": "82d80117c0f049d5196b64f159129adbce5a0506257e6b9dde6f151e212d53b2",
+  "../../.github/workflows/classification-evaluation.yml": "ed04692dab8de018184f36a23f31bd5c0b74006a9fc2b313b8a88b8540f2ae6d",
   "../quality/extraction/core.js": "ce5e6286832abc075d207da7a3ed2066d70df8ca9f9944d849a41c7dfc202d1b",
   "../quality/scoring.js": "739ee1bd3d035614a9c1e2d5f6b4d1786f94dfdfa2aead26131aa4a9934202ee",
   "../quality/corpus.js": "b2c64c87ae7812cc8df67eaf5ffd486a10ff03089325eaa5dd1983d82dd88cf8",

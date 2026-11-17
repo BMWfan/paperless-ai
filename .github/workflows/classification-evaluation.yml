@@ -19,7 +19,7 @@ on:
       extraction_stage:
         description: 'Approved extraction experiment: lock manifests or measure frozen arms'
         type: choice
-        options: [none, locks, measure, replay, projection, projection-replay, identifier-roles, identifier-roles-replay, qwen3-metadata]
+        options: [none, locks, measure, replay, projection, projection-replay, identifier-roles, identifier-roles-replay, qwen3-metadata, qwen3-smoke]
         default: none
 permissions:
   contents: read
@@ -467,3 +467,47 @@ jobs:
       - name: Remove only phase zero container
         if: always()
         run: docker rm -f qwen3-readiness-metadata
+
+  qwen3-contract:
+    if: github.event_name == 'pull_request'
+    name: Qwen3 frozen contract and metadata verification fixtures
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest discover -s tests/qwen3-readiness -p 'test_*.py' -v
+
+  qwen3-smoke:
+    if: github.event_name == 'workflow_dispatch' && inputs.extraction_stage == 'qwen3-smoke'
+    name: Qwen3 phase one - at most20 generation attempts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.0'
+      - name: Prepare frozen runner dependencies
+        run: npm ci --ignore-scripts
+      - name: Verify fixtures before any real inference
+        run: node --test tests/qwen3-readiness.test.js
+      - name: Pull exact locked model without generation retries
+        run: |
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test ! -f tests/qwen3-readiness/smoke-artifact.json
+          docker run -d --name qwen3-smoke --memory=8g --cpus=4 -p 127.0.0.1:11434:11434 -e OLLAMA_NO_CLOUD=1 -e OLLAMA_NUM_PARALLEL=1 ollama/ollama:0.12.6
+          for ready in $(seq 1 60); do docker exec qwen3-smoke ollama list >/dev/null 2>&1 && break; sleep 1; done
+          for attempt in 1 2 3; do docker exec qwen3-smoke ollama pull qwen3:4b-instruct-2507-q4_K_M && break; test "$attempt" -lt 3 || exit 1; done
+          docker cp qwen3-smoke:/root/.ollama/models/manifests/registry.ollama.ai/library/qwen3/4b-instruct-2507-q4_K_M /tmp/qwen3-manifest.json
+          echo '0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0  /tmp/qwen3-manifest.json' | sha256sum -c -
+      - name: Measure20 one-shot attempts and preserve the unchanged quality gate
+        run: node tests/qwen3-readiness/run.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qwen3-smoke
+          path: qwen3-smoke.json
+          if-no-files-found: warn
+      - name: Remove only phase one container
+        if: always()
+        run: docker rm -f qwen3-smoke
