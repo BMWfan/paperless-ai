@@ -1,0 +1,54 @@
+{
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "commit": "efa5658cc04bba68e7e308fe615d4253d90f2c60",
+  "run": "44051912267",
+  "attempt": "1",
+  "generationRequests": 0,
+  "passed": true,
+  "pullAttempts": [
+    {
+      "attempt": 1,
+      "exitCode": 0
+    }
+  ],
+  "metadata": {
+    "manifestDigest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+    "layers": [
+      {
+        "mediaType": "application/vnd.ollama.image.model",
+        "digest": "sha256:85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+        "size": 2497280480
+      },
+      {
+        "mediaType": "application/vnd.ollama.image.template",
+        "digest": "sha256:eade0a07cac7712787bbce23d12f9306adb4781d873d1df6e16f7840fa37afec",
+        "size": 1379
+      },
+      {
+        "mediaType": "application/vnd.ollama.image.license",
+        "digest": "sha256:d18a5cc71b84bc4af394a31116bd3932b42241de70c77d2b76d69a314ec8aa12",
+        "size": 11338
+      },
+      {
+        "mediaType": "application/vnd.ollama.image.params",
+        "digest": "sha256:0914c7781e001948488d937994217538375b4fd8c1466c5e7a625221abd3ea7a",
+        "size": 119
+      }
+    ],
+    "identityEvidence": "exact registry tag and original manifest; not independent weight provenance",
+    "runtimeVersion": "0.12.6",
+    "inferenceCompatibility": "UNMEASURED",
+    "memoryQualification": "UNMEASURED",
+    "accuracy": "UNMEASURED"
+  },
+  "files": {
+    "copy.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "manifest.json": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+    "pull-1.log": "619b7a76320b80d530da21a4c32bf2bed19966709f3c150da1a932fa2a47184b",
+    "ready.log": "c3524fd773301fdc4dec8030c16bc48ae623374f4f9e286028a3cce545a097cd",
+    "show.json": "76aa1237f7053ccea52c08e5f6fc3f70a8d3e8c671e5a0eb2cfbb3fcfc6e6d9c",
+    "start.log": "7d5e092455ce3c68763487060745db3dde445cb4aa7e749f0f0f1cf2070dc2f4",
+    "tags.json": "0e1101eb7a1cd7f2504eebae5fcf3acd39f535f6260d8404dd3a89f787d90342",
+    "version.json": "5496d7bf49b760894390b1239e5d14a73b431ef601074790acf1deba6cb7ec4f"
+  }
+}
