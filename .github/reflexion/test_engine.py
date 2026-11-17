@@ -14,6 +14,16 @@ class EngineTests(unittest.TestCase):
     def test_budget(self):
         self.assertEqual(retrieve([lesson()], "docker", budget=2), [])
         self.assertEqual(retrieve([lesson()], "docker", limit=0), [])
+    def test_invalid_budget(self):
+        for budget in (-1, 0, 1):
+            with self.assertRaises(ValueError):
+                retrieve([], "docker", budget=budget)
+        with self.assertRaises(ValueError):
+            retrieve([], "docker", limit=-1)
+    def test_credential_screen(self):
+        for action in ("token=" + "x"*24, "-----BEGIN PRIVATE KEY-----", "ghp_" + "x"*30):
+            with self.assertRaisesRegex(ValueError, "Potential credential"):
+                validate([lesson(action=action)])
     def test_candidate(self):
         self.assertEqual(retrieve([lesson(status="candidate")], "docker"), [])
     def test_supersession(self):
