@@ -371,3 +371,12 @@ it is not a reason to rerun CI. Run attempt 1 and an absent `smoke-artifact.json
 are required. Never dispatch this profile again after measurement. Fixtures run
 with `node --test tests/qwen3-readiness.test.js`; they cannot authorize phase two.
 At this stage there is no phase-two execution profile.
+
+
+The once-only smoke completed20 attempts at72bd751 (run44052878149):9/10 correct
+present IDs,0 wrong accepted IDs, but one180s timeout. The zero-protocol-failure
+gate failed, so no phase-two generation or native phase-two replay was run. The
+original report is permanently archived with checksums and a no-rerun marker;
+see [the technical result](qwen3-extraction-readiness.md). Do not repeat the
+manual profile or silently extend its timeout. A changed setup needs a new plan.
+The four Python regressions now also protect the original measured archive.

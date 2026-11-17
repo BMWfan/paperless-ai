@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import gzip
 from pathlib import Path
 import tempfile
 import unittest
@@ -63,6 +64,30 @@ class MetadataTest(unittest.TestCase):
             self.assertEqual(len(report['pullAttempts']), 3)
             self.assertFalse(any('curl' in command for command in commands))
             self.assertTrue(all(m.MODEL in command for command in commands if 'pull' in command))
+
+    def test_archived_smoke_is_original_complete_and_blocks_confirmation(self):
+        root = Path(__file__).parent
+        marker = json.loads((root / 'smoke-artifact.json').read_text())
+        stored = (root / marker['archive']).read_bytes()
+        self.assertEqual(m.digest(stored), marker['storedSha256'])
+        raw = gzip.decompress(stored)
+        self.assertEqual(m.digest(raw), marker['payloadSha256'])
+        report = json.loads(raw)
+        self.assertEqual(report['commit'], marker['commit'])
+        self.assertEqual(report['run'], marker['run'])
+        self.assertEqual(report['attempt'], 1)
+        self.assertNotIn('fixtureOnly', report)
+        self.assertTrue(report['complete'])
+        self.assertEqual(report['requestCount'], 20)
+        self.assertEqual(len(report['rows']), 20)
+        self.assertTrue(all(row['terminal'] for row in report['rows']))
+        self.assertEqual(marker['phase2Requests'], 0)
+        self.assertFalse(marker['gate']['passed'])
+        self.assertFalse(report['gate']['passed'])
+        self.assertEqual(report['gate'], json.loads((root / 'report.json').read_text()))
+        for row in report['rows']:
+            if 'response' in row:
+                self.assertEqual(json.loads(row['responseRaw']), row['response'])
 
     def test_frozen_inputs(self):
         root = Path(__file__).parent

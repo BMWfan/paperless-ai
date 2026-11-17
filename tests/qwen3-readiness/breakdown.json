@@ -1,0 +1,774 @@
+{
+  "byLanguage": {
+    "en": {
+      "documents": 10,
+      "failedAttempts": 0,
+      "fields": {
+        "invoice_number": {
+          "present": 2,
+          "absent": 8,
+          "missingTarget": 1,
+          "inapplicable": 7,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "contract_number": {
+          "present": 2,
+          "absent": 8,
+          "missingTarget": 1,
+          "inapplicable": 7,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "policy_number": {
+          "present": 1,
+          "absent": 9,
+          "missingTarget": 1,
+          "inapplicable": 8,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 1,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "amount": {
+          "present": 8,
+          "absent": 2,
+          "missingTarget": 0,
+          "inapplicable": 2,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 8,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "due_date": {
+          "present": 3,
+          "absent": 7,
+          "missingTarget": 0,
+          "inapplicable": 7,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 3,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "end_date": {
+          "present": 5,
+          "absent": 5,
+          "missingTarget": 0,
+          "inapplicable": 5,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 5,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 10,
+          "wrong": 0,
+          "missing": 0
+        },
+        "tags": {
+          "correct": 10,
+          "wrong": 0,
+          "missing": 0
+        },
+        "correspondent": {
+          "correct": 10,
+          "wrong": 0,
+          "missing": 0
+        },
+        "language": {
+          "correct": 10,
+          "wrong": 0,
+          "missing": 0
+        }
+      },
+      "rejections": {},
+      "durationMs": 1477611,
+      "promptTokens": 18333,
+      "generatedTokens": 1233
+    },
+    "de": {
+      "documents": 10,
+      "failedAttempts": 1,
+      "fields": {
+        "invoice_number": {
+          "present": 2,
+          "absent": 8,
+          "missingTarget": 1,
+          "inapplicable": 7,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "contract_number": {
+          "present": 2,
+          "absent": 8,
+          "missingTarget": 1,
+          "inapplicable": 7,
+          "raw": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "validated": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "correctPresent": 1,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "policy_number": {
+          "present": 1,
+          "absent": 9,
+          "missingTarget": 0,
+          "inapplicable": 9,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 1,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "amount": {
+          "present": 7,
+          "absent": 3,
+          "missingTarget": 0,
+          "inapplicable": 3,
+          "raw": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "validated": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "correctPresent": 6,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "due_date": {
+          "present": 3,
+          "absent": 7,
+          "missingTarget": 0,
+          "inapplicable": 7,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 3,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "end_date": {
+          "present": 4,
+          "absent": 6,
+          "missingTarget": 0,
+          "inapplicable": 6,
+          "raw": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "validated": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "correctPresent": 3,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 9,
+          "wrong": 0,
+          "missing": 1
+        },
+        "tags": {
+          "correct": 9,
+          "wrong": 0,
+          "missing": 1
+        },
+        "correspondent": {
+          "correct": 9,
+          "wrong": 0,
+          "missing": 1
+        },
+        "language": {
+          "correct": 9,
+          "wrong": 0,
+          "missing": 1
+        }
+      },
+      "rejections": {},
+      "durationMs": 1629982,
+      "promptTokens": 17300,
+      "generatedTokens": 1167
+    }
+  },
+  "byCohort": {
+    "present": {
+      "documents": 10,
+      "failedAttempts": 1,
+      "fields": {
+        "invoice_number": {
+          "present": 4,
+          "absent": 6,
+          "missingTarget": 0,
+          "inapplicable": 6,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 4,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "contract_number": {
+          "present": 4,
+          "absent": 6,
+          "missingTarget": 0,
+          "inapplicable": 6,
+          "raw": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "validated": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "correctPresent": 3,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "policy_number": {
+          "present": 2,
+          "absent": 8,
+          "missingTarget": 0,
+          "inapplicable": 8,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "amount": {
+          "present": 10,
+          "absent": 0,
+          "missingTarget": 0,
+          "inapplicable": 0,
+          "raw": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "validated": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "correctPresent": 9,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "due_date": {
+          "present": 4,
+          "absent": 6,
+          "missingTarget": 0,
+          "inapplicable": 6,
+          "raw": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 10,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 4,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "end_date": {
+          "present": 6,
+          "absent": 4,
+          "missingTarget": 0,
+          "inapplicable": 4,
+          "raw": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "validated": {
+            "correct": 9,
+            "wrong": 0,
+            "missing": 1
+          },
+          "correctPresent": 5,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 9,
+          "wrong": 0,
+          "missing": 1
+        },
+        "tags": {
+          "correct": 9,
+          "wrong": 0,
+          "missing": 1
+        },
+        "correspondent": {
+          "correct": 9,
+          "wrong": 0,
+          "missing": 1
+        },
+        "language": {
+          "correct": 9,
+          "wrong": 0,
+          "missing": 1
+        }
+      },
+      "rejections": {},
+      "durationMs": 1579443,
+      "promptTokens": 16867,
+      "generatedTokens": 1226
+    },
+    "missing": {
+      "documents": 5,
+      "failedAttempts": 0,
+      "fields": {
+        "invoice_number": {
+          "present": 0,
+          "absent": 5,
+          "missingTarget": 2,
+          "inapplicable": 3,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "contract_number": {
+          "present": 0,
+          "absent": 5,
+          "missingTarget": 2,
+          "inapplicable": 3,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "policy_number": {
+          "present": 0,
+          "absent": 5,
+          "missingTarget": 1,
+          "inapplicable": 4,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "amount": {
+          "present": 5,
+          "absent": 0,
+          "missingTarget": 0,
+          "inapplicable": 0,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 5,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "due_date": {
+          "present": 2,
+          "absent": 3,
+          "missingTarget": 0,
+          "inapplicable": 3,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 2,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "end_date": {
+          "present": 3,
+          "absent": 2,
+          "missingTarget": 0,
+          "inapplicable": 2,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 3,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 5,
+          "wrong": 0,
+          "missing": 0
+        },
+        "tags": {
+          "correct": 5,
+          "wrong": 0,
+          "missing": 0
+        },
+        "correspondent": {
+          "correct": 5,
+          "wrong": 0,
+          "missing": 0
+        },
+        "language": {
+          "correct": 5,
+          "wrong": 0,
+          "missing": 0
+        }
+      },
+      "rejections": {},
+      "durationMs": 765796,
+      "promptTokens": 9393,
+      "generatedTokens": 619
+    },
+    "inapplicable": {
+      "documents": 5,
+      "failedAttempts": 0,
+      "fields": {
+        "invoice_number": {
+          "present": 0,
+          "absent": 5,
+          "missingTarget": 0,
+          "inapplicable": 5,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "contract_number": {
+          "present": 0,
+          "absent": 5,
+          "missingTarget": 0,
+          "inapplicable": 5,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "policy_number": {
+          "present": 0,
+          "absent": 5,
+          "missingTarget": 0,
+          "inapplicable": 5,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "amount": {
+          "present": 0,
+          "absent": 5,
+          "missingTarget": 0,
+          "inapplicable": 5,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "due_date": {
+          "present": 0,
+          "absent": 5,
+          "missingTarget": 0,
+          "inapplicable": 5,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        },
+        "end_date": {
+          "present": 0,
+          "absent": 5,
+          "missingTarget": 0,
+          "inapplicable": 5,
+          "raw": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "validated": {
+            "correct": 5,
+            "wrong": 0,
+            "missing": 0
+          },
+          "correctPresent": 0,
+          "wrongAccepted": 0,
+          "absentFalsePositive": 0,
+          "errors": {}
+        }
+      },
+      "metadata": {
+        "document_type": {
+          "correct": 5,
+          "wrong": 0,
+          "missing": 0
+        },
+        "tags": {
+          "correct": 5,
+          "wrong": 0,
+          "missing": 0
+        },
+        "correspondent": {
+          "correct": 5,
+          "wrong": 0,
+          "missing": 0
+        },
+        "language": {
+          "correct": 5,
+          "wrong": 0,
+          "missing": 0
+        }
+      },
+      "rejections": {},
+      "durationMs": 762354,
+      "promptTokens": 9373,
+      "generatedTokens": 555
+    }
+  },
+  "counterCoverage": {
+    "returnedResponses": 19,
+    "attempts": 20,
+    "promptTokensReturned": 35633,
+    "generatedTokensReturned": 2400,
+    "timeoutTokens": "UNMEASURED",
+    "codexTokenSavings": "UNMEASURED"
+  }
+}
