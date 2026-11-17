@@ -6,7 +6,7 @@
   "ingestion.js": "d4891a10f4e3d29cb518d2be36acfc668f36a687599229b3de21838e6c7f9fb7",
   "measurement-lock.json": "974263ea1df81f7f1551b063d9ddb6dfa678f5680a29860788f6b6c3e06f0930",
   "../context-projection.test.js": "3534865450664ad103e040f47ffe3a590a6373b64745a8e80cfd04a31cdd0ee7",
-  "../../.github/workflows/classification-evaluation.yml": "fcd2bd3c5948279fc32641bb1032f18b3cc8a60adbdded4a0f82df81eedb3169",
+  "../../.github/workflows/classification-evaluation.yml": "82d80117c0f049d5196b64f159129adbce5a0506257e6b9dde6f151e212d53b2",
   "CONTRACT.md": "4253f2acfdfb10052aee0192897a0899f3cb48431afb66d99de100713e975f3d",
   "manifest.json": "047893af9409859a356abaf9fd37200eccb619d8762be2ba5c25216b6a50dc20",
   "../quality/extraction/core.js": "ce5e6286832abc075d207da7a3ed2066d70df8ca9f9944d849a41c7dfc202d1b",

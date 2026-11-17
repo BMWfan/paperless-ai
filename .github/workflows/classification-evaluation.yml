@@ -19,7 +19,7 @@ on:
       extraction_stage:
         description: 'Approved extraction experiment: lock manifests or measure frozen arms'
         type: choice
-        options: [none, locks, measure, replay, projection, projection-replay, identifier-roles, identifier-roles-replay]
+        options: [none, locks, measure, replay, projection, projection-replay, identifier-roles, identifier-roles-replay, qwen3-metadata]
         default: none
 permissions:
   contents: read
@@ -448,3 +448,22 @@ jobs:
       - name: Remove only the synthetic project
         if: always()
         run: docker compose -f docker-compose.test.yml down -v --remove-orphans
+
+  qwen3-metadata:
+    if: github.event_name == 'workflow_dispatch' && inputs.extraction_stage == 'qwen3-metadata'
+    name: Qwen3 phase zero metadata only - no generation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check exact candidate without generating any answer
+        run: python3 tests/qwen3-readiness/metadata.py qwen3-metadata
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qwen3-metadata
+          path: qwen3-metadata/
+          if-no-files-found: error
+      - name: Remove only phase zero container
+        if: always()
+        run: docker rm -f qwen3-readiness-metadata

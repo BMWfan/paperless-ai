@@ -330,3 +330,28 @@ it is distinct from the full official ngx replay. The original role measurement
 source lock is retained separately from the repaired audit/native runtime, with
 byte-identical old/new180-answer reports. Exact native outcomes and full original
 result/checksum evidence are linked from the experiment to PR32.
+
+### Staged Qwen3 readiness (SPEC #20)
+
+The approved contract and new, pre-answer corpus are in
+[`tests/qwen3-readiness/CONTRACT.md`](../tests/qwen3-readiness/CONTRACT.md).
+Start only `classification-evaluation.yml` → `extraction_stage=qwen3-metadata`
+on the approved `test/qwen3-extraction-readiness` branch, run attempt 1.
+This public CI stage pins Ollama 0.12.6 and an 8-GB/4-CPU container, pulls only
+`qwen3:4b-instruct-2507-q4_K_M` (at most three pre-inference attempts), and
+archives original manifest, runtime/show/tags metadata, pull logs and SHA256s.
+It contains no generation/chat requests. Missing or mismatched metadata stops
+with zero generations; do not substitute another tag or retry the workflow.
+Metadata size/availability does not establish inference compatibility, RAM
+sufficiency, instruction-tuning provenance or extraction accuracy.
+
+Run local metadata-verifier/frozen-input regressions with
+`python3 -m unittest discover -s tests/qwen3-readiness -p 'test_*.py' -v`.
+These fixtures prove verification behavior, not model quality. The later
+20-request smoke and conditional 120-request confirmation remain gated by the
+frozen contract; this first implementation exposes only phase zero. Keep model
+weights off the small Cloud runtime. Existing historical measurement locks and
+raw answers remain immutable; only current workflow audit hashes are refreshed.
+Rollback removes this isolated manual stage and its test directory; it does not
+modify production configuration, learned data or native Paperless metadata.
+Complete Codex token/cost counters are unavailable: savings remain UNMEASURED.
