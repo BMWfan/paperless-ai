@@ -37,6 +37,10 @@ def validate(rows):
                 if row["supersedes"] in replaced:
                     raise ValueError("Ambiguous supersession")
                 replaced.add(row["supersedes"])
+        # Heuristic only; human review remains mandatory.
+        payload = " ".join([row["id"], *row["tags"], row["trigger"], row["action"]])
+        if re.search(r"-----BEGIN [A-Z ]*PRIVATE KEY-----|(?:ghp_|github_pat_|sk-)[A-Za-z0-9_-]{16,}|(?:password|api[_ -]?key|token|secret)\s*[:=]\s*\S{8,}", payload, re.I):
+            raise ValueError("Potential credential in lesson")
         fp = (normalized(row["trigger"]), normalized(row["action"]))
         if fp in fingerprints:
             raise ValueError("Duplicate lesson")
@@ -46,8 +50,8 @@ def validate(rows):
 
 def retrieve(rows, query, budget=2000, limit=5):
     replaced = validate(rows)
-    if budget < 0 or limit < 0:
-        raise ValueError("Negative retrieval bounds")
+    if budget < 2 or limit < 0:
+        raise ValueError("Invalid retrieval bounds")
     terms = words(query)
     matches = []
     for row in rows:
