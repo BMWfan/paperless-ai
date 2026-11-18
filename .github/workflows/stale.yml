@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: "0 0 * * *" # Runs daily at midnight
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   stale:
     runs-on: ubuntu-latest
@@ -12,7 +16,7 @@ jobs:
     - name: Close stale issues and pull requests
       uses: actions/stale@v8
       with:
-        repo-token: ${{ secrets.stale_bot }}
+        repo-token: ${{ github.token }}
         stale-issue-message: "This issue has been marked as stale due to inactivity. Please respond to keep it open."
         stale-pr-message: "This pull request has been marked as stale due to inactivity. Please update it to keep it open."
         close-issue-message: "This issue has been closed due to lack of response."
