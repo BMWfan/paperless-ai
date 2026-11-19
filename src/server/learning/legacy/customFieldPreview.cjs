@@ -24,11 +24,11 @@ function occurrences(content,candidates){
   }))};
 }
 
-async function previewCustomFields(paperless,documentId,content,suggestions){
+async function previewCustomFields(paperless,documentId,content,suggestions,options={}){
   const document=await paperless.getDocument(documentId);
   const fullContent=typeof document.content==='string'?document.content:'';
   // Match the exact text submitted by the Manual screen (which caps at50k).
-  if(!fullContent||content!==fullContent.slice(0,50000)){
+  if((!fullContent&&!options.allowEmptyContent)||content!==fullContent.slice(0,50000)){
     const error=new Error('Document text changed. Reload the document and analyze again.');error.status=409;throw error;
   }
   const names=new Map(),definitions=new Map(),rows=[];
@@ -55,6 +55,7 @@ async function previewCustomFields(paperless,documentId,content,suggestions){
     if(evidence.count>1)flags.push('multiple_occurrences');
     rows.push({fieldId:definition?.id??null,name:definition?.name||name,type:definition?.data_type??null,
       currentValue:document.custom_fields?.find(row=>row.field===definition?.id)?.value??null,
+      options:definition?.data_type==='select'?(definition.extra_data?.select_options||[]).filter(option=>typeof option?.id==='string'&&typeof option?.label==='string').map(({id,label})=>({id,label})):[],
       proposedValue:raw??null,normalizedValue:normalized??null,flags,evidence,semanticStatus:'unverified'});
   }
   const ids=rows.map(row=>row.fieldId).filter(id=>id!==null);

@@ -59,7 +59,9 @@ into an existing fixture; use fresh disposable volumes for qualification.
 
 The native runner exercises real text ingestion, app classification through a
 deterministic local protocol fixture, typed-field preview/save, preservation of
-unselected values, invalid integer rejection, stale-snapshot rejection,
+unselected values, all eight writable field types (including zero/false,
+select, long text and leap-day dates), invalid integer/date rejection, explicit
+selected-value clearing, stale-snapshot rejection,
 unverified API edits, explicit session review, protected correction replay,
 external metadata detection and current-document extraction from learned label
 patterns. Direct external API edits emulate an automated client; they are **not**

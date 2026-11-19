@@ -650,3 +650,29 @@ test('single sign-on: set up, link the account, sign in and out at the provider'
   await expect(page.getByText(/Settings saved/)).toBeVisible();
   session = null;
 });
+
+test('selected native fields can be cleared explicitly while other values remain', async ({ page, request }) => {
+  await login(page);
+  const info = await (await request.get('/__demo/info')).json();
+  const headers = { Authorization: `Token ${info.paperlessToken}` };
+  const created: Record<string, number> = {};
+  for (const [name, data_type] of Object.entries({ count: 'integer', date: 'date', keep: 'string' })) {
+    const response = await request.post(`${info.paperlessUrl}/api/custom_fields/`, { headers, data: { name: `Fixture clear ${name}`, data_type } });
+    expect(response.ok()).toBe(true); created[name] = (await response.json()).id;
+  }
+  const before = await (await request.get(`${info.paperlessUrl}/api/documents/2/`, { headers })).json();
+  await request.patch(`${info.paperlessUrl}/api/documents/2/`, { headers, data: { custom_fields: [...before.custom_fields,
+    { field: created.count, value: 0 }, { field: created.date, value: '2032-02-29' }, { field: created.keep, value: 'untouched' },
+  ] } });
+  await page.goto('/review?doc=2');
+  await page.getByRole('button', { name: 'Review current fields', exact: true }).click();
+  await page.getByRole('checkbox', { name: 'Fixture clear count (integer)', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Fixture clear date (date)', exact: true }).check();
+  await page.getByRole('button', { name: 'Clear selected values', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Clear selected field values?', exact: true }).getByRole('button', { name: 'Clear values', exact: true }).click();
+  await expect(page.getByText('Selected field values cleared', { exact: true })).toBeVisible();
+  const after = await (await request.get(`${info.paperlessUrl}/api/documents/2/`, { headers })).json();
+  expect(after.custom_fields).toEqual(expect.arrayContaining([
+    { field: created.count, value: null }, { field: created.date, value: null }, { field: created.keep, value: 'untouched' },
+  ]));
+});

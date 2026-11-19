@@ -10,6 +10,7 @@ export interface FieldReview {
   reviewFieldIds: number[];
   fields: { field: number; value: string | number | boolean }[];
 }
+export interface FieldClear { documentId: number; snapshotDigest: string; reviewFieldIds: number[]; fields: number[] }
 export interface FieldPreview {
   documentId: number;
   snapshotDigest: string;
@@ -27,6 +28,7 @@ function adapter(ctx: AppContext) {
   let snapshot: Promise<PaperlessCustomField[]> | undefined;
   const definitions = () => snapshot ??= ctx.paperless().customFields();
   return {
+    getCustomFields: definitions,
     getDocument: (id: number) => ctx.paperless().getDocument(id),
     getCustomFieldDefinition: async (id: number) => {
       const field = (await definitions()).find(row => row.id === id);
@@ -55,4 +57,23 @@ export function learnedFields(ctx: AppContext, id: number, content: string): Pro
 }
 export function reviewedFields(ctx: AppContext, doc: PaperlessDocument, request: FieldReview): Promise<{ custom_fields: { field: number; value: unknown }[] }> {
   return bridge(() => review.prepareReviewedFields(adapter(ctx), doc.id, doc, request));
+}
+
+export function clearedFields(ctx: AppContext, doc: PaperlessDocument, request: FieldClear): Promise<{ custom_fields: { field: number; value: unknown }[] }> {
+  return bridge(() => review.prepareClearedFields(adapter(ctx), doc.id, doc, request));
+}
+export function currentFields(ctx: AppContext, id: number, content: string, offset = 0): Promise<FieldPreview> {
+  return bridge(async () => {
+    const service = adapter(ctx), document = await service.getDocument(id), definitions = await service.getCustomFields();
+    const assigned = document.custom_fields ?? [];
+    const suggestions = assigned.slice(offset, offset + 50).flatMap(row => {
+      const definition = definitions.find(field => field.id === row.field);
+      return definition ? [{ field_name: definition.name, value: row.value }] : [];
+    });
+    const result = await preview.previewCustomFields(service, id, content, suggestions, { allowEmptyContent: true });
+    const used = definitions.filter(field => result.reviewFieldIds.includes(field.id));
+    if (result.snapshotDigest !== review.snapshotDigest(id, document, used)) throw new HttpProblem(409, 'Document changed; refresh before editing fields');
+    for (const row of result.rows as { flags: string[] }[]) row.flags = row.flags.filter(flag => !['no_exact_occurrence', 'multiple_occurrences', 'not_provided'].includes(flag));
+    return { ...result, suggestionSource: 'current_native_values', offset, totalFields: assigned.length, hasMoreFields: offset + 50 < assigned.length };
+  });
 }

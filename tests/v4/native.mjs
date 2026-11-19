@@ -64,14 +64,15 @@ assert.equal((await stats()).calls, beforeLegacyReplay, 'legacy correction did n
 assert.equal((await pl(`/documents/${fixture.legacyDocumentId}/`)).title, 'Confirmed imported legacy correction');
 console.log('PASS: legacy user/configuration/correction/archive migrated; sources unchanged and correction protected.');
 
-const content = 'SYNTHETIC TEST DATA ONLY\nInvoice number: NEW-42\nPrevious invoice: OLD-17\nTotal: CHF42.50\nFixture Supplier';
+const longNote = 'Synthetic long text '.repeat(8).trim();
+const content = 'SYNTHETIC TEST DATA ONLY\nInvoice number: NEW-42\nPrevious invoice: OLD-17\nTotal: CHF42.50\nCount: 0\nRatio: 1.25\nPaid: false\nCategory: Fixture\nDate: 2032-02-29\nFixture Supplier\nNote: ' + longNote;
 const document = await upload(content);
 const fields = {};
-for (const [key, data_type] of Object.entries({ number: 'string', amount: 'monetary', count: 'integer', keep: 'string' })) {
+for (const [key, data_type] of Object.entries({ number: 'string', amount: 'monetary', count: 'integer', keep: 'string', ratio: 'float', flag: 'boolean', category: 'select', note: 'longtext', date: 'date', invalidDate: 'date' })) {
   const name = `Fixture ${key}`;
-  fields[key] = (await pl('/custom_fields/?page_size=100')).results.find(row => row.name === name) ?? await pl('/custom_fields/', { name, data_type, ...(key === 'amount' ? { extra_data: { default_currency: 'EUR' } } : {}) }, 'POST', 201);
+  fields[key] = (await pl('/custom_fields/?page_size=100')).results.find(row => row.name === name) ?? await pl('/custom_fields/', { name, data_type, ...(key === 'amount' ? { extra_data: { default_currency: 'EUR' } } : data_type === 'select' ? { extra_data: { select_options: [{ label: 'Fixture' }] } } : {}) }, 'POST', 201);
 }
-await pl(`/documents/${document.id}/`, { custom_fields: [{ field: fields.keep.id, value: 'untouched' }] }, 'PATCH');
+await pl(`/documents/${document.id}/`, { custom_fields: [{ field: fields.keep.id, value: 'untouched' }, { field: fields.invalidDate.id, value: '2030-01-01' }] }, 'PATCH');
 await ai('/api/processing/documents', { ids: [document.id] }); await drain();
 let current = await pl(`/documents/${document.id}/`);
 assert.equal(current.title, 'Synthetic native invoice');
@@ -90,17 +91,31 @@ console.log('PASS: ordinary writes rejected fractional integers and preserved ex
 
 const snapshot = await ai(`/api/documents/${document.id}/fields/preview`, { content: current.content.slice(0, 50000), suggestions: [
   { field_name: fields.number.name, value: 'NEW-42' }, { field_name: fields.amount.name, value: 'CHF42.50' }, { field_name: fields.count.name, value: '1.5' },
+  { field_name: fields.ratio.name, value: 1.25 }, { field_name: fields.flag.name, value: false }, { field_name: fields.category.name, value: 'Fixture' },
+  { field_name: fields.note.name, value: longNote }, { field_name: fields.date.name, value: '2032-2-29' }, { field_name: fields.invalidDate.name, value: '2031-02-30' },
 ] });
 assert.equal(snapshot.readOnly, true);
 assert.equal(snapshot.rows.find(row => row.fieldId === fields.count.id).canApply, false);
+assert.equal(snapshot.rows.find(row => row.fieldId === fields.flag.id).normalizedValue, false);
+assert.equal(snapshot.rows.find(row => row.fieldId === fields.invalidDate.id).canApply, false);
 const review = { snapshotDigest: snapshot.snapshotDigest, reviewFieldIds: snapshot.reviewFieldIds };
 await ai(`/api/documents/${document.id}/fields/apply`, { ...review, fields: [{ field: fields.count.id, value: '1.5' }] }, aiHeaders, 400);
+await ai(`/api/documents/${document.id}/fields/apply`, { ...review, fields: [{ field: fields.invalidDate.id, value: '2031-02-30' }, { field: fields.number.id, value: 'SHOULD-NOT-SAVE' }] }, aiHeaders, 400);
 assert.equal((await pl(`/documents/${document.id}/`)).modified, current.modified, 'preview/invalid value changed the document');
-await ai(`/api/documents/${document.id}/fields/apply`, { ...review, fields: [{ field: fields.number.id, value: 'NEW-42' }, { field: fields.amount.id, value: 'CHF42.50' }] });
+await ai(`/api/documents/${document.id}/fields/apply`, { ...review, fields: [{ field: fields.number.id, value: 'NEW-42' }, { field: fields.amount.id, value: 'CHF42.50' },
+  { field: fields.count.id, value: 0 }, { field: fields.ratio.id, value: 1.25 }, { field: fields.flag.id, value: false },
+  { field: fields.category.id, value: fields.category.extra_data.select_options.find(option => option.label === 'Fixture').id },
+  { field: fields.note.id, value: longNote }, { field: fields.date.id, value: '2032-2-29' },
+] });
 current = await pl(`/documents/${document.id}/`);
 assert.ok(current.custom_fields.some(row => row.field === fields.keep.id && row.value === 'untouched'));
 assert.ok(current.custom_fields.some(row => row.field === fields.number.id && row.value === 'NEW-42'));
 assert.ok(current.custom_fields.some(row => row.field === fields.amount.id && row.value === 'CHF42.50'));
+const saved = new Map(current.custom_fields.map(row => [row.field, row.value]));
+assert.equal(saved.get(fields.count.id), 0); assert.equal(saved.get(fields.ratio.id), 1.25);
+assert.equal(saved.get(fields.flag.id), false); assert.equal(saved.get(fields.note.id), longNote);
+assert.equal(saved.get(fields.category.id), fields.category.extra_data.select_options.find(option => option.label === 'Fixture').id);
+assert.equal(saved.get(fields.date.id), '2032-02-29'); assert.equal(saved.get(fields.invalidDate.id), '2030-01-01');
 await ai(`/api/documents/${document.id}/fields/apply`, { ...review, fields: [{ field: fields.number.id, value: 'STALE' }] }, aiHeaders, 409);
 assert.ok(!(await ai('/api/learning/examples')).examples.some(row => row.document_id === document.id), 'API-key edit was automatically trusted as human');
 const pending = (await ai('/api/learning/events?status=pending&limit=100')).events.find(row => row.document_id === document.id);
@@ -115,6 +130,15 @@ const callsBefore = (await stats()).calls;
 await ai('/api/processing/documents', { ids: [document.id] }); await drain();
 assert.equal((await stats()).calls, callsBefore, 'protected correction caused another model request');
 console.log('PASS: native typed fields, stale-write rejection, explicit review and confirmed-learning protection.');
+const clearSnapshot = await ai(`/api/documents/${document.id}/fields/current`, { content: current.content.slice(0, 50000) });
+await ai(`/api/documents/${document.id}/fields/clear`, { snapshotDigest: clearSnapshot.snapshotDigest, reviewFieldIds: clearSnapshot.reviewFieldIds, fields: [fields.count.id, fields.date.id, fields.flag.id] });
+const cleared = new Map((await pl(`/documents/${document.id}/`)).custom_fields.map(row => [row.field, row.value]));
+for (const key of ['count', 'date', 'flag']) assert.equal(cleared.get(fields[key].id), null, `explicit ${key} clear failed`);
+assert.equal(cleared.get(fields.keep.id), 'untouched'); assert.equal(cleared.get(fields.invalidDate.id), '2030-01-01');
+assert.equal(cleared.get(fields.number.id), 'NEW-42'); assert.equal(cleared.get(fields.amount.id), 'CHF42.50');
+assert.equal((await stats()).calls, callsBefore, 'explicit field clearing called a model');
+console.log('PASS: all eight typed fields including 0/false, real dates/select/longtext; explicit clears retained unselected values.');
+
 await ai('/api/learning/settings', { mode: 'automatic' });
 await pl(`/documents/${document.id}/`, { title: 'External automated title change' }, 'PATCH');
 await ai('/api/learning/scan', {});

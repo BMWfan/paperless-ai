@@ -1,4 +1,4 @@
-import { learnedFields, previewFields } from '../learning/fields.js';
+import { currentFields, learnedFields, previewFields } from '../learning/fields.js';
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
@@ -138,6 +138,7 @@ export const documentRoutes =
     );
 
     const fieldParams = z.object({ id: z.coerce.number().int().positive() });
+    app.post('/api/documents/:id/fields/current', { schema: { params: fieldParams, body: z.object({ content: z.string().max(50000), offset: z.number().int().min(0).default(0) }).strict() } }, async req => currentFields(ctx, req.params.id, req.body.content, req.body.offset));
     app.post('/api/documents/:id/fields/preview', { schema: { params: fieldParams, body: z.object({
       content: z.string().max(50000), suggestions: z.array(z.object({ field_name: z.string().max(128), value: z.union([z.string().max(50000), z.number(), z.boolean(), z.null()]) })).max(50),
     }).strict() } }, async req => previewFields(ctx, req.params.id, req.body.content, req.body.suggestions));
@@ -154,6 +155,20 @@ export const documentRoutes =
       });
       rag.requestSync();
       return { document: summary(updated), notes: plan.notes, changed: Object.keys(plan.patch) };
+    });
+
+    app.post('/api/documents/:id/fields/clear', { schema: { params: fieldParams, body: z.object({
+      snapshotDigest: z.string().regex(/^[a-f0-9]{64}$/), reviewFieldIds: z.array(z.number().int().positive()).min(1).max(50),
+      fields: z.array(z.number().int().positive()).min(1).max(50),
+    }).strict() } }, async req => {
+      const doc = await ctx.paperless().getDocument(req.params.id);
+      const plan = await planManualUpdate(ctx, doc, {});
+      const updated = await applyPlannedUpdate(ctx, doc, plan, {
+        source: 'manual', actor: req.principal?.kind === 'user' ? `user:${req.principal.userId}` : undefined,
+        fieldClear: { ...req.body, documentId: req.params.id },
+      });
+      rag.requestSync();
+      return { document: summary(updated), changed: Object.keys(plan.patch) };
     });
 
     // Playground: recent documents with thumbnails, analysed with a custom prompt (nothing is saved).

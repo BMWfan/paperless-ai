@@ -1,4 +1,4 @@
-import { normalizeFieldValue, reviewedFields, type FieldReview } from '../learning/fields.js';
+import { clearedFields, normalizeFieldValue, reviewedFields, type FieldClear, type FieldReview } from '../learning/fields.js';
 /**
  * Turns an AI suggestion (or a manual edit) into a Paperless PATCH, applies
  * it and records an undoable history entry.
@@ -290,6 +290,7 @@ export interface ApplyMeta {
   /** Only authenticated, explicitly chosen UI changes may become trusted feedback. */
   actor?: string;
   fieldReview?: FieldReview;
+  fieldClear?: FieldClear;
   analysis?: AnalysisResult;
 }
 
@@ -303,6 +304,8 @@ export async function applyPlannedUpdate(ctx: AppContext, doc: PaperlessDocument
     }
     // Capture external changes before attributing the following write to this application.
     ctx.learning.observe(current, 'unknown');
+    if (info.fieldReview && info.fieldClear) throw new HttpProblem(400, 'Choose save or clear, not both');
+    if (info.fieldClear) Object.assign(plan.patch, await clearedFields(ctx, current, info.fieldClear));
     if (info.fieldReview) Object.assign(plan.patch, await reviewedFields(ctx, current, info.fieldReview));
     const updated = await applyPlannedUpdateUnlocked(ctx, current, plan, info);
     const source = info.source === 'manual' ? (info.actor ? 'confirmed_ui' : 'unknown') : 'self_write';
@@ -318,7 +321,7 @@ async function applyPlannedUpdateUnlocked(ctx: AppContext, doc: PaperlessDocumen
       updated = await ctx.paperless().updateDocument(doc.id, plan.patch);
     } catch (err) {
       // One unacceptable custom field value must not cost the title, tags and correspondent.
-      if (info.fieldReview || !withoutRejectedCustomFields(err, plan)) throw err;
+      if (info.fieldReview || info.fieldClear || !withoutRejectedCustomFields(err, plan)) throw err;
       updated = Object.keys(plan.patch).length ? await ctx.paperless().updateDocument(doc.id, plan.patch) : doc;
     }
   }

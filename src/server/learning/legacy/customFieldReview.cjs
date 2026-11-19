@@ -45,12 +45,16 @@ async function freshDefinitions(paperless,ids){
   }
   return definitions;
 }
-// Called only by the existing writer, while its document lock is held.
-async function prepareReviewedFields(paperless,documentId,document,request){
-  const review=validateReviewRequest(request);
+async function verifiedDefinitions(paperless,documentId,document,review){
   if(review.documentId!==Number(documentId))throw reviewError(400,'Document does not match the reviewed snapshot');
   const definitions=await freshDefinitions(paperless,review.reviewFieldIds);
   if(snapshotDigest(Number(documentId),document,definitions)!==review.snapshotDigest)throw reviewError(409,'Document or fields changed. Analyze again before saving.');
+  return definitions;
+}
+// Called only by the existing writer, while its document lock is held.
+async function prepareReviewedFields(paperless,documentId,document,request){
+  const review=validateReviewRequest(request);
+  const definitions=await verifiedDefinitions(paperless,documentId,document,review);
   const values=new Map();
   for(const selected of review.fields){
     const definition=definitions.find(field=>field.id===selected.field);
@@ -59,7 +63,18 @@ async function prepareReviewedFields(paperless,documentId,document,request){
     if(value===undefined)throw reviewError(400,'Selected value is invalid for its field type');
     values.set(selected.field,{field:selected.field,value});
   }
-  // Preserve every unselected native value, including types this editor cannot write.
   return {custom_fields:[...values.values(),...(document.custom_fields||[]).filter(row=>!values.has(row.field))]};
 }
-module.exports={snapshotDigest,validateReviewRequest,prepareReviewedFields,reviewError,isReviewableType:type=>types.has(type)};
+async function prepareClearedFields(paperless,documentId,document,request){
+  if(!Array.isArray(request?.fields))throw reviewError(400,'Select fields to clear');
+  // Reuse snapshot/ID validation. The marker is never a field value or a model suggestion.
+  const review=validateReviewRequest({...request,fields:request.fields.map(field=>({field,value:'explicit clear'}))});
+  const definitions=await verifiedDefinitions(paperless,documentId,document,review);
+  const selected=new Set(review.fields.map(row=>row.field));
+  for(const id of selected){
+    if(!types.has(definitions.find(field=>field.id===id)?.data_type))throw reviewError(400,'Selected field type is not supported');
+    if(!(document.custom_fields||[]).some(row=>row.field===id))throw reviewError(409,'Selected field is no longer assigned');
+  }
+  return {custom_fields:(document.custom_fields||[]).map(row=>selected.has(row.field)?{field:row.field,value:null}:row)};
+}
+module.exports={snapshotDigest,validateReviewRequest,prepareReviewedFields,prepareClearedFields,reviewError,isReviewableType:type=>types.has(type)};

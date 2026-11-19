@@ -65,16 +65,25 @@ cross-origin changes, fresh confirmation and stale rejection. Exact counts and
 commit evidence belong in the eventual PR; these intermediate working-tree
 results are not release qualification.
 
-Still required before readiness:
+Current readiness status (2026-11-19):
 
-- Verify the follow-up conservative contract across automatic/manual writes in CI; reviewed preview/save and field hints are ported.
-- Recheck the completed paginated legacy management and audit history at the final committed revision.
-- Keep the proven CI/Compose counterpart current without real-model inference; baseline qualification passed at baa6628.
-- Recheck the native API/restart/upgrade matrix after each runtime change; the baseline passed at baa6628 (see evidence below).
-- Repeat complete tests at the final committed revision and review the complete diff. Build and 18 synthetic browser tests passed during development.
-- Update README, test environment instructions and affected legacy references.
-- Resolve the existing no-new-PR constraint before opening any linked draft PR; obtain the required independent review and owner
-  approval for any prerelease, merge, release or deployment separately.
+| Requirement | Evidence / remaining work |
+| --- | --- |
+| Maintained upstream ancestry and second update | Released 4.2 and 4.3 are true merge ancestors; 83d1021 passed general and native matrix CI. |
+| Durable learning, confirmation and management | Dedicated adapter, settings/events/examples, legacy corrections, review/revocation and audit history ported; API/browser tests pass at 83d1021. |
+| Migration integrity and rollback | Source-preserving transactional learning import, malformed-input guards and idempotency tested; real native seeded legacy import/restart passed at 83d1021. Production restore rehearsal remains a deployment gate. |
+| Native typed fields and preservation | Strict reviewed and ordinary writer qualified at 83d1021. Explicit clearing/current-value editor is the pending parity extension below. |
+| Provenance | Authenticated explicit UI writes can establish human provenance; self-writes never teach; external/API-key changes require review. Real native workflow execution and native AI coexistence are not qualified by simulated external edits. |
+| Reproducible integration | Official unchanged ngx 3.5.1 plus retained-volume 3.4.2-to-3.5.1 upgrade and app restart passed at 83d1021. Recheck every changed runtime head. |
+| Provider independence and quality | Common bounded learning context and synthetic provider fixtures exist. Real-model comparative accuracy and real Entra tenant qualification remain unmeasured. |
+| Resource-efficient change detection | Paginated metadata passes avoid routine full-content synchronization. Incremental cursor/deletion reconciliation is a separately scoped future optimization. |
+| Documentation and review | Current migration/test instructions maintained with code; historical results are dated below. Final complete-diff review and exact-head qualification still required. |
+| Delivery gates | No new PR is authorized under the current constraint. Resolve it before opening the required linked draft PR. Functional prerelease, main merge, publication and deployment require their separate owner gates. |
+
+Do not equate the passing baseline with completion of every original project
+requirement. Native candidate adapters, workflow execution scenarios and measured
+structured-extraction quality remain explicit follow-ups rather than silently
+implemented capabilities.
 
 Historical model evidence is immutable. `docs/historical-evidence-lock.json`
 and `node scripts/audit-historical-evidence.mjs` check archived hashes; they do
@@ -226,4 +235,47 @@ PaddleOCR-model case skipped, 47 files; TypeScript, full lint, build and all 35
 historical hashes passed. All 21 Playwright cases passed, including upstream
 OIDC linking/sign-in/provider logout through a local mock and the fork's learning
 and legacy-revocation flows. This does not certify a real Entra tenant. The
-expanded native legacy-data fixture still requires its next CI run.
+expanded native legacy-data fixture passed both native CI matrix jobs at
+83d1021b8f90435b94ab15841229d521ab2b572f: run 44472769954. General CI
+44472769970 also passed at that exact commit. These results precede the
+explicit-clearing extension below.
+
+
+### Explicit field editing and clearing (SPEC #41 parity)
+
+The current-field editor reads assigned native values without asking a model or
+requiring OCR. It pages at 50 assigned fields, keeps zero/false visible, and uses
+native boolean, select, date and long-text controls. Unsupported or ambiguous
+field definitions remain read-only. Extraction and learned-pattern suggestions
+remain unverified and never implicitly clear existing values.
+
+`POST /api/documents/:id/fields/current` takes the current text prefix (maximum
+50,000 characters) and optional nonnegative `offset`. It returns the normal
+review snapshot plus `suggestionSource: current_native_values`, pagination and
+current values. `POST /api/documents/:id/fields/clear` requires that snapshot's
+`reviewFieldIds`, `snapshotDigest` and an explicit nonempty list of selected
+field IDs. Under the existing document writer lock, fresh definitions and the
+whole document are checked before any write. Only selected supported assigned
+fields receive null; unselected/unsupported values are retained. Stale snapshots
+return 409, invalid selections return 400, and native errors are not retried by
+dropping custom fields. Ordinary reviewed saving continues to reject null.
+
+The UI requires a separate confirmation for clearing. API-key changes retain
+unknown provenance; only an authenticated user's explicit action can be human
+feedback under the configured learning mode. No new configuration or database
+schema is introduced. Rollback restores the prior feature-branch application;
+cleared values are data changes and require normal document-history restoration
+if the user wants to undo them.
+
+The synthetic native runner now covers all eight writable field types, zero and
+false, a leap-day date, invalid-date atomic rejection, explicit selected clears
+and preservation of other values. This extension requires a fresh CI result;
+the earlier 83d1021 qualification does not establish its native compatibility.
+
+Separate self-review of this extension checked the authenticated route boundary,
+strict request schema, writer lock and fresh snapshot, unsupported-field
+preservation, no fallback that drops rejected fields, zero/false handling,
+UI confirmation and existing provenance attribution. This is a self-review,
+not an independent AI review. The temporary browser failure caused by concurrent
+asset rebuilding is excluded from passing evidence; browser verification must
+run after other web builds complete.
