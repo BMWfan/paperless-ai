@@ -64,8 +64,15 @@ select, long text and leap-day dates), invalid integer/date rejection, explicit
 selected-value clearing, stale-snapshot rejection,
 unverified API edits, explicit session review, protected correction replay,
 external metadata detection and current-document extraction from learned label
-patterns. Direct external API edits emulate an automated client; they are **not**
-proof of a configured native workflow or native AI provider integration.
+patterns. The native runner also creates a deterministic updated-document assignment
+workflow restricted to its fresh synthetic tag. An authenticated app save
+triggers the actual native title action. The runner waits for execution, asserts
+unknown/pending provenance and no active learned workflow value, retains a
+foreign custom field, verifies no model call and disables only that workflow in
+finally. Both synchronous and asynchronous native responses are accepted;
+workflow-written metadata must never become human-confirmed feedback.
+This does not qualify native AI provider integration, scheduled/date triggers
+or custom-field title templates.
 
 ### Restart without reinitializing data
 

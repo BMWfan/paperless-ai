@@ -151,5 +151,34 @@ const hints = await ai(`/api/documents/${target.id}/fields/hints`, { content: ta
 assert.ok(hints.rows.some(row => row.fieldId === fields.number.id && row.normalizedValue === 'NEW-99'), 'label pattern did not read the current document number');
 assert.ok(!hints.rows.some(row => row.normalizedValue === 'NEW-42'), 'old learned value was copied into the new document');
 assert.equal((await stats()).calls, callsBefore, 'field hints called a model');
+// Real native workflow, scoped to a newly created fixture tag/document only.
+const workflowTag = await pl('/tags/', { name: `Fixture workflow ${Date.now()}`, matching_algorithm: 0 }, 'POST', 201);
+const workflowDoc = await upload('SYNTHETIC TEST DATA ONLY\nDeterministic native workflow provenance fixture.');
+await pl(`/documents/${workflowDoc.id}/`, { tags: [workflowTag.id], custom_fields: [{ field: fields.keep.id, value: 'workflow untouched' }] }, 'PATCH');
+await ai('/api/learning/scan', {}); // Baseline before either writer changes the document.
+const workflowTitle = 'Fixture workflow-owned title';
+const nativeWorkflow = await pl('/workflows/', {
+  name: `Fixture assignment ${Date.now()}`, order: 1, enabled: true,
+  triggers: [{ type: 3, filter_has_tags: [workflowTag.id] }],
+  actions: [{ type: 1, assign_title: workflowTitle }],
+}, 'POST', 201);
+try {
+  const response = await ai(`/api/documents/${workflowDoc.id}/apply`, { title: 'Explicit human requested title' }, session);
+  assert.ok(['Explicit human requested title', workflowTitle].includes(response.document.title), 'unexpected app-save response');
+  const workflowAfter = await waitFor(async () => {
+    const doc = await pl(`/documents/${workflowDoc.id}/`);
+    return doc.title === workflowTitle && doc;
+  }, 'actual updated-document workflow assignment');
+  assert.ok(workflowAfter.custom_fields.some(row => row.field === fields.keep.id && row.value === 'workflow untouched'));
+  await ai('/api/learning/scan', {});
+  const workflowEvents = (await ai(`/api/learning/events?limit=100&q=${workflowDoc.id}`)).events.filter(row => row.document_id === workflowDoc.id);
+  assert.ok(workflowEvents.some(row => row.status === 'pending' && row.source === 'unknown' && row.metadata.title === workflowTitle), 'native workflow change was not pending/unverified');
+  assert.ok(!workflowEvents.some(row => row.status === 'confirmed' && row.metadata.title === workflowTitle), 'native workflow value was falsely confirmed as human');
+  assert.ok(!(await ai('/api/learning/examples')).examples.some(row => row.document_id === workflowDoc.id && row.active), 'native workflow result became active learned feedback');
+  assert.equal((await stats()).calls, callsBefore, 'deterministic workflow fixture called a model');
+  console.log('PASS: real native updated workflow after authenticated app save stayed unknown/pending; foreign values preserved without inference.');
+} finally {
+  await pl(`/workflows/${nativeWorkflow.id}/`, { enabled: false }, 'PATCH');
+}
 fs.writeFileSync(expectedFile, JSON.stringify({ scope: fixture.scope, documentId: document.id, pendingEventId: external.id, modelCalls: callsBefore, mode: (await ai('/api/learning/settings')).mode }), { mode: 0o600 });
 console.log('PASS: external metadata stayed pending in automatic mode; learned pattern extracted NEW-99 instead of copying NEW-42.');

@@ -332,3 +332,19 @@ Local verification before this last guard: 597 Vitest cases passed, one skipped;
 typecheck, lint and build passed. Those counts are an intermediate checkpoint,
 not qualification of the final correction. The final guard needs its focused
 regression and new exact-head CI/native matrix.
+
+
+### Real native workflow fixture follow-up (SPEC #41)
+
+The next runner revision adds a real updated-document assignment workflow to
+the existing unchanged official-image matrix. It uses one newly created fixture
+tag/document and the imported synthetic user's authenticated app session. The
+app requests a title; the native workflow assigns a different title. The runner
+waits for the actual result, scans metadata and asserts unknown/pending state,
+no human-confirmed workflow value, no active workflow-derived example, retained
+unrelated fields and no model call. Its finally block disables only its own
+workflow. The test accommodates synchronous and asynchronous native execution.
+This is prepared coverage until the new exact-head matrix passes; previous
+fbe982c evidence did not include configured workflow execution. Native AI,
+scheduled workflows and title templates are still separate scenarios. No app
+code or production workflow is changed by this fixture extension.
