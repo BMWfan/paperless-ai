@@ -288,3 +288,47 @@ UI confirmation and existing provenance attribution. This is a self-review,
 not an independent AI review. The temporary browser failure caused by concurrent
 asset rebuilding is excluded from passing evidence; browser verification must
 run after other web builds complete.
+
+
+### Separate PR #45 review — response provenance
+
+Review of `b223580` found a blocking attribution defect in the migrated writer:
+a native PATCH response containing unrequested metadata could be treated as
+`confirmed_ui` in a user save, or hidden as `self_write` after an automatic save.
+A synthetic response adding a tag reproduced an unwanted confirmed example;
+a synthetic automatic response changing the requested title produced no pending
+event. These were Paperless-AI defects, not established Paperless-ngx defects.
+
+The writer now compares normalized returned metadata with the fresh before-state
+plus the actual final patch (including any allowed automatic fallback). A
+mismatch records unknown provenance and requires review. An exact authenticated
+UI change still qualifies normally. Later asynchronous workflow changes remain
+unknown when observed; this check does not claim atomic compare-and-swap against
+external clients or qualification of real configured native workflow execution.
+
+Review scope includes the dedicated learning adapter/store/migration, lifecycle
+and writer hooks, field contracts, learning/review UI, synthetic integration
+fixtures, publication barriers, action maintenance and immutable evidence.
+Upstream4 is a substantial architecture migration; existing upstream tests and
+source review do not establish absence of all inherited defects. This separate
+pass is by the implementing agent, not an independent review. Final exact-head
+CI and owner/prerelease gates remain required after this correction.
+
+A second reproduced review finding allowed a classification plan to save after
+the native OCR/content text changed while metadata remained identical. The
+pre-write check now rejects content differences as well as tracked metadata
+differences with 409, before PATCH. It does not rely solely on the modified
+timestamp. This cannot eliminate an external race after the fresh read; a native
+conditional-write API would be required for a cross-process atomic guarantee.
+
+A third reproduced finding (P1) concerned confirmation after an automatic plan
+was prepared: the earlier engine/planner protection checks did not guard the
+final writer. Under the document lock, the writer now rechecks confirmed/legacy
+protection after the fresh read and rejects an analyzed automatic update with
+409. Explicit manual corrections remain possible. A synthetic prepared plan
+confirmed immediately before applying reproduced the overwrite before the fix.
+
+Local verification before this last guard: 597 Vitest cases passed, one skipped;
+typecheck, lint and build passed. Those counts are an intermediate checkpoint,
+not qualification of the final correction. The final guard needs its focused
+regression and new exact-head CI/native matrix.

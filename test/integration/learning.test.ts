@@ -1,5 +1,6 @@
+import { applyPlannedUpdate } from '../../src/server/processing/applier.js';
 import { seedLegacyLearning } from '../helpers/legacyLearning.js';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createHarness, type Harness } from '../helpers/appHarness.js';
 let h: Harness;
 beforeEach(async () => { h = await createHarness(); h.paperless.addDocument({ id: 1, title: 'Before', content: 'Synthetic invoice' }); });
@@ -36,6 +37,59 @@ describe('Learning v2 management API', () => {
     expect(outcome).toBe('skipped');
     expect(h.llm.chatRequests()).toHaveLength(0);
     expect(h.paperless.patches()).toHaveLength(0);
+  });
+
+  it('does not automatically trust workflow changes returned with an authenticated UI save', async () => {
+    const client = h.ctx.paperless(), original = client.updateDocument.bind(client);
+    const spy = vi.spyOn(client, 'updateDocument').mockImplementation(async (id, patch) => {
+      await original(id, patch);
+      h.paperless.editDocument(id, { tags: [99] });
+      return client.getDocument(id);
+    });
+    const cookie = await h.login();
+    const result = await h.inject({ method: 'POST', url: '/api/documents/1/apply', headers: { cookie }, payload: { title: 'Chosen title' } });
+    expect(result.statusCode).toBe(200);
+    expect(h.ctx.learning.examples()).toHaveLength(0);
+    expect(h.ctx.learning.list('pending')).toMatchObject([{ source: 'unknown', metadata: { title: 'Chosen title', tags: [99] } }]);
+    spy.mockRestore();
+  });
+  it('still accepts an exact authenticated UI change in hybrid mode', async () => {
+    const cookie = await h.login();
+    const result = await h.inject({ method: 'POST', url: '/api/documents/1/apply', headers: { cookie }, payload: { title: 'Chosen title' } });
+    expect(result.statusCode).toBe(200);
+    expect(h.ctx.learning.examples()).toMatchObject([{ metadata: { title: 'Chosen title' } }]);
+    expect(h.ctx.learning.list('confirmed')).toMatchObject([{ source: 'confirmed_ui' }]);
+  });
+  it('does not hide unrequested changes returned with an automatic write as self-writes', async () => {
+    const client = h.ctx.paperless(), original = client.updateDocument.bind(client);
+    const spy = vi.spyOn(client, 'updateDocument').mockImplementation(async (id, patch) => {
+      await original(id, patch);
+      h.paperless.editDocument(id, { title: 'Workflow changed title' });
+      return client.getDocument(id);
+    });
+    const before = await client.getDocument(1);
+    await applyPlannedUpdate(h.ctx, before, { patch: { title: 'AI title' }, display: { title: 'AI title', tags: [], correspondent: null, documentType: null }, notes: [] }, { source: 'api' });
+    expect(h.ctx.learning.examples()).toHaveLength(0);
+    expect(h.ctx.learning.list('pending')).toMatchObject([{ source: 'unknown', metadata: { title: 'Workflow changed title' } }]);
+    spy.mockRestore();
+  });
+
+  it('rejects a plan when OCR text changed while metadata stayed the same', async () => {
+    const before = await h.ctx.paperless().getDocument(1);
+    h.paperless.editDocument(1, { content: 'Different current synthetic contract' });
+    await expect(applyPlannedUpdate(h.ctx, before, { patch: { title: 'Stale AI title' }, display: { title: 'Stale AI title', tags: [], correspondent: null, documentType: null }, notes: [] }, { source: 'api' })).rejects.toMatchObject({ statusCode: 409 });
+    expect(h.paperless.patches()).toHaveLength(0);
+  });
+
+  it('preserves a correction confirmed after an automatic plan was prepared', async () => {
+    const before = await h.ctx.paperless().getDocument(1);
+    const analysis = { suggestion: { title: 'AI title', tags: [], correspondent: null, document_type: null, document_date: null, language: null, custom_fields: [] }, usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 }, model: 'synthetic', provider: 'fixture', durationMs: 0, truncated: false };
+    const plan = { patch: { title: 'AI title' }, display: { title: 'AI title', tags: [], correspondent: null, documentType: null }, notes: [] };
+    h.ctx.learning.observe(doc('Initial'));
+    h.ctx.learning.observe(doc('Before'), 'confirmed_ui', { actor: 'user:1' });
+    await expect(applyPlannedUpdate(h.ctx, before, plan, { source: 'api', analysis })).rejects.toMatchObject({ statusCode: 409 });
+    expect(h.paperless.patches()).toHaveLength(0);
+    expect(h.ctx.learning.examples()).toMatchObject([{ metadata: { title: 'Before' } }]);
   });
 
   it('pages imported corrections and keeps an auditable revocation outside v2 event filters', async () => {

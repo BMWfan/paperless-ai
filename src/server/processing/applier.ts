@@ -298,9 +298,13 @@ export interface ApplyMeta {
 export async function applyPlannedUpdate(ctx: AppContext, doc: PaperlessDocument, plan: PlannedUpdate, info: ApplyMeta): Promise<PaperlessDocument> {
   return withLearningWrite(ctx, doc.id, async () => {
     const current = await ctx.paperless().getDocument(doc.id);
-    if (!sameLearningMetadata(current, doc)) {
+    if (!sameLearningMetadata(current, doc) || (current.content ?? '') !== (doc.content ?? '')) {
       ctx.learning.observe(current, 'unknown');
       throw new HttpProblem(409, 'Document changed before saving; refresh and retry');
+    }
+    // Confirmation may happen after planning, while the analysis/metadata fetch awaits.
+    if (info.analysis && hasProtectedLearning(ctx, doc.id)) {
+      throw new HttpProblem(409, 'Confirmed learning now protects this document; refresh before processing');
     }
     // Capture external changes before attributing the following write to this application.
     ctx.learning.observe(current, 'unknown');
@@ -308,7 +312,10 @@ export async function applyPlannedUpdate(ctx: AppContext, doc: PaperlessDocument
     if (info.fieldClear) Object.assign(plan.patch, await clearedFields(ctx, current, info.fieldClear));
     if (info.fieldReview) Object.assign(plan.patch, await reviewedFields(ctx, current, info.fieldReview));
     const updated = await applyPlannedUpdateUnlocked(ctx, current, plan, info);
-    const source = info.source === 'manual' ? (info.actor ? 'confirmed_ui' : 'unknown') : 'self_write';
+    // A native workflow or concurrent external write may change more than requested.
+    // Never attribute the entire returned document to the human/app in that case.
+    const matchesRequest = sameLearningMetadata(updated, { ...current, ...plan.patch });
+    const source = !matchesRequest ? 'unknown' : info.source === 'manual' ? (info.actor ? 'confirmed_ui' : 'unknown') : 'self_write';
     ctx.learning.observe(updated, source, { actor: info.actor });
     if (info.analysis) ctx.learning.prediction(doc.id, info.analysis.suggestion);
     return updated;
