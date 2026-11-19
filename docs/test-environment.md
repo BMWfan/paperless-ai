@@ -87,8 +87,9 @@ older `paperless-ai-e2e` stack using this branch.
 `learning-e2e.yml` checks an unchanged 3.5.1 image and a separate 3.4.2 fixture
 upgraded to 3.5.1 with its own database/media volumes retained. It restarts the
 real app to check persisted pending/confirmed learning. The workflow uses no
-external model secrets and cannot publish images. Until an actual successful
-run is linked in SPEC #41, these scenarios are **prepared, not proven**.
+external model secrets and cannot publish images. The baseline passed at `baa6628` in [run 44465414428](https://github.com/BMWfan/paperless-ai/actions/runs/44465414428);
+subsequent runtime changes require fresh qualification. This does not establish
+real-model accuracy or configured native workflow execution.
 
 The ordinary `ci.yml` checks TypeScript, lint, application tests, historical
 hashes, build and simulated browser flows. Release-policy tests still enforce

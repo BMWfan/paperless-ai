@@ -33,8 +33,8 @@ function analysisFor(req: ChatRequestInfo): string {
       document_type: 'INVOICE',
       document_date: '15.03.2024',
       custom_fields: [
-        { field_name: 'Amount', value: '1.234,56 €' },
-        { field_name: 'Due date', value: '01.04.2024' },
+        { field_name: 'Amount', value: 'EUR1234.56' },
+        { field_name: 'Due date', value: '2024-04-01' },
         { field_name: 'Not configured', value: 'ignored' },
       ],
     });

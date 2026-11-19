@@ -48,7 +48,7 @@ const dashboard = await ai('/api/dashboard');
 assert.equal(dashboard.paperless.connected, true);
 assert.equal(dashboard.paperless.version, process.env.EXPECTED_PAPERLESS_VERSION ?? '3.5.1');
 console.log(`Connected to official Paperless-ngx ${dashboard.paperless.version}, API ${dashboard.paperless.apiVersion}.`);
-const content = 'SYNTHETIC TEST DATA ONLY\nInvoice number: NEW-42\nPrevious invoice: OLD-17\nTotal: EUR42.50\nFixture Supplier';
+const content = 'SYNTHETIC TEST DATA ONLY\nInvoice number: NEW-42\nPrevious invoice: OLD-17\nTotal: CHF42.50\nFixture Supplier';
 const document = await upload(content);
 const fields = {};
 for (const [key, data_type] of Object.entries({ number: 'string', amount: 'monetary', count: 'integer', keep: 'string' })) {
@@ -62,19 +62,29 @@ assert.equal(current.title, 'Synthetic native invoice');
 assert.ok(current.custom_fields.some(row => row.field === fields.keep.id && row.value === 'untouched'));
 assert.ok(!(await ai('/api/learning/examples')).examples.some(row => row.document_id === document.id), 'automatic classification became confirmed human learning');
 console.log('PASS: real document classification and preserved native fields, without false human feedback.');
+
+const ordinary = await ai(`/api/documents/${document.id}/apply`, { customFields: [
+  { field_name: fields.count.name, value: '1.5' }, { field_name: fields.amount.name, value: 'CHF42.50' },
+] });
+assert.ok(ordinary.notes.some(note => note.includes(fields.count.name) && note.includes('not valid')), 'fractional ordinary integer was not rejected');
+current = await pl(`/documents/${document.id}/`);
+assert.ok(!current.custom_fields.some(row => row.field === fields.count.id), 'ordinary integer write rounded 1.5');
+assert.ok(current.custom_fields.some(row => row.field === fields.amount.id && row.value === 'CHF42.50'), 'ordinary write relabeled CHF as default EUR');
+console.log('PASS: ordinary writes rejected fractional integers and preserved explicit CHF despite EUR default.');
+
 const snapshot = await ai(`/api/documents/${document.id}/fields/preview`, { content: current.content.slice(0, 50000), suggestions: [
-  { field_name: fields.number.name, value: 'NEW-42' }, { field_name: fields.amount.name, value: 'EUR42.50' }, { field_name: fields.count.name, value: '1.5' },
+  { field_name: fields.number.name, value: 'NEW-42' }, { field_name: fields.amount.name, value: 'CHF42.50' }, { field_name: fields.count.name, value: '1.5' },
 ] });
 assert.equal(snapshot.readOnly, true);
 assert.equal(snapshot.rows.find(row => row.fieldId === fields.count.id).canApply, false);
 const review = { snapshotDigest: snapshot.snapshotDigest, reviewFieldIds: snapshot.reviewFieldIds };
 await ai(`/api/documents/${document.id}/fields/apply`, { ...review, fields: [{ field: fields.count.id, value: '1.5' }] }, aiHeaders, 400);
 assert.equal((await pl(`/documents/${document.id}/`)).modified, current.modified, 'preview/invalid value changed the document');
-await ai(`/api/documents/${document.id}/fields/apply`, { ...review, fields: [{ field: fields.number.id, value: 'NEW-42' }, { field: fields.amount.id, value: 'EUR42.50' }] });
+await ai(`/api/documents/${document.id}/fields/apply`, { ...review, fields: [{ field: fields.number.id, value: 'NEW-42' }, { field: fields.amount.id, value: 'CHF42.50' }] });
 current = await pl(`/documents/${document.id}/`);
 assert.ok(current.custom_fields.some(row => row.field === fields.keep.id && row.value === 'untouched'));
 assert.ok(current.custom_fields.some(row => row.field === fields.number.id && row.value === 'NEW-42'));
-assert.ok(current.custom_fields.some(row => row.field === fields.amount.id && row.value === 'EUR42.50'));
+assert.ok(current.custom_fields.some(row => row.field === fields.amount.id && row.value === 'CHF42.50'));
 await ai(`/api/documents/${document.id}/fields/apply`, { ...review, fields: [{ field: fields.number.id, value: 'STALE' }] }, aiHeaders, 409);
 assert.ok(!(await ai('/api/learning/examples')).examples.some(row => row.document_id === document.id), 'API-key edit was automatically trusted as human');
 const pending = (await ai('/api/learning/events?status=pending&limit=100')).events.find(row => row.document_id === document.id);

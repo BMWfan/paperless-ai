@@ -66,10 +66,10 @@ results are not release qualification.
 
 Still required before readiness:
 
-- Complete strict normalization across all automatic/manual paths; reviewed preview/save and field hints are ported.
+- Verify the follow-up conservative contract across automatic/manual writes in CI; reviewed preview/save and field hints are ported.
 - Complete paginated legacy-example management; event history and interval controls are implemented in the follow-up working tree.
-- Qualify the newly adapted CI/Compose counterpart on a fresh runner without real-model inference.
-- Run the prepared official ngx 3.5.1 native API/restart and 3.4.2→3.5.1 upgrade matrix; do not claim success before actual CI evidence.
+- Keep the proven CI/Compose counterpart current without real-model inference; baseline qualification passed at baa6628.
+- Recheck the native API/restart/upgrade matrix after each runtime change; the baseline passed at baa6628 (see evidence below).
 - Repeat complete tests at the final committed revision and review the complete diff. Build and 18 synthetic browser tests passed during development.
 - Update README, test environment instructions and affected legacy references.
 - Resolve the existing no-new-PR constraint before opening any linked draft PR; obtain the required independent review and owner
@@ -98,8 +98,8 @@ patterns, and explicit selected-field saving. They reuse the original strict
 normalizer and snapshot contract. Fresh field definitions and document/content
 hashes are checked while the document lock is held. Unselected values are
 preserved; reviewed saves fail instead of silently dropping rejected fields.
-Native upstream automatic and ordinary manual custom-field paths still need
-contract reconciliation and must not be described as strict yet.
+At that earlier checkpoint, ordinary automatic/manual paths still required
+contract reconciliation; the conservative-write follow-up below supersedes that limitation.
 
 ### Follow-up import integrity — 2026-11-19 (not part of the pending merge checkpoint)
 
@@ -142,3 +142,41 @@ execution displayed all four safety cases. This is not yet native integration
 evidence. The local vfs executor has only 715 MB free and no 3.5.1 image, so no
 large image pull, foreign-data cleanup or local stack start was attempted.
 Legacy model workflows are manual-only and fail before experiments on 4.x.
+
+### Native integration evidence at baa6628
+
+[Learning engine validation 44465414428](https://github.com/BMWfan/paperless-ai/actions/runs/44465414428)
+passed both jobs at `baa6628305f2ec43149bd74c10e6fbdd7fc89e1e`:
+unchanged official ngx 3.5.1, and official 3.4.2 upgraded in place to 3.5.1.
+Logs report API 10 and the exact server versions. Real ingestion, typed reviewed
+fields, stale snapshots, unknown API provenance, explicit session review,
+protected replay, persistent restart and current-number patterns all passed.
+The companion [CI run 44465414511](https://github.com/BMWfan/paperless-ai/actions/runs/44465414511)
+also passed. This uses a deterministic local LLM fixture, not a model-quality
+measurement, native AI-provider benchmark or configured workflow-execution test.
+
+### Conservative ordinary field writes (follow-up)
+
+Automatic, ordinary manual and reviewed writes now reuse the fork's canonical
+normalizer. Ordinary writes retain upstream URL and unambiguous legacy select
+compatibility. Fractional/out-of-range integers, ambiguous monetary separators,
+localized boolean/date guesses, duplicate proposals/field names and oversized
+short text are skipped with a note, preserving existing values. Identifiers are
+not silently truncated; explicit currency codes are retained even when a native
+field has a different default. A default only fills an absent currency.
+
+Value writes fetch the small native field-definition collection freshly, once
+per non-empty eligible proposal set, to handle external definition/type changes
+without relying on the taxonomy cache. This does not synchronize document
+content. Unavailable definitions fail closed for field values; other metadata
+can still be saved with a warning. Invalid-value notes do not include the raw
+value. Prompt rules require canonical dates/numbers and current-document values,
+with no copying of reference identifiers or amounts. A fake canonical response
+in a test is not proof that a real model performs that normalization correctly.
+
+This deliberately preserves the old fork's conservative contract rather than
+upstream4's silent rounding, truncation or currency relabeling. API clients must
+submit `true`/`false`, calendar ISO dates and canonical numeric strings; localized
+manual aliases such as `ja` are not accepted for a boolean field. Missing or
+ambiguous data is omitted rather than guessed. The native fixture now also
+checks ordinary integer rejection and CHF preservation against an EUR default.

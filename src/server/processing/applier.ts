@@ -1,4 +1,4 @@
-import { reviewedFields, type FieldReview } from '../learning/fields.js';
+import { normalizeFieldValue, reviewedFields, type FieldReview } from '../learning/fields.js';
 /**
  * Turns an AI suggestion (or a manual edit) into a Paperless PATCH, applies
  * it and records an undoable history entry.
@@ -58,52 +58,27 @@ export function parseNumber(input: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-/** Convert a textual AI value into the representation Paperless expects for the field type. */
+/** Use the same conservative typed contract for automatic, manual and reviewed fields. */
 export function convertCustomFieldValue(field: PaperlessCustomField, value: string, currency?: string): unknown {
   const v = value.trim();
-  switch (field.data_type) {
-    case 'string':
-      return v.replace(/\s+/g, ' ').slice(0, 128);
-    case 'longtext':
-      return v;
-    case 'url': {
-      const url = /^www\./i.test(v) ? `https://${v}` : v;
-      // Paperless validates URLs strictly – an invalid one would make it reject the whole update.
-      if (/\s/.test(url) || !/^[a-z][a-z0-9+.-]*:\/\/[^/]/i.test(url) || !URL.canParse(url)) return undefined;
-      return url;
-    }
-    case 'date':
-      return normalizeDate(v) ?? undefined;
-    case 'boolean':
-      if (/^(true|yes|ja|1|wahr|oui|si)$/i.test(v)) return true;
-      if (/^(false|no|nein|0|falsch|non)$/i.test(v)) return false;
-      return undefined;
-    case 'integer': {
-      const n = parseNumber(v);
-      return n === null ? undefined : Math.round(n);
-    }
-    case 'float': {
-      const n = parseNumber(v);
-      return n === null ? undefined : n;
-    }
-    case 'monetary': {
-      const n = parseNumber(v);
-      if (n === null) return undefined;
-      const cur = (field.extra_data?.default_currency || currency || /\b([A-Z]{3})\b/.exec(v)?.[1] || '').toUpperCase();
-      return `${cur}${n.toFixed(2)}`;
-    }
-    case 'select': {
-      // Paperless < 2.15 stores plain string options and the option index as value; newer
-      // versions use {id, label} options and the option id.
-      const options = field.extra_data?.select_options ?? [];
-      const idx = options.findIndex((o) => normalizeName(typeof o === 'string' ? o : o.label) === normalizeName(v));
-      if (idx < 0) return undefined;
-      const opt = options[idx];
-      return typeof opt === 'string' ? idx : opt.id;
-    }
-    default:
-      return undefined;
+  if (field.data_type === 'url') {
+    const url = /^www\./i.test(v) ? `https://${v}` : v;
+    return !/\s/.test(url) && /^[a-z][a-z0-9+.-]*:\/\/[^/]/i.test(url) && URL.canParse(url) ? url : undefined;
   }
+  // Retain upstream compatibility with old index-based select fields, but never choose between duplicate labels.
+  if (field.data_type === 'select' && field.extra_data?.select_options?.every(option => typeof option === 'string')) {
+    const options = field.extra_data.select_options as string[];
+    const matches = options.map((label, index) => ({ label, index })).filter(option => normalizeName(option.label) === normalizeName(v));
+    return matches.length === 1 ? matches[0].index : undefined;
+  }
+  if (!['string', 'longtext', 'integer', 'float', 'boolean', 'select', 'date', 'monetary'].includes(field.data_type)) return undefined;
+  const normalized = normalizeFieldValue(v, field);
+  if (normalized === undefined || field.data_type !== 'monetary') return normalized;
+  // An explicit currency belongs to the document; defaults must never silently relabel it.
+  if (/^[A-Z]{3}/.test(String(normalized))) return normalized;
+  const fallback = field.extra_data?.default_currency || currency;
+  if (fallback && !/^[A-Z]{3}$/.test(fallback)) return undefined;
+  return fallback ? `${fallback}${normalized}` : normalized;
 }
 
 function sameSet(a: number[], b: number[]): boolean {
@@ -119,30 +94,46 @@ async function resolveCustomFields(
   onlyConfigured: boolean,
   notes: string[],
 ): Promise<{ field: number; value: unknown }[] | undefined> {
-  if (!values.length) return undefined;
+  const eligible = values.filter(row => !onlyConfigured || ctx.cfg.processing.customFields.some(configured => normalizeName(configured.name) === normalizeName(row.field_name)));
+  if (!eligible.length) return undefined;
   const meta = ctx.metadata();
+  let definitions: PaperlessCustomField[];
+  try { definitions = await ctx.paperless().customFields(); }
+  catch { notes.push('Custom field definitions unavailable; no field values were written'); return undefined; }
   const merged = new Map<number, unknown>((doc.custom_fields ?? []).map((f) => [f.field, f.value]));
   let changed = false;
-  for (const { field_name, value } of values) {
+  const names = eligible.map(row => normalizeName(row.field_name));
+  for (const { field_name, value } of eligible) {
     const configured = ctx.cfg.processing.customFields.find((c) => normalizeName(c.name) === normalizeName(field_name));
-    if (onlyConfigured && !configured) continue;
+    const matches = definitions.filter(field => normalizeName(field.name) === normalizeName(configured?.name ?? field_name));
+    if (names.filter(name => name === normalizeName(field_name)).length > 1 || matches.length > 1) {
+      notes.push(`Custom field "${field_name}" is ambiguous; no value was written`);
+      continue;
+    }
     try {
       const type = (configured?.type ?? 'string') as PaperlessCustomFieldType;
-      // Select fields need their options – those are defined in Paperless.
       const create = Boolean(configured) && type !== 'select';
-      const res = await meta.resolveCustomField(configured?.name ?? field_name, create, type, configured?.currency);
-      if (res.id == null) {
-        notes.push(`Custom field "${field_name}" does not exist in Paperless${type === 'select' ? ' (create select fields with their options in Paperless)' : ''}`);
-        continue;
+      let field = matches[0];
+      if (!field) {
+        if (meta.customFieldByName(configured?.name ?? field_name)) {
+          notes.push(`Custom field "${field_name}" changed; refresh before saving`);
+          continue;
+        }
+        const result = await meta.resolveCustomField(configured?.name ?? field_name, create, type, configured?.currency);
+        if (result.id == null) {
+          notes.push(`Custom field "${field_name}" does not exist in Paperless${type === 'select' ? ' (create select fields with their options in Paperless)' : ''}`);
+          continue;
+        }
+        field = meta.customField(result.id) ?? { id: result.id, name: result.name, data_type: type };
+        definitions.push(field);
       }
-      const field = meta.customField(res.id) ?? { id: res.id, name: res.name, data_type: type };
       const converted = convertCustomFieldValue(field, value, configured?.currency);
       if (converted === undefined) {
-        notes.push(`Value "${value}" is not valid for custom field "${field.name}" (${field.data_type})`);
+        notes.push(`Value is not valid for custom field "${field.name}" (${field.data_type})`);
         continue;
       }
-      if (merged.get(res.id) !== converted) {
-        merged.set(res.id, converted);
+      if (merged.get(field.id) !== converted) {
+        merged.set(field.id, converted);
         changed = true;
       }
     } catch (err) {

@@ -39,56 +39,45 @@ describe('convertCustomFieldValue', () => {
     extra_data,
   });
 
-  it('string / longtext', () => {
+  it('preserves exact text and rejects overflow instead of truncating identifiers', () => {
     expect(convertCustomFieldValue(field('string'), '  hello ')).toBe('hello');
-    expect(convertCustomFieldValue(field('string'), 'x'.repeat(200))).toHaveLength(128);
-    expect(convertCustomFieldValue(field('string'), 'two\nlines')).toBe('two lines');
-    expect(convertCustomFieldValue(field('longtext'), 'two\nlines')).toBe('two\nlines');
+    expect(convertCustomFieldValue(field('string'), 'x'.repeat(129))).toBeUndefined();
+    expect(convertCustomFieldValue(field('string'), 'two\nlines')).toBe('two\nlines');
     expect(convertCustomFieldValue(field('longtext'), 'y'.repeat(500))).toHaveLength(500);
   });
-
-  it('url', () => {
-    expect(convertCustomFieldValue(field('url'), 'https://example.com/a')).toBe('https://example.com/a');
+  it('retains native URL validation', () => {
     expect(convertCustomFieldValue(field('url'), 'www.example.com')).toBe('https://www.example.com');
-    expect(convertCustomFieldValue(field('url'), 'not a url')).toBeUndefined();
-    expect(convertCustomFieldValue(field('url'), 'https://exa mple.com')).toBeUndefined();
-    expect(convertCustomFieldValue(field('url'), 'https://')).toBeUndefined();
+    for (const value of ['not a url', 'https://exa mple.com', 'https://']) expect(convertCustomFieldValue(field('url'), value)).toBeUndefined();
   });
-
-  it('date', () => {
-    expect(convertCustomFieldValue(field('date'), '15.03.2024')).toBe('2024-03-15');
-    expect(convertCustomFieldValue(field('date'), 'soon')).toBeUndefined();
+  it('requires real calendar dates in the canonical contract', () => {
+    expect(convertCustomFieldValue(field('date'), '2024-3-15')).toBe('2024-03-15');
+    for (const value of ['15.03.2024', '2025-02-29', 'soon']) expect(convertCustomFieldValue(field('date'), value)).toBeUndefined();
   });
-
-  it('boolean', () => {
-    for (const t of ['true', 'Yes', 'ja', '1', 'WAHR']) expect(convertCustomFieldValue(field('boolean'), t)).toBe(true);
-    for (const f of ['false', 'no', 'Nein', '0', 'non']) expect(convertCustomFieldValue(field('boolean'), f)).toBe(false);
-    expect(convertCustomFieldValue(field('boolean'), 'maybe')).toBeUndefined();
+  it('uses explicit boolean values rather than guessing from numbers or prose', () => {
+    expect(convertCustomFieldValue(field('boolean'), 'true')).toBe(true);
+    expect(convertCustomFieldValue(field('boolean'), 'false')).toBe(false);
+    for (const value of ['ja', '1', 'maybe']) expect(convertCustomFieldValue(field('boolean'), value)).toBeUndefined();
   });
-
-  it('integer / float', () => {
-    expect(convertCustomFieldValue(field('integer'), '1.234,56')).toBe(1235);
-    expect(convertCustomFieldValue(field('integer'), '42 pcs')).toBe(42);
-    expect(convertCustomFieldValue(field('integer'), 'many')).toBeUndefined();
-    expect(convertCustomFieldValue(field('float'), '12,5')).toBe(12.5);
-    expect(convertCustomFieldValue(field('float'), 'n/a')).toBeUndefined();
+  it('never rounds fractional integers or strips unit text', () => {
+    expect(convertCustomFieldValue(field('integer'), '42')).toBe(42);
+    expect(convertCustomFieldValue(field('float'), '12.5')).toBe(12.5);
+    for (const value of ['1.5', '1.234,56', '42 pcs', '2147483648']) expect(convertCustomFieldValue(field('integer'), value)).toBeUndefined();
+    expect(convertCustomFieldValue(field('float'), '12,5')).toBeUndefined();
   });
-
-  it('monetary uses the field currency, then the configured one, then one found in the value', () => {
-    expect(convertCustomFieldValue(field('monetary', { default_currency: 'EUR' }), '1.234,56 €', 'USD')).toBe('EUR1234.56');
+  it('preserves an explicit document currency and only fills missing currency from defaults', () => {
+    expect(convertCustomFieldValue(field('monetary', { default_currency: 'EUR' }), 'CHF12.50', 'USD')).toBe('CHF12.50');
+    expect(convertCustomFieldValue(field('monetary', { default_currency: 'EUR' }), '12.50', 'USD')).toBe('EUR12.50');
     expect(convertCustomFieldValue(field('monetary'), '12', 'USD')).toBe('USD12.00');
-    expect(convertCustomFieldValue(field('monetary', { default_currency: null }), 'CHF 12.5')).toBe('CHF12.50');
     expect(convertCustomFieldValue(field('monetary'), '7,1')).toBe('7.10');
-    expect(convertCustomFieldValue(field('monetary'), 'free')).toBeUndefined();
+    for (const value of ['1,234', '1.234,56', 'USD 12 EUR', 'free']) expect(convertCustomFieldValue(field('monetary'), value)).toBeUndefined();
   });
-
-  it('select matches option labels (object and legacy string options)', () => {
+  it('selects an exact unique modern label/id and preserves legacy index compatibility', () => {
     const objects = field('select', { select_options: [{ id: 'aB3', label: 'Open' }, { id: 'zZ9', label: 'Paid' }] });
-    expect(convertCustomFieldValue(objects, ' paid ')).toBe('zZ9');
-    expect(convertCustomFieldValue(objects, 'Cancelled')).toBeUndefined();
-    const strings = field('select', { select_options: ['Open', 'Paid'] });
-    expect(convertCustomFieldValue(strings, 'PAID')).toBe(1);
-    expect(convertCustomFieldValue(field('select'), 'Paid')).toBeUndefined();
+    expect(convertCustomFieldValue(objects, 'Paid')).toBe('zZ9');
+    expect(convertCustomFieldValue(objects, 'zZ9')).toBe('zZ9');
+    expect(convertCustomFieldValue(field('select', { select_options: [{ id: 'a', label: 'Paid' }, { id: 'b', label: 'Paid' }] }), 'Paid')).toBeUndefined();
+    expect(convertCustomFieldValue(field('select', { select_options: ['Open', 'Paid'] }), 'PAID')).toBe(1);
+    expect(convertCustomFieldValue(field('select', { select_options: ['Paid', 'PAID'] }), 'Paid')).toBeUndefined();
   });
 
   it('unsupported types are ignored', () => {

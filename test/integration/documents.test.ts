@@ -74,7 +74,7 @@ describe('manual review', () => {
         created: '20.01.2024',
         customFields: [
           { field_name: 'notes', value: 'checked' },
-          { field_name: 'Paid', value: 'ja' },
+          { field_name: 'Paid', value: 'true' },
           { field_name: 'Unknown', value: 'x' },
         ],
       },

@@ -159,9 +159,9 @@ function fieldHint(c: CustomFieldConfig, ctx: PromptContext): string {
     string: 'short text (max. 128 characters)',
     longtext: 'text, may span several lines',
     select: options?.length ? `exactly one of: ${options.map((o) => JSON.stringify(o)).join(', ')}` : 'one of the options of this field',
-    integer: 'whole number',
+    integer: 'whole number without units or grouping separators',
     float: 'decimal number with "." as decimal separator',
-    monetary: `amount as decimal number with "." as decimal separator, no currency symbol${c.currency ? ` (currency ${c.currency})` : ''}`,
+    monetary: `amount as decimal number with "." as decimal separator and no grouping separators; retain the actual three-letter currency code if stated, never change it to a default${c.currency ? ` (default currency ${c.currency}, only when the document does not state one)` : ''}`,
     date: 'date as YYYY-MM-DD',
     boolean: '"true" or "false"',
     url: 'URL',
@@ -202,7 +202,7 @@ export function buildOutputInstructions(p: Processing, ctx: PromptContext): stri
     );
   }
   if (f.customFields) {
-    lines.push('- custom_fields: only include fields whose value is present in the document. Available fields:');
+    lines.push('- custom_fields: only include values from this document, never copy identifiers or amounts from reference examples. Omit ambiguous or missing values. Available fields:');
     lines.push(...p.customFields.map((c) => fieldHint(c, ctx)));
   }
   const allowed = allowedTags(p, ctx);

@@ -76,7 +76,7 @@ describe('enabledFields / buildJsonSchema', () => {
     expect(schema.required).not.toContain('custom_fields');
     const instructions = buildOutputInstructions(cfg.processing, ctx);
     expect(instructions).toContain('"Amount": amount as decimal number');
-    expect(instructions).toContain('(currency EUR)');
+    expect(instructions).toContain('(default currency EUR, only when the document does not state one)' );
     expect(instructions).toContain('"custom_fields"');
   });
 
