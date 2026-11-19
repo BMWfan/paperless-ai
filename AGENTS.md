@@ -11,9 +11,10 @@
 - Integration tests must use `docker-compose.test.yml`, never a production Paperless instance or real documents/credentials.
 - Start the stack with `docker compose -f docker-compose.test.yml up -d --build ai`; run `docker compose -f docker-compose.test.yml run --rm runner`.
 - Reset only this stack with `docker compose -f docker-compose.test.yml down -v --remove-orphans`.
-- On small amd64 cloud runtimes using Docker's `vfs` driver, use `python3 tests/e2e/cloud-test.py test`. This prepares the current source and runs unit, API, real Paperless, and restart checks. Use `reset` to reset synthetic test data or `stop` to preserve it. See `docs/test-environment.md` for advanced commands. Never change the managed storage driver or prune unrelated workloads; the helper selects only cache IDs created by its own build.
+- Transition gate for SPEC #41: the following legacy Docker/cloud helper instructions are not yet qualified for upstream 4.x. Do not run or reset an existing 3.x stack with this branch; port the isolated stack before claiming native compatibility. See `docs/upstream-v4-migration.md`.
+- On the legacy 3.x branch, on small amd64 cloud runtimes using Docker's `vfs` driver, use `python3 tests/e2e/cloud-test.py test`. This prepares the current source and runs unit, API, real Paperless, and restart checks. Use `reset` to reset synthetic test data or `stop` to preserve it. See `docs/test-environment.md` for advanced commands. Never change the managed storage driver or prune unrelated workloads; the helper selects only cache IDs created by its own build.
 - Add meaningful automated coverage, run relevant tests before completion, investigate failures and explicitly report unrun tests and platform limitations.
-- `npm test` starts nodemon. Use Node 22 and `node --test tests/*.test.js`, preferably via `docker compose -f docker-compose.test.yml run --rm --no-deps runner sh -c 'node --test tests/*.test.js'`. Host Node 24 has shown a native SQLite addon cleanup abort.
+- Use Node 22. On the upstream 4.x branch, run `npm run typecheck`, `npm run lint`, `npm test -- --maxWorkers=1`, `npm run build` and `npm run test:e2e`. Vitest/API fixtures and browser mocks do not replace real Paperless-ngx integration. The old `tests/` CommonJS suites are historical/contract tooling; do not claim the deleted 3.x runtime is covered on 4.x. Host Node 24 previously showed a native SQLite cleanup abort.
 
 ## Token-efficient development
 

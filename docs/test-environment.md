@@ -1,3 +1,11 @@
+> **4.x transition:** The legacy Compose/cloud helper instructions below describe
+> the pre-migration 3.x runtime. They are not yet qualified for this feature
+> branch. Do not start or reset an existing stack to test this migration.
+> Current local checks use Node 22: `npm run typecheck`, `npm run lint`,
+> `npm test -- --maxWorkers=1`, `npm run build`, and `npm run test:e2e`
+> (synthetic Paperless/provider fixtures). Official ngx 3.5.1 integration remains
+> an open gate in [SPEC #41](upstream-v4-migration.md).
+
 # Isolated development environment
 
 ## Codex Cloud quick start
