@@ -2,64 +2,49 @@ name: Learning engine validation
 on:
   pull_request:
   push:
-    branches: [main, feature/learning-engine-v2]
+    branches: [main, feature/upstream-v4-learning-v2]
+  workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: learning-v4-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   integration:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        initial: ['3.5.1', '3.4.2']
     env:
-      TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
+      COMPOSE_PROJECT_NAME: paperless-ai-v4-e2e
+      TEST_PAPERLESS_VERSION: ${{ matrix.initial }}
     steps:
       - uses: actions/checkout@v4
-      - name: Prepare trusted CA bundle for Compose
-        run: |
-          mkdir -p .e2e-cache
-          cp /etc/ssl/certs/ca-certificates.crt "$TEST_CA_BUNDLE"
-      - name: Start isolated integration stack
-        run: docker compose -f docker-compose.test.yml up -d --build --wait ai
-      - name: Unit and SQLite regression tests
-        run: docker compose -f docker-compose.test.yml exec -T ai sh -c 'node --test tests/*.test.js'
-      - name: Cloud setup safety contracts
-        run: |
-          docker compose -f docker-compose.test.yml exec -T paperless mkdir -p /tmp/learning-validation/tests
-          docker compose -f docker-compose.test.yml cp tests/e2e paperless:/tmp/learning-validation/tests/
-          docker compose -f docker-compose.test.yml exec -T paperless python3 -B -m unittest discover -s /tmp/learning-validation/tests/e2e -p 'test_*.py'
-      - name: Lint new test infrastructure
-        run: docker compose -f docker-compose.test.yml exec -T ai sh -c 'npx --no-install eslint tests/e2e/*.js tests/quality/*.js tests/quality.test.js tests/learning*.test.js services/learning*.js routes/learning.js routes/manualLearning.js public/js/learning.js'
-      - name: Real Paperless integration tests
-        run: docker compose -f docker-compose.test.yml run --rm runner
-      - name: Detect edits made while the app was stopped
-        run: python3 -B tests/e2e/restart-check.py
-      - name: Browser review and responsive layout checks
-        run: docker compose -f docker-compose.test.yml --profile extended run --build --name paperless-ai-e2e-browser browser
-      - name: Collect browser screenshots
-        if: always()
-        run: docker cp paperless-ai-e2e-browser:/artifacts ./browser-artifacts
-      - uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: learning-browser-screenshots
-          path: browser-artifacts/*.png
-          if-no-files-found: ignore
-      - name: Verify isolated upgrade from Paperless-ngx 3.4.1
+          persist-credentials: false
+      - name: Start unchanged official ngx and the current fork
+        run: docker compose -f docker-compose.test.yml up -d --build --wait --wait-timeout 600 ai
+      - name: Native API, typed extraction, provenance and current-number patterns
+        run: docker compose -f docker-compose.test.yml run --rm --no-deps runner
+      - name: Verify real app restart preserves learning without inference
         run: |
-          docker compose -f docker-compose.test.yml --profile extended down -v --remove-orphans
-          export TEST_PAPERLESS_VERSION=3.4.1
-          docker compose -f docker-compose.test.yml up -d --wait ai
-          docker compose -f docker-compose.test.yml exec -T ai node tests/e2e/upgrade-probe.js seed
-          docker compose -f docker-compose.test.yml down --remove-orphans
-          unset TEST_PAPERLESS_VERSION
-          docker compose -f docker-compose.test.yml up -d --wait ai
-          container=$(docker compose -f docker-compose.test.yml ps -q paperless)
-          image=$(docker inspect --format '{{.Config.Image}}' "$container")
-          test "$image" = ghcr.io/paperless-ngx/paperless-ngx:3.4.2
-          echo "Running upgraded fixture on $image"
-          docker compose -f docker-compose.test.yml exec -T ai node tests/e2e/upgrade-probe.js verify
-      - name: Logs on failure
+          docker compose -f docker-compose.test.yml restart ai
+          docker compose -f docker-compose.test.yml up -d --wait --wait-timeout 120 --no-deps ai
+          docker compose -f docker-compose.test.yml run --rm --no-deps runner node /fixture/native.mjs restart
+      - name: Upgrade official ngx 3.4.2 to 3.5.1 using only this fixture's volumes
+        if: matrix.initial == '3.4.2'
+        env:
+          TEST_PAPERLESS_VERSION: '3.5.1'
+        run: |
+          docker compose -f docker-compose.test.yml up -d --wait --wait-timeout 600 paperless
+          docker compose -f docker-compose.test.yml restart ai
+          docker compose -f docker-compose.test.yml up -d --wait --wait-timeout 120 --no-deps ai
+          docker compose -f docker-compose.test.yml run --rm --no-deps runner
+      - name: Synthetic stack diagnostics on failure
         if: failure()
         run: docker compose -f docker-compose.test.yml logs --no-color --tail=100
-      - name: Remove disposable stack
+      - name: Remove only this disposable stack
         if: always()
-        run: docker compose -f docker-compose.test.yml --profile extended down -v --remove-orphans
+        run: docker compose -f docker-compose.test.yml down -v --remove-orphans

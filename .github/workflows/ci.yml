@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, feature/upstream-v4-learning-v2]
   pull_request:
 
 permissions:
@@ -21,6 +21,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
+      - run: node --test tests/v4/*.test.mjs
+      - run: node scripts/audit-historical-evidence.mjs
       - run: npm run lint
       - run: npm test
       - run: npm run build

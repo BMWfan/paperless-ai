@@ -1,19 +1,5 @@
 name: Synthetic classification evaluation
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/classification-evaluation.yml'
-      - 'tests/e2e/real-model.test.js'
-      - 'tests/e2e/Dockerfile.model'
-      - 'tests/e2e/generate.js'
-      - 'tests/quality/**'
-      - 'services/customFieldUpdates.js'
-      - 'tests/quality.test.js'
-      - 'tests/e2e/Dockerfile.quality-model'
-      - 'docker-compose.quality.yml'
-      - 'services/learningRelevance.js'
-      - 'services/learningContext.js'
-      - 'services/serviceUtils.js'
   workflow_dispatch:
     inputs:
       extraction_stage:
@@ -32,6 +18,9 @@ jobs:
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare trusted CA bundle
         run: |
           mkdir -p .e2e-cache
@@ -74,6 +63,9 @@ jobs:
       QUALITY_SPLITS: ${{ matrix.splits }}
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -110,6 +102,9 @@ jobs:
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -142,6 +137,9 @@ jobs:
       QUALITY_MODEL: ${{ matrix.model }}
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Verify downloaded manifest without inference or publication
         run: docker build --build-arg "QUALITY_MODEL=$QUALITY_MODEL" -f tests/e2e/Dockerfile.quality-model .
 
@@ -151,6 +149,9 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Download approved model manifests without inference
         run: |
           docker run -d --name extraction-locks -e OLLAMA_NO_CLOUD=1 ollama/ollama:0.12.6
@@ -192,6 +193,9 @@ jobs:
           - {arm: C, model: 'qwen2.5:3b', split: confirmation, seed: 43}
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - uses: actions/setup-node@v4
         with:
           node-version: '22.22.0'
@@ -248,6 +252,9 @@ jobs:
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -285,6 +292,9 @@ jobs:
           - {arm: B, split: confirmation, seed: 43}
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - uses: actions/setup-node@v4
         with:
           node-version: '22.22.0'
@@ -339,6 +349,9 @@ jobs:
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -376,6 +389,9 @@ jobs:
           - {arm: B, split: confirmation, seed: 43}
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - uses: actions/setup-node@v4
         with:
           node-version: '22.22.0'
@@ -430,6 +446,9 @@ jobs:
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache

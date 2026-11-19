@@ -1,7 +1,5 @@
 name: Native AI coexistence experiment
 on:
-  pull_request:
-    paths: ['docker-compose.native-ai.yml', 'tests/e2e/native-ai.test.js', 'tests/e2e/Dockerfile.native-model', 'tests/e2e/native-models.sha256', '.github/workflows/native-ai-coexistence.yml', 'services/paperlessService.js']
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,6 +15,9 @@ jobs:
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
       - uses: actions/checkout@v4
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache

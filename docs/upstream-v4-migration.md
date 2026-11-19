@@ -68,8 +68,8 @@ Still required before readiness:
 
 - Complete strict normalization across all automatic/manual paths; reviewed preview/save and field hints are ported.
 - Complete paginated legacy-example management; event history and interval controls are implemented in the follow-up working tree.
-- Adapt legacy CI/test commands to the new runtime without running new model experiments.
-- Run disposable official Paperless-ngx 3.5.1 integration and migration/restart tests.
+- Qualify the newly adapted CI/Compose counterpart on a fresh runner without real-model inference.
+- Run the prepared official ngx 3.5.1 native API/restart and 3.4.2→3.5.1 upgrade matrix; do not claim success before actual CI evidence.
 - Repeat complete tests at the final committed revision and review the complete diff. Build and 18 synthetic browser tests passed during development.
 - Update README, test environment instructions and affected legacy references.
 - Resolve the existing no-new-PR constraint before opening any linked draft PR; obtain the required independent review and owner
@@ -126,3 +126,19 @@ This approval covers neither a merge to main nor publication or deployment.
 The follow-up UI passed all 18 synthetic browser scenarios, including readable
 provenance, review history, confirmation and revocation; both TypeScript targets
 and scoped lint passed. Native official ngx integration remains unverified.
+
+### Native counterpart preparation — 2026-11-19
+
+The Compose project is now `paperless-ai-v4-e2e`, separate from the old cloud
+stack. It uses unchanged official ngx images, PostgreSQL and Redis, and a fixed
+local fake LLM on an internal network. No production URL is an input. A standard
+Node-only API runner tests the built fork image against real ngx. The CI matrix
+includes 3.5.1 and a retained-volume 3.4.2→3.5.1 upgrade plus app restart.
+
+Local preparation checks pass: Compose semantic validation, workflow YAML
+parsing, four explicit safety checks, syntax/lint and existing release-policy
+contracts. A deliberate failing Node test was rejected by the harness; direct
+execution displayed all four safety cases. This is not yet native integration
+evidence. The local vfs executor has only 715 MB free and no 3.5.1 image, so no
+large image pull, foreign-data cleanup or local stack start was attempted.
+Legacy model workflows are manual-only and fail before experiments on 4.x.

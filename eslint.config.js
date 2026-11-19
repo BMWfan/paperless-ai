@@ -18,7 +18,7 @@ export default tseslint.config(
   },
   { files: ['services/learningRelevance.js'], languageOptions: { globals: { escape: 'off' } } },
   { files: ['tests/e2e/browser.test.js'], languageOptions: { globals: { ...globals.browser, origin: 'off' } } },
-  { files: ['scripts/**/*.mjs'], languageOptions: { globals: { ...globals.node } } },
+  { files: ['scripts/**/*.mjs', 'tests/v4/**/*.mjs'], languageOptions: { globals: { ...globals.node } } },
   { files: ['public/js/**/*.js'], languageOptions: { globals: { ...globals.browser } } },
   {
     files: ['src/web/**/*.{ts,tsx,js}'],
