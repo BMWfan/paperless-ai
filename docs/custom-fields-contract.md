@@ -1,5 +1,10 @@
 # Automatic custom-field suggestions
 
+For the current upstream4 integration, see [the migration ledger](upstream-v4-migration.md#explicit-field-editing-and-clearing-spec-41-parity)
+for the guarded reviewed-save and explicit selected-clear API. Historical
+qualification below applies only to its stated source/version; it does not
+automatically qualify a later branch. Missing AI values never authorize deletion.
+
 The scheduled scan, Scan Now and the processing queue resolve provider field
 names against existing Paperless-ngx definitions before constructing a document
 update. Existing provider response shapes and app configuration remain valid.

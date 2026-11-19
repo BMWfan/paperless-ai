@@ -1,0 +1,199 @@
+# Paperless-AI 4 – Architecture
+
+Paperless-AI is a single Node.js (≥ 22) process written in TypeScript. It serves a React single page
+application and a JSON API, runs the document processing pipeline and keeps the search index for
+“Ask your archive”. All state lives in `data/`:
+
+| File | Content |
+| --- | --- |
+| `config.json` (+ `.bak`) | settings (written atomically, validated with zod) |
+| `paperless-ai.db` | SQLite (WAL): users, processing state, history, token usage, RAG index |
+| `models/` | cached local embedding model (only when local embeddings are used) |
+
+On first start a legacy `data/.env` is converted into `config.json` and a legacy `data/documents.db`
+is imported (users, processed documents, history, token metrics). The legacy files are not modified.
+
+## Source layout
+
+```
+src/
+  shared/api.ts          API contract (types only, shared by server and web)
+  shared/ocr.ts          OCR options (languages, modes, quality presets)
+  shared/promptWizard.ts prompt wizard answers → system prompt (used for the live preview and on the server)
+  server/
+    index.ts             bootstrap, graceful shutdown
+    context.ts           AppContext: config, DB, lazily (re)built clients
+    config/              schema (zod), store (env overrides, live reload), legacy .env mapping
+    db/                  migrations, legacy import, repositories
+    auth.ts              bcrypt, JWT session cookie, API key
+    oidc.ts              single sign-on: OpenID Connect discovery, code flow with PKCE, groups, provider logout
+    paperless/           Paperless-ngx client (API v7–v10), metadata cache with get-or-create
+    ai/                  OpenAI-compatible/Azure, Anthropic and Ollama clients, JSON extraction, token estimation
+    processing/          prompt builder, analyzer, applier (+ undo), engine (queue/scheduler), external API
+    rag/                 chunker, SQLite store (FTS5), vector index, local embedder (worker), service, document chat
+    ocr/                 PaddleOCR via ONNX Runtime (child process): rendering, detection post-processing, recognition,
+                         reading order, text-quality heuristic, service (when to read, write-back, undo)
+    http/ routes/        Fastify app, auth levels, SSE helper, route modules
+  web/                   React 19 + Tailwind 4 UI (Vite), pages are code-split
+    styles.css           design tokens (ink palette, accent presets via [data-accent], dark via [data-theme])
+    components/          ui primitives, app shell (Layout), command menu, chat, settings forms
+test/                    vitest unit & integration tests with fake Paperless/LLM servers
+e2e/                     demo server + Playwright end-to-end tests
+```
+
+## Configuration
+
+`ConfigStore` keeps the stored configuration and the environment overrides separately. The effective
+configuration is `stored ⊕ env`, validated leniently (invalid values fall back to defaults instead of
+crashing). Saving settings emits a `change` event; the Paperless client, the AI client, the scheduler
+and the RAG service rebuild themselves from it – no restart. Secrets are never sent to the browser
+(masked values round-trip unchanged).
+
+## Paperless-ngx compatibility
+
+`PaperlessClient` negotiates the API version on the first request: it asks for version 9 (accepted by
+Paperless-ngx 2.16 – 3.x), reads `X-Api-Version` and then uses the highest supported version up to 10.
+Older servers (406) fall back to the advertised version. The client never relies on the `all` field
+(removed in API v10), paginates with page numbers, sends `created` as a date (`created_date` for API < 9),
+and resolves the API user via `/api/ui_settings/`. Tags, correspondents and document types are resolved
+case-insensitively; concurrent creations of the same name are de-duplicated.
+
+## Document processing
+
+```
+scan (cron) ─┐
+webhook ─────┼─▶ queue (dedup, concurrency) ─▶ analyze ─▶ plan update ─▶ PATCH ─▶ history + state
+manual ──────┘                                   │
+                                                 └─ prompt: system prompt + existing data/restrictions
+                                                    + external data + generated output contract
+```
+
+* The output contract and a JSON schema are generated from the enabled functions (only requested
+  fields are asked for; allowed values become enums when restricted).
+* `OpenAiCompatibleClient` adapts to provider quirks at runtime (json_schema → json_object → plain,
+  `max_completion_tokens`/`max_tokens`, unsupported temperature, reasoning budget, output limits,
+  context length errors) and remembers what works.
+* `AnthropicClient` uses the official SDK (streamed Messages API, structured outputs, cached system
+  prompt) and adapts effort/sampling parameters per Claude model the same way.
+* `OllamaClient` uses the native API with a fixed `num_ctx` (Ollama reloads the model when it
+  changes), so long documents are neither truncated silently nor cause reloads; prompts are planned
+  with that window minus room for thinking. `think` is sent when configured and dropped for models
+  without thinking support.
+* Rate limits (HTTP 429, Anthropic 529) pause the queue (Retry-After or growing back-off) and put
+  the document back without counting an attempt.
+* Model output is parsed leniently (fences, `<think>` blocks, trailing commas, truncated JSON) and
+  normalised (dates, custom field values per type, “unknown”-like values).
+* A document is only marked as processed after the PATCH succeeded. Failures are retried on later
+  scans (`maxAttempts`); documents without permission or text are skipped until they change.
+* Every change stores a snapshot of the previous values → *History → Undo* restores them.
+* The prompt library (`prompts`, `prompt_ratings`; `routes/prompts.ts`) keeps prompts with a use case
+  and ratings per provider/model. Activating one writes it to `processing.systemPrompt`; a prompt made
+  with the wizard brings its answers back (`promptWizard`, e.g. the output language), any other one
+  marks the prompt as hand-written. The same text is never stored twice – saving it again adds a rating.
+* Calendar (`processing.functions.events`): the schema and the output contract get an `events` list
+  (title, date, time, kind); `suggestion.ts` normalises it and the engine stores it after the PATCH
+  (`calendar_events`, `calendar_scans`; a re-analysis replaces the dates of a document, dismissed ones
+  stay dismissed). `calendar/scanner.ts` searches earlier documents with the same analysis but only
+  the `events` function enabled, so nothing else is asked for or changed. `calendar/ics.ts` writes the
+  iCal feed (RFC 5545: escaping, 75-octet folding, all-day/floating times, alarms) behind a secret
+  token in the URL (`kv: calendar.feedToken`).
+
+## OCR
+
+```
+engine job ─▶ needs OCR? (mode: always / missing / poor = text-quality score) ─▶ download original
+   (or archived PDF) ─▶ OCR worker ─▶ text ─▶ scores better than the Paperless text?
+   ─▶ yes: optional PATCH content (old text kept for undo), analyze the OCR text; no: analyze the Paperless text
+```
+
+* `ocr/render.ts` turns PDFs into page images with PDFium (WebAssembly) and decodes images with sharp
+  (EXIF orientation, multi-page TIFF). Pages are rendered one at a time.
+* `ocr/pipeline.ts` runs the PP-OCRv5 models with ONNX Runtime: page orientation (0/90/180/270°) →
+  DB text detection (`detPost.ts`: threshold → connected regions → minimum-area rectangle → box
+  score → unclip, no OpenCV) → perspective crop → text-line orientation (0/180°) → CTC recognition.
+  `layout.ts` straightens skewed scans and builds lines and paragraphs.
+* Execution provider: `auto` tries CUDA (when the provider library is installed, i.e. the `-cuda`
+  image) or DirectML (Windows) and falls back to the CPU.
+* Models come from the PaddlePaddle repositories on Hugging Face, pinned to a revision, cached in
+  `data/models/paddleocr`.
+* The worker is a child process (`ocr/worker.ts`, forked by `ocr/runner.ts`): ending it frees all of
+  its memory – including the CUDA context, which would otherwise stay with the server process – and
+  a crash of a native library cannot take the server down. It is started on demand and ends after
+  each document read on the GPU (`ocr.release: auto`; before the AI analysis, so that a local model
+  on the same GPU gets the memory) or after 10 idle minutes, and on its own when the server goes
+  away. Jobs run through the normal processing queue, so a manual OCR request is followed by the AI
+  analysis.
+* `ocr_documents` holds the text-quality score of every document (refreshed incrementally on the OCR
+  page and after each analysis), `ocr_results` the OCR text, the previous Paperless text (undo) and
+  the document version it belongs to. Text that is not written back replaces the Paperless text for
+  the analysis and the RAG index.
+
+## Ask your archive (RAG)
+
+```
+Paperless ──list (id, modified, metadata)──▶ diff ──▶ fetch content (batches) ──▶ chunk (~1200 chars)
+                                                                         │
+                       SQLite: rag_documents, rag_chunks, rag_fts (FTS5, contentless)
+                                                                         │
+                               embed pending passages (batches) ──▶ BLOB + in-memory int8 index
+question ─▶ query analysis with the LLM (standalone query for follow-ups + search keywords)
+        ─▶ BM25 (stemmed prefix terms, coverage-weighted) + vector search (question, keywords)
+        ─▶ reciprocal rank fusion ─▶ boosts (mentioned correspondent/type/month/year, “latest”)
+        ─▶ group by document (best passage decides, ≤ 3 passages)
+        ─▶ context within token budget (short documents completely) ─▶ streamed answer with [n] citations
+```
+
+* Passages carry a metadata header (title, correspondent, type, date, tags) that is indexed with a
+  higher BM25 weight and prepended for embeddings.
+* Index synchronisation is incremental (by `modified` and metadata), runs every 15 minutes and after
+  processing; deleted documents are removed. Keyword search works immediately, vectors follow.
+* The vector index stores normalised vectors as int8 with a per-vector scale and is searched brute
+  force with a bounded heap – milliseconds for archives with hundreds of thousands of passages.
+* Query analysis (`rag.queryExpansion`) is one short JSON call (temperature 0) that also receives a
+  few document titles, so the model can translate terms into the language of the archive. Any
+  failure falls back to the original question. For first questions the user's wording stays the
+  query; the keywords only add a second BM25/vector signal with half the weight.
+* Boosts are uniform per mentioned attribute (all documents of the mentioned correspondent get the
+  same bonus) so that they never prefer newer documents; only “latest …” questions add a recency bonus.
+* Local embeddings run in a worker thread (`transformers.js`/ONNX, limited threads) that is stopped
+  after 5 minutes of inactivity.
+
+## HTTP API & security
+
+* Fastify with zod validation; OpenAPI docs at `/api-docs`.
+* Auth levels per route: `public`, `user` (session cookie or API key), `session` (logged-in user only,
+  e.g. settings and API key), `setup` (only while no user exists).
+* Session: HS256 JWT in an `httpOnly`, `SameSite=Lax` cookie (`Secure` behind HTTPS); changing the
+  password invalidates existing sessions. API key comparison is constant-time. Login is rate limited.
+* Two-factor authentication (`totp.ts`, `twoFactor.ts`, `routes/twoFactor.ts`): TOTP (RFC 6238, SHA-1,
+  6 digits, 30 s, ±1 step) with replay protection (`users.totp_last_step`) and ten recovery codes
+  stored as salted scrypt hashes. With 2FA the password login returns a 5-minute ticket signed with a
+  key derived from the JWT secret – a ticket can never pass as a session – and `/api/auth/login/2fa`
+  turns ticket + code into the session cookie. Enabling 2FA ends all other sessions.
+  `PAPERLESS_AI_RESET_2FA=<user>` switches it off at start-up. API keys are not affected.
+* Single sign-on (`oidc.ts`, `routes/oidc.ts`, `openid-client`): authorization code flow with PKCE (S256),
+  `state` and `nonce`. Nothing is stored on the server during the flow: state, nonce, code verifier,
+  redirect URI and the target path live in a 10-minute HS256-signed cookie (key derived from the JWT
+  secret, `SameSite=Lax`, path `/api/auth/oidc`). The callback verifies the ID token, merges the userinfo
+  claims (groups are often only there), checks the allowed groups and maps `(issuer, sub)` to a user
+  (`users.oidc_issuer/oidc_subject`, unique). Accounts are created on the first sign-in (`autoCreate`)
+  or linked by a signed-in user (`?link=1`); SSO-only accounts have no password hash and cannot use the
+  password login. The ID token is kept in an `httpOnly` cookie for RP-initiated logout. Discovery is
+  cached for an hour and refreshed on config changes. The password login can only be switched off while
+  SSO is usable and – in the UI – only by a linked account. The local 2FA applies to the password login.
+* CORS allows any origin without credentials (API key only), so browser extensions keep working.
+* Server-sent events are used for chats and the live log; disconnecting clients abort the LLM request.
+
+## BMWfan Learning Engine v2 integration
+
+The fork's integration surface is `src/server/learning/` plus small prompt,
+processing, lifecycle and authenticated-route hooks. Its SQLite tables share
+the upstream app database; known legacy learning tables and duplicate archives
+are imported from a read-only source in a target transaction. Native Paperless
+field definitions remain authoritative. Confirmed corrections, unknown-origin
+review, field-source generations and historical evidence are preserved.
+
+The React Learning page provides events, imported corrections and audit history;
+reviewed field previews use fresh native definitions and snapshot hashes.
+[Migration/rollback and qualification](upstream-v4-migration.md) distinguish
+synthetic provider fixtures, unchanged official ngx tests and real-model quality.

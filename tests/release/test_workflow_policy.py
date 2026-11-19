@@ -9,6 +9,30 @@ def workflow(name):
     return yaml.load((ROOT / '.github/workflows' / name).read_text(), Loader=yaml.BaseLoader)
 
 class WorkflowPolicy(unittest.TestCase):
+    def test_validation_action_runtimes_and_app_version(self):
+        # Node20 action majors cause warnings even when app tests use Node22.
+        minimum = {'actions/checkout': 7, 'actions/setup-node': 7,
+                   'actions/setup-python': 6, 'actions/upload-artifact': 7,
+                   'actions/download-artifact': 8, 'actions/github-script': 8,
+                   'docker/setup-buildx-action': 4, 'docker/setup-qemu-action': 4,
+                   'docker/login-action': 4, 'docker/build-push-action': 7}
+        for path in (ROOT / '.github/workflows').glob('*.yml'):
+            if path.name == 'stale.yml':  # Separate SPEC39 / PR40.
+                continue
+            doc = workflow(path.name)
+            for job in doc.get('jobs', {}).values():
+                for step in job.get('steps', []):
+                    action, _, ref = step.get('uses', '').partition('@')
+                    if action in minimum:
+                        self.assertTrue(ref.startswith('v'), (path.name, action, ref))
+                        self.assertGreaterEqual(int(ref[1:].split('.')[0]), minimum[action], (path.name, action))
+                    if action == 'actions/setup-node':
+                        self.assertEqual(str(step['with']['node-version']).split('.')[0], '22')
+                    if action == 'actions/upload-artifact':
+                        self.assertNotEqual(step.get('with', {}).get('archive'), 'false')
+                    if action == 'actions/download-artifact':
+                        self.assertNotIn(step.get('with', {}).get('digest-mismatch', 'error'), ['ignore', 'warn', 'info'])
+
     def test_automatic_build_cannot_publish(self):
         doc = workflow('docker-build-push.yml')
         self.assertEqual(set(doc['on']), {'pull_request', 'push'})
