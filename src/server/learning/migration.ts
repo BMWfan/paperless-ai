@@ -1,8 +1,13 @@
 /** Read-only source import. Never replace source files or merge into an existing learning history. */
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import BetterSqlite3 from 'better-sqlite3';
 import type { Db } from '../db/database.js';
 import { openLearningStore } from './store.js';
+const require = createRequire(import.meta.url);
+const { normalizeDocumentMetadata } = require('./legacy/documentSnapshotService.cjs') as {
+  normalizeDocumentMetadata(value: unknown): { correspondent: unknown; document_type: unknown; custom_fields: { field: number; value: unknown }[] };
+};
 export const IMPORT_KEY = 'fork_learning_v2_import';
 export const LEARNING_TABLES = [
   'learning_migrations', 'learning_document_snapshots', 'learning_change_events', 'learning_examples',
@@ -13,6 +18,35 @@ const legacyFeedback = `CREATE TABLE IF NOT EXISTS learning_feedback (
  id INTEGER PRIMARY KEY, document_id INTEGER, title TEXT, content_preview TEXT, tags TEXT,
  correspondent TEXT, document_type TEXT, corrected_by_user INTEGER DEFAULT 0,
  created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP)`;
+/** Reject broken references before reopening can normalize or discard any imported proof. */
+function assertLearningIntegrity(db: Db) {
+  const invalid = [
+    `SELECT 1 FROM learning_change_events WHERE status NOT IN ('pending','confirmed','rejected','deleted') LIMIT 1`,
+    `SELECT 1 FROM learning_examples e LEFT JOIN learning_change_events c ON c.id=e.event_id
+       WHERE c.id IS NULL OR c.document_id!=e.document_id OR c.status!='confirmed' OR c.metadata_json!=e.metadata_json LIMIT 1`,
+    `SELECT 1 FROM learning_review_history h LEFT JOIN learning_change_events c ON c.id=h.event_id WHERE c.id IS NULL LIMIT 1`,
+    `SELECT 1 FROM learning_event_fields f LEFT JOIN learning_change_events c ON c.id=f.event_id
+       WHERE c.id IS NULL OR c.document_id!=f.document_id OR f.field_id<=0 OR f.generation<=0 LIMIT 1`,
+    `SELECT 1 FROM learning_field_state f LEFT JOIN learning_document_snapshots d ON d.document_id=f.document_id
+       WHERE d.document_id IS NULL OR f.synced_revision!=d.revision LIMIT 1`,
+    `SELECT 1 FROM learning_field_sources f
+       LEFT JOIN learning_change_events c ON c.id=f.event_id
+       LEFT JOIN learning_field_state s ON s.document_id=f.document_id AND s.field_id=f.field_id
+       LEFT JOIN learning_event_fields m ON m.event_id=f.event_id AND m.document_id=f.document_id AND m.field_id=f.field_id
+       WHERE c.id IS NULL OR c.document_id!=f.document_id OR c.status!='confirmed'
+         OR s.document_id IS NULL OR s.generation!=f.generation OR s.present!=1
+         OR m.event_id IS NULL OR m.generation!=f.generation LIMIT 1`,
+  ];
+  if (invalid.some(query => db.prepare(query).get())) throw new Error('Inconsistent learning references; source left untouched');
+  for (const row of db.prepare(`SELECT f.*,d.metadata_json FROM learning_field_state f
+    JOIN learning_document_snapshots d ON d.document_id=f.document_id`).iterate() as Iterable<{ field_id: number; value_json: string; present: number; scope_json: string; metadata_json: string }>) {
+    const metadata = normalizeDocumentMetadata(JSON.parse(row.metadata_json));
+    const field = metadata.custom_fields.find(field => field.field === row.field_id);
+    if (row.present !== Number(!!field) || row.value_json !== (field ? JSON.stringify(field.value) : 'null') ||
+        row.scope_json !== JSON.stringify([metadata.correspondent, metadata.document_type]))
+      throw new Error('Inconsistent learning references; source left untouched');
+  }
+}
 export function initializeLearning(db: Db, legacyFile?: string) {
   openLearningStore(':memory:', { database: db }).close();
   if (!legacyFile || !fs.existsSync(legacyFile)) return openLearningStore(':memory:', { database: db });
@@ -46,13 +80,19 @@ export function initializeLearning(db: Db, legacyFile?: string) {
           db.prepare(`DELETE FROM ${table}`).run();
           counts[table] = 0;
           for (const row of source.prepare(`SELECT * FROM ${table}`).iterate() as Iterable<Record<string, unknown>>) {
-            for (const column of columns) if ((column.endsWith('_json') || column === 'json') && row[column] != null) JSON.parse(String(row[column]));
+            for (const column of columns) if ((column.endsWith('_json') || column === 'json') && row[column] != null) {
+              const value = JSON.parse(String(row[column]));
+              if (['metadata_json', 'changes_json'].includes(column) && (!value || typeof value !== 'object' || Array.isArray(value)))
+                throw new Error(`Invalid learning object in ${table}`);
+            }
             insert.run(...columns.map(column => row[column])); counts[table]++;
           }
         }
+        assertLearningIntegrity(db);
         // Re-run additive migrations/backfill for older Learning v2 schemas inside this transaction.
         const store = openLearningStore(':memory:', { database: db });
-        store.settings(); store.examples(true); store.fieldCorrections();
+        store.configure(store.settings()); store.examples(true); store.fieldCorrections();
+        assertLearningIntegrity(db);
         db.prepare('INSERT INTO kv (key,value) VALUES (?,?)').run(IMPORT_KEY, JSON.stringify({ version: 1, counts }));
       })();
     })();

@@ -490,13 +490,16 @@ test('Learning v2 confirms a UI correction and allows revocation', async ({ page
   await page.goto('/review?doc=2');
   await page.getByLabel('Title', { exact: true }).fill('Synthetic confirmed learning correction');
   await page.getByRole('button', { name: 'Save to Paperless', exact: true }).click();
+  await expect(page.getByText('Saved: title', { exact: true })).toBeVisible();
   await page.getByRole('link', { name: 'Learning', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Learning', exact: true })).toBeVisible();
   await page.getByLabel('Status', { exact: true }).selectOption('confirmed');
   const event = page.locator('div').filter({ has: page.getByRole('heading', { name: 'Document #2 · confirmed', exact: true }) }).filter({ has: page.getByRole('button', { name: 'Revoke learning', exact: true }) }).last();
-  await expect(event.getByText('Source: confirmed_ui', { exact: true })).toBeVisible();
+  await expect(event.getByText('Source: Confirmed in Paperless-AI', { exact: true })).toBeVisible();
+  await event.getByText('Review history', { exact: true }).click();
+  await expect(event.getByText(/confirmed · User #/)).toBeVisible();
   await event.getByRole('button', { name: 'Revoke learning', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Document #2 · confirmed', exact: true })).toHaveCount(0);
   await page.getByLabel('Status', { exact: true }).selectOption('deleted');
-  await expect(page.getByRole('heading', { name: 'Document #2 · deleted', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Document #2 · revoked', exact: true })).toBeVisible();
 });

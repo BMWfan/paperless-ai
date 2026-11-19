@@ -67,7 +67,7 @@ results are not release qualification.
 Still required before readiness:
 
 - Complete strict normalization across all automatic/manual paths; reviewed preview/save and field hints are ported.
-- Complete learning UI history, legacy management and interval controls.
+- Complete paginated legacy-example management; event history and interval controls are implemented in the follow-up working tree.
 - Adapt legacy CI/test commands to the new runtime without running new model experiments.
 - Run disposable official Paperless-ngx 3.5.1 integration and migration/restart tests.
 - Repeat complete tests at the final committed revision and review the complete diff. Build and 18 synthetic browser tests passed during development.
@@ -100,3 +100,29 @@ hashes are checked while the document lock is held. Unselected values are
 preserved; reviewed saves fail instead of silently dropping rejected fields.
 Native upstream automatic and ordinary manual custom-field paths still need
 contract reconciliation and must not be described as strict yet.
+
+### Follow-up import integrity — 2026-11-19 (not part of the pending merge checkpoint)
+
+Additional importer guards reject orphaned examples/review entries, mismatched
+field generations, unknown event statuses, invalid metadata JSON shapes and
+field values/scopes that disagree with their snapshots. Checks run before any
+reopen normalization can discard proof. The source remains read-only and the
+target import rolls back on rejection. These follow-up changes are kept in a separate commit from the upstream and
+diagnostic-history merges.
+
+Follow-up verification: all 16 focused migration tests pass, including a real
+file-backed AppContext import/restart and invalid-settings rollback. The six
+existing legacy-import integration tests also pass. These are local synthetic
+checks; official ngx 3.5.1 integration remains pending. No model was called.
+
+The follow-up learning UI renders before/after values using metadata names,
+loads per-document review history on expansion, and exposes scan/stabilization
+interval controls. Requests use the shared abort-aware loader so a superseded
+filter response cannot overwrite a newer result. This work is recorded with the importer follow-up, separately from the
+upstream and diagnostic-history merges.
+
+The owner approved the local feature-branch merge and push on 2026-11-19.
+This approval covers neither a merge to main nor publication or deployment.
+The follow-up UI passed all 18 synthetic browser scenarios, including readable
+provenance, review history, confirmation and revocation; both TypeScript targets
+and scoped lint passed. Native official ngx integration remains unverified.

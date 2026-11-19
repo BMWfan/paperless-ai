@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { AppContext } from '../../src/server/context.js';
 import { openDatabase, type Db } from '../../src/server/db/database.js';
 import { initializeLearning, IMPORT_KEY, LEARNING_TABLES } from '../../src/server/learning/migration.js';
 import { openLearningStore } from '../../src/server/learning/store.js';
@@ -96,4 +97,51 @@ describe('Learning v2 import into upstream4 database', () => {
     store.observe(document('External'), 'unknown'); expect(store.list('pending')).toHaveLength(1); expect(store.examples()).toHaveLength(0);
     store.observe(document('Explicit'), 'confirmed_ui', { actor: 'user:1' }); expect(store.examples()).toHaveLength(1);
   });
+  it.each([
+    'UPDATE learning_examples SET event_id=999999',
+    'UPDATE learning_review_history SET event_id=999999',
+    'UPDATE learning_field_sources SET generation=generation+1',
+    `UPDATE learning_field_state SET value_json='"WRONG"'`,
+    `UPDATE learning_field_state SET scope_json='[999,999]'`,
+  ])('rejects broken proof without silently dropping imported history: %s', sql => {
+    const source = sourceFixture(), broken = openLearningStore(source.file);
+    expect(broken.database.prepare(sql).run().changes).toBeGreaterThan(0); broken.close();
+    const before = sha(source.file), db = target(); initializeLearning(db);
+    const counts = tableCounts(db);
+    expect(() => initializeLearning(db, source.file)).toThrow(/Inconsistent learning references/);
+    expect(tableCounts(db)).toEqual(counts); expect(sha(source.file)).toBe(before);
+    expect(db.prepare('SELECT value FROM kv WHERE key=?').get(IMPORT_KEY)).toBeUndefined();
+  });
+  it('rejects syntactically valid JSON that cannot be document metadata', () => {
+    const source = sourceFixture(), broken = openLearningStore(source.file);
+    broken.database.prepare("UPDATE learning_change_events SET metadata_json='[]'").run(); broken.close();
+    const before = sha(source.file), db = target(); initializeLearning(db);
+    const counts = tableCounts(db);
+    expect(() => initializeLearning(db, source.file)).toThrow(/Invalid learning object/);
+    expect(tableCounts(db)).toEqual(counts); expect(sha(source.file)).toBe(before);
+  });
+
+  it('imports through the real file-backed AppContext and preserves new settings across restart', () => {
+    const source = sourceFixture(), before = sha(source.file), dataDir = path.dirname(source.file);
+    const first = new AppContext({ dataDir, env: {} });
+    try {
+      expect(first.learning.examples(true)).toEqual(source.examples);
+      first.learning.configure({ mode: 'manual', enabled: false });
+    } finally { first.close(); }
+    const second = new AppContext({ dataDir, env: {} });
+    try {
+      expect(second.learning.settings()).toMatchObject({ mode: 'manual', enabled: false });
+      expect(second.learning.fieldCorrections()).toEqual(source.fields);
+    } finally { second.close(); }
+    expect(sha(source.file)).toBe(before);
+  });
+  it('rolls back invalid persisted settings rather than enabling an unsupported learning mode', () => {
+    const source = sourceFixture(), broken = openLearningStore(source.file);
+    broken.database.prepare('UPDATE learning_settings SET json=?').run(JSON.stringify({ ...broken.settings(), mode: 'unrecognized' })); broken.close();
+    const before = sha(source.file), db = target(); initializeLearning(db); const counts = tableCounts(db);
+    expect(() => initializeLearning(db, source.file)).toThrow(/Invalid learning settings/);
+    expect(tableCounts(db)).toEqual(counts); expect(sha(source.file)).toBe(before);
+    expect(db.prepare('SELECT value FROM kv WHERE key=?').get(IMPORT_KEY)).toBeUndefined();
+  });
+
 });
