@@ -184,7 +184,18 @@ export class ProcessingEngine extends EventEmitter<{ job: [documentId: number, o
         }
         tagFilter = res.ids;
       }
-      const docs = await client.listDocuments({ tagsAny: tagFilter, fields: ['id', 'title', 'modified'], ordering: 'added', pageSize: 1000 });
+      let excludeFilter: number[] | undefined;
+      if (p.excludeTags.length) {
+        const res = await meta.resolveTags(p.excludeTags, false);
+        if (res.ids.length) excludeFilter = res.ids;
+      }
+      const docs = await client.listDocuments({
+        tagsAny: tagFilter,
+        tagsNone: excludeFilter,
+        fields: ['id', 'title', 'modified'],
+        ordering: 'added',
+        pageSize: 1000,
+      });
       const states = this.ctx.repos.documents.all();
       let count = 0;
       for (const doc of docs) {
@@ -195,7 +206,7 @@ export class ProcessingEngine extends EventEmitter<{ job: [documentId: number, o
       this.lastScanAt = Date.now();
       this.lastError = null;
       log.info(`Scan finished: ${docs.length} documents checked, ${count} queued for processing`);
-      await this.pruneDeleted(tagFilter ? undefined : docs.map((d) => d.id));
+      await this.pruneDeleted(tagFilter || excludeFilter ? undefined : docs.map((d) => d.id));
       return count;
     } catch (err) {
       this.lastError = describeError(err);
@@ -249,6 +260,18 @@ export class ProcessingEngine extends EventEmitter<{ job: [documentId: number, o
       default:
         return true;
     }
+  }
+
+  /** The first exclude tag (Settings → Processing) the document carries, if any. */
+  private async excludeTag(doc: Pick<PaperlessDocument, 'tags'>): Promise<string | null> {
+    const names = this.ctx.cfg.processing.excludeTags;
+    if (!names.length || !doc.tags?.length) return null;
+    const meta = this.ctx.metadata();
+    for (const name of names) {
+      const [id] = (await meta.resolveTags([name], false)).ids;
+      if (id !== undefined && doc.tags.includes(id)) return name;
+    }
+    return null;
   }
 
   private ocrAutomatic(): boolean {
@@ -358,6 +381,16 @@ export class ProcessingEngine extends EventEmitter<{ job: [documentId: number, o
       }
       doc = await this.ctx.paperless().getDocument(documentId);
       if (info) info.title = doc.title;
+      // Exclude tags guard automatic processing (scan and Paperless workflow webhook). Documents
+      // requested explicitly – manual review, OCR page, API queue – are still processed.
+      if (job.source === 'scan' || job.source === 'webhook') {
+        const excluded = await this.excludeTag(doc);
+        if (excluded) {
+          repo.markSkipped(documentId, doc.title, `Has the exclude tag "${excluded}"`, doc.modified ?? null);
+          log.info(`Skipping document ${documentId}: exclude tag "${excluded}"`);
+          return 'skipped';
+        }
+      }
       if (doc.user_can_change === false) {
         repo.markSkipped(documentId, doc.title, 'The Paperless user of Paperless-AI has no permission to change this document', doc.modified ?? null);
         log.info(`Skipping document ${documentId}: no change permission`);

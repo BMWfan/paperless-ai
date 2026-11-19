@@ -1,6 +1,7 @@
 # Upstream 4.x migration — SPEC #41 (work in progress)
 
-This branch merges released upstream v4.2.0 (`4200b96ae376a3bf4cebd743c26e70ee9b5c874b`)
+This branch first merged released upstream v4.2.0 (`4200b96ae376a3bf4cebd743c26e70ee9b5c874b`)
+and now integrates the subsequently released v4.3.0 (`ba56eeddc417a02517fd288b1f04a3b917c5df3c`)
 into the fork baseline `363c0c646ef368642e0468d139dc974095e8cb6a`.
 The merge preserves upstream ancestry so future updates can use a normal fetch,
 review and merge. Do not deploy this intermediate branch.
@@ -207,3 +208,22 @@ archives, and database/config source hashes, including after app restart. It
 does not run an old 3.x application. This extension still needs actual CI proof.
 Existing fixtures are not retroactively reseeded or erased; qualification must
 use fresh disposable volumes rather than rewriting existing test data.
+
+### Released upstream 4.3.0 refresh
+
+Release v4.3.0 was published after the initial baseline selection. Its 41-file
+delta adds native OIDC sign-on and exclusion-tag support (processing and
+workflow webhook). These are reused from upstream; no fork alternative is
+introduced. Both remain governed by upstream configuration, with OIDC disabled
+in the native fixture and local mock-issuer tests only. The fork retains its
+Learning v2 hooks, conservative field writer and manual-only publication policy.
+The E2E append conflict is resolved by keeping all upstream and fork scenarios.
+The previous 4.2 qualification is historical; the refreshed head needs complete
+checks and the same real-ngx matrix before readiness can be claimed.
+
+Local verification of the integrated 4.3 tree: 588 Vitest cases passed, one real
+PaddleOCR-model case skipped, 47 files; TypeScript, full lint, build and all 35
+historical hashes passed. All 21 Playwright cases passed, including upstream
+OIDC linking/sign-in/provider logout through a local mock and the fork's learning
+and legacy-revocation flows. This does not certify a real Entra tenant. The
+expanded native legacy-data fixture still requires its next CI run.

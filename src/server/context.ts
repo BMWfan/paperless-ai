@@ -17,7 +17,7 @@ import { initializeLearning } from './learning/migration.js';
 import type { LearningStore } from './learning/store.js';
 import { stopLearningMonitor } from './learning/runtime.js';
 
-export const VERSION = '4.2.0';
+export const VERSION = '4.3.0';
 
 export class NotConfiguredError extends Error {
   constructor(message: string) {

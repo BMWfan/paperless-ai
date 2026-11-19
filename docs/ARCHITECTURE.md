@@ -26,6 +26,7 @@ src/
     config/              schema (zod), store (env overrides, live reload), legacy .env mapping
     db/                  migrations, legacy import, repositories
     auth.ts              bcrypt, JWT session cookie, API key
+    oidc.ts              single sign-on: OpenID Connect discovery, code flow with PKCE, groups, provider logout
     paperless/           Paperless-ngx client (API v7–v10), metadata cache with get-or-create
     ai/                  OpenAI-compatible/Azure, Anthropic and Ollama clients, JSON extraction, token estimation
     processing/          prompt builder, analyzer, applier (+ undo), engine (queue/scheduler), external API
@@ -170,5 +171,29 @@ question ─▶ query analysis with the LLM (standalone query for follow-ups + s
   key derived from the JWT secret – a ticket can never pass as a session – and `/api/auth/login/2fa`
   turns ticket + code into the session cookie. Enabling 2FA ends all other sessions.
   `PAPERLESS_AI_RESET_2FA=<user>` switches it off at start-up. API keys are not affected.
+* Single sign-on (`oidc.ts`, `routes/oidc.ts`, `openid-client`): authorization code flow with PKCE (S256),
+  `state` and `nonce`. Nothing is stored on the server during the flow: state, nonce, code verifier,
+  redirect URI and the target path live in a 10-minute HS256-signed cookie (key derived from the JWT
+  secret, `SameSite=Lax`, path `/api/auth/oidc`). The callback verifies the ID token, merges the userinfo
+  claims (groups are often only there), checks the allowed groups and maps `(issuer, sub)` to a user
+  (`users.oidc_issuer/oidc_subject`, unique). Accounts are created on the first sign-in (`autoCreate`)
+  or linked by a signed-in user (`?link=1`); SSO-only accounts have no password hash and cannot use the
+  password login. The ID token is kept in an `httpOnly` cookie for RP-initiated logout. Discovery is
+  cached for an hour and refreshed on config changes. The password login can only be switched off while
+  SSO is usable and – in the UI – only by a linked account. The local 2FA applies to the password login.
 * CORS allows any origin without credentials (API key only), so browser extensions keep working.
 * Server-sent events are used for chats and the live log; disconnecting clients abort the LLM request.
+
+## BMWfan Learning Engine v2 integration
+
+The fork's integration surface is `src/server/learning/` plus small prompt,
+processing, lifecycle and authenticated-route hooks. Its SQLite tables share
+the upstream app database; known legacy learning tables and duplicate archives
+are imported from a read-only source in a target transaction. Native Paperless
+field definitions remain authoritative. Confirmed corrections, unknown-origin
+review, field-source generations and historical evidence are preserved.
+
+The React Learning page provides events, imported corrections and audit history;
+reviewed field previews use fresh native definitions and snapshot hashes.
+[Migration/rollback and qualification](upstream-v4-migration.md) distinguish
+synthetic provider fixtures, unchanged official ngx tests and real-model quality.

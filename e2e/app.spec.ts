@@ -8,6 +8,13 @@ import { timeStep, totpCode } from '../src/server/totp.js';
 
 test.describe.configure({ mode: 'serial' });
 
+// The support reminder would open on the dashboard in every test – it has a test of its own.
+test.beforeEach(async ({ context }) => {
+  await context.addInitScript(() => {
+    if (!sessionStorage.getItem('e2e-support-reminder')) localStorage.setItem('pai-support-snoozed-until', String(Date.now() + 86_400_000));
+  });
+});
+
 const USER = 'admin';
 const PASSWORD = 'e2e-password-123';
 
@@ -513,4 +520,133 @@ test('imported legacy corrections can be revoked with history retained', async (
   await page.getByLabel('Status', { exact: true }).selectOption('history');
   await expect(page.getByRole('heading', { name: 'Document #500 · revoked', exact: true })).toBeVisible();
   await expect(page.getByText('Source: Legacy user correction', { exact: true })).toBeVisible();
+});
+
+test('support reminder opens on the dashboard, can be put off for 7 days and comes back', async ({ page }) => {
+  await login(page);
+  await page.evaluate(() => {
+    sessionStorage.setItem('e2e-support-reminder', '1');
+    localStorage.removeItem('pai-support-snoozed-until');
+  });
+  await page.goto('/');
+  const dialog = page.getByRole('dialog', { name: 'Enjoying Paperless-AI?' });
+  await expect(dialog).toBeVisible({ timeout: 10_000 });
+
+  // The shields.io badges, served by Paperless-AI itself.
+  const links = dialog.getByRole('list', { name: 'Ways to support the project' }).getByRole('link');
+  expect(await links.evaluateAll((as) => as.map((a) => a.getAttribute('href')))).toEqual([
+    'https://www.patreon.com/c/clusterzx',
+    'https://www.paypal.com/paypalme/bech0r',
+    'https://www.buymeacoffee.com/clusterzx',
+    'https://ko-fi.com/clusterzx',
+  ]);
+  const images = dialog.getByRole('img');
+  await expect(images).toHaveCount(4);
+  expect(await images.evaluateAll((imgs) => imgs.map((i) => i.getAttribute('src')))).toEqual([
+    '/support/patreon.svg',
+    '/support/paypal.svg',
+    '/support/buymeacoffee.svg',
+    '/support/kofi.svg',
+  ]);
+  for (const img of await images.all()) {
+    await expect.poll(() => img.evaluate((i) => (i as unknown as { naturalWidth: number }).naturalWidth)).toBeGreaterThan(0);
+  }
+
+  await dialog.getByRole('button', { name: 'Maybe later' }).click();
+  await expect(dialog).toBeHidden();
+  const until = Number(await page.evaluate(() => localStorage.getItem('pai-support-snoozed-until')));
+  expect(until - Date.now()).toBeGreaterThan(6.9 * 86_400_000);
+  expect(until - Date.now()).toBeLessThanOrEqual(7 * 86_400_000);
+
+  // Not again on the next visit …
+  await page.reload();
+  await expect(dashboardHeading(page)).toBeVisible();
+  await page.waitForTimeout(3500);
+  await expect(dialog).toBeHidden();
+  // … but once the 7 days are over.
+  await page.evaluate(() => localStorage.setItem('pai-support-snoozed-until', String(Date.now() - 1000)));
+  await page.reload();
+  await expect(dialog).toBeVisible({ timeout: 10_000 });
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+
+  // At any time from the account menu.
+  await page.getByRole('button', { name: /Account & appearance/ }).click();
+  await page.getByRole('button', { name: 'Support the project' }).click();
+  await expect(dialog).toBeVisible();
+});
+
+test('single sign-on: set up, link the account, sign in and out at the provider', async ({ page, request }) => {
+  const demoInfo = async () => (await (await request.get('/__demo/info')).json()) as { oidc: { issuer: string; clientId: string; clientSecret: string; logouts: number } };
+  const { oidc } = await demoInfo();
+  await login(page);
+
+  // Settings → Sign-in: connect the provider
+  await page.goto('/settings?tab=signin');
+  await page.getByRole('switch', { name: /Single sign-on \(OpenID Connect\)/ }).click();
+  await page.getByLabel('Issuer URL').fill(oidc.issuer);
+  await page.getByLabel('Client ID').fill(oidc.clientId);
+  await page.getByLabel('Client secret').fill(oidc.clientSecret);
+  await expect(page.getByLabel('Redirect URI')).toHaveText(/\/api\/auth\/oidc\/callback$/);
+  await page.getByRole('button', { name: 'Test provider' }).click();
+  await expect(page.getByText(`Found ${oidc.issuer}`)).toBeVisible();
+  await expect(page.getByText(/Without allowed groups, everyone/)).toBeVisible();
+  const groups = page.getByLabel('Allowed groups');
+  await groups.fill('paperless');
+  await groups.press('Enter');
+  await expect(page.getByText(/Without allowed groups, everyone/)).toBeHidden();
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByText(/Settings saved/)).toBeVisible();
+
+  // The password login can only be switched off once the own account is linked
+  const passwordLogin = page.getByRole('switch', { name: /Sign in with user name and password/ });
+  await passwordLogin.click();
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByText(/Link your account with single sign-on first/).first()).toBeVisible();
+  await page.getByRole('button', { name: 'Discard' }).click();
+
+  // Settings → Account: link with the provider (it signs in as "erika" at once and sends the browser back)
+  await page.goto('/settings?tab=account');
+  await page.getByRole('link', { name: 'Link with single sign-on' }).click();
+  await expect(page.getByText('Your account is now linked with single sign-on')).toBeVisible();
+  await expect(page.getByText('Linked', { exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/\/settings\?tab=account$/);
+
+  // Now only single sign-on
+  await page.goto('/settings?tab=signin');
+  await passwordLogin.click();
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByText(/Settings saved/)).toBeVisible();
+
+  const signOut = async () => {
+    await page.getByRole('button', { name: /Account & appearance/ }).click();
+    await page.getByRole('button', { name: 'Sign out' }).click();
+  };
+  // A password session signs out locally; the login page offers single sign-on only
+  await signOut();
+  const ssoButton = page.getByRole('link', { name: 'Sign in with SSO' });
+  await expect(ssoButton).toBeVisible();
+  await expect(page.locator('#password')).toHaveCount(0);
+  expect((await demoInfo()).oidc.logouts).toBe(oidc.logouts);
+
+  // Signing in with SSO opens the linked account – and the page the browser came from
+  const signedInAsAdmin = page.getByRole('button', { name: new RegExp(`^${USER} Account & appearance`) });
+  await ssoButton.click();
+  await expect(signedInAsAdmin).toBeVisible();
+  await expect(page).toHaveURL(/\/settings\?tab=signin$/);
+
+  // Signing out of an SSO session ends it at the provider, which sends the browser back to the login page
+  await signOut();
+  await expect(ssoButton).toBeVisible();
+  expect((await demoInfo()).oidc.logouts).toBe(oidc.logouts + 1);
+  await ssoButton.click();
+  await expect(signedInAsAdmin).toBeVisible();
+
+  // Back to passwords for the other tests
+  await page.goto('/settings?tab=signin');
+  await passwordLogin.click();
+  await page.getByRole('switch', { name: /Single sign-on \(OpenID Connect\)/ }).click();
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByText(/Settings saved/)).toBeVisible();
+  session = null;
 });

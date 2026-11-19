@@ -467,6 +467,36 @@ describe('automatic processing', () => {
     expect(hh.paperless.docs.get(301)!.title).toBe('Processed');
   });
 
+  it('excludes documents with an exclude tag even when onlyTagged matches them', async () => {
+    const hh = await harness({
+      config: { processing: { onlyTagged: true, tags: ['ai-process'], excludeTags: ['do-not-ai'] } },
+    });
+    hh.paperless.addTag('ai-process', 50);
+    hh.paperless.addTag('do-not-ai', 60);
+    hh.paperless.addDocument({ id: 401, title: 'included', content: 'Please process this document', tags: [50] });
+    hh.paperless.addDocument({ id: 402, title: 'both tags', content: 'Please do not process this document', tags: [50, 60] });
+    hh.llm.reply(analysisJson({ title: 'Processed', tags: ['Misc'] }));
+
+    expect(await scan(hh)).toBe(1);
+    expect(hh.paperless.patches(401)).toHaveLength(1);
+    expect(hh.paperless.patches(402)).toHaveLength(0);
+    const q = hh.paperless.calls('GET', '/api/documents/')[0].query;
+    expect(q.tags__id__in).toBe('50');
+    expect(q.tags__id__none).toBe('60');
+  });
+
+  it('excludes documents with an exclude tag with no other filter active', async () => {
+    const hh = await harness({ config: { processing: { excludeTags: ['do-not-ai'] } } });
+    hh.paperless.addTag('do-not-ai', 60);
+    hh.paperless.addDocument({ id: 401, title: 'excluded', content: 'Please do not process this document', tags: [60] });
+    hh.paperless.addDocument({ id: 402, title: 'included', content: 'Please process this document' });
+    hh.llm.reply(analysisJson({ title: 'Processed', tags: ['Misc'] }));
+
+    expect(await scan(hh)).toBe(1);
+    expect(hh.paperless.patches(401)).toHaveLength(0);
+    expect(hh.paperless.patches(402)).toHaveLength(1);
+  });
+
   it('skips scanning when none of the trigger tags exist', async () => {
     const hh = await harness({ config: { processing: { onlyTagged: true, tags: ['missing-tag'] } } });
     hh.paperless.addDocument({ id: 1, content: 'Some content to process here' });
@@ -620,6 +650,27 @@ describe('webhook', () => {
     expect(hh.paperless.docs.get(5)!.title).toBe('Forced');
     const last = hh.llm.chatRequests().at(-1)!.body as { messages: { content: string }[] };
     expect(last.messages[0].content.startsWith('Webhook prompt')).toBe(true);
+  });
+
+  it('leaves documents with an exclude tag alone – unless they are requested explicitly', async () => {
+    const hh = await harness({ config: { processing: { excludeTags: ['private', 'do-not-ai'] } } });
+    hh.paperless.addTag('do-not-ai', 60);
+    hh.paperless.addDocument({ id: 7, title: 'License 2026', content: 'Yearly license renewal certificate text', tags: [60] });
+    hh.llm.reply(analysisJson({ title: 'AI title' }));
+
+    const res = await hh.inject({ method: 'POST', url: '/api/webhook/document', headers: hh.apiKeyHeaders(), payload: { document_id: 7, force: true } });
+    expect(res.statusCode).toBe(202);
+    await hh.engine.drain();
+    expect(hh.paperless.docs.get(7)!.title).toBe('License 2026');
+    expect(hh.paperless.patches(7)).toHaveLength(0);
+    expect(hh.llm.chatRequests()).toHaveLength(0);
+    expect(hh.ctx.repos.documents.get(7)).toMatchObject({ status: 'skipped', reason: 'Has the exclude tag "do-not-ai"' });
+
+    // "process these documents now" is an explicit request
+    const queued = await hh.inject({ method: 'POST', url: '/api/processing/documents', headers: hh.apiKeyHeaders(), payload: { ids: [7] } });
+    expect(queued.json()).toEqual({ queued: 1 });
+    await hh.engine.drain();
+    expect(hh.paperless.docs.get(7)!.title).toBe('AI title');
   });
 
   it('rejects invalid references', async () => {
