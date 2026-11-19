@@ -73,7 +73,7 @@ Current readiness status (2026-11-19):
 | Durable learning, confirmation and management | Dedicated adapter, settings/events/examples, legacy corrections, review/revocation and audit history ported; API/browser tests pass at 83d1021. |
 | Migration integrity and rollback | Source-preserving transactional learning import, malformed-input guards and idempotency tested; real native seeded legacy import/restart passed at 83d1021. Production restore rehearsal remains a deployment gate. |
 | Native typed fields and preservation | Strict reviewed and ordinary writer qualified at 83d1021. Explicit clearing/current-value editor is the pending parity extension below. |
-| Provenance | Authenticated explicit UI writes can establish human provenance; self-writes never teach; external/API-key changes require review. Real native workflow execution and native AI coexistence are not qualified by simulated external edits. |
+| Provenance | Authenticated explicit UI writes can establish human provenance; self-writes never teach; external/API-key changes require review. Actual native updated-document assignment after an authenticated app save is qualified by the later workflow fixture below; native AI coexistence remains unqualified. |
 | Reproducible integration | Official unchanged ngx 3.5.1 plus retained-volume 3.4.2-to-3.5.1 upgrade and app restart passed at 83d1021. Recheck every changed runtime head. |
 | Provider independence and quality | Common bounded learning context and synthetic provider fixtures exist. Real-model comparative accuracy and real Entra tenant qualification remain unmeasured. |
 | Resource-efficient change detection | Paginated metadata passes avoid routine full-content synchronization. Incremental cursor/deletion reconciliation is a separately scoped future optimization. |
@@ -348,3 +348,19 @@ This is prepared coverage until the new exact-head matrix passes; previous
 fbe982c evidence did not include configured workflow execution. Native AI,
 scheduled workflows and title templates are still separate scenarios. No app
 code or production workflow is changed by this fixture extension.
+
+
+Workflow fixture qualification: commit
+`0c0d7eb39e57eda39fbe21e90268f66d4dc64e3d` passed native CI
+[44509456349](https://github.com/BMWfan/paperless-ai/actions/runs/44509456349),
+both matrix jobs. Decoded logs explicitly confirm actual workflow execution
+on 3.4.2, standalone 3.5.1 and after the retained-volume upgrade to 3.5.1,
+with unknown/pending provenance, retained fields and no inference. This
+supersedes earlier statements that configured assignment-workflow execution
+was not qualified. General CI
+[44509456397](https://github.com/BMWfan/paperless-ai/actions/runs/44509456397),
+policy44509456386 and build44509456428 passed at the same commit. The application
+runtime remains the reviewed fbe982c version; this extension changes only the
+fixture and documentation. Separate self-review checked fresh tag scoping,
+finally cleanup, authenticated actor, synchronous/asynchronous response handling,
+active/stale examples and zero model calls. No independent review is claimed.
