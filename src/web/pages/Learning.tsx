@@ -9,7 +9,9 @@ import { useMetadata, type MetadataLookup } from '../lib/metadata';
 type Settings = { mode: 'manual' | 'automatic' | 'hybrid' | 'disabled'; enabled: boolean; intervalMs: number; stabilizationMs: number };
 type LearningEvent = { id: number; document_id: number; status: string; source: string; changes: Record<string, { before: unknown; after: unknown }> };
 type Events = { events: LearningEvent[]; total: number; hasMore: boolean };
-type Review = { id: number; decision: string; actor: string; created_at: string };
+type Review = { id: number | null; document_id: number; source: string; decision: string; actor: string; created_at: string };
+type LegacyPage = { examples: { document_id: number; metadata: Record<string, unknown> }[]; total: number; hasMore: boolean };
+type HistoryPage = { history: Review[]; hasMore: boolean };
 const labels: Record<string, string> = { title: 'Title', tags: 'Tags', correspondent: 'Correspondent', document_type: 'Document type', custom_fields: 'Custom fields' };
 const sources: Record<string, string> = { confirmed_ui: 'Confirmed in Paperless-AI', unknown: 'External change; origin unverified', observed: 'Observed metadata', self_write: 'Automatic Paperless-AI change', legacy_user: 'Legacy user correction' };
 const statusLabel = (status: string) => status === 'deleted' ? 'revoked' : status;
@@ -54,11 +56,22 @@ export default function LearningPage() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const data = useAsync(async signal => {
-    const [config, page] = await Promise.all([get<Settings>('/api/learning/settings', signal), get<Events>(`/api/learning/events?status=${status}&limit=25&offset=${offset}`, signal)]);
-    return { config, page };
+    const config = get<Settings>('/api/learning/settings', signal);
+    if (status === 'legacy') {
+      const [settings, legacy] = await Promise.all([config, get<LegacyPage>(`/api/learning/legacy?limit=25&offset=${offset}`, signal)]);
+      return { config: settings, legacy, page: null, history: null };
+    }
+    if (status === 'history') {
+      const [settings, history] = await Promise.all([config, get<HistoryPage>(`/api/learning/history?limit=25&offset=${offset}`, signal)]);
+      return { config: settings, legacy: null, page: null, history };
+    }
+    const [settings, page] = await Promise.all([config, get<Events>(`/api/learning/events?status=${status}&limit=25&offset=${offset}`, signal)]);
+    return { config: settings, page, legacy: null, history: null };
   }, [status, offset]);
   const settings = data.data?.config;
-  const events = data.data?.page;
+  const events = status !== 'legacy' && status !== 'history' ? data.data?.page : null;
+  const legacy = status === 'legacy' ? data.data?.legacy : null;
+  const history = status === 'history' ? data.data?.history : null;
   async function act(path: string, body: unknown = {}) {
     setBusy(true); setError('');
     try { await post(`/api/learning/${path}`, body); await data.reload(); }
@@ -80,8 +93,8 @@ export default function LearningPage() {
       <Button disabled={busy || settings.mode === 'disabled'} onClick={() => void act('scan')}>Scan changes</Button>
     </Card>}
     <div className="my-4 flex items-center gap-3"><label htmlFor="learning-status">Status</label><Select id="learning-status" value={status} onChange={e => { setStatus(e.target.value); setOffset(0); }}>
-      <option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="rejected">Rejected</option><option value="deleted">Revoked</option><option value="">All</option>
-    </Select><span>{events?.total ?? 0} events</span></div>
+      <option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="rejected">Rejected</option><option value="deleted">Revoked</option><option value="">All events</option><option value="legacy">Imported legacy corrections</option><option value="history">Review history</option>
+    </Select><span>{events?.total ?? legacy?.total ?? history?.history.length ?? 0} {history ? 'decisions on this page' : 'records'}</span></div>
     {data.loading && <p>Loading learning events…</p>}
     <div className="space-y-3">{events?.events.map(event => <Card key={event.id} className="space-y-3 p-4">
       <h2 className="font-medium">Document #{event.document_id} · {statusLabel(event.status)}</h2>
@@ -96,6 +109,24 @@ export default function LearningPage() {
       <div className="flex gap-2">{event.status === 'pending' && <><Button disabled={busy} onClick={() => void act(`events/${event.id}/review`, { decision: 'confirmed' })}>Confirm correction</Button><Button disabled={busy} onClick={() => void act(`events/${event.id}/review`, { decision: 'rejected' })}>Reject</Button></>}
       {event.status === 'confirmed' && <Button disabled={busy} onClick={() => void act(`events/${event.id}/review`, { decision: 'deleted' })}>Revoke learning</Button>}</div>
     </Card>)}{!data.loading && events?.events.length === 0 && <p>No events with this status.</p>}</div>
-    <div className="my-4 flex gap-3"><Button disabled={!offset || busy || data.loading} onClick={() => setOffset(Math.max(0, offset - 25))}>Previous</Button><Button disabled={!events?.hasMore || busy || data.loading} onClick={() => setOffset(offset + 25)}>Next</Button></div>
+    {legacy && <div className="space-y-3">
+      <p className="text-sm text-muted">These corrections were imported from the older learning system. Revoking removes their learning influence and automatic-write protection, without changing the native document or deleting audit history.</p>
+      {legacy.examples.map((example, index) => <Card key={`${example.document_id}/${index}`} className="space-y-3 p-4">
+        <h2 className="font-medium">Imported correction · document #{example.document_id}</h2>
+        <p>{String(example.metadata.title || 'Untitled legacy correction')}</p>
+        <p className="text-sm text-muted">Tags: {Array.isArray(example.metadata.tags) ? example.metadata.tags.map(tag => typeof tag === 'number' ? meta.tagName(tag) : String(tag)).join(', ') || 'None' : 'None'}</p>
+        <p className="text-sm">Correspondent: {String(example.metadata.correspondent ?? 'Not set')} · Document type: {String(example.metadata.document_type ?? 'Not set')}</p>
+        <ReviewHistory documentId={example.document_id} status="legacy" />
+        {Number.isSafeInteger(example.document_id) && example.document_id > 0 && <Button disabled={busy} onClick={() => void act(`legacy/${example.document_id}/revoke`)}>Revoke legacy learning</Button>}
+      </Card>)}
+      {!legacy.examples.length && <p>No active imported corrections.</p>}
+    </div>}
+    {history && <div className="space-y-3">{history.history.map((row, index) => <Card key={`${row.id}/${row.document_id}/${index}`} className="space-y-2 p-4">
+      <h2 className="font-medium">Document #{row.document_id} · {statusLabel(row.decision)}</h2>
+      <p className="text-sm">{row.actor.startsWith('user:') ? `User #${row.actor.slice(5)}` : row.actor === 'api-key' ? 'API key' : row.actor} · {row.created_at}</p>
+      <p className="text-sm text-muted">Source: {sources[row.source] ?? 'Origin unverified'}</p>
+      <Link className="text-sm underline" href={`/review?doc=${row.document_id}`}>Open document review</Link>
+    </Card>)}{!history.history.length && <p>No review decisions yet.</p>}</div>}
+    <div className="my-4 flex gap-3"><Button disabled={!offset || busy || data.loading} onClick={() => setOffset(Math.max(0, offset - 25))}>Previous</Button><Button disabled={!(events?.hasMore || legacy?.hasMore || history?.hasMore) || busy || data.loading} onClick={() => setOffset(offset + 25)}>Next</Button></div>
   </Page>;
 }

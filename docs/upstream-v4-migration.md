@@ -67,7 +67,7 @@ results are not release qualification.
 Still required before readiness:
 
 - Verify the follow-up conservative contract across automatic/manual writes in CI; reviewed preview/save and field hints are ported.
-- Complete paginated legacy-example management; event history and interval controls are implemented in the follow-up working tree.
+- Recheck the completed paginated legacy management and audit history at the final committed revision.
 - Keep the proven CI/Compose counterpart current without real-model inference; baseline qualification passed at baa6628.
 - Recheck the native API/restart/upgrade matrix after each runtime change; the baseline passed at baa6628 (see evidence below).
 - Repeat complete tests at the final committed revision and review the complete diff. Build and 18 synthetic browser tests passed during development.
@@ -180,3 +180,30 @@ submit `true`/`false`, calendar ISO dates and canonical numeric strings; localiz
 manual aliases such as `ja` are not accepted for a boolean field. Missing or
 ambiguous data is omitted rather than guessed. The native fixture now also
 checks ordinary integer rejection and CHF preservation against an EUR default.
+
+### Legacy completeness and management follow-up
+
+Comparison with `models/document.js` at 363c0c6 found an additional
+`learning_feedback_archive` table. New failing regressions demonstrated that it
+was not copied and that pre-upsert duplicates were not normalized. The importer
+now copies that archive, applies the original confirmed-first duplicate policy
+only to the target, archives displaced predictions, and keeps source bytes
+unchanged. Import JSON errors name the table/column without echoing the payload.
+
+The learning UI now has paginated imported corrections, selective revocation
+and a global paginated review history (including legacy revocations). A selected
+revoke cannot remove other documents' corrections and retains its audit row.
+Automatic protection uses an indexed document lookup instead of materializing
+all legacy examples for every document; legacy retrieval ranking is unchanged.
+Local follow-up checks: 19 migration tests (including archive preservation and
+legacy pagination/revocation), 36 focused import/history/runtime/API cases, and
+19 complete simulated browser scenarios passed; type checks and lint passed.
+Counts overlap and must not be added as independent executions.
+
+The native initializer is extended to seed actual pre-v4 user/feedback/archive
+schemas and a legacy .env for one real synthetic native document, then let the
+built app import them. It checks preserved login, correction protection,
+archives, and database/config source hashes, including after app restart. It
+does not run an old 3.x application. This extension still needs actual CI proof.
+Existing fixtures are not retroactively reseeded or erased; qualification must
+use fresh disposable volumes rather than rewriting existing test data.

@@ -21,10 +21,11 @@ export const learningRoutes = ({ ctx }: Services): FastifyPluginAsync => async f
   });
   app.get('/api/learning/events', { schema: { querystring: z.object({ ...pagination, status: z.enum(['', 'pending', 'confirmed', 'rejected', 'deleted']).default(''), q: z.string().max(500).default('') }) } }, async req =>
     ctx.learning.page(req.query.status, req.query.q, req.query.limit, req.query.offset));
+  app.get('/api/learning/legacy', { schema: { querystring: z.object(pagination) } }, async req => ctx.learning.legacyPage(req.query.limit, req.query.offset));
   app.get('/api/learning/examples', async () => ({ examples: ctx.learning.examples(true), legacy: ctx.learning.legacyExamples() }));
   app.get('/api/learning/summary', async () => ({ ...ctx.learning.summary(), monitor: learningStatus(ctx) }));
   app.get('/api/learning/history', { schema: { querystring: z.object({ ...pagination, documentId: z.coerce.number().int().positive().optional() }) } }, async req =>
-    ({ history: ctx.learning.history(req.query.documentId, req.query.limit, req.query.offset) }));
+    { const rows = ctx.learning.history(req.query.documentId, req.query.limit + 1, req.query.offset); return { history: rows.slice(0, req.query.limit), hasMore: rows.length > req.query.limit }; });
   app.get('/api/learning/settings', async () => ctx.learning.settings());
   app.post('/api/learning/settings', { schema: { body: z.object({
     mode: z.enum(['manual', 'automatic', 'hybrid', 'disabled']).optional(), enabled: z.boolean().optional(),

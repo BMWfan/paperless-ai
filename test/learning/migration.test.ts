@@ -31,6 +31,24 @@ function tableCounts(db: Db) {
 }
 function sha(file: string) { return createHash('sha256').update(fs.readFileSync(file)).digest('hex'); }
 
+// Legacy schema from models/document.js at fork baseline 363c0c6 (including its duplicate archive).
+function legacyRows(file: string, duplicates = false) {
+  const source = openLearningStore(file);
+  source.database.exec(`CREATE TABLE learning_feedback (
+    id INTEGER PRIMARY KEY,document_id INTEGER,title TEXT,content_preview TEXT,tags TEXT,
+    correspondent TEXT,document_type TEXT,corrected_by_user INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,updated_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+    CREATE TABLE learning_feedback_archive (id INTEGER PRIMARY KEY,original_id INTEGER NOT NULL,
+      document_id INTEGER NOT NULL,payload_json TEXT NOT NULL,archived_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);`);
+  const insert = source.database.prepare('INSERT INTO learning_feedback(id,document_id,title,tags,corrected_by_user) VALUES(?,10,?,?,?)');
+  insert.run(1, 'Confirmed legacy correction', '["invoice"]', 1);
+  if (duplicates) { insert.run(2, 'Newer unconfirmed prediction', '[]', 0); insert.run(3, 'Latest unconfirmed prediction', '[]', 0); }
+  source.database.prepare('INSERT INTO learning_feedback_archive(original_id,document_id,payload_json) VALUES(?,?,?)').run(99, 10, JSON.stringify({ title: 'Preserved old prediction', corrected_by_user: 0 }));
+  const feedback = source.database.prepare('SELECT * FROM learning_feedback ORDER BY id').all();
+  const archive = source.database.prepare('SELECT * FROM learning_feedback_archive ORDER BY id').all();
+  source.close(); return { feedback, archive };
+}
+
 describe('Learning v2 import into upstream4 database', () => {
   it('initializes isolated memory databases without closing the upstream connection', () => {
     const db = target(), store = initializeLearning(db);
@@ -70,7 +88,7 @@ describe('Learning v2 import into upstream4 database', () => {
     broken.database.prepare("UPDATE learning_change_events SET metadata_json='invalid-json' WHERE id=(SELECT min(id) FROM learning_change_events)").run(); broken.close();
     const before = sha(source.file), db = target(); initializeLearning(db);
     const counts = tableCounts(db);
-    expect(() => initializeLearning(db, source.file)).toThrow();
+    expect(() => initializeLearning(db, source.file)).toThrow(/Invalid JSON in learning table learning_change_events/);
     expect(tableCounts(db)).toEqual(counts); expect(sha(source.file)).toBe(before);
     expect(db.prepare('SELECT value FROM kv WHERE key=?').get(IMPORT_KEY)).toBeUndefined();
   });
@@ -142,6 +160,42 @@ describe('Learning v2 import into upstream4 database', () => {
     expect(() => initializeLearning(db, source.file)).toThrow(/Invalid learning settings/);
     expect(tableCounts(db)).toEqual(counts); expect(sha(source.file)).toBe(before);
     expect(db.prepare('SELECT value FROM kv WHERE key=?').get(IMPORT_KEY)).toBeUndefined();
+  });
+
+  it('preserves the original legacy duplicate archive rather than dropping its audit rows', () => {
+    const source = sourceFixture(), rows = legacyRows(source.file), before = sha(source.file), db = target();
+    const imported = initializeLearning(db, source.file);
+    expect(db.prepare("SELECT 1 FROM sqlite_master WHERE name='learning_feedback_archive'").get()).toBeDefined();
+    expect(db.prepare('SELECT * FROM learning_feedback_archive ORDER BY id').all()).toEqual(rows.archive);
+    expect(db.prepare('SELECT * FROM learning_feedback ORDER BY id').all()).toEqual(rows.feedback);
+    expect(imported.legacyExamples()).toHaveLength(1);
+    expect(sha(source.file)).toBe(before);
+  });
+  it('retains confirmed legacy feedback ahead of newer predictions and archives duplicates only in the target', () => {
+    const source = sourceFixture(), rows = legacyRows(source.file, true), before = sha(source.file), db = target();
+    initializeLearning(db, source.file);
+    expect(db.prepare('SELECT * FROM learning_feedback').all()).toEqual([rows.feedback[0]]);
+    expect(db.prepare('SELECT count(*) AS n FROM learning_feedback_archive').get()).toEqual({ n: 3 });
+    initializeLearning(db, source.file);
+    expect(db.prepare('SELECT count(*) AS n FROM learning_feedback_archive').get()).toEqual({ n: 3 });
+    expect(sha(source.file)).toBe(before);
+  });
+
+  it('pages legacy corrections and revokes only the selected document without touching the source', () => {
+    const source = sourceFixture(); legacyRows(source.file);
+    const legacy = openLearningStore(source.file);
+    legacy.database.prepare('INSERT INTO learning_feedback(document_id,title,corrected_by_user) VALUES(?,?,1)').run(20, 'Second correction');
+    legacy.database.prepare('INSERT INTO learning_feedback(document_id,title,corrected_by_user) VALUES(?,?,1)').run(30, 'Third correction'); legacy.close();
+    const before = sha(source.file), db = target(), store = initializeLearning(db, source.file);
+    expect(store.legacyPage(1, 0)).toMatchObject({ total: 3, hasMore: true, examples: [{ document_id: 30 }] });
+    expect(store.legacyPage(1, 1).examples[0].document_id).toBe(20);
+    expect(store.hasLegacyExample(20)).toBe(true);
+    expect(store.revokeLegacy(20, 'user:1')).toBe(true);
+    expect(store.hasLegacyExample(20)).toBe(false); expect(store.hasLegacyExample(10)).toBe(true);
+    expect(store.legacyPage(10, 0).examples.map(row => row.document_id)).toEqual([30, 10]);
+    expect(store.history(20)).toEqual(expect.arrayContaining([expect.objectContaining({ decision: 'revoked', actor: 'user:1' })]));
+    initializeLearning(db, source.file);
+    expect(store.hasLegacyExample(20)).toBe(false); expect(sha(source.file)).toBe(before);
   });
 
 });

@@ -1,6 +1,7 @@
 /** Native API contract test. Only fixed internal fixture hosts are accepted. No real LLM. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import { validateFixture } from './safety.mjs';
 const fixture = JSON.parse(fs.readFileSync('/fixtures/runtime.json', 'utf8'));
 validateFixture(fixture);
@@ -29,6 +30,12 @@ async function upload(content) {
 async function drain() { await waitFor(async () => { const status = await ai('/api/processing/status'); return !status.running && !status.queued && !status.current.length; }, 'selected document processing'); }
 const stats = async () => (await fetch('http://mock-ai:11434/stats', { signal: AbortSignal.timeout(20000) })).json();
 const expectedFile = '/fixtures/expected.json';
+if (fixture.legacyDocumentId) {
+  const digest = path => createHash('sha256').update(fs.readFileSync(path)).digest('hex');
+  assert.equal(digest('/app/data/documents.db'), fixture.legacyDatabaseDigest, 'legacy database source changed');
+  assert.equal(digest('/app/data/.env'), fixture.legacyEnvDigest, 'legacy configuration source changed');
+}
+
 if (process.argv[2] === 'restart') {
   const expected = JSON.parse(fs.readFileSync(expectedFile, 'utf8'));
   assert.equal(expected.scope, fixture.scope);
@@ -48,6 +55,15 @@ const dashboard = await ai('/api/dashboard');
 assert.equal(dashboard.paperless.connected, true);
 assert.equal(dashboard.paperless.version, process.env.EXPECTED_PAPERLESS_VERSION ?? '3.5.1');
 console.log(`Connected to official Paperless-ngx ${dashboard.paperless.version}, API ${dashboard.paperless.apiVersion}.`);
+assert.ok(fixture.legacyDocumentId, 'fresh qualification must exercise legacy migration');
+const imported = (await ai('/api/learning/legacy?limit=100')).examples.find(row => row.document_id === fixture.legacyDocumentId);
+assert.equal(imported?.metadata.title, 'Confirmed imported legacy correction');
+const beforeLegacyReplay = (await stats()).calls;
+await ai('/api/processing/documents', { ids: [fixture.legacyDocumentId] }); await drain();
+assert.equal((await stats()).calls, beforeLegacyReplay, 'legacy correction did not protect automatic replay');
+assert.equal((await pl(`/documents/${fixture.legacyDocumentId}/`)).title, 'Confirmed imported legacy correction');
+console.log('PASS: legacy user/configuration/correction/archive migrated; sources unchanged and correction protected.');
+
 const content = 'SYNTHETIC TEST DATA ONLY\nInvoice number: NEW-42\nPrevious invoice: OLD-17\nTotal: CHF42.50\nFixture Supplier';
 const document = await upload(content);
 const fields = {};

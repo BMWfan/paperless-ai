@@ -75,5 +75,5 @@ export async function learningContext(ctx: AppContext, content: string): Promise
 
 export function hasProtectedLearning(ctx: AppContext, id: number): boolean {
   return ctx.learning.settings().mode !== 'disabled' &&
-    (!!ctx.learning.protectedMetadata(id) || ctx.learning.legacyExamples().some(row => row.document_id === id));
+    (!!ctx.learning.protectedMetadata(id) || ctx.learning.hasLegacyExample(id));
 }

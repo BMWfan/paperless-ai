@@ -51,6 +51,12 @@ unqualified version names before making requests. It also refuses existing
 non-fixture documents. The standalone safety tests include negative controls
 for accidental production-URL or provider-secret injection.
 
+Fresh fixtures also seed the actual old user/feedback/archive schemas and a
+legacy .env for one synthetic native document. The built app performs the
+import; source hashes, imported login, retained archives and legacy protection
+are checked. An old 3.x application is not executed. Do not retrofit this seed
+into an existing fixture; use fresh disposable volumes for qualification.
+
 The native runner exercises real text ingestion, app classification through a
 deterministic local protocol fixture, typed-field preview/save, preservation of
 unselected values, invalid integer rejection, stale-snapshot rejection,

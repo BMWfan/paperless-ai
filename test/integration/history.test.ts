@@ -25,7 +25,7 @@ beforeAll(async () => {
         tags: ['Finance', 'Energy'],
         document_type: 'Bill',
         document_date: '2024-01-15',
-        custom_fields: [{ field_name: 'Amount', value: '99,90' }],
+        custom_fields: [{ field_name: 'Amount', value: '99.90' }],
       });
     if (req.user.includes('Bank')) return analysisJson({ title: 'Bank statement 100% complete', tags: ['Finance'], document_type: 'Statement' });
     return analysisJson({ title: 'Insurance policy', correspondent: 'Allianz', tags: ['Insurance'] });

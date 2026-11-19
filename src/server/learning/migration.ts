@@ -18,6 +18,29 @@ const legacyFeedback = `CREATE TABLE IF NOT EXISTS learning_feedback (
  id INTEGER PRIMARY KEY, document_id INTEGER, title TEXT, content_preview TEXT, tags TEXT,
  correspondent TEXT, document_type TEXT, corrected_by_user INTEGER DEFAULT 0,
  created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP)`;
+const legacyArchive = `CREATE TABLE IF NOT EXISTS learning_feedback_archive (
+ id INTEGER PRIMARY KEY, original_id INTEGER NOT NULL, document_id INTEGER NOT NULL,
+ payload_json TEXT NOT NULL, archived_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)`;
+const optionalTables = [
+  { name: 'learning_feedback', ddl: legacyFeedback },
+  { name: 'learning_feedback_archive', ddl: legacyArchive },
+];
+/** Same confirmed-first duplicate policy as legacy models/document.js; target only. */
+function normalizeLegacyFeedback(db: Db): number {
+  if (!db.prepare("SELECT 1 FROM sqlite_master WHERE name='learning_feedback'").get()) return 0;
+  db.exec(legacyArchive);
+  const duplicates = db.prepare(`SELECT * FROM learning_feedback WHERE document_id IN (
+    SELECT document_id FROM learning_feedback WHERE document_id IS NOT NULL GROUP BY document_id HAVING count(*)>1
+  ) ORDER BY document_id,corrected_by_user DESC,id DESC`).all() as { id: number; document_id: number }[];
+  const retained = new Set<number>(); let archived = 0;
+  for (const row of duplicates) {
+    if (!retained.has(row.document_id)) { retained.add(row.document_id); continue; }
+    db.prepare('INSERT INTO learning_feedback_archive(original_id,document_id,payload_json) VALUES(?,?,?)').run(row.id, row.document_id, JSON.stringify(row));
+    db.prepare('DELETE FROM learning_feedback WHERE id=?').run(row.id); archived++;
+  }
+  db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_learning_feedback_document_id ON learning_feedback(document_id)');
+  return archived;
+}
 /** Reject broken references before reopening can normalize or discard any imported proof. */
 function assertLearningIntegrity(db: Db) {
   const invalid = [
@@ -55,7 +78,7 @@ export function initializeLearning(db: Db, legacyFile?: string) {
   try {
     source.transaction(() => {
       const available = new Set((source.prepare("SELECT name FROM sqlite_master WHERE type='table'").all() as { name: string }[]).map(row => row.name));
-      const tables = [...LEARNING_TABLES, 'learning_feedback'].filter(name => available.has(name));
+      const tables = [...LEARNING_TABLES, ...optionalTables.map(table => table.name)].filter(name => available.has(name));
       if (!tables.length) return;
       if (available.has('learning_migrations')) {
         const versions = source.prepare('SELECT version FROM learning_migrations').all() as { version: number }[];
@@ -65,10 +88,11 @@ export function initializeLearning(db: Db, legacyFile?: string) {
         for (const table of LEARNING_TABLES.filter(name => name !== 'learning_migrations' && name !== 'learning_settings')) {
           if ((db.prepare(`SELECT count(*) AS n FROM ${table}`).get() as { n: number }).n) throw new Error('Refusing to overwrite existing Learning v2 history');
         }
-        if (available.has('learning_feedback')) {
-          db.exec(legacyFeedback);
-          if ((db.prepare('SELECT count(*) AS n FROM learning_feedback').get() as { n: number }).n)
+        for (const table of optionalTables) {
+          const exists = db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?").get(table.name);
+          if (exists && (db.prepare(`SELECT count(*) AS n FROM ${table.name}`).get() as { n: number }).n)
             throw new Error('Refusing to overwrite existing legacy learning history');
+          if (available.has(table.name)) db.exec(table.ddl);
         }
         const counts: Record<string, number> = {};
         for (const table of tables) {
@@ -81,19 +105,22 @@ export function initializeLearning(db: Db, legacyFile?: string) {
           counts[table] = 0;
           for (const row of source.prepare(`SELECT * FROM ${table}`).iterate() as Iterable<Record<string, unknown>>) {
             for (const column of columns) if ((column.endsWith('_json') || column === 'json') && row[column] != null) {
-              const value = JSON.parse(String(row[column]));
+              let value: unknown;
+              try { value = JSON.parse(String(row[column])); }
+              catch { throw new Error(`Invalid JSON in learning table ${table}, column ${column}`); }
               if (['metadata_json', 'changes_json'].includes(column) && (!value || typeof value !== 'object' || Array.isArray(value)))
                 throw new Error(`Invalid learning object in ${table}`);
             }
             insert.run(...columns.map(column => row[column])); counts[table]++;
           }
         }
+        const archivedDuplicates = normalizeLegacyFeedback(db);
         assertLearningIntegrity(db);
         // Re-run additive migrations/backfill for older Learning v2 schemas inside this transaction.
         const store = openLearningStore(':memory:', { database: db });
         store.configure(store.settings()); store.examples(true); store.fieldCorrections();
         assertLearningIntegrity(db);
-        db.prepare('INSERT INTO kv (key,value) VALUES (?,?)').run(IMPORT_KEY, JSON.stringify({ version: 1, counts }));
+        db.prepare('INSERT INTO kv (key,value) VALUES (?,?)').run(IMPORT_KEY, JSON.stringify({ version: 1, counts, archivedDuplicates }));
       })();
     })();
   } finally { source.close(); }

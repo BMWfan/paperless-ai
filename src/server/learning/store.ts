@@ -27,6 +27,8 @@ export interface LearningStore {
   review(id: number, decision: 'confirmed' | 'rejected' | 'deleted', actor?: string): boolean;
   examples(includeStale?: boolean): Array<{ document_id: number; metadata: Metadata; content_preview: string }>;
   legacyExamples(): Array<{ document_id: number; metadata: Metadata; content_preview: string }>;
+  hasLegacyExample(id: number): boolean;
+  legacyPage(limit?: number, offset?: number): { examples: Array<{ document_id: number; metadata: Metadata; content_preview: string }>; total: number; hasMore: boolean };
   protectedMetadata(id: number): Metadata | null;
   fieldCorrections(): unknown[];
   prediction(id: number, metadata: unknown): void;

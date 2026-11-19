@@ -65,6 +65,12 @@ function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'docu
     try { const tags = JSON.parse(value || '[]'); return Array.isArray(tags) ? tags : []; }
     catch { return String(value || '').split(',').map(tag => tag.trim()).filter(Boolean); }
   };
+  const legacyWhere = `FROM learning_feedback f WHERE f.corrected_by_user=1
+    AND NOT EXISTS (SELECT 1 FROM learning_legacy_overrides o WHERE o.document_id=f.document_id)`;
+  const legacyExample = row => ({ document_id: row.document_id, legacy: true, source: 'legacy_user',
+    metadata: { title: row.title || '', tags: parseTags(row.tags), correspondent: row.correspondent || null,
+      document_type: row.document_type || null }, content_preview: row.content_preview || '', updated_at: row.updated_at });
+  const legacyCount = () => hasLegacy() ? db.prepare(`SELECT count(*) AS total ${legacyWhere}`).get().total : 0;
   const saveExample = db.prepare(`INSERT INTO learning_examples(document_id,event_id,metadata_json,content_preview)
     VALUES(@document_id,@id,@metadata_json,@content_preview) ON CONFLICT(document_id) DO UPDATE SET
     event_id=excluded.event_id, metadata_json=excluded.metadata_json,
@@ -173,12 +179,13 @@ function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'docu
     protectedMetadata(id) { const row = db.prepare('SELECT metadata_json FROM learning_examples WHERE document_id=?').get(id); return row ? JSON.parse(row.metadata_json) : null; },
     isLegacySuppressed(id) { return !!db.prepare('SELECT 1 FROM learning_legacy_overrides WHERE document_id=?').get(id); },
     legacyExamples() {
-      if (!hasLegacy()) return [];
-      return db.prepare(`SELECT f.* FROM learning_feedback f WHERE corrected_by_user=1
-        AND NOT EXISTS (SELECT 1 FROM learning_legacy_overrides o WHERE o.document_id=f.document_id)
-        ORDER BY document_id DESC`).all().map(row => ({ document_id: row.document_id, legacy: true, source: 'legacy_user',
-          metadata: { title: row.title || '', tags: parseTags(row.tags), correspondent: row.correspondent || null,
-            document_type: row.document_type || null }, content_preview: row.content_preview || '', updated_at: row.updated_at }));
+      return hasLegacy() ? db.prepare(`SELECT f.* ${legacyWhere} ORDER BY document_id DESC`).all().map(legacyExample) : [];
+    },
+    hasLegacyExample(id) { return hasLegacy() && !!db.prepare(`SELECT 1 ${legacyWhere} AND f.document_id=? LIMIT 1`).get(id); },
+    legacyPage(limit = 50, offset = 0) {
+      const count = legacyCount(), size = limitValue(limit), start = offsetValue(offset);
+      const rows = hasLegacy() ? db.prepare(`SELECT f.* ${legacyWhere} ORDER BY document_id DESC LIMIT ? OFFSET ?`).all(size,start) : [];
+      return { examples: rows.map(legacyExample), total: count, limit: size, offset: start, hasMore: start+rows.length<count };
     },
     revokeLegacy: db.transaction((id, actor = 'system') => {
       if (!hasLegacy() || !db.prepare('SELECT 1 FROM learning_feedback WHERE document_id=? AND corrected_by_user=1').get(id)) return false;
@@ -191,12 +198,12 @@ function openLearningStore(databasePath = path.join(process.cwd(), 'data', 'docu
         WHERE (?=0 OR e.document_id=?) UNION ALL
         SELECT NULL AS id,NULL AS event_id,document_id,reason AS decision,actor,created_at,'legacy_user' AS source
         FROM learning_legacy_overrides WHERE reason='revoked' AND (?=0 OR document_id=?)
-        ORDER BY created_at DESC,id DESC LIMIT ? OFFSET ?`).all(id,id,id,id,limitValue(limit),offsetValue(offset));
+        ORDER BY created_at DESC,id DESC,document_id DESC LIMIT ? OFFSET ?`).all(id,id,id,id,limitValue(limit),offsetValue(offset));
     },
     summary() {
       const statuses = Object.fromEntries(db.prepare('SELECT status,COUNT(*) AS n FROM learning_change_events GROUP BY status').all().map(row => [row.status,row.n]));
       const activeExamples = db.prepare('SELECT COUNT(*) AS n FROM learning_examples e JOIN learning_document_snapshots s ON s.document_id=e.document_id AND s.metadata_json=e.metadata_json').get().n;
-      return { ...statuses, activeExamples, legacyExamples: this.legacyExamples().length };
+      return { ...statuses, activeExamples, legacyExamples: legacyCount() };
     },
     prediction(id, value) { db.prepare('INSERT INTO learning_prediction_history(document_id,metadata_json) VALUES(?,?)').run(id,JSON.stringify(value)); },
     close() { if (!options.database) db.close(); }

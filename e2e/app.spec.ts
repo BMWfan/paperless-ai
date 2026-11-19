@@ -503,3 +503,14 @@ test('Learning v2 confirms a UI correction and allows revocation', async ({ page
   await page.getByLabel('Status', { exact: true }).selectOption('deleted');
   await expect(page.getByRole('heading', { name: 'Document #2 · revoked', exact: true })).toBeVisible();
 });
+
+test('imported legacy corrections can be revoked with history retained', async ({ page }) => {
+  await login(page); await page.goto('/learning');
+  await page.getByLabel('Status', { exact: true }).selectOption('legacy');
+  await expect(page.getByRole('heading', { name: 'Imported correction · document #500', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Revoke legacy learning', exact: true }).click();
+  await expect(page.getByText('No active imported corrections.', { exact: true })).toBeVisible();
+  await page.getByLabel('Status', { exact: true }).selectOption('history');
+  await expect(page.getByRole('heading', { name: 'Document #500 · revoked', exact: true })).toBeVisible();
+  await expect(page.getByText('Source: Legacy user correction', { exact: true })).toBeVisible();
+});

@@ -1,3 +1,4 @@
+import { seedLegacyLearning } from '../test/helpers/legacyLearning.js';
 /**
  * Demo / end-to-end test server: starts a fake Paperless-ngx with sample
  * documents, a fake OpenAI-compatible LLM and the real Paperless-AI app.
@@ -198,6 +199,7 @@ llm.reply((req: ChatRequestInfo) => {
 const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'paperless-ai-demo-'));
 // In setup-wizard mode the embeddings are pinned to the fake LLM so tests never download a model.
 const ctx = new AppContext({ dataDir, env: fresh ? { RAG_EMBEDDING_PROVIDER: 'custom', RAG_EMBEDDING_MODEL: 'mock-embed' } : {} });
+seedLegacyLearning(ctx.db, 500);
 if (!fresh) {
   ctx.config.update({
     setupCompleted: true,

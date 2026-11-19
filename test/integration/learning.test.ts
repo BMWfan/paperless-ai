@@ -1,3 +1,4 @@
+import { seedLegacyLearning } from '../helpers/legacyLearning.js';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createHarness, type Harness } from '../helpers/appHarness.js';
 let h: Harness;
@@ -35,6 +36,19 @@ describe('Learning v2 management API', () => {
     expect(outcome).toBe('skipped');
     expect(h.llm.chatRequests()).toHaveLength(0);
     expect(h.paperless.patches()).toHaveLength(0);
+  });
+
+  it('pages imported corrections and keeps an auditable revocation outside v2 event filters', async () => {
+    seedLegacyLearning(h.ctx.db, 500); seedLegacyLearning(h.ctx.db, 501, 'Second imported correction');
+    expect((await h.inject({ method: 'GET', url: '/api/learning/legacy' })).statusCode).toBe(401);
+    const page = await h.inject({ method: 'GET', url: '/api/learning/legacy?limit=1&offset=1', headers: h.apiKeyHeaders() });
+    expect(page.statusCode).toBe(200);
+    expect(page.json()).toMatchObject({ total: 2, hasMore: false, examples: [{ document_id: 500 }] });
+    const revoke = await h.inject({ method: 'POST', url: '/api/learning/legacy/500/revoke', headers: h.apiKeyHeaders(), payload: {} });
+    expect(revoke.statusCode).toBe(200); expect(h.ctx.learning.hasLegacyExample(500)).toBe(false);
+    expect(h.ctx.learning.hasLegacyExample(501)).toBe(true);
+    const history = await h.inject({ method: 'GET', url: '/api/learning/history?limit=1', headers: h.apiKeyHeaders() });
+    expect(history.json()).toMatchObject({ hasMore: false, history: [{ document_id: 500, decision: 'revoked', actor: 'api-key' }] });
   });
 
 });

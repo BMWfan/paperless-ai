@@ -103,6 +103,7 @@ services:
     volumes:
       - ./tests/v4:/fixture:ro
       - fixture-state:/fixtures
+      - ai-data:/app/data:ro
 networks:
   fixture:
     internal: true
