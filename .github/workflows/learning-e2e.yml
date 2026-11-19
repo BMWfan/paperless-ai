@@ -21,7 +21,7 @@ jobs:
       COMPOSE_PROJECT_NAME: paperless-ai-v4-e2e
       TEST_PAPERLESS_VERSION: ${{ matrix.initial }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: Start unchanged official ngx and the current fork

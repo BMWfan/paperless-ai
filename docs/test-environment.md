@@ -113,3 +113,26 @@ recorded source and hashes; never relabel it as a current run. Automatic legacy
 model experiments are disabled on 4.x; manual historical workflows check for
 the legacy runtime before any model step. Real-model quality is a separate,
 explicitly bounded experiment, not part of this native protocol fixture.
+
+
+## CI action runtime maintenance (SPEC #46)
+
+GitHub Actions execute their own JavaScript runtime independently of the app's
+Node version. Validation actions now use Node24-based releases: checkout7,
+setup-node7, setup-python6, upload-artifact7, download-artifact8 and Docker
+setup/login4/build-push7. The manual policy path uses github-script8. App tests
+and builds still explicitly use Node22. GitHub-hosted runners support the new
+action runtime; self-hosted runners would need compatible runner versions.
+
+Checkout7 blocks unsafe fork checkouts in privileged pull_request_target and
+workflow_run contexts; these workflows use neither trigger. setup-node7's ESM
+change does not change our selected app runtime or introduce registry auth.
+Artifact uploads keep the default archive format/names; download-artifact8
+fails on digest mismatch instead of merely warning. This is intentional.
+The manual github-script action still loads local CommonJS policy modules.
+No workflow trigger, permission, publication gate or legacy model guard changes.
+The unrelated stale-bot action/authentication remains tracked in #39/PR#40.
+Manual-only legacy experiments and publication are statically checked, never
+dispatched to validate this update. Revert the isolated maintenance commit to
+roll back action references. Current PR CI provides execution evidence; offline
+policy tests alone do not establish hosted-action compatibility.
