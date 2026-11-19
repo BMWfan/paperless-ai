@@ -1,6 +1,6 @@
 # Paperless-ngx / Learning Engine v2 technical assessment
 
-Source check: 2026-11-11. Fork baseline: main `1e27411`, Paperless-ngx 3.4.2.
+Historical source check: 2026-11-11. Fork baseline: main `1e27411`, Paperless-ngx 3.4.2.
 This assessment separates shipped behavior in that pinned version, later upstream
 merges and proposals. PR #19 / SPEC #17 holds the experimental runtime evidence;
 source inspection alone does not establish a passing integration.
@@ -127,3 +127,33 @@ explicit human correction.
 repository protections or authorize publication. #19 remains opt-in, with actual
 runtime outcomes recorded separately. Do not mark the complete project finished
 based on unit counts or an integration workflow alone.
+
+
+## Refresh for SPEC #41 — 2026-11-19, ngx 3.5.1 / AI 4.3
+
+The sections above record the earlier 3.4.2 analysis; they must not be read as
+the current release inventory. Rechecked the linked PRs and versioned 3.5.1
+sources, independently of runtime/model testing:
+
+| Area | Confirmed current state | Fork consequence |
+| --- | --- | --- |
+| Native ML / LLM candidates | Both `suggestions/` and `ai_suggestions/` remain in the [3.5.1 views](https://github.com/paperless-ngx/paperless-ngx/blob/v3.5.1/src/documents/views.py). LLM suggestions require AI enabled and document-change permission. The response resolves visible taxonomy IDs and proposed names; it still has no custom-field output. | An optional read-only adapter is viable but not implemented here. Do not treat candidate generation as human confirmation. A GET can cause native inference on a cache miss; it is not a free metadata-only poll. |
+| Native custom-field AI | #14340 is closed **without merge**; discussion #13996 remains background, not an API contract. | Continue using native definitions and typed values with the fork's guarded extraction/review pipeline. No provisional `cf_<id>` dependency. |
+| Workflows | [3.5.1 router](https://github.com/paperless-ngx/paperless-ngx/blob/v3.5.1/src/paperless/urls.py) exposes workflow, action and trigger endpoints. [Versioned usage](https://github.com/paperless-ngx/paperless-ngx/blob/v3.5.1/docs/usage.md#workflows) documents added/updated/scheduled/manual triggers, date-field offsets, custom-field title templates and queued AI-suggestion actions. [Serializers](https://github.com/paperless-ngx/paperless-ngx/blob/v3.5.1/src/documents/serialisers.py) define nested configuration validation. | Reuse ngx for execution; the new migration matrix checks external-edit provenance, not configured workflow execution. Add an actual workflow scenario before claiming that behavior qualified on 4.3. |
+| OCR templates | #14507 is still open and unmerged. Its current preview merge SHA is not a release qualification. | No runtime dependency, parallel template editor or extraction-quality claim. |
+| Tag hierarchy and selection data | Merges #14612 (`8aa99a3`) and #14597 (`5357be2`) are ancestors of v3.5.1. GitHub compare reports ahead with zero behind (55/53 commits respectively). [3.5.1 Tag](https://github.com/paperless-ngx/paperless-ngx/blob/v3.5.1/src/documents/models.py) uses MatchingModel rather than TreeNodeModel. | Improvements now exist in the test counterpart; neither provides an external change feed. Avoid selection-data aggregation in polling. |
+| Change detection | [3.5.1 filters](https://github.com/paperless-ngx/paperless-ngx/blob/v3.5.1/src/documents/filters.py) retain modified datetime filtering. A filter alone does not prove every M2M/custom-field change advances the timestamp. | Retain conservative paginated metadata reconciliation until ties, deletions, permissions and field-only updates have tested cursor semantics. |
+
+The maintained Paperless-AI 4.3 base now supplies OIDC, provider adapters, OCR,
+calendar, chat and native review/history UI. Reuse those features; keep the fork
+focused on durable correction learning, provenance, revocation, source-preserving
+migration and safe structured extraction. OIDC mock tests passed at 83d1021;
+Microsoft Entra ID is technically compatible with the generic OIDC flow but no
+real tenant has been tested. This source refresh does not authorize tenant
+access, native-provider inference, model experiments or deployment.
+
+Next meaningful quality work remains a frozen synthetic corpus separating
+current versus historical invoice/contract identifiers, missing fields, typed
+values and false acceptance. Report abstention and invalid-response/timeouts
+separately; do not reuse old values or relabel historical Qwen evidence as
+current-runtime accuracy. See SPEC #20 and the immutable quality archives.

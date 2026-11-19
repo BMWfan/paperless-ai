@@ -269,8 +269,17 @@ if the user wants to undo them.
 
 The synthetic native runner now covers all eight writable field types, zero and
 false, a leap-day date, invalid-date atomic rejection, explicit selected clears
-and preservation of other values. This extension requires a fresh CI result;
-the earlier 83d1021 qualification does not establish its native compatibility.
+and preservation of other values. At runtime commit
+`669a0b4de35723c1d6289adacd6eac18ecd4648e`, native CI
+[44497651466](https://github.com/BMWfan/paperless-ai/actions/runs/44497651466)
+passed both jobs, including all eight types/clearing on 3.4.2 and 3.5.1,
+source-preserving legacy migration, restart and retained-volume upgrade.
+Local typecheck, lint and full build passed; 593 Vitest cases passed with one
+real-model OCR skip (48 files), and all 22 synthetic browser cases passed.
+General CI for that runtime commit is
+[44497651472](https://github.com/BMWfan/paperless-ai/actions/runs/44497651472);
+it also passed. Subsequent documentation-only changes do
+not replace this exact runtime qualification with a claim about another SHA.
 
 Separate self-review of this extension checked the authenticated route boundary,
 strict request schema, writer lock and fresh snapshot, unsupported-field
