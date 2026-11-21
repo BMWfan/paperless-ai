@@ -1,0 +1,8 @@
+{
+  "core.js": "4afb011a14b664a6cb37336c28651663a6c7670b3f722213d87cb61497c66c8d",
+  "run.js": "87298ec42fb59a338e3a8054b35013331d65a8e5a5fc2dfa8a492f8e68c82e88",
+  "model-lock.json": "e9c4017b98bbe71b1ff0d22c03df44850b14851634928ffc7fec2a9c9ff96670",
+  "manifest.json": "eb63340a385e9ac1976d1b739985e5f76fb531e4597e1a026b09ad6e7fd94ca6",
+  "../qwen3-readiness.test.js": "0677a7697d8c02636a6b8646372c4ea6827f46da2e7617ea4b464683c73ed521",
+  "../../.github/workflows/classification-evaluation.yml": "ed04692dab8de018184f36a23f31bd5c0b74006a9fc2b313b8a88b8540f2ae6d"
+}
