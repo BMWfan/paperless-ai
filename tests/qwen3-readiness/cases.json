@@ -1,0 +1,1284 @@
+{
+  "cases": [
+    {
+      "id": "veydan-training-en-training-0",
+      "family": "veydan-T-en-training-0",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "From: Veydan Training Kestrel Ltd\nBILL FOR NETWORK SERVICES\nRecord issued for the current billing period.\nInvoice identifier: VEY-T-EN-001-N\nCurrent charge: EUR 610.80\nPayment due: 2054-04-17\nAuthorised signature.\n",
+      "expected": {
+        "title": "BILL FOR NETWORK SERVICES",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Training Kestrel Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "VEY-T-EN-001-N",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR610.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-EN-001-R",
+        "VEY-ATTACH-T-EN-001-Z"
+      ]
+    },
+    {
+      "id": "veydan-training-en-training-1",
+      "family": "veydan-T-en-training-1",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "From: Veydan Training Linden Ltd\nMAINTENANCE AGREEMENT\nRecord issued for the current billing period.\nContract identifier: VEY-T-EN-002-N\nCurrent charge: EUR 611.80\nAgreement end: 2057-10-25\nAuthorised signature.\n",
+      "expected": {
+        "title": "MAINTENANCE AGREEMENT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Training Linden Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "VEY-T-EN-002-N",
+          "policy_number": null,
+          "amount": "EUR611.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-EN-002-R",
+        "VEY-ATTACH-T-EN-002-Z"
+      ]
+    },
+    {
+      "id": "veydan-training-en-training-2",
+      "family": "veydan-T-en-training-2",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "From: Veydan Training Maple Ltd\nINSURANCE COVER NOTE\nRecord issued for the current billing period.\nPolicy identifier: VEY-T-EN-003-N\nCurrent charge: EUR 612.80\nAgreement end: 2057-10-25\nCopy of the current identifier: VEY-T-EN-003-N\nAuthorised signature.\n",
+      "expected": {
+        "title": "INSURANCE COVER NOTE",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Veydan Training Maple Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "VEY-T-EN-003-N",
+          "amount": "EUR612.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-EN-003-R",
+        "VEY-ATTACH-T-EN-003-Z"
+      ]
+    },
+    {
+      "id": "veydan-training-en-training-3",
+      "family": "veydan-T-en-training-3",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": false,
+      "content": "From: Veydan Training Nacre Ltd\nSERVICE CORRESPONDENCE\nRecord issued for the current billing period.\nThis correspondence is not an invoice, agreement or insurance policy.\nAuthorised signature.\n",
+      "expected": {
+        "title": "SERVICE CORRESPONDENCE",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veydan Training Nacre Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-EN-004-R",
+        "VEY-ATTACH-T-EN-004-Z"
+      ]
+    },
+    {
+      "id": "veydan-training-en-training-4",
+      "family": "veydan-T-en-training-4",
+      "split": "training",
+      "language": "en",
+      "cohort": "training",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": false,
+      "content": "From: Veydan Training Opal Ltd\nRECEIPT OF PAYMENT\nRecord issued for the current billing period.\nThis correspondence is not an invoice, agreement or insurance policy.\nAuthorised signature.\n",
+      "expected": {
+        "title": "RECEIPT OF PAYMENT",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Veydan Training Opal Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-EN-005-R",
+        "VEY-ATTACH-T-EN-005-Z"
+      ]
+    },
+    {
+      "id": "veydan-training-de-training-0",
+      "family": "veydan-T-de-training-0",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "Absender: Veydan Training Kestrel GmbH\nABRECHNUNG NETZDIENSTE\nVorgang für den aktuellen Abrechnungszeitraum.\nRechnungskennung: VEY-T-DE-001-N\nAktueller Betrag: EUR 610.80\nFällig am: 2054-04-17\nAutorisierte Unterschrift.\n",
+      "expected": {
+        "title": "ABRECHNUNG NETZDIENSTE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Training Kestrel GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "VEY-T-DE-001-N",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR610.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-DE-001-R",
+        "VEY-ATTACH-T-DE-001-Z"
+      ]
+    },
+    {
+      "id": "veydan-training-de-training-1",
+      "family": "veydan-T-de-training-1",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Absender: Veydan Training Linden GmbH\nWARTUNGSVEREINBARUNG\nVorgang für den aktuellen Abrechnungszeitraum.\nVertragskennung: VEY-T-DE-002-N\nAktueller Betrag: EUR 611.80\nEnddatum: 2057-10-25\nAutorisierte Unterschrift.\n",
+      "expected": {
+        "title": "WARTUNGSVEREINBARUNG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Training Linden GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "VEY-T-DE-002-N",
+          "policy_number": null,
+          "amount": "EUR611.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-DE-002-R",
+        "VEY-ATTACH-T-DE-002-Z"
+      ]
+    },
+    {
+      "id": "veydan-training-de-training-2",
+      "family": "veydan-T-de-training-2",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "Absender: Veydan Training Maple GmbH\nVERSICHERUNGSDECKUNG\nVorgang für den aktuellen Abrechnungszeitraum.\nVersicherungskennung: VEY-T-DE-003-N\nAktueller Betrag: EUR 612.80\nEnddatum: 2057-10-25\nKopie der aktuellen Kennung: VEY-T-DE-003-N\nAutorisierte Unterschrift.\n",
+      "expected": {
+        "title": "VERSICHERUNGSDECKUNG",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Veydan Training Maple GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "VEY-T-DE-003-N",
+          "amount": "EUR612.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-DE-003-R",
+        "VEY-ATTACH-T-DE-003-Z"
+      ]
+    },
+    {
+      "id": "veydan-training-de-training-3",
+      "family": "veydan-T-de-training-3",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": false,
+      "content": "Absender: Veydan Training Nacre GmbH\nSERVICEKORRESPONDENZ\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Korrespondenz ist keine Rechnung, Vereinbarung oder Versicherungspolice.\nAutorisierte Unterschrift.\n",
+      "expected": {
+        "title": "SERVICEKORRESPONDENZ",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veydan Training Nacre GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-DE-004-R",
+        "VEY-ATTACH-T-DE-004-Z"
+      ]
+    },
+    {
+      "id": "veydan-training-de-training-4",
+      "family": "veydan-T-de-training-4",
+      "split": "training",
+      "language": "de",
+      "cohort": "training",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": false,
+      "content": "Absender: Veydan Training Opal GmbH\nZAHLUNGSEINGANG\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Korrespondenz ist keine Rechnung, Vereinbarung oder Versicherungspolice.\nAutorisierte Unterschrift.\n",
+      "expected": {
+        "title": "ZAHLUNGSEINGANG",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Veydan Training Opal GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-T-DE-005-R",
+        "VEY-ATTACH-T-DE-005-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-present-0",
+      "family": "veydan-F-en-present-0",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "From: Veydan Confirmation Kestrel Ltd\nBILL FOR NETWORK SERVICES\nRecord issued for the current billing period.\nInvoice identifier: VEY-F-EN-001-N\nCurrent charge: EUR 610.80\nPayment due: 2054-04-17\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nInvoice identifier: VEY-PAST-F-EN-001-R\nPrevious total EUR 31.75, due 2029-08-13.\n",
+      "expected": {
+        "title": "BILL FOR NETWORK SERVICES",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Confirmation Kestrel Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "VEY-F-EN-001-N",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR610.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-001-R",
+        "VEY-ATTACH-F-EN-001-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-present-1",
+      "family": "veydan-F-en-present-1",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Earlier service record, retained for correspondence:\nContract identifier: VEY-PAST-F-EN-002-R\nPrevious total EUR 31.75, due 2029-08-13.\n\nFrom: Veydan Confirmation Linden Ltd\nMAINTENANCE AGREEMENT\nRecord issued for the current billing period.\nContract identifier: VEY-F-EN-002-N\nCurrent charge: EUR 611.80\nAgreement end: 2057-10-25\nAuthorised signature.\n",
+      "expected": {
+        "title": "MAINTENANCE AGREEMENT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Confirmation Linden Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "VEY-F-EN-002-N",
+          "policy_number": null,
+          "amount": "EUR611.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-002-R",
+        "VEY-ATTACH-F-EN-002-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-present-2",
+      "family": "veydan-F-en-present-2",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "From: Veydan Confirmation Maple Ltd\nINSURANCE COVER NOTE\nRecord issued for the current billing period.\nPolicy identifier: VEY-F-EN-003-N\nCurrent charge: EUR 612.80\nAgreement end: 2057-10-25\nCopy of the current identifier: VEY-F-EN-003-N\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nPolicy identifier: VEY-PAST-F-EN-003-R\nPrevious total EUR 31.75, due 2029-08-13.\nPrevious record used the same printed identifier: VEY-F-EN-003-N\n",
+      "expected": {
+        "title": "INSURANCE COVER NOTE",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Veydan Confirmation Maple Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "VEY-F-EN-003-N",
+          "amount": "EUR612.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-003-R",
+        "VEY-ATTACH-F-EN-003-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-present-3",
+      "family": "veydan-F-en-present-3",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "From: Veydan Confirmation Nacre Ltd\nBILL FOR NETWORK SERVICES\nRecord issued for the current billing period.\nInvoice identifier: VEY-F-EN-004-N\nCurrent charge: EUR 613.80\nPayment due: 2054-04-17\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nInvoice identifier: VEY-PAST-F-EN-004-R\nPrevious total EUR 31.75, due 2029-08-13.\n\nSupplier copy follows for information.\nInvoice identifier: VEY-ATTACH-F-EN-004-Z\n",
+      "expected": {
+        "title": "BILL FOR NETWORK SERVICES",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Confirmation Nacre Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": "VEY-F-EN-004-N",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR613.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-004-R",
+        "VEY-ATTACH-F-EN-004-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-present-4",
+      "family": "veydan-F-en-present-4",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "From: Veydan Confirmation Opal Ltd\nMAINTENANCE AGREEMENT\nRecord issued for the current billing period.\nContract identifier: VEY-F-EN-005-N\nCurrent charge: EUR 614.80\nAgreement end: 2057-10-25\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nContract identifier: VEY-PAST-F-EN-005-R\nPrevious total EUR 31.75, due 2029-08-13.\n",
+      "expected": {
+        "title": "MAINTENANCE AGREEMENT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Confirmation Opal Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "VEY-F-EN-005-N",
+          "policy_number": null,
+          "amount": "EUR614.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-005-R",
+        "VEY-ATTACH-F-EN-005-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-missing-0",
+      "family": "veydan-F-en-missing-0",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "From: Veydan Confirmation Kestrel Ltd\nBILL FOR NETWORK SERVICES\nRecord issued for the current billing period.\nThis issue has no identifier; request a numbered replacement.\nCurrent charge: EUR 615.80\nPayment due: 2054-04-17\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nInvoice identifier: VEY-PAST-F-EN-006-R\nPrevious total EUR 31.75, due 2029-08-13.\n",
+      "expected": {
+        "title": "BILL FOR NETWORK SERVICES",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Confirmation Kestrel Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR615.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-006-R",
+        "VEY-ATTACH-F-EN-006-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-missing-1",
+      "family": "veydan-F-en-missing-1",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "Earlier service record, retained for correspondence:\nContract identifier: VEY-PAST-F-EN-007-R\nPrevious total EUR 31.75, due 2029-08-13.\n\nFrom: Veydan Confirmation Linden Ltd\nMAINTENANCE AGREEMENT\nRecord issued for the current billing period.\nThis issue has no identifier; request a numbered replacement.\nCurrent charge: EUR 616.80\nAgreement end: 2057-10-25\nAuthorised signature.\n",
+      "expected": {
+        "title": "MAINTENANCE AGREEMENT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Confirmation Linden Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR616.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-007-R",
+        "VEY-ATTACH-F-EN-007-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-missing-2",
+      "family": "veydan-F-en-missing-2",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": true,
+      "content": "From: Veydan Confirmation Maple Ltd\nINSURANCE COVER NOTE\nRecord issued for the current billing period.\nThis issue has no identifier; request a numbered replacement.\nCurrent charge: EUR 617.80\nAgreement end: 2057-10-25\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nPolicy identifier: VEY-PAST-F-EN-008-R\nPrevious total EUR 31.75, due 2029-08-13.\n",
+      "expected": {
+        "title": "INSURANCE COVER NOTE",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Veydan Confirmation Maple Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR617.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-008-R",
+        "VEY-ATTACH-F-EN-008-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-missing-3",
+      "family": "veydan-F-en-missing-3",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "From: Veydan Confirmation Nacre Ltd\nBILL FOR NETWORK SERVICES\nRecord issued for the current billing period.\nThis issue has no identifier; request a numbered replacement.\nCurrent charge: EUR 618.80\nPayment due: 2054-04-17\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nInvoice identifier: VEY-PAST-F-EN-009-R\nPrevious total EUR 31.75, due 2029-08-13.\n\nSupplier copy follows for information.\nInvoice identifier: VEY-ATTACH-F-EN-009-Z\n",
+      "expected": {
+        "title": "BILL FOR NETWORK SERVICES",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Confirmation Nacre Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR618.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-009-R",
+        "VEY-ATTACH-F-EN-009-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-missing-4",
+      "family": "veydan-F-en-missing-4",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "From: Veydan Confirmation Opal Ltd\nMAINTENANCE AGREEMENT\nRecord issued for the current billing period.\nThis issue has no identifier; request a numbered replacement.\nCurrent charge: EUR 619.80\nAgreement end: 2057-10-25\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nContract identifier: VEY-PAST-F-EN-010-R\nPrevious total EUR 31.75, due 2029-08-13.\n",
+      "expected": {
+        "title": "MAINTENANCE AGREEMENT",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Confirmation Opal Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR619.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-010-R",
+        "VEY-ATTACH-F-EN-010-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-inapplicable-0",
+      "family": "veydan-F-en-inapplicable-0",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Veydan Confirmation Kestrel Ltd\nSERVICE CORRESPONDENCE\nRecord issued for the current billing period.\nThis correspondence is not an invoice, agreement or insurance policy.\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nInvoice identifier: VEY-PAST-F-EN-011-R\nPrevious total EUR 31.75, due 2029-08-13.\n",
+      "expected": {
+        "title": "SERVICE CORRESPONDENCE",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veydan Confirmation Kestrel Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-011-R",
+        "VEY-ATTACH-F-EN-011-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-inapplicable-1",
+      "family": "veydan-F-en-inapplicable-1",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Earlier service record, retained for correspondence:\nInvoice identifier: VEY-PAST-F-EN-012-R\nPrevious total EUR 31.75, due 2029-08-13.\n\nFrom: Veydan Confirmation Linden Ltd\nRECEIPT OF PAYMENT\nRecord issued for the current billing period.\nThis correspondence is not an invoice, agreement or insurance policy.\nAuthorised signature.\n",
+      "expected": {
+        "title": "RECEIPT OF PAYMENT",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Veydan Confirmation Linden Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-012-R",
+        "VEY-ATTACH-F-EN-012-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-inapplicable-2",
+      "family": "veydan-F-en-inapplicable-2",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Veydan Confirmation Maple Ltd\nSERVICE CORRESPONDENCE\nRecord issued for the current billing period.\nThis correspondence is not an invoice, agreement or insurance policy.\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nInvoice identifier: VEY-PAST-F-EN-013-R\nPrevious total EUR 31.75, due 2029-08-13.\n",
+      "expected": {
+        "title": "SERVICE CORRESPONDENCE",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veydan Confirmation Maple Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-013-R",
+        "VEY-ATTACH-F-EN-013-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-inapplicable-3",
+      "family": "veydan-F-en-inapplicable-3",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Veydan Confirmation Nacre Ltd\nRECEIPT OF PAYMENT\nRecord issued for the current billing period.\nThis correspondence is not an invoice, agreement or insurance policy.\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nInvoice identifier: VEY-PAST-F-EN-014-R\nPrevious total EUR 31.75, due 2029-08-13.\n\nSupplier copy follows for information.\nInvoice identifier: VEY-ATTACH-F-EN-014-Z\n",
+      "expected": {
+        "title": "RECEIPT OF PAYMENT",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Veydan Confirmation Nacre Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-014-R",
+        "VEY-ATTACH-F-EN-014-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-en-inapplicable-4",
+      "family": "veydan-F-en-inapplicable-4",
+      "split": "confirmation",
+      "language": "en",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "From: Veydan Confirmation Opal Ltd\nSERVICE CORRESPONDENCE\nRecord issued for the current billing period.\nThis correspondence is not an invoice, agreement or insurance policy.\nAuthorised signature.\n\nEarlier service record, retained for correspondence:\nInvoice identifier: VEY-PAST-F-EN-015-R\nPrevious total EUR 31.75, due 2029-08-13.\n",
+      "expected": {
+        "title": "SERVICE CORRESPONDENCE",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veydan Confirmation Opal Ltd",
+        "language": "en",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-EN-015-R",
+        "VEY-ATTACH-F-EN-015-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-present-0",
+      "family": "veydan-F-de-present-0",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "Absender: Veydan Confirmation Kestrel GmbH\nABRECHNUNG NETZDIENSTE\nVorgang für den aktuellen Abrechnungszeitraum.\nRechnungskennung: VEY-F-DE-001-N\nAktueller Betrag: EUR 610.80\nFällig am: 2054-04-17\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nRechnungskennung: VEY-PAST-F-DE-001-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n",
+      "expected": {
+        "title": "ABRECHNUNG NETZDIENSTE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Confirmation Kestrel GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "VEY-F-DE-001-N",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR610.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-001-R",
+        "VEY-ATTACH-F-DE-001-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-present-1",
+      "family": "veydan-F-de-present-1",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Früherer Servicevorgang, zur Korrespondenz aufbewahrt:\nVertragskennung: VEY-PAST-F-DE-002-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n\nAbsender: Veydan Confirmation Linden GmbH\nWARTUNGSVEREINBARUNG\nVorgang für den aktuellen Abrechnungszeitraum.\nVertragskennung: VEY-F-DE-002-N\nAktueller Betrag: EUR 611.80\nEnddatum: 2057-10-25\nAutorisierte Unterschrift.\n",
+      "expected": {
+        "title": "WARTUNGSVEREINBARUNG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Confirmation Linden GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "VEY-F-DE-002-N",
+          "policy_number": null,
+          "amount": "EUR611.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-002-R",
+        "VEY-ATTACH-F-DE-002-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-present-2",
+      "family": "veydan-F-de-present-2",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": false,
+      "content": "Absender: Veydan Confirmation Maple GmbH\nVERSICHERUNGSDECKUNG\nVorgang für den aktuellen Abrechnungszeitraum.\nVersicherungskennung: VEY-F-DE-003-N\nAktueller Betrag: EUR 612.80\nEnddatum: 2057-10-25\nKopie der aktuellen Kennung: VEY-F-DE-003-N\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nVersicherungskennung: VEY-PAST-F-DE-003-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\nDer frühere Vorgang hatte dieselbe gedruckte Kennung: VEY-F-DE-003-N\n",
+      "expected": {
+        "title": "VERSICHERUNGSDECKUNG",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Veydan Confirmation Maple GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": "VEY-F-DE-003-N",
+          "amount": "EUR612.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-003-R",
+        "VEY-ATTACH-F-DE-003-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-present-3",
+      "family": "veydan-F-de-present-3",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": false,
+      "content": "Absender: Veydan Confirmation Nacre GmbH\nABRECHNUNG NETZDIENSTE\nVorgang für den aktuellen Abrechnungszeitraum.\nRechnungskennung: VEY-F-DE-004-N\nAktueller Betrag: EUR 613.80\nFällig am: 2054-04-17\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nRechnungskennung: VEY-PAST-F-DE-004-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n\nLieferantenkopie folgt zur Information.\nRechnungskennung: VEY-ATTACH-F-DE-004-Z\n",
+      "expected": {
+        "title": "ABRECHNUNG NETZDIENSTE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Confirmation Nacre GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": "VEY-F-DE-004-N",
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR613.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-004-R",
+        "VEY-ATTACH-F-DE-004-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-present-4",
+      "family": "veydan-F-de-present-4",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "present",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": false,
+      "content": "Absender: Veydan Confirmation Opal GmbH\nWARTUNGSVEREINBARUNG\nVorgang für den aktuellen Abrechnungszeitraum.\nVertragskennung: VEY-F-DE-005-N\nAktueller Betrag: EUR 614.80\nEnddatum: 2057-10-25\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nVertragskennung: VEY-PAST-F-DE-005-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n",
+      "expected": {
+        "title": "WARTUNGSVEREINBARUNG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Confirmation Opal GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": "VEY-F-DE-005-N",
+          "policy_number": null,
+          "amount": "EUR614.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-005-R",
+        "VEY-ATTACH-F-DE-005-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-missing-0",
+      "family": "veydan-F-de-missing-0",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "Absender: Veydan Confirmation Kestrel GmbH\nABRECHNUNG NETZDIENSTE\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Ausfertigung hat keine Kennung; nummerierten Ersatz anfordern.\nAktueller Betrag: EUR 615.80\nFällig am: 2054-04-17\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nRechnungskennung: VEY-PAST-F-DE-006-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n",
+      "expected": {
+        "title": "ABRECHNUNG NETZDIENSTE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Confirmation Kestrel GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR615.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-006-R",
+        "VEY-ATTACH-F-DE-006-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-missing-1",
+      "family": "veydan-F-de-missing-1",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "Früherer Servicevorgang, zur Korrespondenz aufbewahrt:\nVertragskennung: VEY-PAST-F-DE-007-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n\nAbsender: Veydan Confirmation Linden GmbH\nWARTUNGSVEREINBARUNG\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Ausfertigung hat keine Kennung; nummerierten Ersatz anfordern.\nAktueller Betrag: EUR 616.80\nEnddatum: 2057-10-25\nAutorisierte Unterschrift.\n",
+      "expected": {
+        "title": "WARTUNGSVEREINBARUNG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Confirmation Linden GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR616.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-007-R",
+        "VEY-ATTACH-F-DE-007-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-missing-2",
+      "family": "veydan-F-de-missing-2",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "insurance",
+      "targetIdentifier": "policy_number",
+      "abstentionCase": true,
+      "content": "Absender: Veydan Confirmation Maple GmbH\nVERSICHERUNGSDECKUNG\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Ausfertigung hat keine Kennung; nummerierten Ersatz anfordern.\nAktueller Betrag: EUR 617.80\nEnddatum: 2057-10-25\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nVersicherungskennung: VEY-PAST-F-DE-008-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n",
+      "expected": {
+        "title": "VERSICHERUNGSDECKUNG",
+        "document_type": "Insurance policy",
+        "tags": [
+          "insurance"
+        ],
+        "correspondent": "Veydan Confirmation Maple GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR617.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-008-R",
+        "VEY-ATTACH-F-DE-008-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-missing-3",
+      "family": "veydan-F-de-missing-3",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "invoice",
+      "targetIdentifier": "invoice_number",
+      "abstentionCase": true,
+      "content": "Absender: Veydan Confirmation Nacre GmbH\nABRECHNUNG NETZDIENSTE\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Ausfertigung hat keine Kennung; nummerierten Ersatz anfordern.\nAktueller Betrag: EUR 618.80\nFällig am: 2054-04-17\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nRechnungskennung: VEY-PAST-F-DE-009-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n\nLieferantenkopie folgt zur Information.\nRechnungskennung: VEY-ATTACH-F-DE-009-Z\n",
+      "expected": {
+        "title": "ABRECHNUNG NETZDIENSTE",
+        "document_type": "Invoice",
+        "tags": [
+          "invoice"
+        ],
+        "correspondent": "Veydan Confirmation Nacre GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR618.80",
+          "due_date": "2054-04-17",
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-009-R",
+        "VEY-ATTACH-F-DE-009-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-missing-4",
+      "family": "veydan-F-de-missing-4",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "missing",
+      "kind": "contract",
+      "targetIdentifier": "contract_number",
+      "abstentionCase": true,
+      "content": "Absender: Veydan Confirmation Opal GmbH\nWARTUNGSVEREINBARUNG\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Ausfertigung hat keine Kennung; nummerierten Ersatz anfordern.\nAktueller Betrag: EUR 619.80\nEnddatum: 2057-10-25\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nVertragskennung: VEY-PAST-F-DE-010-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n",
+      "expected": {
+        "title": "WARTUNGSVEREINBARUNG",
+        "document_type": "Contract",
+        "tags": [
+          "contract"
+        ],
+        "correspondent": "Veydan Confirmation Opal GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": "EUR619.80",
+          "due_date": null,
+          "end_date": "2057-10-25"
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-010-R",
+        "VEY-ATTACH-F-DE-010-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-inapplicable-0",
+      "family": "veydan-F-de-inapplicable-0",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Veydan Confirmation Kestrel GmbH\nSERVICEKORRESPONDENZ\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Korrespondenz ist keine Rechnung, Vereinbarung oder Versicherungspolice.\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nRechnungskennung: VEY-PAST-F-DE-011-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n",
+      "expected": {
+        "title": "SERVICEKORRESPONDENZ",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veydan Confirmation Kestrel GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-011-R",
+        "VEY-ATTACH-F-DE-011-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-inapplicable-1",
+      "family": "veydan-F-de-inapplicable-1",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Früherer Servicevorgang, zur Korrespondenz aufbewahrt:\nRechnungskennung: VEY-PAST-F-DE-012-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n\nAbsender: Veydan Confirmation Linden GmbH\nZAHLUNGSEINGANG\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Korrespondenz ist keine Rechnung, Vereinbarung oder Versicherungspolice.\nAutorisierte Unterschrift.\n",
+      "expected": {
+        "title": "ZAHLUNGSEINGANG",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Veydan Confirmation Linden GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-012-R",
+        "VEY-ATTACH-F-DE-012-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-inapplicable-2",
+      "family": "veydan-F-de-inapplicable-2",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Veydan Confirmation Maple GmbH\nSERVICEKORRESPONDENZ\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Korrespondenz ist keine Rechnung, Vereinbarung oder Versicherungspolice.\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nRechnungskennung: VEY-PAST-F-DE-013-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n",
+      "expected": {
+        "title": "SERVICEKORRESPONDENZ",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veydan Confirmation Maple GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-013-R",
+        "VEY-ATTACH-F-DE-013-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-inapplicable-3",
+      "family": "veydan-F-de-inapplicable-3",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "payment",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Veydan Confirmation Nacre GmbH\nZAHLUNGSEINGANG\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Korrespondenz ist keine Rechnung, Vereinbarung oder Versicherungspolice.\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nRechnungskennung: VEY-PAST-F-DE-014-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n\nLieferantenkopie folgt zur Information.\nRechnungskennung: VEY-ATTACH-F-DE-014-Z\n",
+      "expected": {
+        "title": "ZAHLUNGSEINGANG",
+        "document_type": "Payment confirmation",
+        "tags": [
+          "payment"
+        ],
+        "correspondent": "Veydan Confirmation Nacre GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-014-R",
+        "VEY-ATTACH-F-DE-014-Z"
+      ]
+    },
+    {
+      "id": "veydan-confirmation-de-inapplicable-4",
+      "family": "veydan-F-de-inapplicable-4",
+      "split": "confirmation",
+      "language": "de",
+      "cohort": "inapplicable",
+      "kind": "letter",
+      "targetIdentifier": null,
+      "abstentionCase": true,
+      "content": "Absender: Veydan Confirmation Opal GmbH\nSERVICEKORRESPONDENZ\nVorgang für den aktuellen Abrechnungszeitraum.\nDiese Korrespondenz ist keine Rechnung, Vereinbarung oder Versicherungspolice.\nAutorisierte Unterschrift.\n\nFrüherer Servicevorgang, zur Korrespondenz aufbewahrt:\nRechnungskennung: VEY-PAST-F-DE-015-R\nFrüherer Betrag EUR 31.75, fällig 2029-08-13.\n",
+      "expected": {
+        "title": "SERVICEKORRESPONDENZ",
+        "document_type": "Letter",
+        "tags": [
+          "letter"
+        ],
+        "correspondent": "Veydan Confirmation Opal GmbH",
+        "language": "de",
+        "custom_fields": {
+          "invoice_number": null,
+          "contract_number": null,
+          "policy_number": null,
+          "amount": null,
+          "due_date": null,
+          "end_date": null
+        }
+      },
+      "forbiddenCurrentIdentifiers": [
+        "VEY-PAST-F-DE-015-R",
+        "VEY-ATTACH-F-DE-015-Z"
+      ]
+    }
+  ]
+}
