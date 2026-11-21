@@ -364,3 +364,40 @@ runtime remains the reviewed fbe982c version; this extension changes only the
 fixture and documentation. Separate self-review checked fresh tag scoping,
 finally cleanup, authenticated actor, synchronous/asynchronous response handling,
 active/stale examples and zero model calls. No independent review is claimed.
+
+### Released upstream 4.4.0 refresh
+
+This follow-up to SPEC #41 integrates the released tag
+`cedd5be2d585d301e23a6d7856deb0c411ebe482` on top of fork main
+`130bd7193f18594023495aac177c9f8c48209a47`. The merge base is released upstream
+4.3.0. Retaining the upstream merge parent keeps future release comparisons
+anchored to the original commits.
+
+- Use upstream prompt rules to select the library prompt, model and processing
+  settings. Keep Learning v2's context injection, confirmed-correction guards and
+  response provenance. Rule-specific custom-field eligibility feeds the fork's
+  existing ambiguity and typed-value checks. Manual saves record the selected
+  prompt in history and retain the authenticated actor for the learning audit.
+- Keep upstream embedding prompts and the existing index's compatibility key.
+  Existing indexes keep their prior prompts until the administrator accepts the
+  suggested upgrade or changes embedding configuration. Explicit prompt changes
+  can require a full index rebuild.
+- Database migration 10 adds nullable prompt metadata to history. Existing
+  entries have no associated prompt. Upgrade verification covers existing v9
+  history. Preserve a pre-upgrade copy of the application data directory for
+  rollback, including the database and embedding state. Restore that copy with
+  the former application version.
+- Extend release qualification with the prompt-rule and Learning v2 interaction,
+  the v9 history upgrade, the RAG compatibility tests, and the isolated native
+  Paperless-ngx workflow. Current fixture results do not qualify real-model
+  extraction accuracy.
+
+Upstream supplies classification routing and embedding configuration. Those
+features can be reused for the roadmap in #44. Contract deadlines, retention
+policy and signature integration remain separate work. Learning quality #20 and
+EPIC #12 remain open concerns. PR #35 is Qwen-specific historical evidence and
+does not qualify a different model. Stale automation #39/#40 and development
+practice #33/#36 are separate. The v4 setup tests and the action runtime
+maintenance already on fork main make #42 and #46 candidates for individual
+acceptance review. The OpenAI test credential check in #43 remains a separate
+diagnostic. No workflow edits are needed for this integration.

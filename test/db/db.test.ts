@@ -93,7 +93,7 @@ describe('migrations', () => {
   it('creates the schema and records applied migrations', () => {
     const db = memoryDb();
     const versions = (db.prepare('SELECT version FROM schema_migrations ORDER BY version').all() as { version: number }[]).map((r) => r.version);
-    expect(versions).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(versions).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     const tables = (db.prepare(`SELECT name FROM sqlite_master WHERE type IN ('table')`).all() as { name: string }[]).map((t) => t.name);
     for (const t of ['users', 'documents', 'history', 'usage', 'kv', 'rag_documents', 'rag_chunks', 'rag_fts', 'ocr_documents', 'ocr_results', 'prompts', 'prompt_ratings', 'recovery_codes', 'calendar_events', 'calendar_scans']) expect(tables).toContain(t);
   });
@@ -102,7 +102,27 @@ describe('migrations', () => {
     const db = memoryDb();
     migrate(db);
     migrate(db);
-    expect((db.prepare('SELECT COUNT(*) AS c FROM schema_migrations').get() as { c: number }).c).toBe(9);
+    expect((db.prepare('SELECT COUNT(*) AS c FROM schema_migrations').get() as { c: number }).c).toBe(10);
+  });
+
+  it('upgrades v9 history without losing existing rows', () => {
+    const db = memoryDb();
+    db.exec(`
+      DROP INDEX history_prompt;
+      ALTER TABLE history DROP COLUMN prompt_id;
+      ALTER TABLE history DROP COLUMN prompt_name;
+      DELETE FROM schema_migrations WHERE version = 10;
+      INSERT INTO history (document_id, title, source, created_at)
+        VALUES (42, 'Existing correction', 'manual', 1);
+    `);
+
+    migrate(db);
+    migrate(db);
+
+    expect(createRepos(db).history.list({}).items).toMatchObject([
+      { documentId: 42, title: 'Existing correction', prompt: null },
+    ]);
+    expect(db.prepare('SELECT name FROM schema_migrations WHERE version = 10').get()).toEqual({ name: 'prompt rules' });
   });
 
   it('persists to a file and reopens without re-running migrations', () => {
