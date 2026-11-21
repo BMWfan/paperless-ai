@@ -143,3 +143,23 @@ Manual-only legacy experiments and publication are statically checked, never
 dispatched to validate this update. Revert the isolated maintenance commit to
 roll back action references. Current PR CI provides execution evidence; offline
 policy tests alone do not establish hosted-action compatibility.
+
+## Historical Qwen3 readiness evidence (SPEC #20)
+
+The [Qwen3 readiness report](qwen3-extraction-readiness.md) documents the
+completed 3.x experiment. Its 20 recorded attempts include one timeout, so the
+stop gate prevented phase two. The original inputs, report and compressed
+responses are retained under [tests/qwen3-readiness](../tests/qwen3-readiness).
+
+Run the archived contract tests in a separate checkout of
+`2b899a2e8147c1a42107c877d12971c04c09e5db`, with LF line endings and the
+locked dependencies for that revision. The harness verifies hashes of that
+revision's files, including its workflow. Under Node 22 and Python:
+
+```sh
+node --test tests/qwen3-readiness.test.js
+python -m unittest discover -s tests/qwen3-readiness -p 'test_*.py'
+```
+
+These commands use fixtures and archived responses. The 4.x workflow remains
+unchanged. Do not dispatch the historical model profiles or rerun inference.

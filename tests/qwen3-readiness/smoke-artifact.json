@@ -1,0 +1,25 @@
+{
+  "run": "44052878149",
+  "commit": "72bd75159381c2a1724b4269104ddb523693327e",
+  "artifactId": 14317279562,
+  "zipSha256": "b5125396eaa2c7d763e844d28757c0881bb83d1bbf90f99f2e90b1cfa0536faf",
+  "archive": "archive/qwen3-smoke.json.gz",
+  "payloadSha256": "e7ac8eeedfda2a6640506e3738e255711192ee94359f4f803a1a7c9cab6aa7d4",
+  "storedSha256": "70cea6f087d49d092fa08565589ca7e8bd79eac5d6df83744012a544304c1ddc",
+  "requestCount": 20,
+  "gate": {
+    "passed": false,
+    "reasons": [
+      "protocol_failure"
+    ],
+    "identifiers": {
+      "present": 10,
+      "correct": 9,
+      "wrong": 0
+    },
+    "failedAttempts": 1
+  },
+  "phase2Requests": 0,
+  "nativePhase2Replay": "NOT RUN: phase-one gate failed",
+  "productionActivation": false
+}

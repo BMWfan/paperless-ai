@@ -1,0 +1,21 @@
+{
+  "run": "44051912267",
+  "commit": "efa5658cc04bba68e7e308fe615d4253d90f2c60",
+  "artifactId": 14313593269,
+  "zipSha256": "193196e1b952cb1a867825b40f8112602bc1360e6dc3b3e35820b8d94f6dd597",
+  "generationRequests": 0,
+  "candidate": "qwen3:4b-instruct-2507-q4_K_M",
+  "candidateDigest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+  "files": {
+    "copy.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "manifest.json": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+    "pull-1.log": "619b7a76320b80d530da21a4c32bf2bed19966709f3c150da1a932fa2a47184b",
+    "ready.log": "c3524fd773301fdc4dec8030c16bc48ae623374f4f9e286028a3cce545a097cd",
+    "report.json": "6bb1e2435e998321f31ed41e56692b10e18075e911995ffd8ee398a6afa814c3",
+    "show.json": "76aa1237f7053ccea52c08e5f6fc3f70a8d3e8c671e5a0eb2cfbb3fcfc6e6d9c",
+    "start.log": "7d5e092455ce3c68763487060745db3dde445cb4aa7e749f0f0f1cf2070dc2f4",
+    "tags.json": "0e1101eb7a1cd7f2504eebae5fcf3acd39f535f6260d8404dd3a89f787d90342",
+    "version.json": "5496d7bf49b760894390b1239e5d14a73b431ef601074790acf1deba6cb7ec4f"
+  },
+  "preflightSourceSha256": "d602cb07ff4e8468488650ae6e0ff9526334392c2c57768cf49b31c0ccca26c8"
+}

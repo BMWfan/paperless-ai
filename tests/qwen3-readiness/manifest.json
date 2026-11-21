@@ -1,0 +1,15 @@
+{
+  "revision": "qwen3-readiness-freeze-v1",
+  "files": {
+    "cases.json": "e05b5dfa2d6bcdb488bbb0f476ef8148dac0a4560c3a047e0cb1f1dd2ef3d510",
+    "protocol.json": "004a55d290fb2cc0c7ee9f0254845e7555f49e9be8d1df9b26b6c89eeb8d7d9e",
+    "smoke-selection.json": "9ebc21949f711f366eaf38c9344ce2c94e8fde299990773e2eaf70ec4c10ad5a",
+    "CONTRACT.md": "bf03ccbcf4527902f18e66aeb6c1833b294dfae42d5e8223f8a5f6fcbe8e6fb2",
+    "../identifier-roles/cases.json": "6b251e74517ea7d29bdf904c5b828bf083b1b80a75af333233728bc737ca7530",
+    "../identifier-roles/archive/identifier-roles-A-development-42.json.gz": "92f6f87cabdf49f821d7ad657ce4c8af1f4bee063024aaa6352ea9e255db39f6",
+    "../quality/extraction/core.js": "ce5e6286832abc075d207da7a3ed2066d70df8ca9f9944d849a41c7dfc202d1b",
+    "../quality/scoring.js": "739ee1bd3d035614a9c1e2d5f6b4d1786f94dfdfa2aead26131aa4a9934202ee",
+    "../../services/learningContext.js": "c01343bf3eb665559cbbe0e30c9e6796a54961152ad3664c380e746d4d7fd4c7",
+    "../../services/customFieldUpdates.js": "fe3cf81b7b43176dc4a34a3061e13beadd428ef6bd66eaa98dbf3b4c8beac316"
+  }
+}

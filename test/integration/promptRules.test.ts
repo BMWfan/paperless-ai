@@ -242,6 +242,13 @@ describe('prompt rules', () => {
     await hh.inject({ method: 'POST', url: '/api/webhook/document', headers: hh.apiKeyHeaders(), payload: { document_id: 1, force: true, prompt: 'Webhook prompt' } });
     await hh.engine.drain();
     expect(requestsByDocument(hh)[0].system.startsWith('Webhook prompt')).toBe(true);
+
+    for (const prompt of ['', '   ']) {
+      hh.llm.clearRequests();
+      await hh.inject({ method: 'POST', url: '/api/webhook/document', headers: hh.apiKeyHeaders(), payload: { document_id: 1, force: true, prompt } });
+      await hh.engine.drain();
+      expect(requestsByDocument(hh)[0].system.startsWith(TEACHING)).toBe(true);
+    }
   });
 
   it('manages the rules through the API, locked by PROMPT_RULES', async () => {
@@ -272,6 +279,14 @@ describe('prompt rules', () => {
     const analysis = await hh.inject({ method: 'POST', url: '/api/documents/1/analyze', headers: { cookie } });
     expect(analysis.json().rule).toMatchObject({ name: 'School', promptName: 'Teaching material' });
     expect(requestsByDocument(hh).at(-1)!.system.startsWith(TEACHING)).toBe(true);
+    for (const prompt of ['', '   ']) {
+      const blank = await hh.inject({ method: 'POST', url: '/api/documents/1/analyze', headers: { cookie }, payload: { prompt } });
+      expect(blank.json().rule).toMatchObject({ promptName: 'Teaching material' });
+      expect(requestsByDocument(hh).at(-1)!.system.startsWith(TEACHING)).toBe(true);
+    }
+    const explicit = await hh.inject({ method: 'POST', url: '/api/documents/1/analyze', headers: { cookie }, payload: { prompt: ' Explicit prompt ' } });
+    expect(explicit.json().rule).toBeNull();
+    expect(requestsByDocument(hh).at(-1)!.system.startsWith('Explicit prompt')).toBe(true);
     hh.ctx.learning.configure({ mode: 'hybrid' });
     const applied = await hh.inject({ method: 'POST', url: '/api/documents/1/apply', headers: { cookie }, payload: { title: 'Fractions', promptId: ids.teaching } });
     expect(applied.statusCode).toBe(200);

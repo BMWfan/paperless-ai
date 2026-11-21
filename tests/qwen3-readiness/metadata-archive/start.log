@@ -1,0 +1,20 @@
+Unable to find image 'ollama/ollama:0.12.6' locally
+0.12.6: Pulling from ollama/ollama
+4b3ffd8ccb52: Pulling fs layer
+98bf6a5ec929: Pulling fs layer
+ebcb0a999d8e: Pulling fs layer
+09bd5f2738f8: Pulling fs layer
+09bd5f2738f8: Waiting
+98bf6a5ec929: Verifying Checksum
+98bf6a5ec929: Download complete
+ebcb0a999d8e: Verifying Checksum
+4b3ffd8ccb52: Download complete
+4b3ffd8ccb52: Pull complete
+09bd5f2738f8: Verifying Checksum
+09bd5f2738f8: Download complete
+98bf6a5ec929: Pull complete
+ebcb0a999d8e: Pull complete
+09bd5f2738f8: Pull complete
+Digest: sha256:a61a8fd395dbb931cc8cb1b5da7a2510746575c87113fdc45b647ee59ef7f808
+Status: Downloaded newer image for ollama/ollama:0.12.6
+caf498db742e1b4df5792cded6290e37204931aec9506d34f981aa293deee969

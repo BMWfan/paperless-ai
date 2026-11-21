@@ -439,14 +439,15 @@ export class ProcessingEngine extends EventEmitter<{ job: [documentId: number, o
       }
       if (info) info.stage = 'analyzing';
       // A prompt sent with the request (webhook, API) wins; otherwise the first matching prompt rule.
-      const rule = job.prompt ? null : await matchPromptRule(this.ctx, doc);
+      const prompt = job.prompt?.trim() || undefined;
+      const rule = prompt ? null : await matchPromptRule(this.ctx, doc);
       const processing = rule?.processing ?? this.ctx.cfg.processing;
       this.modelsUsed.add(rule?.model ?? null);
       log.info(`Analyzing document ${documentId} "${doc.title}"${rule ? ` with the prompt "${rule.prompt.name}" (${ruleLabel(rule.rule, rule.index)})` : ''}`);
       const analysis = await analyzeContent(this.ctx, content, {
         feature: 'process',
         documentId,
-        customPrompt: job.prompt ?? rule?.prompt.prompt,
+        customPrompt: prompt ?? rule?.prompt.prompt,
         filename: doc.original_file_name,
         processing: rule?.processing,
         model: rule?.model,

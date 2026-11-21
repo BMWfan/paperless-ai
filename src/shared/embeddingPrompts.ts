@@ -61,8 +61,11 @@ export function applyQueryPrompt(prompt: string, query: string): string {
 
 /** A passage as it is embedded. */
 export function applyDocumentPrompt(prompt: string, text: string, title: string): string {
-  const withTitle = prompt.replace(/\{title\}/g, () => title.trim() || 'none');
-  return /\{(text|content)\}/.test(withTitle) ? withTitle.replace(/\{(?:text|content)\}/g, () => text) : withTitle + text;
+  const hasPassage = /\{(?:text|content)\}/.test(prompt);
+  const rendered = prompt.replace(/\{(?:title|text|content)\}/g, (placeholder) =>
+    placeholder === '{title}' ? title.trim() || 'none' : text,
+  );
+  return hasPassage ? rendered : rendered + text;
 }
 
 /** A prompt in template form for display ("search_query: {query}"). */
