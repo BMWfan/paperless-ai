@@ -63,6 +63,20 @@ class WorkflowPolicy(unittest.TestCase):
         self.assertEqual(steps[build]['with']['push'], 'true')
         self.assertTrue(any(s.get('with', {}).get('ref') == '${{ needs.preflight.outputs.sha }}' for s in steps[gate+1:login]))
 
+    def test_model_measurement_is_manual_and_secret_is_step_scoped(self):
+        doc = workflow('model-regression.yml')
+        self.assertEqual(set(doc['on']), {'workflow_dispatch'})
+        self.assertEqual(doc['permissions'], {'contents': 'read'})
+        job = doc['jobs']['measure']
+        self.assertEqual(job['environment'], 'model-regression')
+        self.assertIn('github.sha == inputs.reviewed_sha', job['if'])
+        steps = job['steps']
+        self.assertEqual(steps[1]['with']['ref'], '${{ github.sha }}')
+        self.assertEqual(steps[1]['with']['persist-credentials'], 'false')
+        secret_steps = [step for step in steps if 'secrets.' in str(step)]
+        self.assertEqual(len(secret_steps), 1)
+        self.assertEqual(secret_steps[0]['run'], 'node --import tsx test/helpers/runModelRegression.ts')
+
     def test_discord_removed_and_main_is_actually_tested(self):
         self.assertFalse((ROOT / '.github/workflows/release-to-discord.yml').exists())
         self.assertIn('main', workflow('learning-e2e.yml')['on']['push']['branches'])

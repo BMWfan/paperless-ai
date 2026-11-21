@@ -1,0 +1,50 @@
+name: Model regression measurement
+on:
+  workflow_dispatch:
+    inputs:
+      reviewed_sha:
+        description: Exact owner-reviewed commit SHA of the selected branch
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: paid-model-regression
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    if: github.repository == 'BMWfan/paperless-ai' && github.run_attempt == 1 && github.sha == inputs.reviewed_sha
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    environment: model-regression
+    steps:
+      - name: Require the SHA configured by the environment owner
+        env:
+          APPROVED_SHA: ${{ vars.MODEL_REGRESSION_APPROVED_SHA }}
+        run: test "$APPROVED_SHA" = "$GITHUB_SHA"
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 22
+      - run: npm ci
+        env:
+          ONNXRUNTIME_NODE_INSTALL: skip
+      - run: npm test -- test/model-regression.test.ts --maxWorkers=1
+      - name: Measure the reviewed revision
+        env:
+          MODEL_REGRESSION_API_KEY: ${{ secrets.MODEL_REGRESSION_API_KEY }}
+          MODEL_REGRESSION_SHA: ${{ github.sha }}
+        run: node --import tsx test/helpers/runModelRegression.ts
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: model-regression-${{ github.sha }}
+          path: model-regression-report.json
+          if-no-files-found: warn
+          retention-days: 7
