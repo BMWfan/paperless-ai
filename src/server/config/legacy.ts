@@ -45,6 +45,17 @@ export function decodeLegacyPrompt(value: string): string {
   return v.replace(/\\r\\n/g, '\n').replace(/\\n/g, '\n').replace(/\r\n/g, '\n').trim();
 }
 
+/** A JSON array (e.g. PROMPT_RULES); anything else is ignored. The schema validates the entries. */
+export function parseJsonArray(value: string | undefined): unknown[] | undefined {
+  if (value === undefined || value.trim() === '') return undefined;
+  try {
+    const parsed: unknown = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function parseLegacyCustomFields(value: string | undefined): CustomFieldConfig[] | undefined {
   if (!value?.trim()) return undefined;
   try {
@@ -153,6 +164,7 @@ export const ENV_MAPPINGS: Mapping[] = [
   { env: 'RESTRICT_TO_EXISTING_CORRESPONDENTS', path: 'processing.restrict.correspondents', parse: b },
   { env: 'RESTRICT_TO_EXISTING_DOCUMENT_TYPES', path: 'processing.restrict.documentTypes', parse: b },
   { env: 'CUSTOM_FIELDS', path: 'processing.customFields', parse: (v) => parseLegacyCustomFields(v) },
+  { env: 'PROMPT_RULES', path: 'processing.promptRules', parse: (v) => parseJsonArray(v) },
   { env: 'PROCESSING_CONCURRENCY', path: 'processing.concurrency', parse: i },
 
   { env: 'EXTERNAL_API_ENABLED', path: 'externalApi.enabled', parse: b },
@@ -167,6 +179,8 @@ export const ENV_MAPPINGS: Mapping[] = [
   { env: 'RAG_ENABLED', path: 'rag.enabled', parse: b },
   { env: 'RAG_EMBEDDING_PROVIDER', path: 'rag.embeddingProvider', parse: (v) => v.trim().toLowerCase() },
   { env: 'RAG_EMBEDDING_MODEL', path: 'rag.embeddingModel', parse: s },
+  { env: 'RAG_QUERY_PROMPT', path: 'rag.queryPrompt', parse: (v) => v },
+  { env: 'RAG_DOCUMENT_PROMPT', path: 'rag.documentPrompt', parse: (v) => v },
   { env: 'RAG_QUERY_EXPANSION', path: 'rag.queryExpansion', parse: b },
 
   { env: 'OCR_ENABLED', path: 'ocr.enabled', parse: b },
