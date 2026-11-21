@@ -8,10 +8,11 @@ const { schema, system, revision: protocol } = require('./protocol');
 const { evaluate } = require('./scoring');
 
 const models = [
-  ['gpt-5-mini', 0.25, 2.00],
+  ['gpt-5.4-mini-2026-03-17', 0.75, 4.50],
 ];
-const outputLimit = 1024;
+const outputLimit = 768;
 const eurPerUsdIncludingCharges = 2;
+const priorReservedEur = 0.08;
 const training = corpus('training');
 const fixtures = corpus('confirmation');
 const confirmed = references();
@@ -28,7 +29,7 @@ const tasks = models.flatMap(([model, inputPrice, outputPrice]) =>
       max_completion_tokens: outputLimit,
       service_tier: 'default',
       store: false,
-      ...(model.startsWith('gpt-5-') ? { reasoning_effort: 'minimal' } : { temperature: 0 }),
+      reasoning_effort: 'none',
     };
     const body = JSON.stringify(request);
     const inputBound = Buffer.byteLength(body) + 2048;
@@ -41,12 +42,13 @@ const plan = {
   sha: process.env.GITHUB_SHA ?? null,
   revision, protocol, models, calls: tasks.length, outputLimit,
   maxUsd, eurPerUsdIncludingCharges, maxEur: maxUsd * eurPerUsdIncludingCharges,
+  priorReservedEur,
   digest: createHash('sha256').update(JSON.stringify({ training, fixtures, tasks })).digest('hex'),
 };
 
 async function main() {
   assert.equal(tasks.length, 40);
-  assert.ok(plan.maxEur <= 1, 'Budget exceeded');
+  assert.ok(plan.maxEur + priorReservedEur <= 1, 'Budget exceeded');
   console.log(JSON.stringify(plan));
   if (process.argv[2] !== '--execute') return;
   assert.equal(process.env.GITHUB_ACTIONS, 'true');
@@ -107,7 +109,7 @@ async function main() {
       usdWithoutCacheDiscount: validUsage ? (input * inputPrice + output * outputPrice) / 1e6 : null,
       scores: actual ? evaluate(actual, fixture, training) : null,
     });
-    if (!validUsage || !/^gpt-5-mini(?:-\d{4}-\d{2}-\d{2})?$/.test(result.model)) {
+    if (!validUsage || result.model !== model) {
       throw new Error('Unexpected model or token usage');
     }
   }
