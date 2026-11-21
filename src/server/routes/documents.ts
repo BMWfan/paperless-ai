@@ -105,11 +105,12 @@ export const documentRoutes =
           ? configSchema.parse(deepMerge(structuredClone(ctx.cfg), { processing: req.body.processing } as DeepPartial<AppConfig>)).processing
           : undefined;
         // The manual review analyses like the automatic processing: with the prompt rule that applies.
-        const rule = req.body?.prompt || processing ? null : await matchPromptRule(ctx, doc);
+        const prompt = req.body?.prompt?.trim() || undefined;
+        const rule = prompt || processing ? null : await matchPromptRule(ctx, doc);
         const result = await analyzeContent(ctx, ocr.storedText(doc) ?? doc.content ?? '', {
-          feature: req.body?.prompt || processing ? 'playground' : 'manual',
+          feature: prompt || processing ? 'playground' : 'manual',
           documentId: doc.id,
-          customPrompt: req.body?.prompt ?? rule?.prompt.prompt,
+          customPrompt: prompt ?? rule?.prompt.prompt,
           filename: doc.original_file_name,
           processing: processing ?? rule?.processing,
           model: rule?.model,
