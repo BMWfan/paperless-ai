@@ -22,6 +22,7 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: node --test tests/v4/*.test.mjs
+      - run: node --import tsx e2e/model-regression.ts
       - run: node scripts/audit-historical-evidence.mjs
       - run: npm run lint
       - run: npm test
