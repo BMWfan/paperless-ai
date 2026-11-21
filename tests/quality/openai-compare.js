@@ -80,7 +80,13 @@ async function main() {
     const result = response.ok ? await response.json() : null;
     const durationMs = Math.round(performance.now() - start);
     if (!result) {
-      record({ ...row, durationMs, status: response.status });
+      const failure = await response.json().catch(() => null);
+      const knownCodes = ['insufficient_quota', 'rate_limit_exceeded', 'model_not_found',
+        'invalid_api_key', 'invalid_json_schema', 'unsupported_value'];
+      const code = knownCodes.find(candidate => candidate === failure?.error?.code
+        || candidate === failure?.error?.type) ?? 'unclassified';
+      record({ ...row, durationMs, status: response.status, code });
+      console.error('OpenAI request rejected:', response.status, code);
       throw new Error('Inference request failed');
     }
     const { usage, choices } = result;
