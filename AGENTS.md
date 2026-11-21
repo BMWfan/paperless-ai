@@ -26,3 +26,7 @@ Follow [SPEC #36](.github/SDD-LIGHT.md#reflexion-spec-36-pilot). Retrieve only r
 ## Process-only change exception (owner-approved, 2026-11-18)
 
 Changes exclusively to development methodology, agent instructions, internal documentation, or development-only tooling may merge **without a developer prerelease** if they do not modify runtime or shipped artifacts, dependencies, configuration, CI/release workflows, or deployment behavior. Classify based on the complete diff, not the PR label. Applicable SDD-Light requirements, independent AI review, passing relevant CI and explicit owner merge approval remain mandatory. Functional or release-affecting changes retain the prerelease-first policy. This exception never authorizes an automatic release, bypass of branch protection, or deployment. If a push-to-default-branch workflow could publish a release, verify and prevent that side effect before merging; otherwise keep the PR open.
+
+## Cross-account Codex / ChatGPT Work handoff (process-only pilot)
+
+For a change of ChatGPT account, use the task-scoped [handoff template](.github/spec-templates/handoff.md) and the linked GitHub issue/draft PR as the source of truth. A chat, Codex session or Work session is not assumed to transfer. On resumption verify the branch and current SHA, read only relevant diff/spec/test evidence, and follow existing owner approval gates. Keep handoff information public-safe, concise and updated at meaningful task boundaries, not on every message. Do not create an automatic commit loop or overwrite another agent's work.
