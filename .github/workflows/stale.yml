@@ -1,4 +1,4 @@
-name: Mark stale issues and pull requests
+name: Mark and close opted-in stale issues
 
 on:
   schedule:
@@ -13,16 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Close stale issues and pull requests
+    - name: Close opted-in stale issues
       uses: actions/stale@v8
       with:
         repo-token: ${{ github.token }}
-        stale-issue-message: "This issue has been marked as stale due to inactivity. Please respond to keep it open."
-        stale-pr-message: "This pull request has been marked as stale due to inactivity. Please update it to keep it open."
+        stale-issue-message: "This opted-in issue will be closed after three more days of inactivity. Respond or remove the stale-opt-in label to keep it open."
         close-issue-message: "This issue has been closed due to lack of response."
-        close-pr-message: "This pull request has been closed due to lack of response."
-        days-before-stale: 7 # Days before an issue or PR is marked as stale
-        days-before-close: 3 # Days before a stale issue or PR is closed
-        stale-issue-label: "stale" # Label added to stale issues
-        exempt-issue-labels: "wontfix,bug" # Labels that exempt issues from being marked as stale
-        days-before-pr-stale: -1 # Disable stale processing for pull requests
+        only-issue-labels: "stale-opt-in"
+        days-before-issue-stale: 7
+        days-before-issue-close: 3
+        stale-issue-label: "stale"
+        exempt-issue-labels: "wontfix,bug"
+        days-before-pr-stale: -1
+        days-before-pr-close: -1
+        remove-pr-stale-when-updated: false
