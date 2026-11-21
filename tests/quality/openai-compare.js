@@ -8,9 +8,7 @@ const { schema, system, revision: protocol } = require('./protocol');
 const { evaluate } = require('./scoring');
 
 const models = [
-  ['gpt-4.1-mini-2025-04-14', 0.40, 1.60],
-  ['gpt-5-nano-2025-08-07', 0.05, 0.40],
-  ['gpt-5-mini-2025-08-07', 0.25, 2.00],
+  ['gpt-5-mini', 0.25, 2.00],
 ];
 const outputLimit = 1024;
 const eurPerUsdIncludingCharges = 2;
@@ -47,7 +45,7 @@ const plan = {
 };
 
 async function main() {
-  assert.equal(tasks.length, 120);
+  assert.equal(tasks.length, 40);
   assert.ok(plan.maxEur <= 1, 'Budget exceeded');
   console.log(JSON.stringify(plan));
   if (process.argv[2] !== '--execute') return;
@@ -61,7 +59,7 @@ async function main() {
   writeFileSync(path, JSON.stringify({ plan }) + '\n', { flag: 'wx' });
   const record = row => appendFileSync(path, JSON.stringify(row) + '\n');
   const headers = { Authorization: 'Bearer ' + key };
-  for (const [model] of models) {
+  for (const model of new Set(tasks.map(task => task.model))) {
     const visibility = await fetch('https://api.openai.com/v1/models/' + model, {
       headers, redirect: 'error', signal: AbortSignal.timeout(20_000),
     });
@@ -109,7 +107,9 @@ async function main() {
       usdWithoutCacheDiscount: validUsage ? (input * inputPrice + output * outputPrice) / 1e6 : null,
       scores: actual ? evaluate(actual, fixture, training) : null,
     });
-    if (!validUsage || result.model !== model) throw new Error('Unexpected model or token usage');
+    if (!validUsage || !/^gpt-5-mini(?:-\d{4}-\d{2}-\d{2})?$/.test(result.model)) {
+      throw new Error('Unexpected model or token usage');
+    }
   }
   record({ complete: true });
 }
