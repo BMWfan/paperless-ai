@@ -31,8 +31,7 @@ const { evaluate } = require('../tests/quality/scoring.js') as {
   };
 };
 const models = [
-  { id: 'gpt-4.1-mini-2025-04-14', input: 0.40, output: 1.60 },
-  { id: 'gpt-5.4-mini-2026-03-17', input: 0.75, output: 4.50 },
+  { id: 'gpt-6.1-sol', input: 2, output: 10 },
 ];
 const training = corpus('training');
 const fixtures = corpus('confirmation').filter((_, index) => index % 2 === 0);
@@ -52,8 +51,11 @@ const plan = {
   sha, revision, models, calls: callsPerModel * models.length, inputBound, outputLimit, maxEur,
   digest: createHash('sha256').update(JSON.stringify({ training, fixtures })).digest('hex'),
 };
-assert.equal(plan.calls, 40);
-assert.ok(maxEur <= 1);
+assert.equal(plan.calls, 20);
+let spentEur = 0;
+const runLimitEur = 1;
+const reservationEur = maxEur / plan.calls;
+assert.ok(reservationEur < runLimitEur);
 if (live) {
   assert.equal(process.env.GITHUB_ACTIONS, 'true');
   assert.equal(process.env.GITHUB_RUN_ATTEMPT, '1');
@@ -132,7 +134,8 @@ measurement: for (const model of models) {
         assert.equal(sent, false, 'Only one outbound request per case and arm');
         sent = true;
         if (live) {
-          record({ attempt: identity });
+          assert.ok(spentEur + reservationEur <= runLimitEur, 'Remaining budget insufficient');
+          record({ attempt: identity, spentEur, reservationEur, runLimitEur });
           try {
             const response = await realFetch(endpoint, { ...init, redirect: 'error' });
             if (!response.ok) {
@@ -157,7 +160,7 @@ measurement: for (const model of models) {
       try {
         const analysis = await analyzeContent(ctx, fixture.content, { feature: 'playground' });
         assert.ok(sent);
-        assert.equal(analysis.model, model.id);
+        assert.ok(analysis.model === model.id || /^gpt-6\.1-sol-\d{4}-\d{2}-\d{2}$/.test(analysis.model));
         assert.ok(analysis.usage.promptTokens > 0 && analysis.usage.promptTokens <= inputBound);
         assert.ok(analysis.usage.completionTokens > 0 && analysis.usage.completionTokens <= outputLimit);
         const actual = {
@@ -165,12 +168,12 @@ measurement: for (const model of models) {
           custom_fields: Object.fromEntries(analysis.suggestion.custom_fields.map(field => [field.field_name, field.value])),
         };
         const { fields, errors } = evaluate(actual as Fixture['expected'], fixture, training);
-        delete fields.language;
+        spentEur += eurPerUsd * (analysis.usage.promptTokens * model.input + analysis.usage.completionTokens * model.output) / 1e6;
         if (!live) {
           assert.ok(Object.values(fields).every(value => value === 'correct'));
           await assert.rejects(globalThis.fetch(endpoint, offlineRequest), /Only one outbound request/);
         }
-        record({ ...identity, expected: fixture.expected, actual, fields, errors, usage: analysis.usage,
+        record({ ...identity, returnedModel: analysis.model, expected: fixture.expected, actual, fields, errors, usage: analysis.usage,
           usdWithoutCacheDiscount: (analysis.usage.promptTokens * model.input +
             analysis.usage.completionTokens * model.output) / 1e6,
           durationMs: Math.round(performance.now() - started) });
@@ -186,4 +189,4 @@ measurement: for (const model of models) {
   }
 }
 assert.equal(measured, plan.calls, 'Model regression stopped. Inspect the run artifact.');
-record({ complete: true, measured });
+record({ complete: true, measured, spentEur });
