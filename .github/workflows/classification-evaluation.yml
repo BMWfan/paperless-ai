@@ -1,25 +1,11 @@
 name: Synthetic classification evaluation
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/classification-evaluation.yml'
-      - 'tests/e2e/real-model.test.js'
-      - 'tests/e2e/Dockerfile.model'
-      - 'tests/e2e/generate.js'
-      - 'tests/quality/**'
-      - 'services/customFieldUpdates.js'
-      - 'tests/quality.test.js'
-      - 'tests/e2e/Dockerfile.quality-model'
-      - 'docker-compose.quality.yml'
-      - 'services/learningRelevance.js'
-      - 'services/learningContext.js'
-      - 'services/serviceUtils.js'
   workflow_dispatch:
     inputs:
       extraction_stage:
         description: 'Approved extraction experiment: lock manifests or measure frozen arms'
         type: choice
-        options: [none, locks, measure, replay, projection, projection-replay, identifier-roles, identifier-roles-replay, qwen3-metadata, qwen3-smoke]
+        options: [none, locks, measure, replay, projection, projection-replay, identifier-roles, identifier-roles-replay]
         default: none
 permissions:
   contents: read
@@ -31,7 +17,10 @@ jobs:
     env:
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare trusted CA bundle
         run: |
           mkdir -p .e2e-cache
@@ -43,7 +32,7 @@ jobs:
           docker compose -f docker-compose.test.yml --profile extended run --no-deps --build \
             --name paperless-ai-evaluation -e "GITHUB_SHA=$(git rev-parse HEAD)" model-check
           docker cp paperless-ai-evaluation:/app/data/real-model-evaluation.json ./real-model-evaluation.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: synthetic-classification-evaluation
           path: real-model-evaluation.json
@@ -73,7 +62,10 @@ jobs:
       QUALITY_SEED: ${{ matrix.seed }}
       QUALITY_SPLITS: ${{ matrix.splits }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -85,7 +77,7 @@ jobs:
       - name: Collect complete or partial report
         if: always()
         run: docker cp quality-evaluation:/app/data/learning-quality.json ./learning-quality.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: learning-quality-${{ matrix.label }}-${{ matrix.seed }}
@@ -109,7 +101,10 @@ jobs:
       COMPOSE_PROJECT_NAME: paperless-quality-replay
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -120,7 +115,7 @@ jobs:
         run: |
           docker compose -f docker-compose.test.yml exec -T -e "GITHUB_SHA=$(git rev-parse HEAD)" ai node tests/quality/replay.js tests/quality/baseline
           docker compose -f docker-compose.test.yml cp ai:/app/data/quality-replay.json ./quality-replay.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: quality-typed-replay
           path: quality-replay.json
@@ -141,7 +136,10 @@ jobs:
     env:
       QUALITY_MODEL: ${{ matrix.model }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Verify downloaded manifest without inference or publication
         run: docker build --build-arg "QUALITY_MODEL=$QUALITY_MODEL" -f tests/e2e/Dockerfile.quality-model .
 
@@ -150,7 +148,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Download approved model manifests without inference
         run: |
           docker run -d --name extraction-locks -e OLLAMA_NO_CLOUD=1 ollama/ollama:0.12.6
@@ -162,7 +163,7 @@ jobs:
           docker cp extraction-locks:/root/.ollama/models/manifests/registry.ollama.ai/library/qwen2.5/3b extraction-locks/qwen3b.json
           sha256sum extraction-locks/*.json
           echo "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b  extraction-locks/qwen15b.json" | sha256sum -c -
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: extraction-model-manifests
           path: extraction-locks/*.json
@@ -191,8 +192,11 @@ jobs:
           - {arm: B, model: 'qwen2.5:3b', split: confirmation, seed: 43}
           - {arm: C, model: 'qwen2.5:3b', split: confirmation, seed: 43}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: '22.22.0'
       - name: Install locked development dependencies
@@ -229,7 +233,7 @@ jobs:
         run: |
           export GITHUB_SHA="$(git rev-parse HEAD)"
           node tests/quality/extraction/run.js
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: extraction-${{ matrix.arm }}-${{ matrix.split }}-${{ matrix.seed }}
@@ -247,7 +251,10 @@ jobs:
       COMPOSE_PROJECT_NAME: extraction-replay
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -258,7 +265,7 @@ jobs:
         run: |
           docker compose -f docker-compose.test.yml exec -T -e "GITHUB_SHA=$(git rev-parse HEAD)" ai node tests/quality/extraction/replay.js
           docker compose -f docker-compose.test.yml cp ai:/app/data/extraction-replay.json ./extraction-replay.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: extraction-native-replay
           path: extraction-replay.json
@@ -284,8 +291,11 @@ jobs:
           - {arm: A, split: confirmation, seed: 43}
           - {arm: B, split: confirmation, seed: 43}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: '22.22.0'
       - name: Install locked dependencies
@@ -320,7 +330,7 @@ jobs:
         run: |
           export GITHUB_SHA="$(git rev-parse HEAD)"
           node tests/context-projection/run.js
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: projection-${{ matrix.arm }}-${{ matrix.split }}-${{ matrix.seed }}
@@ -338,7 +348,10 @@ jobs:
       COMPOSE_PROJECT_NAME: projection-replay
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -349,7 +362,7 @@ jobs:
         run: |
           docker compose -f docker-compose.test.yml exec -T -e "GITHUB_SHA=$(git rev-parse HEAD)" ai node tests/context-projection/replay.js
           docker compose -f docker-compose.test.yml cp ai:/app/data/projection-replay.json ./projection-replay.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: projection-native-replay
           path: projection-replay.json
@@ -375,8 +388,11 @@ jobs:
           - {arm: A, split: confirmation, seed: 43}
           - {arm: B, split: confirmation, seed: 43}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: '22.22.0'
       - name: Install locked dependencies
@@ -411,7 +427,7 @@ jobs:
         run: |
           export GITHUB_SHA="$(git rev-parse HEAD)"
           node tests/identifier-roles/run.js
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: identifier-roles-${{ matrix.arm }}-${{ matrix.split }}-${{ matrix.seed }}
@@ -429,7 +445,10 @@ jobs:
       COMPOSE_PROJECT_NAME: identifier-roles-replay
       TEST_CA_BUNDLE: .e2e-cache/ca-certificates.crt
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
+      - name: Require the historical 3.x runtime before any experiment
+        run: |
+          test -f server.js || { echo 'Historical workflow: use its recorded legacy commit; upstream4 is not qualified by this experiment.'; exit 1; }
       - name: Prepare isolated trust bundle
         run: |
           mkdir -p .e2e-cache
@@ -440,7 +459,7 @@ jobs:
         run: |
           docker compose -f docker-compose.test.yml exec -T -e "GITHUB_SHA=$(git rev-parse HEAD)" ai node tests/identifier-roles/replay.js
           docker compose -f docker-compose.test.yml cp ai:/app/data/identifier-roles-replay.json ./identifier-roles-replay.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: identifier-roles-native-replay
           path: identifier-roles-replay.json
@@ -448,66 +467,3 @@ jobs:
       - name: Remove only the synthetic project
         if: always()
         run: docker compose -f docker-compose.test.yml down -v --remove-orphans
-
-  qwen3-metadata:
-    if: github.event_name == 'workflow_dispatch' && inputs.extraction_stage == 'qwen3-metadata'
-    name: Qwen3 phase zero metadata only - no generation
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check exact candidate without generating any answer
-        run: python3 tests/qwen3-readiness/metadata.py qwen3-metadata
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: qwen3-metadata
-          path: qwen3-metadata/
-          if-no-files-found: error
-      - name: Remove only phase zero container
-        if: always()
-        run: docker rm -f qwen3-readiness-metadata
-
-  qwen3-contract:
-    if: github.event_name == 'pull_request'
-    name: Qwen3 frozen contract and metadata verification fixtures
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-      - run: python3 -m unittest discover -s tests/qwen3-readiness -p 'test_*.py' -v
-
-  qwen3-smoke:
-    if: github.event_name == 'workflow_dispatch' && inputs.extraction_stage == 'qwen3-smoke'
-    name: Qwen3 phase one - at most20 generation attempts
-    runs-on: ubuntu-24.04
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22.22.0'
-      - name: Prepare frozen runner dependencies
-        run: npm ci --ignore-scripts
-      - name: Verify fixtures before any real inference
-        run: node --test tests/qwen3-readiness.test.js
-      - name: Pull exact locked model without generation retries
-        run: |
-          test "$GITHUB_RUN_ATTEMPT" = 1
-          test ! -f tests/qwen3-readiness/smoke-artifact.json
-          docker run -d --name qwen3-smoke --memory=8g --cpus=4 -p 127.0.0.1:11434:11434 -e OLLAMA_NO_CLOUD=1 -e OLLAMA_NUM_PARALLEL=1 ollama/ollama:0.12.6
-          for ready in $(seq 1 60); do docker exec qwen3-smoke ollama list >/dev/null 2>&1 && break; sleep 1; done
-          for attempt in 1 2 3; do docker exec qwen3-smoke ollama pull qwen3:4b-instruct-2507-q4_K_M && break; test "$attempt" -lt 3 || exit 1; done
-          docker cp qwen3-smoke:/root/.ollama/models/manifests/registry.ollama.ai/library/qwen3/4b-instruct-2507-q4_K_M /tmp/qwen3-manifest.json
-          echo '0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0  /tmp/qwen3-manifest.json' | sha256sum -c -
-      - name: Measure20 one-shot attempts and preserve the unchanged quality gate
-        run: node tests/qwen3-readiness/run.js
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: qwen3-smoke
-          path: qwen3-smoke.json
-          if-no-files-found: warn
-      - name: Remove only phase one container
-        if: always()
-        run: docker rm -f qwen3-smoke

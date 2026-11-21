@@ -1,5 +1,13 @@
 # Document-bound learning quality experiment
 
+> Historical 3.x experiment. The reproduction commands below require the
+> original recorded 3.x commit and its matching Compose files. They must not be
+> run against the current upstream4 test stack. Current compatibility evidence
+> lives in [the migration ledger](upstream-v4-migration.md); no comparative
+> real-model accuracy measurement has been completed for the 4.3 runtime.
+> Preserve the frozen corpus, protocol and raw archives when preparing a future
+> separately authorized model round.
+
 SPEC [#20](https://github.com/BMWfan/paperless-ai/issues/20), EPIC #12.
 The owner approved the model/relevance/extraction plan. This first implementation
 adds measurement, an experimental selector and a bounded typed-currency format

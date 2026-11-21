@@ -5,6 +5,9 @@ Approved [plan](https://github.com/BMWfan/paperless-ai/issues/20#issuecomment-69
 [PR #35](https://github.com/BMWfan/paperless-ai/pull/35), EPIC #12.
 This is a bounded model capability experiment, not production activation.
 
+For offline reproduction at the original 3.x revision, see the
+[archived contract test instructions](test-environment.md#historical-qwen3-readiness-evidence-spec-20).
+
 ## Frozen contract and sequence
 
 The [contract](../tests/qwen3-readiness/CONTRACT.md), 40 new bilingual synthetic

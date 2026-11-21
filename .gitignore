@@ -1,3 +1,31 @@
+# Dependencies & build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Runtime data (config, database, models, logs)
+data/
+data_*/
+logs/
+
+# Environment files (keep the example)
+.env
+.env.*
+!.env.example
+
+# Test artefacts
+coverage/
+test-results/
+playwright-report/
+e2e/.auth/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.local.*
+.local/
 .env
 .env.bak
 .dockerignore
