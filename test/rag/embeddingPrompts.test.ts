@@ -50,6 +50,8 @@ describe('embedding prompts', () => {
     expect(applyDocumentPrompt('title: {title} | text: {text}', 'Text', 'Rechnung')).toBe('title: Rechnung | text: Text');
     expect(applyDocumentPrompt('title: {title} | text: ', 'Text', '')).toBe('title: none | text: Text');
     expect(applyDocumentPrompt('{content} (end)', 'Text', 'T')).toBe('Text (end)');
+    expect(applyDocumentPrompt('{title}: {text}', 'Passage', 'Invoice {text}')).toBe('Invoice {text}: Passage');
+    expect(applyDocumentPrompt('{title}: ', 'Passage', 'Invoice {content}')).toBe('Invoice {content}: Passage');
     // replacement patterns in the text are not interpreted
     expect(applyQueryPrompt('q: {query}', 'costs $& $1')).toBe('q: costs $& $1');
     expect(applyDocumentPrompt('d: {text} {title}', 'costs $&', '$1')).toBe('d: costs $& $1');
