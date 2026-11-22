@@ -133,7 +133,11 @@ export const systemRoutes =
       return { models: (res.details?.models as string[] | undefined) ?? [], error: res.ok ? undefined : res.message };
     });
 
+    let setupLease = false;
     app.post('/api/setup', { config: { auth: 'setup' }, schema: { body: setupBody } }, async (req, reply) => {
+      if (setupLease) return reply.code(409).send({ error: 'Setup is already in progress' });
+      setupLease = true;
+      try {
       if (!ctx.needsSetup()) return reply.code(409).send({ error: 'Setup has already been completed' });
       const needsUser = ctx.repos.users.count() === 0;
       if (needsUser) {
@@ -170,6 +174,9 @@ export const systemRoutes =
       log.info('Setup completed');
       if (ctx.cfg.rag.enabled) rag.requestSync();
       return { ok: true };
+      } finally {
+        setupLease = false;
+      }
     });
 
     // ---------------------------------------------------------------- account
