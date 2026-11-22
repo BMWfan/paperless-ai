@@ -1,6 +1,6 @@
 import { mkdirSync, rmdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SESSION_COOKIE } from '../../src/server/auth.js';
 import { createHarness, type Harness } from '../helpers/appHarness.js';
 
@@ -37,6 +37,25 @@ function setup(username: string, model = 'test-model') {
     },
   });
 }
+
+it('leaves setup incomplete when account creation fails and permits a retry', async () => {
+  const create = vi.spyOn(h.ctx.repos.users, 'create').mockImplementationOnce(() => {
+    throw new Error('Injected database failure');
+  });
+  const save = vi.spyOn(h.ctx.config, 'update');
+  try {
+    expect((await setup('first')).statusCode).toBe(500);
+    expect(save).not.toHaveBeenCalled();
+    expect(h.ctx.repos.users.count()).toBe(0);
+    expect(h.ctx.cfg.setupCompleted).toBe(false);
+
+    expect((await setup('second')).statusCode).toBe(200);
+    expect(h.ctx.repos.users.list().map((user) => user.username)).toEqual(['second']);
+  } finally {
+    create.mockRestore();
+    save.mockRestore();
+  }
+});
 
 describe('setup requests at the same time', () => {
   it('creates one account and keeps the configuration that belongs to it', async () => {
