@@ -133,7 +133,11 @@ export const systemRoutes =
       return { models: (res.details?.models as string[] | undefined) ?? [], error: res.ok ? undefined : res.message };
     });
 
+    let setupLease = false;
     app.post('/api/setup', { config: { auth: 'setup' }, schema: { body: setupBody } }, async (req, reply) => {
+      if (setupLease) return reply.code(409).send({ error: 'Setup has already been completed' });
+      setupLease = true;
+      try {
       if (!ctx.needsSetup()) return reply.code(409).send({ error: 'Setup has already been completed' });
       const needsUser = ctx.repos.users.count() === 0;
       if (needsUser) {
@@ -159,17 +163,22 @@ export const systemRoutes =
       if (!ctx.needsSetup() || (needsUser && ctx.repos.users.count() > 0)) {
         return reply.code(409).send({ error: 'Setup has already been completed' });
       }
-      ctx.config.update({ ...patch, setupCompleted: true });
       let user = req.principal?.kind === 'user' ? ctx.repos.users.byId(req.principal.userId) : undefined;
-      if (needsUser) {
-        const id = ctx.repos.users.create(req.body.username!, passwordHash);
-        user = ctx.repos.users.byId(id);
-        log.info(`Created user "${req.body.username}"`);
-      }
+      ctx.db.transaction(() => {
+        if (needsUser) {
+          const id = ctx.repos.users.create(req.body.username!, passwordHash);
+          user = ctx.repos.users.byId(id);
+        }
+        ctx.config.update({ ...patch, setupCompleted: true });
+      })();
+      if (needsUser) log.info(`Created user "${req.body.username}"`);
       if (user) setSessionCookie(reply, req, await issueSession(ctx, user), ctx.cfg.security.sessionHours);
       log.info('Setup completed');
       if (ctx.cfg.rag.enabled) rag.requestSync();
       return { ok: true };
+      } finally {
+        setupLease = false;
+      }
     });
 
     // ---------------------------------------------------------------- account

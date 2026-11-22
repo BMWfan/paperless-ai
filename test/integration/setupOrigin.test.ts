@@ -37,7 +37,7 @@ describe('setup wizard and other origins', () => {
 
   it('does not let other origins read the setup endpoints', async () => {
     const res = await h.inject({ method: 'GET', url: '/api/setup/defaults', headers: { origin: OTHER } });
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(403);
     expect(res.headers['access-control-allow-origin']).toBeUndefined();
     expect(res.headers['x-content-type-options']).toBe('nosniff');
   });
@@ -60,9 +60,9 @@ describe('setup wizard and other origins', () => {
   it('only accepts a JSON body, which browsers send to other origins only after a preflight', async () => {
     const body = JSON.stringify({ ...setupPayload('evil'), force: true });
     const text = await h.inject({ method: 'POST', url: '/api/setup', headers: { origin: OTHER, 'content-type': 'text/plain' }, payload: body });
-    expect(text.statusCode).toBe(400);
+    expect(text.statusCode).toBe(403);
     const form = await h.inject({ method: 'POST', url: '/api/setup', headers: { origin: OTHER, 'content-type': 'application/x-www-form-urlencoded' }, payload: body });
-    expect(form.statusCode).toBe(415);
+    expect(form.statusCode).toBe(403);
     expect(h.ctx.repos.users.count()).toBe(0);
   });
 
@@ -80,7 +80,7 @@ describe('setup wizard and other origins', () => {
   });
 
   it('still runs the wizard from its own page', async () => {
-    const headers = { origin: 'http://localhost:3000', 'sec-fetch-site': 'same-origin' };
+    const headers = { host: 'localhost:3000', origin: 'http://localhost:3000', 'sec-fetch-site': 'same-origin' };
     const defaults = await h.inject({ method: 'GET', url: '/api/setup/defaults', headers });
     expect(defaults.statusCode).toBe(200);
     const test = await h.inject({ method: 'POST', url: '/api/setup/test-paperless', headers, payload: { url: h.paperless.url, token: h.paperless.token } });
