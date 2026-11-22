@@ -1,8 +1,10 @@
-import test from 'node:test';
+import activeTest from 'node:test';
 import assert from 'node:assert/strict';
 
 // Only the isolated compose fixture is permitted. Never point at production.
 const base = 'http://ai:3000';
+// Unit CI has no Docker DNS; run only when explicitly enabled by the isolated compose runner.
+const test = process.env.SETUP_SECURITY_HTTP_FIXTURE === '1' ? activeTest : activeTest.skip;
 const json = { 'content-type': 'application/json' };
 const fixtureKey = 'isolated-test-api-key';
 const endpoints = [
