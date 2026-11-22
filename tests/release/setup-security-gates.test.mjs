@@ -3,6 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { URL } from 'node:url';
 
 const app = readFileSync(new URL('../../src/server/http/app.ts', import.meta.url), 'utf8');
 const system = readFileSync(new URL('../../src/server/routes/system.ts', import.meta.url), 'utf8');
