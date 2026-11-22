@@ -152,9 +152,9 @@ export class ConfigStore extends EventEmitter<{ change: [next: AppConfig, prev: 
     return lenientParse(deepMerge(this.stored, valid)).config;
   }
 
-  private persist(): void {
+  private persist(config = this.stored): void {
     const tmp = `${this.file}.tmp`;
-    const json = JSON.stringify(this.stored, null, 2);
+    const json = JSON.stringify(config, null, 2);
     fs.writeFileSync(tmp, json, { mode: 0o600 });
     if (fs.existsSync(this.file)) fs.copyFileSync(this.file, `${this.file}.bak`);
     fs.renameSync(tmp, this.file);
@@ -172,8 +172,8 @@ export class ConfigStore extends EventEmitter<{ change: [next: AppConfig, prev: 
     }
     const next = configSchema.parse(deepMerge(this.stored, cleaned));
     const prev = this.effective;
+    this.persist(next);
     this.stored = next;
-    this.persist();
     this.effective = this.compute();
     this.emit('change', this.effective, prev);
     return this.effective;

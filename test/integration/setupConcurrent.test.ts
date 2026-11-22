@@ -1,3 +1,5 @@
+import { mkdirSync, rmdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { SESSION_COOKIE } from '../../src/server/auth.js';
 import { createHarness, type Harness } from '../helpers/appHarness.js';
@@ -5,6 +7,19 @@ import { createHarness, type Harness } from '../helpers/appHarness.js';
 let h: Harness;
 beforeEach(async () => {
   h = await createHarness({ configured: false });
+});
+
+it('rolls back the first account when saving setup fails and permits a retry', async () => {
+  const blockedConfig = join(h.dataDir, 'config.json.tmp');
+  mkdirSync(blockedConfig);
+
+  expect((await setup('first')).statusCode).toBe(500);
+  expect(h.ctx.repos.users.count()).toBe(0);
+  expect(h.ctx.cfg.setupCompleted).toBe(false);
+
+  rmdirSync(blockedConfig);
+  expect((await setup('second')).statusCode).toBe(200);
+  expect(h.ctx.repos.users.list().map((user) => user.username)).toEqual(['second']);
 });
 afterEach(() => h.close());
 
