@@ -52,3 +52,16 @@ indistinguishable from current values in the flattened text. A literal
 `[Current document]` heading is not trusted ownership information. A production
 gate would need trustworthy source boundaries or explicit user confirmation for
 ambiguous values. Keep this diagnostic out of the automatic writer.
+
+## Distinguish the two amount contracts
+
+The original replay configured an amount field without a description. Its null
+expectation assumed a current payment demand, but the file also contains a valid
+historic receipt total. The original score is retained as historical evidence.
+
+The new [paired fixture](../test/processing/amount-scope.fixture.json) uses the
+same document and field name with two explicit descriptions. The current-payment
+scope expects no value, and the invoice-in-file scope expects `EUR777.77`.
+`npm test -- test/processing/amount-scope.test.ts` verifies that the real prompt
+builder supplies these distinct descriptions with otherwise identical input.
+It does not verify that a live model follows either description.

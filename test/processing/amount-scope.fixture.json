@@ -1,0 +1,15 @@
+{
+  "document": "Bergpfad Auskunft Ltd\nNotice about our opening hours, no charges requested.\nAn old receipt is attached for information:\nInvoice number: OLD-HOLD-EN-402-0081\nAmount: EUR 777.77",
+  "cases": [
+    {
+      "id": "current-amount-due",
+      "description": "Extract only the amount the main document currently asks the recipient to pay. Omit this field when no payment is requested. Do not use amounts from historical attachments.",
+      "expected": null
+    },
+    {
+      "id": "invoice-amount-in-file",
+      "description": "Extract the total from the sole invoice or receipt in the supplied file, including a historical attachment. This is the recorded amount, even when no payment is requested.",
+      "expected": "EUR777.77"
+    }
+  ]
+}
