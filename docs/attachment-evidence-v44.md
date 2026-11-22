@@ -33,3 +33,22 @@ gate. In the analyzer replay, blocking every wrong proposal came at the cost of
 blocking every correct proposal too. Keep the raw model evidence and the
 existing runtime unchanged. This experiment did not send model requests or
 write Paperless metadata. SPEC #20 and EPIC #12 remain open.
+
+## Field-level provenance follow-up
+
+`node --test tests/v4/attachment-provenance.test.mjs` verifies raw line
+references, repeated and missing evidence, and section boundaries.
+`node tests/v4/attachment-provenance.mjs /path/to/model-regression-report.json`
+replays invoice numbers and amounts only. Explicitly equivalent EUR formats
+count as correct. Currency-less amounts do not. The original report is unchanged.
+
+| Dataset | Correct with support | Wrong held | Wrong for review | Wrong with support |
+| --- | ---: | ---: | ---: | ---: |
+| 4.4 replay | 14/14 | 7 | 7 | 0/14 |
+| Frozen confirmation subset | 4/4 | 0 | 2 | 2/4 |
+
+Both confirmation false supports are unmarked attachments whose lines are
+indistinguishable from current values in the flattened text. A literal
+`[Current document]` heading is not trusted ownership information. A production
+gate would need trustworthy source boundaries or explicit user confirmation for
+ambiguous values. Keep this diagnostic out of the automatic writer.
