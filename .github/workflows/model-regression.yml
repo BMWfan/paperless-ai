@@ -6,6 +6,13 @@ on:
         description: Exact owner-reviewed commit SHA of the selected branch
         required: true
         type: string
+      mode:
+        description: Measurement to run
+        type: choice
+        default: baseline
+        options:
+          - baseline
+          - amount-scope
 
 permissions:
   contents: read
@@ -35,11 +42,12 @@ jobs:
       - run: npm ci
         env:
           ONNXRUNTIME_NODE_INSTALL: skip
-      - run: npm test -- test/model-regression.test.ts --maxWorkers=1
+      - run: npm test -- test/model-regression.test.ts test/processing/amount-scope.test.ts --maxWorkers=1
       - name: Measure the reviewed revision
         env:
           MODEL_REGRESSION_API_KEY: ${{ secrets.MODEL_REGRESSION_API_KEY }}
           MODEL_REGRESSION_SHA: ${{ github.sha }}
+          MODEL_REGRESSION_MODE: ${{ inputs.mode }}
         run: node --import tsx test/helpers/runModelRegression.ts
       - uses: actions/upload-artifact@v7.0.2
         if: always()
