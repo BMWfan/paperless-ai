@@ -141,7 +141,7 @@ export async function buildApp(services: Services, opts: AppOptions = {}): Promi
   });
 
   app.decorateRequest('principal', null);
-  app.addHook('preHandler', async (req, reply) => {
+  const authorize = async (req: FastifyRequest, reply: FastifyReply) => {
     // API routes require authentication unless they opt out; static assets and docs are public.
     const url = req.routeOptions.url ?? '';
     let level: AuthLevel = req.routeOptions.config?.auth ?? (url.startsWith('/api/') || url.startsWith('/chat/') ? 'user' : 'public');
@@ -157,6 +157,12 @@ export async function buildApp(services: Services, opts: AppOptions = {}): Promi
     if (level === 'session' && req.principal.kind !== 'user') {
       return reply.code(403).send({ error: 'This action requires a logged-in user (API keys are not allowed)' });
     }
+  };
+  app.addHook('onRequest', async (req, reply) => {
+    if (req.routeOptions.config?.auth === 'setup') await authorize(req, reply);
+  });
+  app.addHook('preHandler', async (req, reply) => {
+    if (req.routeOptions.config?.auth !== 'setup') await authorize(req, reply);
   });
 
   app.setErrorHandler((err: Error & { statusCode?: number; validation?: unknown }, req: FastifyRequest, reply: FastifyReply) => {

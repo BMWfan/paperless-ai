@@ -1,12 +1,13 @@
 import activeTest from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { validateFixture } from './safety.mjs';
 
 // Only the isolated compose fixture is permitted. Never point at production.
 const base = 'http://ai:3000';
 // Unit CI has no Docker DNS; run only when explicitly enabled by the isolated compose runner.
 const test = process.env.SETUP_SECURITY_HTTP_FIXTURE === '1' ? activeTest : activeTest.skip;
 const json = { 'content-type': 'application/json' };
-const fixtureKey = 'isolated-test-api-key';
 const endpoints = [
   ['GET', '/api/setup/defaults'],
   ['POST', '/api/setup/test-paperless'],
@@ -32,8 +33,10 @@ test('configured fixture rejects anonymous setup requests before processing body
 });
 
 test('configured fixture rejects API-key-only setup access', async () => {
+  const fixture = JSON.parse(readFileSync('/fixtures/runtime.json', 'utf8'));
+  validateFixture(fixture);
   for (const [method, path] of endpoints) {
-    const r = await call(method, path, { 'x-api-key': fixtureKey });
+    const r = await call(method, path, { 'x-api-key': fixture.apiKey });
     assert.equal(r.status, 403, method + ' ' + path);
   }
 });
