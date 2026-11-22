@@ -135,7 +135,7 @@ export const systemRoutes =
 
     let setupLease = false;
     app.post('/api/setup', { config: { auth: 'setup' }, schema: { body: setupBody } }, async (req, reply) => {
-      if (setupLease) return reply.code(409).send({ error: 'Setup is already in progress' });
+      if (setupLease) return reply.code(409).send({ error: 'Setup has already been completed' });
       setupLease = true;
       try {
       if (!ctx.needsSetup()) return reply.code(409).send({ error: 'Setup has already been completed' });
