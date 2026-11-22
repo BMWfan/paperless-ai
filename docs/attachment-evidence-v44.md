@@ -65,3 +65,13 @@ scope expects no value, and the invoice-in-file scope expects `EUR777.77`.
 `npm test -- test/processing/amount-scope.test.ts` verifies that the real prompt
 builder supplies these distinct descriptions with otherwise identical input.
 It does not verify that a live model follows either description.
+
+The manual model-regression workflow's `amount-scope` mode runs the two prompts
+through the current analyzer with the pinned GPT-5.4 mini snapshot. Each arm can
+make at most one HTTP attempt, including retries. At the documented rates and
+currency ceiling this reserves at most USD 0.186 (EUR 0.248). Both outcomes must
+match for the workflow to pass. The report distinguishes mismatches from
+unmeasured arms. The offline test exercises the retry cap with fixture responses.
+
+Use the existing protected environment and exact reviewed SHA. A live run still
+requires a separately approved dispatch and the environment reviewer.
