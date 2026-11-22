@@ -29,7 +29,7 @@ jobs:
       - name: Native API, typed extraction, provenance and current-number patterns
         run: docker compose -f docker-compose.test.yml run --rm --no-deps runner
       - name: Setup security HTTP regression gates (isolated fixture)
-        run: docker compose -f docker-compose.test.yml run --rm --no-deps runner node --test /fixture/setup-security.test.mjs
+        run: docker compose -f docker-compose.test.yml run --rm --no-deps runner env SETUP_SECURITY_HTTP_FIXTURE=1 node --test /fixture/setup-security.test.mjs
       - name: Verify real app restart preserves learning without inference
         run: |
           docker compose -f docker-compose.test.yml restart ai
