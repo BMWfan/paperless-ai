@@ -123,6 +123,11 @@ export async function buildApp(services: Services, opts: AppOptions = {}): Promi
     reply.header('X-Content-Type-Options', 'nosniff');
     reply.header('Referrer-Policy', 'same-origin');
     if (isSetupRequest(req)) {
+      const origin = req.headers.origin;
+      const expectedOrigin = `${req.protocol}://${req.headers.host}`;
+      if (typeof origin === 'string' && origin !== expectedOrigin) {
+        return reply.code(403).send({ error: 'The setup wizard requires a same-origin request' });
+      }
       if (req.method === 'OPTIONS' || isFromOtherSite(req)) {
         return reply.code(403).send({ error: 'The setup wizard can only be used from its own page' });
       }
