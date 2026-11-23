@@ -444,3 +444,11 @@ export interface OcrDocumentText {
   inPaperless: boolean;
   ocr: OcrResultInfo | null;
 }
+export type InventoryCategory = 'tags' | 'correspondent' | 'documentType';
+
+export type InventoryCounts = Record<InventoryCategory | 'total', number | null>;
+
+export interface InventoryPage {
+  count: number;
+  documents: { id: number; title: string; url: string }[];
+}

@@ -207,9 +207,10 @@ export class PaperlessClient {
   }
 
   /** One page of documents, e.g. for pickers in the UI. */
-  async searchDocuments(opts: { query?: string; page?: number; pageSize?: number; ordering?: string; fields?: string[] }) {
+  async searchDocuments(opts: { query?: string; page?: number; pageSize?: number; ordering?: string; fields?: string[]; filters?: Record<string, string> }) {
     const version = await this.version();
     const query: Record<string, string | number | undefined> = {
+      ...opts.filters,
       page: opts.page ?? 1,
       page_size: opts.pageSize ?? 25,
       ordering: opts.ordering ?? '-added',

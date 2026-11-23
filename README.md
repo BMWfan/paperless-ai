@@ -256,6 +256,10 @@ If Paperless-ngx or your AI server uses a certificate from your own CA, mount th
 
 As a last resort, `NODE_TLS_REJECT_UNAUTHORIZED=0` turns certificate checks off completely. ⚠️ This applies to **every** connection of Paperless-AI – including the one carrying your OpenAI/Anthropic API key – so anybody in the network path could read and change the traffic. Only use it for testing in a trusted network.
 
+### Document inventory
+
+The dashboard shows the total number of documents visible to the configured Paperless-ngx connection and the numbers without tags, a correspondent or a document type. Select a category to browse matching documents and open them in Paperless-ngx. A document can appear in several categories. The inventory reads the current archive and makes no changes to its documents.
+
 ### Choosing embeddings for “Ask your archive”
 
 | Option | Notes |

@@ -2,7 +2,7 @@ import { currentFields, learnedFields, previewFields } from '../learning/fields.
 import type { FastifyPluginAsync } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import type { ChatStreamEvent, ChatTurn, DocumentDetail, DocumentSummary } from '../../shared/api.js';
+import type { ChatStreamEvent, ChatTurn, DocumentDetail, DocumentSummary, InventoryCategory, InventoryCounts, InventoryPage } from '../../shared/api.js';
 import type { Principal } from '../auth.js';
 import type { Services } from '../http/app.js';
 import { sendEventStream } from '../http/helpers.js';
@@ -16,6 +16,11 @@ import type { PaperlessDocument } from '../paperless/types.js';
 import { documentChat } from '../rag/documentChat.js';
 
 const chatTurn = z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(50_000) });
+const inventoryFilters = {
+  tags: { is_tagged: 'false' },
+  correspondent: { correspondent__isnull: 'true' },
+  documentType: { document_type__isnull: 'true' },
+} satisfies Record<InventoryCategory, Record<string, string>>;
 
 function summary(d: PaperlessDocument): DocumentSummary {
   return {
@@ -32,6 +37,32 @@ export const documentRoutes =
   ({ ctx, rag, ocr }: Services): FastifyPluginAsync =>
   async (fastify) => {
     const app = fastify.withTypeProvider<ZodTypeProvider>();
+
+    app.get('/api/inventory', { config: { auth: 'session' } }, async (): Promise<InventoryCounts> => {
+      const client = ctx.paperless();
+      const count = (filters?: Record<string, string>) => client.count('/documents/', filters).catch(() => null);
+      const [total, tags, correspondent, documentType] = await Promise.all([
+        count(), count(inventoryFilters.tags), count(inventoryFilters.correspondent), count(inventoryFilters.documentType),
+      ]);
+      return { total, tags, correspondent, documentType };
+    });
+
+    app.get('/api/inventory/documents', {
+      config: { auth: 'session' },
+      schema: { querystring: z.object({
+        category: z.enum(['tags', 'correspondent', 'documentType']),
+        page: z.coerce.number().int().min(1).default(1),
+      }) },
+    }, async (req): Promise<InventoryPage> => {
+      const result = await ctx.paperless().searchDocuments({
+        filters: inventoryFilters[req.query.category], ordering: 'id',
+        page: req.query.page, pageSize: 25, fields: ['id', 'title'],
+      });
+      return {
+        count: result.count,
+        documents: result.results.map(({ id, title }) => ({ id, title, url: ctx.documentLink(id) })),
+      };
+    });
 
     app.get('/api/metadata', async () => {
       const meta = await ctx.metadata().snapshot();
