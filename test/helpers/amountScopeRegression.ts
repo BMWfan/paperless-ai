@@ -9,6 +9,13 @@ export const amountScopeFixture = JSON.parse(readFileSync(
 )) as { document: string; cases: { id: string; description: string; expected: string | null }[] };
 
 const model = 'gpt-5.4-mini-2026-03-17';
+const confirmationCases = (JSON.parse(readFileSync(
+  new URL('../processing/amount-confirmation.fixture.json', import.meta.url), 'utf8',
+)) as { id: string; document: string; scope: 0 | 1; expected: string | null }[]).map(({ scope, ...sample }) => ({
+  ...sample,
+  description: amountScopeFixture.cases[scope].description + (scope === 1 ? ' Omit the field when more than one receipt qualifies.' : ''),
+}));
+export const amountConfirmationCallCount = confirmationCases.length;
 
 const importedPdfCases = [
   {
@@ -31,10 +38,10 @@ const importedPdfCases = [
   },
 ];
 
-export async function measureAmountScope(sha: string, key: string, transport = globalThis.fetch, includeImportedPdfs = false) {
+export async function measureAmountScope(sha: string, key: string, transport = globalThis.fetch, suite: boolean | 'confirmation' = false) {
   if (amountScopeFixture.cases.length !== 2) throw new Error('Exactly two amount scopes are required');
   const pair = amountScopeFixture.cases.map((sample) => ({ ...sample, document: amountScopeFixture.document }));
-  const cases = includeImportedPdfs ? [...pair, ...importedPdfCases] : pair;
+  const cases = suite === 'confirmation' ? confirmationCases : suite ? [...pair, ...importedPdfCases] : pair;
   const harness = await createHarness({
     env: { OPENAI_API_KEY: key },
     config: { ai: { provider: 'openai', responseTokens: 300 } },
@@ -61,9 +68,10 @@ export async function measureAmountScope(sha: string, key: string, transport = g
       } catch (error) {
         status = meter.totals().stopped ? 'budget-or-contract-stop' : `unmeasured:${error instanceof Error ? error.name : 'unknown'}`;
       }
-      rows.push({ ...sample, ...(includeImportedPdfs ? { document } : {}), actual, status, attempts: meter.attempts, budget: meter.totals() });
+      rows.push({ ...sample, ...(suite ? { document } : {}), actual, status, attempts: meter.attempts, budget: meter.totals() });
     }
-    return { sha, protocol: includeImportedPdfs ? 'amount-scope-pdf-v1' : 'amount-scope-pair-v1', model, document: amountScopeFixture.document, rows };
+    const protocol = suite === 'confirmation' ? 'amount-scope-confirmation-v1' : suite ? 'amount-scope-pdf-v1' : 'amount-scope-pair-v1';
+    return { sha, protocol, model, document: amountScopeFixture.document, rows };
   } finally {
     globalThis.fetch = originalFetch;
     await harness.close();

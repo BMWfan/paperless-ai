@@ -47,6 +47,26 @@ it('measures both scopes and caps invalid-response retries at one HTTP attempt p
   ]);
 }, 30_000);
 
+it('records the independent confirmation cases without calling the provider more than once per case', async () => {
+  const localFetch = globalThis.fetch;
+  const amounts = ['184.60 EUR', '63.28 EUR', null, null, '236.80 EUR', '72.49 EUR', null, null];
+  let calls = 0;
+  const report = await measureAmountScope('offline-fixture', 'fake-key', async (input, init) => {
+    if (String(input) !== endpoint) return localFetch(input, init);
+    const body = JSON.parse(String(init?.body));
+    const value = amounts[calls++];
+    const custom_fields = value ? [{ field_name: 'Amount', value }] : [];
+    return Response.json({
+      model: body.model,
+      choices: [{ message: { content: JSON.stringify({ custom_fields }) }, finish_reason: 'stop' }],
+      usage: { prompt_tokens: 200, completion_tokens: 20, total_tokens: 220 },
+    });
+  }, 'confirmation');
+  expect(report.protocol).toBe('amount-scope-confirmation-v1');
+  expect(calls).toBe(8);
+  expect(report.rows.map((row) => row.status)).toEqual(Array(8).fill('match'));
+}, 30_000);
+
 it('measures five PDF-derived cases and rejects an amount selected for an ambiguous case', async () => {
   const localFetch = globalThis.fetch;
   const outputs = [null, '777.77 EUR', '45.00 EUR', '777.77 EUR', null];
