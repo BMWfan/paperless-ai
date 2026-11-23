@@ -46,3 +46,22 @@ it('measures both scopes and caps invalid-response retries at one HTTP attempt p
     { status: 'match', actual: 'EUR777.77', attempts: [expect.anything()] },
   ]);
 }, 30_000);
+
+it('measures five PDF-derived cases and rejects an amount selected for an ambiguous case', async () => {
+  const localFetch = globalThis.fetch;
+  const outputs = [null, '777.77 EUR', '45.00 EUR', '777.77 EUR', null];
+  let calls = 0;
+  const report = await measureAmountScope('offline-fixture', 'fake-key', async (input, init) => {
+    if (String(input) !== endpoint) return localFetch(input, init);
+    const body = JSON.parse(String(init?.body));
+    const value = outputs[calls++];
+    const custom_fields = value === null ? [] : [{ field_name: 'Amount', value }];
+    return Response.json({
+      model: body.model,
+      choices: [{ message: { content: JSON.stringify({ custom_fields }) }, finish_reason: 'stop' }],
+      usage: { prompt_tokens: 200, completion_tokens: 20, total_tokens: 220 },
+    });
+  }, true);
+  expect(calls).toBe(5);
+  expect(report.rows.map((row) => row.status)).toEqual(['match', 'match', 'match', 'mismatch', 'match']);
+}, 30_000);

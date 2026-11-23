@@ -10,9 +10,10 @@ if (!key || !sha || !/^[0-9a-f]{40}$/.test(sha) || process.env.GITHUB_ACTIONS !=
 }
 delete process.env.MODEL_REGRESSION_API_KEY;
 const mode = process.env.MODEL_REGRESSION_MODE ?? 'baseline';
-if (mode !== 'baseline' && mode !== 'amount-scope') throw new Error('Unknown measurement mode');
-const paired = mode === 'amount-scope';
-console.log(JSON.stringify({ sha, mode, snapshots, limits: { ...limits, calls: paired ? 2 : limits.calls }, maxEurPerUsdWithTaxes: 4 / 3 }));
-const report = paired ? await measureAmountScope(sha, key) : await measureRegression(sha, key);
+if (mode !== 'baseline' && mode !== 'amount-scope' && mode !== 'amount-scope-pdf') throw new Error('Unknown measurement mode');
+const amountScope = mode !== 'baseline';
+const includeImportedPdfs = mode === 'amount-scope-pdf';
+console.log(JSON.stringify({ sha, mode, snapshots, limits: { ...limits, calls: includeImportedPdfs ? 5 : amountScope ? 2 : limits.calls }, maxEurPerUsdWithTaxes: 4 / 3 }));
+const report = amountScope ? await measureAmountScope(sha, key, globalThis.fetch, includeImportedPdfs) : await measureRegression(sha, key);
 writeFileSync('model-regression-report.json', JSON.stringify(report, null, 2) + '\n');
-if (report.rows.some((row) => row.status !== (paired ? 'match' : 'measured'))) process.exitCode = 1;
+if (report.rows.some((row) => row.status !== (amountScope ? 'match' : 'measured'))) process.exitCode = 1;
