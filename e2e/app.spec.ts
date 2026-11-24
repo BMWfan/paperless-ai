@@ -81,6 +81,20 @@ test('setup wizard configures Paperless-AI', async ({ page, request }) => {
   expect(errors).toEqual([]);
 });
 
+test('the inventory opens matching documents in Paperless-ngx', async ({ page, request }) => {
+  await login(page);
+  const info = await (await request.get('/__demo/info')).json() as { paperlessUrl: string };
+  await expect(page.getByRole('heading', { name: 'Document inventory' })).toBeVisible();
+  await page.getByRole('button', { name: /^Without tags/ }).click();
+  const dialog = page.getByRole('dialog', { name: 'Without tags' });
+  const document = dialog.getByRole('link').first();
+  await expect(document).toBeVisible();
+  await expect(document).toHaveAttribute('href', /^https?:\/\/[^/]+\/documents\/\d+\/details$/);
+  expect(new URL((await document.getAttribute('href'))!).origin).toBe(new URL(info.paperlessUrl).origin);
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+});
+
 test('scan processes documents and the dashboard updates', async ({ page }) => {
   await login(page);
   await page.getByRole('button', { name: 'Scan now' }).click();

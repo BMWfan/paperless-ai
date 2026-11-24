@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import type { DashboardData, HistoryPage, ProcessingStatus } from '@shared/api';
 import { Page } from '../components/Layout';
+import { Inventory } from '../components/Inventory';
 import { AreaChart, HBars, SegmentBar, Sparkline, type Slice } from '../components/charts';
 import { Alert, Badge, Button, buttonClass, Card, EmptyState, Modal, Segmented, Skeleton, Stat, useToast } from '../components/ui';
 import { errorMessage, get, post, qs } from '../lib/api';
@@ -554,6 +555,7 @@ export default function DashboardPage() {
         </Card>
       </div>
       <ProblemsModal status={problems} onClose={() => setProblems(null)} />
+      <Inventory />
       <MetadataModal initial={meta} onClose={() => setMeta(null)} />
     </Page>
   );

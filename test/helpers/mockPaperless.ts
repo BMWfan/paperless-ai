@@ -401,6 +401,9 @@ export class MockPaperless {
 
   private listDocuments(q: URLSearchParams, version: number, u: URL) {
     let docs = [...this.docs.values()];
+    if (q.has('is_tagged')) docs = docs.filter((d) => (d.tags.length > 0) === (q.get('is_tagged') === 'true'));
+    if (q.has('correspondent__isnull')) docs = docs.filter((d) => (d.correspondent === null) === (q.get('correspondent__isnull') === 'true'));
+    if (q.has('document_type__isnull')) docs = docs.filter((d) => (d.document_type === null) === (q.get('document_type__isnull') === 'true'));
     const tagsIn = q.get('tags__id__in');
     if (tagsIn) {
       const wanted = tagsIn.split(',').map(Number);
