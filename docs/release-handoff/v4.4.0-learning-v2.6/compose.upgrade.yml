@@ -1,0 +1,7 @@
+# Overlay for an existing 4.x project with service paperless-ai.
+# Use the same project name and base Compose files as the current instance.
+services:
+  paperless-ai:
+    image: ${PAPERLESS_AI_UPGRADE_IMAGE:?Set the approved GHCR image including its verified index digest}
+    build: !reset null
+    pull_policy: never

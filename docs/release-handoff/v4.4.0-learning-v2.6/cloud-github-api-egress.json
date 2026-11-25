@@ -1,0 +1,6 @@
+{
+  "network": {
+    "type": "restricted",
+    "allowed_domains": ["*.chatgpt.com", "chatgpt.com", "api.github.com"]
+  }
+}
