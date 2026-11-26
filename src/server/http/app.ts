@@ -1,4 +1,5 @@
 import { learningRoutes } from '../routes/learning.js';
+import { contractRoutes } from '../routes/contracts.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import Fastify, { LogController, type FastifyBaseLogger, type FastifyInstance, type FastifyReply, type FastifyRequest, type FastifyServerOptions } from 'fastify';
@@ -190,6 +191,7 @@ export async function buildApp(services: Services, opts: AppOptions = {}): Promi
   await app.register(processingRoutes(services));
   await app.register(documentRoutes(services));
   await app.register(learningRoutes(services));
+  await app.register(contractRoutes(services));
   await app.register(ragRoutes(services));
   await app.register(ocrRoutes(services));
   await app.register(oidcRoutes(services));

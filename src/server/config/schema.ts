@@ -131,8 +131,19 @@ export const AI_PROVIDERS = ['openai', 'anthropic', 'ollama', 'custom', 'azure']
 export const OLLAMA_THINK = ['auto', 'off', 'on', 'low', 'medium', 'high'] as const;
 export const EMBEDDING_PROVIDERS = ['local', 'openai', 'ollama', 'custom', 'azure', 'none'] as const;
 
+const contractBinding = z.object({ id: z.number().int().positive(), name: z.string().min(1).max(256), type: z.enum(['string', 'longtext', 'date']) });
+
 export const configSchema = z.object({
   version: z.literal(1).default(1),
+  /** Optional read-only overview. No selected types means no document queries. */
+  contracts: z.object({
+    sourceUrl: str(),
+    documentTypes: z.array(z.object({ id: z.number().int().positive(), name: z.string().min(1).max(256) })).max(50).default([]),
+    fields: z.object({
+      number: contractBinding.nullable().default(null), party: contractBinding.nullable().default(null),
+      start: contractBinding.nullable().default(null), end: contractBinding.nullable().default(null), cancelBy: contractBinding.nullable().default(null),
+    }).prefault({}),
+  }).prefault({}),
   /** True once the setup wizard (or a migrated legacy config) produced a usable configuration. */
   setupCompleted: bool(false),
   paperless: z

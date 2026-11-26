@@ -264,6 +264,7 @@ export function Layout({ children }: { children: ReactNode }) {
     { href: '/playground', label: 'Prompt playground', icon: <FlaskConical />, keywords: 'test prompt' },
     { href: '/prompts', label: 'Prompt library', icon: <BookMarked />, keywords: 'saved prompts rating model use case manager' },
     { href: '/learning', label: 'Learning', icon: <BookMarked />, keywords: 'corrections confirmation review' },
+    { href: '/contracts', label: 'Contracts', icon: <FileSearch />, keywords: 'private contract dates native fields' },
     { href: '/history', label: 'History', icon: <History />, keywords: 'undo changes' },
     { href: '/ocr', label: 'OCR', icon: <ScanText />, keywords: 'text recognition scan paddleocr quality' },
     { href: '/calendar', label: 'Calendar', icon: <CalendarDays />, hidden: !session?.features.calendar, keywords: 'dates deadlines appointments due ical' },

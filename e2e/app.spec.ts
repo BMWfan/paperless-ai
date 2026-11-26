@@ -738,3 +738,31 @@ test('prompt rules: a rule analyses matching documents with its own prompt and s
   await page.getByRole('dialog', { name: 'Delete “Utility bills”?' }).getByRole('button', { name: 'Delete' }).click();
   await expect(page.getByText('No rules yet – every document is analysed with the system prompt.')).toBeVisible();
 });
+
+test('private contracts show only mapped native metadata and render markup as text', async ({ page, request }) => {
+  await login(page);
+  const info = await (await request.get('/__demo/info')).json();
+  const headers = { Authorization: `Token ${info.paperlessToken}` };
+  const type = await (await request.post(`${info.paperlessUrl}/api/document_types/`, { headers, data: { name: 'Private contract fixture', matching_algorithm: 0 } })).json();
+  const fields: Record<string, number> = {};
+  for (const [role, data_type] of Object.entries({ number: 'string', party: 'longtext', end: 'date' })) {
+    const created = await request.post(`${info.paperlessUrl}/api/custom_fields/`, { headers, data: { name: `Contract fixture ${role}`, data_type } });
+    expect(created.ok()).toBe(true); fields[role] = (await created.json()).id;
+  }
+  await request.patch(`${info.paperlessUrl}/api/documents/2/`, { headers, data: { document_type: type.id, custom_fields: [
+    { field: fields.number, value: 'CONTRACT-NEW-41' }, { field: fields.party, value: '<img src=x onerror=alert(1)>' }, { field: fields.end, value: '2032-02-29' },
+  ] } });
+  await page.goto('/contracts');
+  await expect(page.getByText(/Choose native document types to enable/)).toBeVisible();
+  await page.getByRole('button', { name: 'Configure mappings', exact: true }).click();
+  await page.getByRole('checkbox', { name: 'Private contract fixture', exact: true }).check();
+  await page.getByRole('combobox', { name: 'Contract number', exact: true }).selectOption(String(fields.number));
+  await page.getByRole('combobox', { name: 'Party', exact: true }).selectOption(String(fields.party));
+  await page.getByRole('combobox', { name: 'End date', exact: true }).selectOption(String(fields.end));
+  await page.getByRole('button', { name: 'Save mappings', exact: true }).click();
+  await expect(page.getByText('CONTRACT-NEW-41', { exact: true })).toBeVisible();
+  await expect(page.getByText('<img src=x onerror=alert(1)>', { exact: true })).toBeVisible();
+  await expect(page.locator('main img')).toHaveCount(0);
+  await expect(page.getByText('2032-02-29', { exact: true })).toBeVisible();
+  await expect(page.getByText(/verification not established/)).toBeVisible();
+});
