@@ -11,8 +11,27 @@
 - Das veröffentlichte Image wurde anhand des Digests gezogen und auf AMD64 mit
   leerem Datenvolume und deaktiviertem Netzwerk gestartet. Health meldete
   Version `4.4.0` und `not_configured`, die Session-API meldete erforderliches
-  Erstsetup. Der getrennte Upgrade- und Restore-Test im Prüfbericht bezog
-  sich auf den lokalen Kandidaten desselben Quell-Commits.
+  Erstsetup. Anschließend folgte die Upgrade- und Restore-Probe mit dem
+  veröffentlichten Image.
+
+## Upgrade-Probe mit dem veröffentlichten AMD64-Image
+
+- Das Compose-Overlay startete das vorab geladene Image per festem Digest und
+  `pull_policy: never`. Das Testprojekt hatte ein eigenes leeres Volume,
+  deaktiviertes Netzwerk und keine veröffentlichten Ports.
+- In der nativen Fixture mit offiziellem Paperless-ngx 3.5.1 lief zuerst der
+  aus dem exakten v2.5-Tag gebaute Vorgänger. Die Suche nach dessen GHCR-Image
+  ergab weiterhin keinen Treffer. Die Dokumente waren synthetisch und der
+  Modellanbieter war die isolierte Protokoll-Fixture.
+- Nach der kalten Sicherung startete v2.6 aus GHCR auf demselben Datenvolume.
+  Ausstehende und bestätigte Lernkorrekturen sowie der Lernmodus blieben
+  erhalten. Der Modellaufrufzähler änderte sich beim Start nicht. Das
+  Inventar verlangte eine Sitzung und lieferte nach der Anmeldung für alle
+  drei Kategorien konsistente Anzahlen und Listen.
+- Die Sicherung bestand die SHA-256-Prüfung. Der Restore in ein neues Volume
+  reproduzierte die Dateiliste. Der Vorgänger startete mit dem Restore und
+  las den erwarteten Lernzustand. Die Testcontainer wurden anschließend
+  gestoppt.
 
 ## Fest gepinnte Image-Referenz für Compose
 
