@@ -45,6 +45,13 @@ if (process.argv[2] === 'restart') {
   assert.ok(examples.examples.some(row => row.document_id === expected.documentId), 'confirmed example/audit state lost across restart');
   assert.equal((await stats()).calls, expected.modelCalls, 'restart unexpectedly called the model');
   assert.equal((await ai('/api/learning/settings')).mode, expected.mode, 'learning mode lost across restart');
+  if (expected.contractDocumentId) {
+    const login = await fetch(fixture.aiUrl + '/api/auth/login', { method: 'POST', redirect: 'error', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: 'fixture-user', password: 'isolated-v4-password' }), signal: AbortSignal.timeout(20000) });
+    assert.equal(login.status, 200);
+    const cookie = login.headers.get('set-cookie')?.split(';')[0]; assert.ok(cookie);
+    const contracts = await ai('/api/contracts', undefined, { Cookie: cookie });
+    assert.ok(contracts.documents.some(doc => doc.id === expected.contractDocumentId), 'contract mapping lost across restart');
+  }
   console.log('PASS: real app restart preserved pending and confirmed learning without inference.');
   process.exit(0);
 }
@@ -180,5 +187,25 @@ try {
 } finally {
   await pl(`/workflows/${nativeWorkflow.id}/`, { enabled: false }, 'PATCH');
 }
-fs.writeFileSync(expectedFile, JSON.stringify({ scope: fixture.scope, documentId: document.id, pendingEventId: external.id, modelCalls: callsBefore, mode: (await ai('/api/learning/settings')).mode }), { mode: 0o600 });
+// Session-only metadata overview: real native type filter/field projection, no writer/model.
+const contractType = await pl('/document_types/', { name: `Fixture contract ${Date.now()}`, matching_algorithm: 0 }, 'POST', 201);
+const contractDoc = await upload('SYNTHETIC TEST DATA ONLY\nPrivate contract overview fixture.');
+await pl(`/documents/${contractDoc.id}/`, { document_type: contractType.id, custom_fields: [
+  { field: fields.number.id, value: 'CONTRACT-NEW-41' }, { field: fields.keep.id, value: 'Fixture private party' }, { field: fields.date.id, value: '2032-02-29' },
+] }, 'PATCH');
+await ai('/api/contracts', undefined, aiHeaders, 403);
+const mappings = await ai('/api/contracts/settings', undefined, session);
+await request(fixture.aiUrl, '/api/contracts/settings', session, { snapshotDigest: mappings.snapshotDigest, documentTypeIds: [contractType.id],
+  fields: { number: fields.number.id, party: fields.keep.id, end: fields.date.id } }, 'PUT');
+const learningBeforeContracts = await ai('/api/learning/summary');
+const contracts = await ai('/api/contracts?page=1', undefined, session);
+assert.equal(contracts.configured, true); assert.equal(contracts.count, 1); assert.equal(contracts.documents.length, 1);
+assert.equal(contracts.documents[0].id, contractDoc.id);
+assert.equal(contracts.documents[0].fields.number.value, 'CONTRACT-NEW-41');
+assert.equal(contracts.documents[0].fields.party.value, 'Fixture private party');
+assert.equal(contracts.documents[0].fields.end.value, '2032-02-29');
+assert.deepEqual(await ai('/api/learning/summary'), learningBeforeContracts, 'contract reads changed learning');
+assert.equal((await stats()).calls, callsBefore, 'contract overview called a model');
+console.log('PASS: session-only contracts filtered native metadata/typed values without inference or learning changes.');
+fs.writeFileSync(expectedFile, JSON.stringify({ scope: fixture.scope, documentId: document.id, pendingEventId: external.id, contractDocumentId: contractDoc.id, modelCalls: callsBefore, mode: (await ai('/api/learning/settings')).mode }), { mode: 0o600 });
 console.log('PASS: external metadata stayed pending in automatic mode; learned pattern extracted NEW-99 instead of copying NEW-42.');

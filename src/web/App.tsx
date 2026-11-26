@@ -14,6 +14,7 @@ const ReviewPage = lazy(() => import('./pages/Review'));
 const PlaygroundPage = lazy(() => import('./pages/Playground'));
 const PromptsPage = lazy(() => import('./pages/Prompts'));
 const LearningPage = lazy(() => import('./pages/Learning'));
+const ContractsPage = lazy(() => import('./pages/Contracts'));
 const HistoryPage = lazy(() => import('./pages/History'));
 const OcrPage = lazy(() => import('./pages/Ocr'));
 const CalendarPage = lazy(() => import('./pages/Calendar'));
@@ -116,6 +117,7 @@ function Routes() {
             <Route path="/prompts" component={PromptsPage} />
             <Route path="/history" component={HistoryPage} />
             <Route path="/learning" component={LearningPage} />
+            <Route path="/contracts" component={ContractsPage} />
             <Route path="/ocr" component={OcrPage} />
             <Route path="/calendar" component={CalendarPage} />
             <Route path="/prompt-wizard" component={PromptWizardPage} />

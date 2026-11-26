@@ -421,6 +421,10 @@ export class MockPaperless {
     }
     if (q.has('correspondent__id')) docs = docs.filter((d) => d.correspondent === Number(q.get('correspondent__id')));
     if (q.has('document_type__id')) docs = docs.filter((d) => d.document_type === Number(q.get('document_type__id')));
+    if (q.has('document_type__id__in')) {
+      const ids = q.get('document_type__id__in')!.split(',').map(Number);
+      docs = docs.filter(d => d.document_type !== null && ids.includes(d.document_type));
+    }
     if (q.has('created__year')) docs = docs.filter((d) => Number(d.created.slice(0, 4)) === Number(q.get('created__year')));
     if (q.has('created__month')) docs = docs.filter((d) => Number(d.created.slice(5, 7)) === Number(q.get('created__month')));
     const idIn = q.get('id__in');
