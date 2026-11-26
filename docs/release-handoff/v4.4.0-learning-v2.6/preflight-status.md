@@ -1,4 +1,6 @@
-# Offene Live-Prüfungen für v4.4.0-learning-v2.6
+# Historischer Preflight-Stand für v4.4.0-learning-v2.6
+
+Aktueller Nachweis im [Veröffentlichungsstand vom 26. November](publication-status.md).
 
 Stand 25. November 2026. Kandidat und aktuelles GitHub-main
 `6ceafca36419f877aea52c4342686d05c0dc621d`.

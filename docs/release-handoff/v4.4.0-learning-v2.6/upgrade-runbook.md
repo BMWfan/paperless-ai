@@ -13,7 +13,7 @@ Keep the rendered configuration private if it contains interpolated secrets.
 
 - Obtain the released CPU image's approved multiarch index digest. Set
   `PAPERLESS_AI_UPGRADE_IMAGE` to
-  `ghcr.io/bmwfan/paperless-ai:v4.4.0-learning-v2.6@sha256:<verified-index-digest>`.
+  `ghcr.io/bmwfan/paperless-ai:v4.4.0-learning-v2.6@sha256:4236977476113841eac26ebf9191fd814f84ed3a289515c21d869370d41c15c5`.
   The local test OCI archive has its own digest and cannot supply the release digest.
 - Record the current image digest and confirm it will still be available if a
   rollback is needed. Record the Compose project name and base files, the source
