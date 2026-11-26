@@ -62,3 +62,45 @@ check. Redirects, tools, unrecognized request fields and unbounded output are
 rejected. Reported usage outside the reservation stops further calls.
 
 Remove the optional workflow and its test helpers to roll back the measurement.
+
+## Offline eight-case report audit (SPEC #20)
+
+The confirmation-v1 auditor reads an **existing JSON report** and the frozen
+fixtures from its exact, separately reviewed source commit. It never imports the
+analyzer/provider/harness, sends HTTP requests, reads API keys or starts a model.
+Fetch the reviewed source commit separately if it is not present locally.
+
+```sh
+node --import tsx scripts/audit-amount-report.mjs model-regression-report.json \
+  --source-sha e998c61247c6fa9bc42e48d1e8df33cc28275f26
+```
+
+Use Node 22 with the repository's existing dependencies. The explicit SHA must
+match the report; the CLI reads the pair/confirmation fixture blobs from that
+Git commit, not today's working-tree fixtures. Only the frozen eight-case
+`amount-scope-confirmation-v1` / GPT-5.4 mini snapshot is supported. Other
+protocols require their own reviewed contract. Input is capped at 1 MiB.
+
+The audit verifies case identity, document/description/expected values, duplicate
+and unknown cases, model/protocol/SHA, recorded scoring, one-attempt bounds,
+reservation arithmetic and measured usage. Missing cases and failed/stopped
+attempts stay unmeasured. Positive accuracy and correct omissions are separate;
+wrong current/attachment amounts, missing values, invalid normalization and
+multiple proposals are not silently converted into correct omissions. Reported
+tokens cover only attempts with reconcilable usage; reservations are not billed
+usage. No source-position or document-role accuracy is inferred from a literal.
+
+Exit codes: **0** = internally valid, complete, all eight sample values match;
+**1** = internally valid but mismatching/partial/unmeasured sample; **2** = invalid
+report/arguments or unavailable source fixtures. Even exit 0 is a diagnostic
+sample, **not** general qualification or permission for unattended extraction.
+Report and fixture hashes identify the bytes audited; they do not authenticate
+that an API call occurred. Original report bytes are never modified. Full raw
+provider responses/request bodies are absent from the existing report, so the
+auditor cannot reconstruct them or independently recompute request hashes.
+
+Verification uses synthetic reports, including tampering, partial results,
+missing usage and CLI exit codes. A real archived report still has to be supplied
+for its actual outcome to be audited; no new inference is authorized or needed.
+No workflow, permission, application, writer or schema changes are made. Revert
+the audit helper/CLI/tests and this section to roll back the development tool.
